@@ -1,0 +1,38 @@
+{
+  "human.female.death": {
+    "category": "player",
+    "sounds": ["human/female/death1", "human/female/death2"]
+  },
+  "human.female.attack": {
+    "category": "player",
+    "sounds": ["human/female/attack1","human/female/attack2"]
+  },
+  "human.female.hurt": {
+    "category": "player",
+    "sounds": ["human/female/hurt1", "human/female/hurt2"]
+  },
+  "human.male.death": {
+    "category": "player",
+    "sounds": ["human/male/death1", "human/male/death2"]
+  },
+  "human.male.attack": {
+    "category": "player",
+    "sounds": ["human/male/attack1", "human/male/attack2"]
+  },
+  "human.male.hurt": {
+    "category": "player",
+    "sounds": ["human/male/hurt1", "human/male/hurt2"]
+  },
+  "goblin.male.death": {
+    "category": "player",
+    "sounds": ["goblin/male/death1", "goblin/male/death2", "goblin/male/death3", "goblin/male/death4", "goblin/male/death5"]
+  },
+  "goblin.male.attack": {
+    "category": "player",
+    "sounds": ["goblin/male/attack1", "goblin/male/attack2", "goblin/male/attack3", "goblin/male/attack4", "goblin/male/attack5"]
+  },
+  "goblin.male.hurt": {
+    "category": "player",
+    "sounds": ["goblin/male/hurt1", "goblin/male/hurt2", "goblin/male/hurt3", "goblin/male/hurt4", "goblin/male/hurt5"]
+  }
+}
