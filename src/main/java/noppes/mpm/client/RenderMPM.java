@@ -65,12 +65,26 @@ public class RenderMPM extends RenderPlayer{
 	private EntityLivingBase entity;
 	private ModelRenderPassHelper renderpass = new ModelRenderPassHelper();
 
+	// Steve 64x32
+	protected final ModelMPM originalBipedMain;
+
+	// Steve 64x64
+	protected final static ModelMPM steve64 = new ModelMPM(0, false);
+	protected final static ModelMPM steveArmorChest = new ModelMPM(1,0);
+	protected final static ModelMPM steveArmor = new ModelMPM(0.5F,0);
+
+	// Stvee 64x32
+	protected final static ModelMPM alex = new ModelMPM(0, true);
+	protected final static ModelMPM alex32armorChest = new ModelMPM(1,1);
+	protected final static ModelMPM alex32armor = new ModelMPM(0.5F,1);
+
 	public RenderMPM() {
 		super();
 		this.setRenderManager(RenderManager.instance);
-		this.modelBipedMain = new ModelMPM(0);
-		this.modelArmor = new ModelMPM(0.5f);
-		this.modelArmorChestplate = new ModelMPM(1.0f);
+		this.originalBipedMain = new ModelMPM(0, 0);;
+		this.modelBipedMain = new ModelMPM(0, 0);
+		this.modelArmor = new ModelMPM(0.5f, 0);
+		this.modelArmorChestplate = new ModelMPM(1.0f, 0);
 	}
 	
 	public void setModelData(ModelData data, EntityLivingBase entity){
@@ -78,6 +92,7 @@ public class RenderMPM extends RenderPlayer{
 		modelBipedMain.setPlayerData(data, entity);
 		modelArmorChestplate.setPlayerData(data, entity);
 		modelArmor.setPlayerData(data, entity);
+		originalBipedMain.setPlayerData(data, entity);
 	}
 	
 	@Override
@@ -107,10 +122,10 @@ public class RenderMPM extends RenderPlayer{
 		super.doRender(p_76986_1_, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
     }
 
-    private void loadTexture(File file, ResourceLocation resource, String par1Str){
+    private void loadTexture(File file, ResourceLocation resource, String par1Str, boolean version){
         TextureManager texturemanager = Minecraft.getMinecraft().getTextureManager();
-        ITextureObject object = new ThreadDownloadImageData(file, par1Str, SkinManager.field_152793_a, new ImageBufferDownloadAlt());
-        texturemanager.loadTexture(resource, object);
+		ITextureObject object = new ImageDownloadAlt(file, par1Str, SkinManager.field_152793_a, new ImageBufferDownloadAlt(version));
+		texturemanager.loadTexture(resource, object);
     }
 
 	public void loadResource(AbstractClientPlayer player) {
@@ -128,9 +143,15 @@ public class RenderMPM extends RenderPlayer{
 				player.func_152121_a(Type.SKIN, location);
 			}
 			else{
-		        location = new ResourceLocation("skins/" + url.hashCode());
-				player.func_152121_a(Type.SKIN, location);
-		        loadTexture(null, location, url);
+				if (data.urlType == 1) {
+					location = new ResourceLocation("skins64/" + url.hashCode());
+					player.func_152121_a(Type.SKIN, location);
+					loadTexture(null, location, url, true);
+				} else {
+					location = new ResourceLocation("skins/" + url.hashCode());
+					player.func_152121_a(Type.SKIN, location);
+					loadTexture(null, location, url, false);
+				}
 			}
 			return;
 		}
@@ -153,7 +174,7 @@ public class RenderMPM extends RenderPlayer{
         ResourceLocation location = new ResourceLocation("skins/" + profile.getHash());
 		if(file.exists())
 			file.delete();
-		loadTexture(file, location, url);
+		loadTexture(file, location, url, false);
 		player.func_152121_a(Type.SKIN, location);
 		return;
 	}
@@ -498,8 +519,34 @@ public class RenderMPM extends RenderPlayer{
 			renderPassModel = renderpass;
 			renderpass.renderer = renderEntity;
 			renderpass.entity = entity;
+			modelBipedMain.entityModel = modelArmorChestplate.entityModel = modelArmor.entityModel = model;
+		} else {
+			int modelVal = data.modelType;
+			if(modelVal ==  1){
+				this.mainModel = steve64;
+				this.modelBipedMain = steve64;
+				this.modelArmorChestplate = steveArmorChest;
+				this.modelArmor = steveArmor;
+			}
+			else if(modelVal ==  2){
+				this.mainModel = alex;
+				this.modelBipedMain = alex;
+				this.modelArmorChestplate = alex32armorChest;
+				this.modelArmor = alex32armor;
+			}
+			else{
+				data.bodywear = 0;
+				data.armwear = 0;
+				data.legwear = 0;
+				this.mainModel = originalBipedMain;
+				this.modelBipedMain = originalBipedMain;
+				this.modelArmorChestplate = steveArmorChest;
+				this.modelArmor = steveArmor;
+			}
+			modelBipedMain.entityModel = modelBipedMain;
+			modelArmorChestplate.entityModel = modelArmorChestplate;
+			modelArmor.entityModel = modelArmor;
 		}
-		modelBipedMain.entityModel = modelArmorChestplate.entityModel = modelArmor.entityModel = model;
 		modelBipedMain.entity = modelArmorChestplate.entity = modelArmor.entity = entity;
 	}
 	

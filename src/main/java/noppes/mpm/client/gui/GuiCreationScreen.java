@@ -110,6 +110,9 @@ public class GuiCreationScreen extends GuiModelInterface implements ITextfieldLi
     	
     	addButton(new GuiNpcButton(8, guiLeft + 4, y += 22, 96, 20, "Scale"));
 
+		addButton(new GuiNpcButton(250, guiLeft + 50, y += 22, 50, 20, new String[]{"Default","Steve64","Alex"}, playerdata.modelType));
+		addLabel(new GuiNpcLabel(250, "Model", guiLeft, y + 5, 0xFFFFFF));
+
     	addButton(new GuiNpcButton(4, guiLeft + 50, y += 22, 50, 20, "selectServer.edit"));
 		addLabel(new GuiNpcLabel(1, "Head", guiLeft, y + 5, 0xFFFFFF));
 
@@ -127,9 +130,12 @@ public class GuiCreationScreen extends GuiModelInterface implements ITextfieldLi
 		
     	addButton(new GuiNpcButton(44, guiLeft + 310, guiTop + 14, 80, 20, "Save Settings"));
     	addButton(new GuiNpcButton(45, guiLeft + 310, guiTop + 36, 80, 20, "Load Settings"));
-		addLabel(new GuiNpcLabel(52, "Skin Url", guiLeft, guiTop + 163, 0xFFFFFF));
-		addTextField(new GuiNpcTextField(52, this, guiLeft, guiTop + 173, 160, 20, playerdata.url));
-    }
+		addLabel(new GuiNpcLabel(52, "Skin Url", guiLeft, guiTop + 183, 0xFFFFFF));
+		addTextField(new GuiNpcTextField(52, this, guiLeft, guiTop + 193, 140, 20, playerdata.url));
+
+		addLabel(new GuiNpcLabel(251, "URL Type", guiLeft + 270, guiTop + 117, 0xFFFFFF));
+		addButton(new GuiNpcButton(251, guiLeft + 350, guiTop + 112, 50, 20, new String[]{"Default", "Full"}, playerdata.urlType));
+	}
 
 	private void showEntityButtons(EntityLivingBase entity) {
 		mapped.clear();
@@ -267,7 +273,6 @@ public class GuiCreationScreen extends GuiModelInterface implements ITextfieldLi
     			ModelData data = PlayerDataController.instance.getPlayerData(player);
     	    	data.loaded = false;
     		}
-			playerdata.loaded = false;
     	}
     	if(button.id == 47){
     		MorePlayerModels.EnablePOV = button.getValue() == 1;
@@ -299,6 +304,22 @@ public class GuiCreationScreen extends GuiModelInterface implements ITextfieldLi
 	    	EntityLivingBase entity = playerdata.getEntity(mc.theWorld, mc.thePlayer);
 	    	playerdata.setExtra(entity, "breed", ((GuiNpcButton)button).getValue() + "");
     	}
+    	if(button.id == 250){
+			if(playerdata.modelType == 0){
+				playerdata.modelType = 1;
+			}
+			else if(playerdata.modelType == 1){
+				playerdata.modelType = 2;
+			}
+			else {
+				playerdata.modelType = 0;
+			}
+			playerdata.loaded = false;
+		}
+		if(button.id == 251){
+			playerdata.urlType = (byte) button.getValue();
+			playerdata.loaded = false;
+		}
     }
     
     @Override

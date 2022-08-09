@@ -10,6 +10,9 @@ import noppes.mpm.client.gui.util.GuiModelInterface;
 public class GuiModelArms extends GuiModelInterface{
 
 	private final String[] arrParticles = new String[]{"gui.no","Both","Left","Right"};
+	private final String[] arrArm = new String[]{"gui.no","Both","Right","Left"};
+	private final String[] arrArmwear = new String[]{"gui.no","Both","Left","Right"};
+	private final String[] arrSolidArmwear = new String[]{"gui.no","Both","Left","Right"};
 
 	private GuiScreen parent;
 	public GuiModelArms(GuiScreen parent){
@@ -21,6 +24,18 @@ public class GuiModelArms extends GuiModelInterface{
     public void initGui() {
     	super.initGui();
 		int y = guiTop + 20;
+
+		addButton(new GuiNpcButton(30, guiLeft + 50, y += 22, 70, 20, arrArm, playerdata.hideArms));
+		addLabel(new GuiNpcLabel(30, "Hide", guiLeft, y + 5, 0xFFFFFF));
+
+		if (playerdata.modelType == 1 || playerdata.modelType == 2) {
+			addButton(new GuiNpcButton(8, guiLeft + 50, y += 22, 70, 20, arrArmwear, playerdata.armwear));
+			addLabel(new GuiNpcLabel(8, "Armwear", guiLeft, y + 5, 0xFFFFFF));
+
+			addButton(new GuiNpcButton(9, guiLeft + 50, y += 22, 70, 20, arrSolidArmwear, playerdata.solidArmwear));
+			addLabel(new GuiNpcLabel(9, "Solid", guiLeft, y + 5, 0xFFFFFF));
+		}
+
 
 		ModelPartData claws = playerdata.getPartData("claws");
     	addButton(new GuiNpcButton(0, guiLeft + 50, y += 22, 70, 20, arrParticles, claws == null?0:claws.type + 1));
@@ -35,6 +50,15 @@ public class GuiModelArms extends GuiModelInterface{
     	super.actionPerformed(btn);
     	GuiNpcButton button = (GuiNpcButton) btn;
 
+		if(button.id == 8){
+			playerdata.armwear = (byte) button.getValue();
+		}
+		if(button.id == 9){
+			playerdata.solidArmwear = (byte) button.getValue();
+		}
+		if(button.id == 30){
+			playerdata.hideArms = (byte) button.getValue();
+		}
     	if(button.id == 0){
     		if(button.getValue() == 0)
     			playerdata.removePart("claws");

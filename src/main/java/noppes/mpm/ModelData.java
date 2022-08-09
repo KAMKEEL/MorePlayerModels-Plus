@@ -39,10 +39,12 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 	
 	public short soundType = 0;
 
-	public String url= ""; 
-	
+	public byte urlType = 0;	//	0:url, 1:url64
+	public String url= "";
 	public String displayName = "";
 
+	// For Alex / Steve 3D Layers
+	public int modelType = 0;
 	public ModelData(){
 		
 	}
@@ -54,9 +56,12 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 		
 		compound.setShort("SoundType", soundType);
 		compound.setString("DisplayName", displayName);
-		
+		compound.setInteger("ModelType", modelType);
+
 		compound.setString("CustomSkinUrl", url);
-				
+		compound.setByte("UrlType", urlType);
+
+
 		return compound;
 	}
 	
@@ -71,7 +76,9 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 		
 		String prevUrl = url;
 		url = compound.getString("CustomSkinUrl");
-		
+		urlType = compound.getByte("UrlType");
+		modelType = compound.getInteger("ModelType");
+
 		setAnimation(compound.getInteger("Animation"));
 		
 		if(loaded && !prevUrl.equals(url))

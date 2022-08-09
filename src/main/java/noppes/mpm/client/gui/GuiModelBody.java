@@ -10,6 +10,8 @@ import noppes.mpm.client.gui.util.GuiModelInterface;
 public class GuiModelBody extends GuiModelInterface{
 
 	private GuiScreen parent;
+	private final String[] arrBody = new String[]{"gui.no","gui.yes"};
+	private final String[] arrBodywear = new String[]{"gui.no","gui.yes","Solid"};
 	private final String[] arrWing = new String[]{"gui.no","Player","Type1","Type2","Type3","Type4","Type5","Type6","Type7","Type8","Type9",
 			"Type10","Type11","Type12","Type13"};
 	private final String[] arrBreasts = new String[]{"gui.no","Type1","Type2","Type3"};
@@ -26,6 +28,15 @@ public class GuiModelBody extends GuiModelInterface{
     public void initGui() {
     	super.initGui();
 		int y = guiTop + 20;
+
+		addButton(new GuiNpcButton(30, guiLeft + 50, y += 22, 70, 20, arrBody, playerdata.hideBody));
+		addLabel(new GuiNpcLabel(30, "Hide", guiLeft, y + 5, 0xFFFFFF));
+
+		if (playerdata.modelType == 1 || playerdata.modelType == 2) {
+			addButton(new GuiNpcButton(8, guiLeft + 50, y += 22, 70, 20, arrBodywear, playerdata.bodywear));
+			addLabel(new GuiNpcLabel(8, "Bodywear", guiLeft, y + 5, 0xFFFFFF));
+		}
+
     	addButton(new GuiNpcButton(1, guiLeft + 50, y += 22, 70, 20, arrBreasts, playerdata.breasts));
 		addLabel(new GuiNpcLabel(1, "Breasts", guiLeft, y + 5, 0xFFFFFF));
 
@@ -48,7 +59,7 @@ public class GuiModelBody extends GuiModelInterface{
 			addButton(new GuiNpcButton(13, guiLeft + 122, y, 40, 20, fin.getColor()));
 
 		ModelPartData skirt = playerdata.getPartData("skirt");
-    	addButton(new GuiNpcButton(4, guiLeft + 50, y += 22, 70, 20, arrfins, getFinIndex(skirt)));
+    	addButton(new GuiNpcButton(4, guiLeft + 50, y += 22, 70, 20, arrskirt, getSkirtIndex(skirt)));
 		addLabel(new GuiNpcLabel(4, "Skirt", guiLeft, y + 5, 0xFFFFFF));
 		if(skirt != null)
 			addButton(new GuiNpcButton(14, guiLeft + 122, y, 40, 20, skirt.getColor()));
@@ -74,6 +85,18 @@ public class GuiModelBody extends GuiModelInterface{
 				return 6;
 			if(fin.texture.contains("6"))
 				return 7;
+		}
+		return 0;
+	}
+
+	private int getSkirtIndex(ModelPartData skirt) {
+		if(skirt == null)
+			return 0;
+		if(skirt.type == 0){
+			if(skirt.playerTexture)
+				return 1;
+			if(skirt.texture.contains("1"))
+				return 2;
 		}
 		return 0;
 	}
@@ -168,6 +191,14 @@ public class GuiModelBody extends GuiModelInterface{
     		}
     		initGui();
     	}
+
+		if(button.id == 8){
+			playerdata.bodywear = (byte) button.getValue();
+		}
+
+		if(button.id == 30){
+			playerdata.hideBody = (byte) button.getValue();
+		}
 
     	if(button.id == 11){
     		this.mc.displayGuiScreen(new GuiModelColor(this, playerdata.getPartData("wings")));

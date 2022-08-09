@@ -59,6 +59,7 @@ public class ModelMPM extends ModelBiped{
 	public boolean currentlyPlayerTexture;
 	
 	public boolean isArmor;
+	public boolean isAlexArmor;
 
 	// Steve 64x64 and Alex 64x64
 	public ModelMPM(float par1, boolean alex) {
@@ -187,56 +188,111 @@ public class ModelMPM extends ModelBiped{
 		}
 	}
 
-	public ModelMPM(float par1) {
+	public ModelMPM(float par1, int alexArms) {
 		super(par1);
 		isArmor = par1 > 0;
+		if (isArmor && alexArms == 1) {
+			isAlexArmor = true;
+		}
+
 		float par2 = 0;
-        this.bipedCloak = new ModelRenderer(this, 0, 0);
-        this.bipedCloak.addBox(-5.0F, 0.0F, -1.0F, 10, 16, 1, par1);
-        this.bipedEars = new ModelRenderer(this, 24, 0);
-        this.bipedEars.addBox(-3.0F, -6.0F, -1.0F, 6, 6, 1, par1);
-        this.bipedHead = new ModelScaleRenderer(this, 0, 0);
-        this.bipedHead.addBox(-4.0F, -8.0F, -4.0F, 8, 8, 8, par1);
-        this.bipedHead.setRotationPoint(0.0F, 0.0F + par2, 0.0F);
-        this.bipedHeadwear = new ModelScaleRenderer(this, 32, 0);
-        this.bipedHeadwear.addBox(-4.0F, -8.0F, -4.0F, 8, 8, 8, par1 + 0.5F);
-        this.bipedHeadwear.setRotationPoint(0.0F, 0.0F + par2, 0.0F);
-        this.bipedBody = new ModelScaleRenderer(this, 16, 16);
-        this.bipedBody.addBox(-4.0F, 0.0F, -2.0F, 8, 12, 4, par1);
-        this.bipedBody.setRotationPoint(0.0F, 0.0F + par2, 0.0F);
-        this.bipedRightArm = new ModelScaleRenderer(this, 40, 16);
-        this.bipedRightArm.addBox(-3.0F, -2.0F, -2.0F, 4, 12, 4, par1);
-        this.bipedRightArm.setRotationPoint(-5.0F, 2.0F + par2, 0.0F);
-        this.bipedLeftArm = new ModelScaleRenderer(this, 40, 16);
-        this.bipedLeftArm.mirror = true;
-        this.bipedLeftArm.addBox(-1.0F, -2.0F, -2.0F, 4, 12, 4, par1);
-        this.bipedLeftArm.setRotationPoint(5.0F, 2.0F + par2, 0.0F);
-        this.bipedRightLeg = new ModelScaleRenderer(this, 0, 16);
-        this.bipedRightLeg.addBox(-2.0F, 0.0F, -2.0F, 4, 12, 4, par1);
-        this.bipedRightLeg.setRotationPoint(-1.9F, 12.0F + par2, 0.0F);
-        this.bipedLeftLeg = new ModelScaleRenderer(this, 0, 16);
-        this.bipedLeftLeg.mirror = true;
-        this.bipedLeftLeg.addBox(-2.0F, 0.0F, -2.0F, 4, 12, 4, par1);
-        this.bipedLeftLeg.setRotationPoint(1.9F, 12.0F + par2, 0.0F);
-		
-		headwear = new ModelHeadwear(this);
-		legs = new ModelLegs(this, (ModelScaleRenderer)bipedRightLeg, (ModelScaleRenderer)bipedLeftLeg);
-		
-		this.bipedBody.addChild(breasts = new ModelBreasts(this));
+
+		this.bipedCloak = new ModelRenderer(this, 0, 0);
+		this.bipedCloak.setTextureSize(64,32);
+		this.bipedCloak.addBox(-5.0F, 0.0F, -1.0F, 10, 16, 1, par1);
+
+		this.bipedEars = new ModelRenderer(this, 24, 0);
+		this.bipedEars.addBox(-3.0F, -6.0F, -1.0F, 6, 6, 1, par1);
+
+		this.bipedHead = (new ModelScaleRenderer(this, 0, 0));
+		this.bipedHead.addBox(-4.0F, -8.0F, -4.0F, 8, 8, 8, par1);
+		this.bipedHead.setRotationPoint(0.0F, 0.0F + par2, 0.0F);
+
+		this.bipedHeadwear = (new ModelScaleRenderer(this, 32, 0));
+		this.bipedHeadwear.addBox(-4.0F, -8.0F, -4.0F, 8, 8, 8, par1 + 0.5F);
+		this.bipedHeadwear.setRotationPoint(0.0F, 0.0F + par2, 0.0F);
+
+		this.bipedBody = (new ModelScaleRenderer(this, 16, 16));
+		this.bipedBody.addBox(-4.0F, 0.0F, -2.0F, 8, 12, 4, par1);
+		this.bipedBody.setRotationPoint(0.0F, 0.0F + par2, 0.0F);
+
+		if (alexArms == 0) {
+			this.bipedRightArm = new ModelScaleRenderer(this, 40, 16);
+			this.bipedRightArm.addBox(-3.0F, -2.0F, -2.0F, 4, 12, 4, par1);
+			this.bipedRightArm.setRotationPoint(-5.0F, 2.0F + par2, 0.0F);
+
+			this.bipedLeftArm = new ModelScaleRenderer(this, 40, 16);
+			this.bipedLeftArm.mirror = true;
+			this.bipedLeftArm.addBox(-1.0F, -2.0F, -2.0F, 4, 12, 4, par1);
+			this.bipedLeftArm.setRotationPoint(5.0F, 2.0F + par2, 0.0F);
+		} else {
+			this.bipedRightArm = (new ModelScaleRenderer(this, 40, 16));
+			this.bipedLeftArm = new ModelScaleRenderer(this, 40, 16);
+			this.bipedLeftArm.mirror = true;
+
+			if (isArmor) {
+				this.bipedLeftArm.setRotationPoint(5.0F, 2.5F + par2, 0.0F);
+				this.bipedRightArm.addBox(-4.5F, -2.0F, -2.0F, 4, 12, 4, par1);
+				this.bipedLeftArm.addBox(0.25F, -2.0F, -2.0F, 4, 12, 4, par1);
+			} else {
+				this.bipedLeftArm.setRotationPoint(5.0F, 2.5F + par2, 0.0F);
+				this.bipedRightArm.addBox(-2.0F, -2.0F, -2.0F, 3, 12, 4, par1);
+				this.bipedLeftArm.addBox(-1.0F, -2.0F, -2.0F, 3, 12, 4, par1);
+			}
+		}
+
+		this.bipedRightLeg = new ModelScaleRenderer(this, 0, 16);
+		this.bipedRightLeg.addBox(-2.0F, 0.0F, -2.0F, 4, 12, 4, par1);
+		this.bipedRightLeg.setRotationPoint(-1.9F, 12.0F + par2, 0.0F);
+
+		this.bipedLeftLeg = new ModelScaleRenderer(this, 0, 16);
+		this.bipedLeftLeg.mirror = true;
+		this.bipedLeftLeg.addBox(-2.0F, 0.0F, -2.0F, 4, 12, 4, par1);
+		this.bipedLeftLeg.setRotationPoint(1.9F, 12.0F + par2, 0.0F);
+
+		// Body
+		this.bipedBodywear = (new ModelScaleRenderer(this, 0, 0));
+		this.bipedBody.addChild(this.bipedBodywear);
+
+		// Arms
+		this.bipedRightArmWear = (new ModelScaleRenderer(this, 0, 0));
+		this.bipedRightArm.addChild(this.bipedRightArmWear);
+		this.solidRightArmWear = (new ModelScaleRenderer(this, 0, 0));
+		this.bipedRightArm.addChild(this.solidRightArmWear);
+		this.bipedLeftArmwear = new ModelScaleRenderer(this, 0, 0);
+		this.bipedLeftArm.addChild(this.bipedLeftArmwear);
+		this.solidLeftArmWear = (new ModelScaleRenderer(this, 0, 0));
+		this.bipedLeftArm.addChild(this.solidLeftArmWear);
+
+		// Legs
+		this.bipedRightLegWear = (new ModelScaleRenderer(this, 0, 0));
+		this.bipedRightLeg.addChild(this.bipedRightLegWear);
+		this.solidRightLegWear = new ModelScaleRenderer(this, 0, 0);
+		this.bipedRightLeg.addChild(this.solidRightLegWear);
+		this.bipedLeftLegWear = new ModelScaleRenderer(this, 0, 0);
+		this.bipedLeftLeg.addChild(this.bipedLeftLegWear);
+		this.solidLeftLegWear = new ModelScaleRenderer(this, 0, 0);
+		this.bipedLeftLeg.addChild(this.solidLeftLegWear);
+
+		headwear = new ModelHeadwear(this, true);
+		legs = new ModelLegs(this, (ModelScaleRenderer)bipedRightLeg, (ModelScaleRenderer)bipedLeftLeg, 64, 32);
+
+		this.bipedBody.addChild(breasts = new ModelBreasts(this, 64, 32));
 		if(!isArmor){
-			this.bipedHead.addChild(ears = new ModelEars(this));			
-			this.bipedHead.addChild(mohawk = new ModelMohawk(this));			
-			this.bipedHead.addChild(hair = new ModelHair(this));			
-			this.bipedHead.addChild(beard = new ModelBeard(this));	
+			this.bipedHead.addChild(ears = new ModelEars(this));
+			this.bipedHead.addChild(mohawk = new ModelMohawk(this));
+			this.bipedHead.addChild(hair = new ModelHair(this));
+			this.bipedHead.addChild(beard = new ModelBeard(this));
+
+			// Completed
 			this.bipedHead.addChild(snout = new ModelSnout(this));
 			this.bipedHead.addChild(horns = new ModelHorns(this));
-			
+
+			// Completed
 			tail = new ModelTail(this);
-			
 			this.bipedBody.addChild(wings = new ModelWings(this));
-			this.bipedBody.addChild(skirt = new ModelSkirt(this));
 			this.bipedBody.addChild(fin = new ModelFin(this));
-			
+			this.bipedBody.addChild(skirt = new ModelSkirt(this));
 			this.bipedLeftArm.addChild(clawsL = new ModelClaws(this, false));
 			this.bipedRightArm.addChild(clawsR = new ModelClaws(this, true));
 		}
@@ -395,6 +451,10 @@ public class ModelMPM extends ModelBiped{
 	        GL11.glTranslatef((float)Math.sin(dancing) * 0.075F, (float)Math.abs(Math.cos(dancing)) * 0.125F - 0.02F, (float)(-Math.abs(Math.cos(dancing))) * 0.075F);   
     	}
 		ModelPartConfig head = data.head;
+
+		// Hide Head
+		((ModelScaleRenderer)this.bipedHead).isHidden = data.hideHead == 1;
+    	
 		if(bipedHeadwear.showModel && !bipedHeadwear.isHidden){
 			if(data.headwear == 1 || isArmor){
 				((ModelScaleRenderer)this.bipedHeadwear).setConfig(head,x,y,z);
@@ -430,6 +490,30 @@ public class ModelMPM extends ModelBiped{
     	}
 		
 		ModelPartConfig body = data.body;
+
+		// Hide Body
+		((ModelScaleRenderer)this.bipedBody).isHidden = data.hideBody == 1;
+
+		// Hide Bodywear
+		((ModelScaleRenderer)this.bipedBodywear).isHidden = data.bodywear == 0;
+
+		if(bipedBodywear.showModel && !bipedBodywear.isHidden){
+			if(data.bodywear == 1 || isArmor){
+				((ModelScaleRenderer)this.bipedBodywear).setConfig(data.body,x,y,z);
+				((ModelScaleRenderer)this.bipedBodywear).render(f);
+			}
+			else if(data.bodywear == 2){
+				this.bodywear.rotateAngleX = bipedBodywear.rotateAngleX;
+				this.bodywear.rotateAngleY = bipedBodywear.rotateAngleY;
+				this.bodywear.rotateAngleZ = bipedBodywear.rotateAngleZ;
+				this.bodywear.rotationPointX = bipedBodywear.rotationPointX;
+				this.bodywear.rotationPointY = bipedBodywear.rotationPointY;
+				this.bodywear.rotationPointZ = bipedBodywear.rotationPointZ;
+				this.bodywear.setConfig(data.body,x,y,z);
+				this.bodywear.render(f);
+			}
+		}
+    	
 		((ModelScaleRenderer)this.bipedBody).setConfig(body,x,y,z);
 		((ModelScaleRenderer)this.bipedBody).render(f);
 		GL11.glPopMatrix();
@@ -449,6 +533,53 @@ public class ModelMPM extends ModelBiped{
 			float dancing = entity.ticksExisted / 4f;
 	        GL11.glTranslatef((float)Math.sin(dancing) * 0.025F, (float)Math.abs(Math.cos(dancing)) * 0.125F - 0.02F, 0.0F);
     	}
+
+		// Hide Arms
+		if(data.hideArms == 1){
+			((ModelScaleRenderer)this.bipedRightArm).isHidden = true;
+			((ModelScaleRenderer)this.bipedLeftArm).isHidden = true;
+		}
+		else if(data.hideArms == 2){
+			((ModelScaleRenderer)this.bipedRightArm).isHidden = true;
+			((ModelScaleRenderer)this.bipedLeftArm).isHidden = false;
+		}
+		else if(data.hideArms == 3){
+			((ModelScaleRenderer)this.bipedRightArm).isHidden = false;
+			((ModelScaleRenderer)this.bipedLeftArm).isHidden = true;
+		}
+		else{
+			((ModelScaleRenderer)this.bipedRightArm).isHidden = false;
+			((ModelScaleRenderer)this.bipedLeftArm).isHidden = false;
+		}
+
+		// Hide Armwear
+		if(data.armwear == 1){
+			((ModelScaleRenderer)this.bipedRightArmWear).isHidden = data.solidArmwear == 1 || data.solidArmwear == 3;
+			((ModelScaleRenderer)this.bipedLeftArmwear).isHidden = data.solidArmwear == 1 || data.solidArmwear == 2;
+
+			this.solidRightArmWear.isHidden = data.solidArmwear == 0 || data.solidArmwear == 2;
+			this.solidLeftArmWear.isHidden = data.solidArmwear == 0 || data.solidArmwear == 3;
+		}
+		else if(data.armwear == 2){
+			((ModelScaleRenderer)this.bipedRightArmWear).isHidden = true;
+			((ModelScaleRenderer)this.bipedLeftArmwear).isHidden = data.solidArmwear == 1 || data.solidArmwear == 2;
+
+			this.solidRightArmWear.isHidden = true;
+			this.solidLeftArmWear.isHidden = data.solidArmwear == 0 || data.solidArmwear == 3;
+		}
+		else if(data.armwear == 3){
+			((ModelScaleRenderer)this.bipedRightArmWear).isHidden = data.solidArmwear == 1 || data.solidArmwear == 3;
+			((ModelScaleRenderer)this.bipedLeftArmwear).isHidden = true;
+
+			this.solidRightArmWear.isHidden = data.solidArmwear == 0 || data.solidArmwear == 2;
+			this.solidLeftArmWear.isHidden = true;
+		}
+		else{
+			((ModelScaleRenderer)this.bipedRightArmWear).isHidden = true;
+			((ModelScaleRenderer)this.bipedLeftArmwear).isHidden = true;
+			this.solidRightArmWear.isHidden = true;
+			this.solidLeftArmWear.isHidden = true;
+		}
 		
 		if(!bo){
 			((ModelScaleRenderer)this.bipedLeftArm).setConfig(arms,-x,y,z);
@@ -472,6 +603,55 @@ public class ModelMPM extends ModelBiped{
 		float z = 0;
 
 		GL11.glPushMatrix();
+
+		// Hide Legs
+		if(data.hideLegs == 1){
+			((ModelScaleRenderer)this.bipedRightLeg).isHidden = true;
+			((ModelScaleRenderer)this.bipedLeftLeg).isHidden = true;
+		}
+		else if(data.hideLegs == 2){
+			((ModelScaleRenderer)this.bipedRightLeg).isHidden = true;
+			((ModelScaleRenderer)this.bipedLeftLeg).isHidden = false;
+		}
+		else if(data.hideLegs == 3){
+			((ModelScaleRenderer)this.bipedRightLeg).isHidden = false;
+			((ModelScaleRenderer)this.bipedLeftLeg).isHidden = true;
+		}
+		else{
+			((ModelScaleRenderer)this.bipedRightLeg).isHidden = false;
+			((ModelScaleRenderer)this.bipedLeftLeg).isHidden = false;
+		}
+
+		// Hide Legwear
+		if(data.legwear == 1){
+			((ModelScaleRenderer)this.bipedRightLegWear).isHidden = data.solidLegwear == 1 || data.solidLegwear == 3;
+			((ModelScaleRenderer)this.bipedLeftLegWear).isHidden = data.solidLegwear == 1 || data.solidLegwear == 2;
+
+			this.solidRightLegWear.isHidden = data.solidLegwear == 0 || data.solidLegwear == 2;
+			this.solidLeftLegWear.isHidden = data.solidLegwear == 0 || data.solidLegwear == 3;
+		}
+		else if(data.legwear == 2){
+			((ModelScaleRenderer)this.bipedRightLegWear).isHidden = true;
+			((ModelScaleRenderer)this.bipedLeftLegWear).isHidden = data.solidLegwear == 1 || data.solidLegwear == 2;
+
+			this.solidRightLegWear.isHidden = true;
+			this.solidLeftLegWear.isHidden = data.solidLegwear == 0 || data.solidLegwear == 3;
+		}
+		else if(data.legwear == 3){
+			((ModelScaleRenderer)this.bipedRightLegWear).isHidden = data.solidLegwear == 1 || data.solidLegwear == 3;
+			((ModelScaleRenderer)this.bipedLeftLegWear).isHidden = true;
+
+			this.solidRightLegWear.isHidden = data.solidLegwear == 0 || data.solidLegwear == 2;
+			this.solidLeftLegWear.isHidden = true;
+		}
+		else{
+			((ModelScaleRenderer)this.bipedRightLegWear).isHidden = true;
+			((ModelScaleRenderer)this.bipedLeftLegWear).isHidden = true;
+			this.solidRightLegWear.isHidden = true;
+			this.solidLeftLegWear.isHidden = true;
+		}
+		
+		
 		this.legs.setConfig(legs,x,y,z);
 		this.legs.render(f);
 		if(!isArmor){

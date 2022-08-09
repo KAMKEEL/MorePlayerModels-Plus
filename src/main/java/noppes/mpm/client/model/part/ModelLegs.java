@@ -58,9 +58,10 @@ public class ModelLegs extends ModelScaleRenderer{
     private ModelRenderer frontRightHoof;
             
     private ModelMPM base;
-	
+
 	public ModelLegs(ModelMPM base, ModelScaleRenderer leg1, ModelScaleRenderer leg2, int textWidth, int textHeight) {
 		super(base);
+
 		this.base = base;
 		this.leg1 = leg1;
 		this.leg2 = leg2;
@@ -68,146 +69,162 @@ public class ModelLegs extends ModelScaleRenderer{
 		if(base.isArmor)
 			return;
 		spider = new ModelRenderer(base);
-        this.addChild(spider);
+		this.addChild(spider);
 
-        float var1 = 0.0F;
-        byte var2 = 15;
-        spiderNeck = new ModelRenderer(base, 0, 0);
-        spiderNeck.addBox(-3.0F, -3.0F, -3.0F, 6, 6, 6, var1);
-        spiderNeck.setRotationPoint(0.0F, (float)var2, 2.0F);
-        spider.addChild(spiderNeck);
-        
-        spiderBody = new ModelRenderer(base, 0, 12);
-        spiderBody.addBox(-5.0F, -4.0F, -6.0F, 10, 8, 12, var1);
-        spiderBody.setRotationPoint(0.0F, (float)var2, 11.0F);
-        spider.addChild(spiderBody);
-        
-        this.spiderLeg1 = new ModelRenderer(base, 18, 0);
-        this.spiderLeg1.addBox(-15.0F, -1.0F, -1.0F, 16, 2, 2, var1);
-        this.spiderLeg1.setRotationPoint(-4.0F, (float)var2, 4.0F);
-        spider.addChild(spiderLeg1);
-        
-        this.spiderLeg2 = new ModelRenderer(base, 18, 0);
-        this.spiderLeg2.addBox(-1.0F, -1.0F, -1.0F, 16, 2, 2, var1);
-        this.spiderLeg2.setRotationPoint(4.0F, (float)var2, 4.0F);
-        spider.addChild(spiderLeg2);
-        
-        this.spiderLeg3 = new ModelRenderer(base, 18, 0);
-        this.spiderLeg3.addBox(-15.0F, -1.0F, -1.0F, 16, 2, 2, var1);
-        this.spiderLeg3.setRotationPoint(-4.0F, (float)var2, 3.0F);
-        spider.addChild(spiderLeg3);
-        
-        this.spiderLeg4 = new ModelRenderer(base, 18, 0);
-        this.spiderLeg4.addBox(-1.0F, -1.0F, -1.0F, 16, 2, 2, var1);
-        this.spiderLeg4.setRotationPoint(4.0F, (float)var2, 3.0F);
-        spider.addChild(spiderLeg4);
-        
-        this.spiderLeg5 = new ModelRenderer(base, 18, 0);
-        this.spiderLeg5.addBox(-15.0F, -1.0F, -1.0F, 16, 2, 2, var1);
-        this.spiderLeg5.setRotationPoint(-4.0F, (float)var2, 2.0F);
-        spider.addChild(spiderLeg5);
-        
-        this.spiderLeg6 = new ModelRenderer(base, 18, 0);
-        this.spiderLeg6.addBox(-1.0F, -1.0F, -1.0F, 16, 2, 2, var1);
-        this.spiderLeg6.setRotationPoint(4.0F, (float)var2, 2.0F);
-        spider.addChild(spiderLeg6);
-        
-        this.spiderLeg7 = new ModelRenderer(base, 18, 0);
-        this.spiderLeg7.addBox(-15.0F, -1.0F, -1.0F, 16, 2, 2, var1);
-        this.spiderLeg7.setRotationPoint(-4.0F, (float)var2, 1.0F);
-        spider.addChild(spiderLeg7);
-        
-        this.spiderLeg8 = new ModelRenderer(base, 18, 0);
-        this.spiderLeg8.addBox(-1.0F, -1.0F, -1.0F, 16, 2, 2, var1);
-        this.spiderLeg8.setRotationPoint(4.0F, (float)var2, 1.0F);
-        spider.addChild(spiderLeg8);
+		float var1 = 0.0F;
+		byte var2 = 15;
+		spiderNeck = new ModelRenderer(base, 0, 0);
+		spiderNeck.setTextureSize(64,32);
+		spiderNeck.addBox(-3.0F, -3.0F, -3.0F, 6, 6, 6, var1);
+		spiderNeck.setRotationPoint(0.0F, (float)var2, 2.0F);
+		spider.addChild(spiderNeck);
 
-        
-        int zOffset = 10;
-        float yOffset = 7f;
-        horse = new ModelRenderer(base);
-        this.addChild(horse);
+		spiderBody = new ModelRenderer(base, 0, 12);
+		spiderBody.setTextureSize(64,32);
+		spiderBody.addBox(-5.0F, -4.0F, -6.0F, 10, 8, 12, var1);
+		spiderBody.setRotationPoint(0.0F, (float)var2, 11.0F);
+		spider.addChild(spiderBody);
 
-        ModelRenderer body = new ModelRenderer(base, 0, 34);
-        body.setTextureSize(128, 128);
-        body.addBox(-5.0F, -8.0F, -19.0F, 10, 10, 24);
-        body.setRotationPoint(0.0F, 11.0F + yOffset, 9.0F + zOffset);
-        horse.addChild(body);
-        
-        this.backLeftLeg = new ModelRenderer(base, 78, 29);
-        this.backLeftLeg.setTextureSize(128, 128);
-        this.backLeftLeg.addBox(-2.5F, -2.0F, -2.5F, 4, 9, 5);
-        this.backLeftLeg.setRotationPoint(4.0F, 9.0F + yOffset, 11.0F + zOffset);
-        horse.addChild(backLeftLeg);
-        this.backLeftShin = new ModelRenderer(base, 78, 43);
-        this.backLeftShin.setTextureSize(128, 128);
-        this.backLeftShin.addBox(-2.0F, 0.0F, -1.5F, 3, 5, 3);
-        this.backLeftShin.setRotationPoint(0F, 7.0F, 0);
-        backLeftLeg.addChild(backLeftShin);
-        this.backLeftHoof = new ModelRenderer(base, 78, 51);
-        this.backLeftHoof.setTextureSize(128, 128);
-        this.backLeftHoof.addBox(-2.5F, 5.1F, -2.0F, 4, 3, 4);
-        this.backLeftHoof.setRotationPoint(0F, 7.0F, 0);
-        backLeftLeg.addChild(backLeftHoof);
-        
-        this.backRightLeg = new ModelRenderer(base, 96, 29);
-        this.backRightLeg.setTextureSize(128, 128);
-        this.backRightLeg.addBox(-1.5F, -2.0F, -2.5F, 4, 9, 5);
-        this.backRightLeg.setRotationPoint(-4.0F, 9.0F + yOffset, 11.0F + zOffset);
-        horse.addChild(backRightLeg);
-        this.backRightShin = new ModelRenderer(base, 96, 43);
-        this.backRightShin.setTextureSize(128, 128);
-        this.backRightShin.addBox(-1.0F, 0.0F, -1.5F, 3, 5, 3);
-        this.backRightShin.setRotationPoint(0F, 7, 0);
-        backRightLeg.addChild(backRightShin);
-        this.backRightHoof = new ModelRenderer(base, 96, 51);
-        this.backRightHoof.setTextureSize(128, 128);
-        this.backRightHoof.addBox(-1.5F, 5.1F, -2.0F, 4, 3, 4);
-        this.backRightHoof.setRotationPoint(0F, 7, 0);
-        backRightLeg.addChild(backRightHoof);
-        
-        this.frontLeftLeg = new ModelRenderer(base, 44, 29);
-        this.frontLeftLeg.setTextureSize(128, 128);
-        this.frontLeftLeg.addBox(-1.9F, -1.0F, -2.1F, 3, 8, 4);
-        this.frontLeftLeg.setRotationPoint(4.0F, 9.0F + yOffset, -8.0F + zOffset);
-        horse.addChild(frontLeftLeg);
-        this.frontLeftShin = new ModelRenderer(base, 44, 41);
-        this.frontLeftShin.setTextureSize(128, 128);
-        this.frontLeftShin.addBox(-1.9F, 0.0F, -1.6F, 3, 5, 3);
-        this.frontLeftShin.setRotationPoint(0F, 7.0F, 0F);
-        frontLeftLeg.addChild(frontLeftShin);
-        this.frontLeftHoof = new ModelRenderer(base, 44, 51);
-        this.frontLeftHoof.setTextureSize(128, 128);
-        this.frontLeftHoof.addBox(-2.4F, 5.1F, -2.1F, 4, 3, 4);
-        this.frontLeftHoof.setRotationPoint(.0F, 7.0F, 0F);
-        frontLeftLeg.addChild(frontLeftHoof);
-        
-        this.frontRightLeg = new ModelRenderer(base, 60, 29);
-        this.frontRightLeg.setTextureSize(128, 128);
-        this.frontRightLeg.addBox(-1.1F, -1.0F, -2.1F, 3, 8, 4);
-        this.frontRightLeg.setRotationPoint(-4.0F, 9.0F + yOffset, -8.0F + zOffset);
-        horse.addChild(frontRightLeg);
-        this.frontRightShin = new ModelRenderer(base, 60, 41);
-        this.frontRightShin.setTextureSize(128, 128);
-        this.frontRightShin.addBox(-1.1F, 0.0F, -1.6F, 3, 5, 3);
-        this.frontRightShin.setRotationPoint(0F, 7, 0);
-        frontRightLeg.addChild(frontRightShin);
-        this.frontRightHoof = new ModelRenderer(base, 60, 51);
-        this.frontRightHoof.setTextureSize(128, 128);
-        this.frontRightHoof.addBox(-1.6F, 5.1F, -2.1F, 4, 3, 4);
-        this.frontRightHoof.setRotationPoint(0F, 7, 0);
-        frontRightLeg.addChild(frontRightHoof);
+		this.spiderLeg1 = new ModelRenderer(base, 18, 0);
+		this.spiderLeg1.setTextureSize(64,32);
+		this.spiderLeg1.addBox(-15.0F, -1.0F, -1.0F, 16, 2, 2, var1);
+		this.spiderLeg1.setRotationPoint(-4.0F, (float)var2, 4.0F);
+		spider.addChild(spiderLeg1);
+
+		this.spiderLeg2 = new ModelRenderer(base, 18, 0);
+		this.spiderLeg2.setTextureSize(64,32);
+		this.spiderLeg2.addBox(-1.0F, -1.0F, -1.0F, 16, 2, 2, var1);
+		this.spiderLeg2.setRotationPoint(4.0F, (float)var2, 4.0F);
+		spider.addChild(spiderLeg2);
+
+		this.spiderLeg3 = new ModelRenderer(base, 18, 0);
+		this.spiderLeg3.setTextureSize(64,32);
+		this.spiderLeg3.addBox(-15.0F, -1.0F, -1.0F, 16, 2, 2, var1);
+		this.spiderLeg3.setRotationPoint(-4.0F, (float)var2, 3.0F);
+		spider.addChild(spiderLeg3);
+
+		this.spiderLeg4 = new ModelRenderer(base, 18, 0);
+		this.spiderLeg4.setTextureSize(64,32);
+		this.spiderLeg4.addBox(-1.0F, -1.0F, -1.0F, 16, 2, 2, var1);
+		this.spiderLeg4.setRotationPoint(4.0F, (float)var2, 3.0F);
+		spider.addChild(spiderLeg4);
+
+		this.spiderLeg5 = new ModelRenderer(base, 18, 0);
+		this.spiderLeg5.setTextureSize(64,32);
+		this.spiderLeg5.addBox(-15.0F, -1.0F, -1.0F, 16, 2, 2, var1);
+		this.spiderLeg5.setRotationPoint(-4.0F, (float)var2, 2.0F);
+		spider.addChild(spiderLeg5);
+
+		this.spiderLeg6 = new ModelRenderer(base, 18, 0);
+		this.spiderLeg6.setTextureSize(64,32);
+		this.spiderLeg6.addBox(-1.0F, -1.0F, -1.0F, 16, 2, 2, var1);
+		this.spiderLeg6.setRotationPoint(4.0F, (float)var2, 2.0F);
+		spider.addChild(spiderLeg6);
+
+		this.spiderLeg7 = new ModelRenderer(base, 18, 0);
+		this.spiderLeg7.setTextureSize(64,32);
+		this.spiderLeg7.addBox(-15.0F, -1.0F, -1.0F, 16, 2, 2, var1);
+		this.spiderLeg7.setRotationPoint(-4.0F, (float)var2, 1.0F);
+		spider.addChild(spiderLeg7);
+
+		this.spiderLeg8 = new ModelRenderer(base, 18, 0);
+		this.spiderLeg8.setTextureSize(64,32);
+		this.spiderLeg8.addBox(-1.0F, -1.0F, -1.0F, 16, 2, 2, var1);
+		this.spiderLeg8.setRotationPoint(4.0F, (float)var2, 1.0F);
+		spider.addChild(spiderLeg8);
+
+
+		int zOffset = 10;
+		float yOffset = 7f;
+		horse = new ModelRenderer(base);
+		this.addChild(horse);
+
+		ModelRenderer body = new ModelRenderer(base, 0, 34);
+		body.setTextureSize(128, 128);
+		body.addBox(-5.0F, -8.0F, -19.0F, 10, 10, 24);
+		body.setRotationPoint(0.0F, 11.0F + yOffset, 9.0F + zOffset);
+		horse.addChild(body);
+
+		this.backLeftLeg = new ModelRenderer(base, 78, 29);
+		this.backLeftLeg.setTextureSize(128, 128);
+		this.backLeftLeg.addBox(-2.5F, -2.0F, -2.5F, 4, 9, 5);
+		this.backLeftLeg.setRotationPoint(4.0F, 9.0F + yOffset, 11.0F + zOffset);
+		horse.addChild(backLeftLeg);
+		this.backLeftShin = new ModelRenderer(base, 78, 43);
+		this.backLeftShin.setTextureSize(128, 128);
+		this.backLeftShin.addBox(-2.0F, 0.0F, -1.5F, 3, 5, 3);
+		this.backLeftShin.setRotationPoint(0F, 7.0F, 0);
+		backLeftLeg.addChild(backLeftShin);
+		this.backLeftHoof = new ModelRenderer(base, 78, 51);
+		this.backLeftHoof.setTextureSize(128, 128);
+		this.backLeftHoof.addBox(-2.5F, 5.1F, -2.0F, 4, 3, 4);
+		this.backLeftHoof.setRotationPoint(0F, 7.0F, 0);
+		backLeftLeg.addChild(backLeftHoof);
+
+		this.backRightLeg = new ModelRenderer(base, 96, 29);
+		this.backRightLeg.setTextureSize(128, 128);
+		this.backRightLeg.addBox(-1.5F, -2.0F, -2.5F, 4, 9, 5);
+		this.backRightLeg.setRotationPoint(-4.0F, 9.0F + yOffset, 11.0F + zOffset);
+		horse.addChild(backRightLeg);
+		this.backRightShin = new ModelRenderer(base, 96, 43);
+		this.backRightShin.setTextureSize(128, 128);
+		this.backRightShin.addBox(-1.0F, 0.0F, -1.5F, 3, 5, 3);
+		this.backRightShin.setRotationPoint(0F, 7, 0);
+		backRightLeg.addChild(backRightShin);
+		this.backRightHoof = new ModelRenderer(base, 96, 51);
+		this.backRightHoof.setTextureSize(128, 128);
+		this.backRightHoof.addBox(-1.5F, 5.1F, -2.0F, 4, 3, 4);
+		this.backRightHoof.setRotationPoint(0F, 7, 0);
+		backRightLeg.addChild(backRightHoof);
+
+		this.frontLeftLeg = new ModelRenderer(base, 44, 29);
+		this.frontLeftLeg.setTextureSize(128, 128);
+		this.frontLeftLeg.addBox(-1.9F, -1.0F, -2.1F, 3, 8, 4);
+		this.frontLeftLeg.setRotationPoint(4.0F, 9.0F + yOffset, -8.0F + zOffset);
+		horse.addChild(frontLeftLeg);
+		this.frontLeftShin = new ModelRenderer(base, 44, 41);
+		this.frontLeftShin.setTextureSize(128, 128);
+		this.frontLeftShin.addBox(-1.9F, 0.0F, -1.6F, 3, 5, 3);
+		this.frontLeftShin.setRotationPoint(0F, 7.0F, 0F);
+		frontLeftLeg.addChild(frontLeftShin);
+		this.frontLeftHoof = new ModelRenderer(base, 44, 51);
+		this.frontLeftHoof.setTextureSize(128, 128);
+		this.frontLeftHoof.addBox(-2.4F, 5.1F, -2.1F, 4, 3, 4);
+		this.frontLeftHoof.setRotationPoint(.0F, 7.0F, 0F);
+		frontLeftLeg.addChild(frontLeftHoof);
+
+		this.frontRightLeg = new ModelRenderer(base, 60, 29);
+		this.frontRightLeg.setTextureSize(128, 128);
+		this.frontRightLeg.addBox(-1.1F, -1.0F, -2.1F, 3, 8, 4);
+		this.frontRightLeg.setRotationPoint(-4.0F, 9.0F + yOffset, -8.0F + zOffset);
+		horse.addChild(frontRightLeg);
+		this.frontRightShin = new ModelRenderer(base, 60, 41);
+		this.frontRightShin.setTextureSize(128, 128);
+		this.frontRightShin.addBox(-1.1F, 0.0F, -1.6F, 3, 5, 3);
+		this.frontRightShin.setRotationPoint(0F, 7, 0);
+		frontRightLeg.addChild(frontRightShin);
+		this.frontRightHoof = new ModelRenderer(base, 60, 51);
+		this.frontRightHoof.setTextureSize(128, 128);
+		this.frontRightHoof.addBox(-1.6F, 5.1F, -2.1F, 4, 3, 4);
+		this.frontRightHoof.setRotationPoint(0F, 7, 0);
+		frontRightLeg.addChild(frontRightHoof);
 
 		naga = new ModelNagaLegs(base);
-        this.addChild(naga);
+		this.addChild(naga);
 
+		// Add Mermaid Legs
 		mermaid = new ModelMermaidLegs(base);
-
 		mermaid2 = new ModelMermaidLegs2(base);
-        this.addChild(mermaid2);
-        
-        digitigrade = new ModelDigitigradeLegs(base);
-        this.addChild(digitigrade);
+		this.addChild(mermaid);
+		this.addChild(mermaid2);
+
+		boolean mirror = false;
+		if(textHeight != textWidth){
+			mirror = true;
+		}
+
+		digitigrade = new ModelDigitigradeLegs(base, mirror, textWidth, textHeight);
+		this.addChild(digitigrade);
 	}
 	public void setRotation(ModelRenderer model, float x, float y, float z) {
 		model.rotateAngleX = x;

@@ -11,20 +11,50 @@ public class ImageBufferDownloadAlt extends ImageBufferDownload
     private int imageData[];
     private int imageWidth;
     private int imageHeight;
+    private boolean version;
+    public boolean skinTexture = true;
+
+    // If Version == true, use 64 Loader
+    public ImageBufferDownloadAlt(boolean ver){
+        this.version = ver;
+    }
+
+    public ImageBufferDownloadAlt(boolean ver, boolean skinTexture){
+        this.version = ver;
+        this.skinTexture = skinTexture;
+    }
 
     @Override
     public BufferedImage parseUserSkin(BufferedImage bufferedimage)
-    {        
-		imageWidth = bufferedimage.getWidth(null);
-        imageHeight = imageWidth / 2;
-        
-        BufferedImage bufferedimage1 = new BufferedImage(imageWidth, imageHeight, 2);
-        Graphics g = bufferedimage1.getGraphics();
-        g.drawImage(bufferedimage, 0, 0, null);
-        g.dispose();
-        imageData = ((DataBufferInt)bufferedimage1.getRaster().getDataBuffer()).getData();
-        setAreaTransparent(imageWidth / 2, 0, imageWidth, imageHeight / 2);
-        return bufferedimage1;
+    {
+        if(this.version){
+            imageWidth = bufferedimage.getWidth(null);
+            imageHeight = bufferedimage.getHeight(null);
+
+            BufferedImage bufferedimage1 = new BufferedImage(imageWidth, imageHeight, 2);
+            Graphics g = bufferedimage1.getGraphics();
+            g.drawImage(bufferedimage, 0, 0, null);
+            g.dispose();
+
+            imageData = ((DataBufferInt) bufferedimage1.getRaster().getDataBuffer()).getData();
+            if(skinTexture)
+                setAreaTransparent(imageWidth / 2, 0, imageWidth, imageHeight / 4);
+            return bufferedimage1;
+        }
+
+        else{
+            imageWidth = bufferedimage.getWidth(null);
+            imageHeight = imageWidth / 2;
+
+            BufferedImage bufferedimage1 = new BufferedImage(imageWidth, imageHeight, 2);
+            Graphics g = bufferedimage1.getGraphics();
+            g.drawImage(bufferedimage, 0, 0, null);
+            g.dispose();
+            imageData = ((DataBufferInt)bufferedimage1.getRaster().getDataBuffer()).getData();
+
+            setAreaTransparent(imageWidth / 2, 0, imageWidth, imageHeight / 2);
+            return bufferedimage1;
+        }
     }
     /**
      * Makes the given area of the image transparent if it was previously completely opaque (used to remove the outer

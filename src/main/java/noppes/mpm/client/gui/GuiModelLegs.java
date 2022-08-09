@@ -10,6 +10,9 @@ import noppes.mpm.client.gui.util.GuiModelInterface;
 public class GuiModelLegs extends GuiModelInterface{
 
 	private GuiScreen parent;
+	private final String[] arrLeg = new String[]{"gui.no","Both","Right","Left"};
+	private final String[] arrLegwear = new String[]{"gui.no","Both","Left","Right"};
+	private final String[] arrSolidLegwear = new String[]{"gui.no","Both","Left","Right"};
 	private final String[] arrLegs = new String[]{"gui.no","Player","Player Naga","Spider","Horse","Naga", "Mermaid","Digitigrade"};
 	private final String[] arrTail = new String[]{"gui.no","Player", "Player Dragon","Cat","Wolf","Horse","Dragon", "Squirrel", "Fin", "Rodent"};
 	public GuiModelLegs(GuiScreen parent){
@@ -21,6 +24,17 @@ public class GuiModelLegs extends GuiModelInterface{
     public void initGui() {
     	super.initGui();
 		int y = guiTop + 20;
+
+		addButton(new GuiNpcButton(30, guiLeft + 50, y += 22, 70, 20, arrLeg, playerdata.hideLegs));
+		addLabel(new GuiNpcLabel(30, "Hide", guiLeft, y + 5, 0xFFFFFF));
+
+		if (playerdata.modelType == 1 || playerdata.modelType == 2) {
+			addButton(new GuiNpcButton(8, guiLeft + 50, y += 22, 70, 20, arrLegwear, playerdata.legwear));
+			addLabel(new GuiNpcLabel(8, "Legwear", guiLeft, y + 5, 0xFFFFFF));
+
+			addButton(new GuiNpcButton(9, guiLeft + 50, y += 22, 70, 20, arrSolidLegwear, playerdata.solidLegwear));
+			addLabel(new GuiNpcLabel(9, "Solid", guiLeft, y + 5, 0xFFFFFF));
+		}
 
     	addButton(new GuiNpcButton(1, guiLeft + 50, y += 22, 70, 20, arrLegs, getNagaIndex(playerdata.legParts)));
 		addLabel(new GuiNpcLabel(1, "Legs", guiLeft, y + 5, 0xFFFFFF));
@@ -73,6 +87,15 @@ public class GuiModelLegs extends GuiModelInterface{
     	super.actionPerformed(btn);
     	GuiNpcButton button = (GuiNpcButton) btn;
 
+    	if(button.id == 8){
+			playerdata.legwear = (byte) button.getValue();
+		}
+		if(button.id == 9){
+			playerdata.solidLegwear = (byte) button.getValue();
+		}
+		if(button.id == 30){
+			playerdata.hideLegs = (byte) button.getValue();
+		}
     	if(button.id == 1){
     		ModelPartData data = playerdata.legParts;
     		int value = button.getValue() - 1;
