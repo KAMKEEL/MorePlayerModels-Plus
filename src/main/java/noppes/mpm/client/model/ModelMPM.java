@@ -193,6 +193,7 @@ public class ModelMPM extends ModelBiped{
 	public ModelMPM(float par1, int alexArms) {
 		super(par1);
 		isArmor = par1 > 0;
+		x64 = false;
 		if (isArmor && alexArms == 1) {
 			isAlexArmor = true;
 		}
