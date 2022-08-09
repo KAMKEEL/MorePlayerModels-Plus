@@ -65,8 +65,6 @@ public class RenderMPM extends RenderPlayer{
 	private EntityLivingBase entity;
 	private ModelRenderPassHelper renderpass = new ModelRenderPassHelper();
 
-	// Steve 64x32
-	protected final ModelMPM originalBipedMain;
 
 	// Steve 64x64
 	protected final static ModelMPM steve64 = new ModelMPM(0, false);
@@ -81,7 +79,6 @@ public class RenderMPM extends RenderPlayer{
 	public RenderMPM() {
 		super();
 		this.setRenderManager(RenderManager.instance);
-		this.originalBipedMain = new ModelMPM(0, 0);;
 		this.modelBipedMain = new ModelMPM(0, 0);
 		this.modelArmor = new ModelMPM(0.5f, 0);
 		this.modelArmorChestplate = new ModelMPM(1.0f, 0);
@@ -92,7 +89,6 @@ public class RenderMPM extends RenderPlayer{
 		modelBipedMain.setPlayerData(data, entity);
 		modelArmorChestplate.setPlayerData(data, entity);
 		modelArmor.setPlayerData(data, entity);
-		originalBipedMain.setPlayerData(data, entity);
 	}
 	
 	@Override
@@ -178,48 +174,6 @@ public class RenderMPM extends RenderPlayer{
 		player.func_152121_a(Type.SKIN, location);
 		return;
 	}
-	
-
-//	public ResourceLocation loadResource(AbstractClientPlayer player) {
-//		if(data.loaded)
-//			return data.playerResource;
-//		
-//		Minecraft mc = Minecraft.getMinecraft();
-//		SkinManager skinmanager = mc.func_152342_ad();
-//		String url = data.url;
-//		Map map = skinmanager.func_152788_a(player.getGameProfile());
-//		if(map.isEmpty()){
-//			map = mc.func_152347_ac().getTextures(mc.func_152347_ac().fillProfileProperties(player.getGameProfile(), false), false);
-//		}
-//		File file = null;
-//		ResourceLocation location = null;
-//		if(map.containsKey(Type.SKIN)){
-//			MinecraftProfileTexture profile = (MinecraftProfileTexture) map.get(Type.SKIN);
-//			if(url == null || url.isEmpty())
-//				url = profile.getUrl();	
-//
-//	        File dir = new File((File)ObfuscationReflectionHelper.getPrivateValue(SkinManager.class, skinmanager, 3), profile.getHash().substring(0, 2));
-//	        file = new File(dir, profile.getHash());
-//			location = new ResourceLocation("skins/" + profile.getHash());
-//		}
-//		
-//		if(url == null || url.isEmpty()){
-//			return player.getLocationSkin();
-//		}
-//		if(file == null){
-//	        File dir = new File((File)ObfuscationReflectionHelper.getPrivateValue(SkinManager.class, skinmanager, 3), player.getGameProfile().getId().toString());
-//	        file = new File(dir, player.getGameProfile().getId().toString());
-//		}
-//		if(location == null)
-//			location = new ResourceLocation("skins/" + player.getGameProfile().getId().toString());
-//		if(file != null && file.exists())
-//			file.delete();
-//		func_110301_a(file, location, url);
-//		player.func_152121_a(Type.SKIN, location);
-//		data.playerResource = location;
-//		data.loaded = true;
-//		return location;
-//	}
 	
 	@Override
     public void renderFirstPersonArm(EntityPlayer player){
@@ -519,34 +473,33 @@ public class RenderMPM extends RenderPlayer{
 			renderPassModel = renderpass;
 			renderpass.renderer = renderEntity;
 			renderpass.entity = entity;
-			modelBipedMain.entityModel = modelArmorChestplate.entityModel = modelArmor.entityModel = model;
-		} else {
-			int modelVal = data.modelType;
-			if(modelVal ==  1){
-				this.mainModel = steve64;
-				this.modelBipedMain = steve64;
-				this.modelArmorChestplate = steveArmorChest;
-				this.modelArmor = steveArmor;
-			}
-			else if(modelVal ==  2){
-				this.mainModel = alex;
-				this.modelBipedMain = alex;
-				this.modelArmorChestplate = alex32armorChest;
-				this.modelArmor = alex32armor;
-			}
-			else{
-				data.bodywear = 0;
-				data.armwear = 0;
-				data.legwear = 0;
-				this.mainModel = originalBipedMain;
-				this.modelBipedMain = originalBipedMain;
-				this.modelArmorChestplate = steveArmorChest;
-				this.modelArmor = steveArmor;
-			}
-			modelBipedMain.entityModel = modelBipedMain;
-			modelArmorChestplate.entityModel = modelArmorChestplate;
-			modelArmor.entityModel = modelArmor;
 		}
+		// THIS NEEDS FIXING
+//		else {
+//			int modelVal = data.modelType;
+//			if(modelVal ==  1){
+//				this.mainModel = steve64;
+//				this.modelBipedMain = steve64;
+//				this.modelArmorChestplate = steveArmorChest;
+//				this.modelArmor = steveArmor;
+//			}
+//			else if(modelVal ==  2){
+//				this.mainModel = alex;
+//				this.modelBipedMain = alex;
+//				this.modelArmorChestplate = alex32armorChest;
+//				this.modelArmor = alex32armor;
+//			}
+//			else{
+//				data.bodywear = 0;
+//				data.armwear = 0;
+//				data.legwear = 0;
+//				this.mainModel = originalBipedMain;
+//				this.modelBipedMain = originalBipedMain;
+//				this.modelArmorChestplate = steveArmorChest;
+//				this.modelArmor = steveArmor;
+//			}
+//		}
+		modelBipedMain.entityModel = modelArmorChestplate.entityModel = modelArmor.entityModel = model;
 		modelBipedMain.entity = modelArmorChestplate.entity = modelArmor.entity = entity;
 	}
 	
