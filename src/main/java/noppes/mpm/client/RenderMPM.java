@@ -65,6 +65,7 @@ public class RenderMPM extends RenderPlayer{
 	private EntityLivingBase entity;
 	private ModelRenderPassHelper renderpass = new ModelRenderPassHelper();
 
+	protected final static ModelMPM originalBipedMain = new ModelMPM(0,0);
 
 	// Steve 64x64
 	protected final static ModelMPM steve64 = new ModelMPM(0, false);
@@ -473,32 +474,30 @@ public class RenderMPM extends RenderPlayer{
 			renderPassModel = renderpass;
 			renderpass.renderer = renderEntity;
 			renderpass.entity = entity;
+		} else {
+			int modelVal = data.modelType;
+			if(modelVal ==  1){
+				this.mainModel = steve64;
+				this.modelBipedMain = steve64;
+				this.modelArmorChestplate = steveArmorChest;
+				this.modelArmor = steveArmor;
+			}
+			else if(modelVal ==  2){
+				this.mainModel = alex;
+				this.modelBipedMain = alex;
+				this.modelArmorChestplate = alex32armorChest;
+				this.modelArmor = alex32armor;
+			}
+			else{
+				data.bodywear = 0;
+				data.armwear = 0;
+				data.legwear = 0;
+				this.mainModel = originalBipedMain;
+				this.modelBipedMain = originalBipedMain;
+				this.modelArmorChestplate = steveArmorChest;
+				this.modelArmor = steveArmor;
+			}
 		}
-		// THIS NEEDS FIXING
-//		else {
-//			int modelVal = data.modelType;
-//			if(modelVal ==  1){
-//				this.mainModel = steve64;
-//				this.modelBipedMain = steve64;
-//				this.modelArmorChestplate = steveArmorChest;
-//				this.modelArmor = steveArmor;
-//			}
-//			else if(modelVal ==  2){
-//				this.mainModel = alex;
-//				this.modelBipedMain = alex;
-//				this.modelArmorChestplate = alex32armorChest;
-//				this.modelArmor = alex32armor;
-//			}
-//			else{
-//				data.bodywear = 0;
-//				data.armwear = 0;
-//				data.legwear = 0;
-//				this.mainModel = originalBipedMain;
-//				this.modelBipedMain = originalBipedMain;
-//				this.modelArmorChestplate = steveArmorChest;
-//				this.modelArmor = steveArmor;
-//			}
-//		}
 		modelBipedMain.entityModel = modelArmorChestplate.entityModel = modelArmor.entityModel = model;
 		modelBipedMain.entity = modelArmorChestplate.entity = modelArmor.entity = entity;
 	}
