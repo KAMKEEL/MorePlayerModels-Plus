@@ -60,12 +60,14 @@ public class ModelMPM extends ModelBiped{
 	
 	public boolean isArmor;
 	public boolean isAlexArmor;
+	public boolean x64 = false;
 
 	// Steve 64x64 and Alex 64x64
 	public ModelMPM(float par1, boolean alex) {
 
 		super(par1);
 		isArmor = par1 > 0;
+		x64 = true;
 		float par2 = 0;
 
 		this.bipedCloak = new ModelRenderer(this, 0, 0);
@@ -191,6 +193,7 @@ public class ModelMPM extends ModelBiped{
 	public ModelMPM(float par1, int alexArms) {
 		super(par1);
 		isArmor = par1 > 0;
+		x64 = false;
 		if (isArmor && alexArms == 1) {
 			isAlexArmor = true;
 		}

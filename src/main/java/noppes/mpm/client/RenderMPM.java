@@ -65,6 +65,7 @@ public class RenderMPM extends RenderPlayer{
 	private EntityLivingBase entity;
 	private ModelRenderPassHelper renderpass = new ModelRenderPassHelper();
 
+	protected final static ModelMPM originalBipedMain = new ModelMPM(0,0);
 
 	// Steve 64x64
 	protected final static ModelMPM steve64 = new ModelMPM(0, false);
@@ -114,8 +115,29 @@ public class RenderMPM extends RenderPlayer{
     }
 
 	@Override
-    public void doRender(AbstractClientPlayer p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_){
-		super.doRender(p_76986_1_, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
+    public void doRender(AbstractClientPlayer player, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_){
+		ItemStack itemstack = player.getHeldItem();
+		this.modelArmorChestplate.heldItemRight = this.modelArmor.heldItemRight = this.modelBipedMain.heldItemRight = itemstack != null ? 1 : 0;
+		if (itemstack != null && player.getItemInUseCount() > 0)
+		{
+			EnumAction enumaction = itemstack.getItemUseAction();
+
+			if (enumaction == EnumAction.block)
+			{
+				this.modelArmorChestplate.heldItemRight = this.modelArmor.heldItemRight = this.modelBipedMain.heldItemRight = 3;
+			}
+			else if (enumaction == EnumAction.bow)
+			{
+				this.modelArmorChestplate.aimedBow = this.modelArmor.aimedBow = this.modelBipedMain.aimedBow = true;
+			}
+		}
+		modelArmorChestplate.isSneak = modelArmor.isSneak = modelBipedMain.isSneak = player.isSneaking();
+		modelArmorChestplate.isRiding = modelArmor.isRiding = modelBipedMain.isRiding = player.isRiding();
+		super.doRender(player, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
+		modelArmorChestplate.aimedBow = modelArmor.aimedBow = modelBipedMain.aimedBow = false;
+		modelArmorChestplate.isSneak = modelArmor.isSneak = modelBipedMain.isSneak = false;
+		modelArmorChestplate.heldItemRight = modelArmor.heldItemRight = modelBipedMain.heldItemRight = 0;
+		modelArmorChestplate.heldItemLeft = modelArmor.heldItemLeft = modelBipedMain.heldItemLeft = 0;
     }
 
     private void loadTexture(File file, ResourceLocation resource, String par1Str, boolean version){
@@ -473,32 +495,30 @@ public class RenderMPM extends RenderPlayer{
 			renderPassModel = renderpass;
 			renderpass.renderer = renderEntity;
 			renderpass.entity = entity;
+		} else {
+			int modelVal = data.modelType;
+			if(modelVal ==  1){
+				this.mainModel = steve64;
+				this.modelBipedMain = steve64;
+				this.modelArmorChestplate = steveArmorChest;
+				this.modelArmor = steveArmor;
+			}
+			else if(modelVal ==  2){
+				this.mainModel = alex;
+				this.modelBipedMain = alex;
+				this.modelArmorChestplate = alex32armorChest;
+				this.modelArmor = alex32armor;
+			}
+			else{
+				data.bodywear = 0;
+				data.armwear = 0;
+				data.legwear = 0;
+				this.mainModel = originalBipedMain;
+				this.modelBipedMain = originalBipedMain;
+				this.modelArmorChestplate = steveArmorChest;
+				this.modelArmor = steveArmor;
+			}
 		}
-		// THIS NEEDS FIXING
-//		else {
-//			int modelVal = data.modelType;
-//			if(modelVal ==  1){
-//				this.mainModel = steve64;
-//				this.modelBipedMain = steve64;
-//				this.modelArmorChestplate = steveArmorChest;
-//				this.modelArmor = steveArmor;
-//			}
-//			else if(modelVal ==  2){
-//				this.mainModel = alex;
-//				this.modelBipedMain = alex;
-//				this.modelArmorChestplate = alex32armorChest;
-//				this.modelArmor = alex32armor;
-//			}
-//			else{
-//				data.bodywear = 0;
-//				data.armwear = 0;
-//				data.legwear = 0;
-//				this.mainModel = originalBipedMain;
-//				this.modelBipedMain = originalBipedMain;
-//				this.modelArmorChestplate = steveArmorChest;
-//				this.modelArmor = steveArmor;
-//			}
-//		}
 		modelBipedMain.entityModel = modelArmorChestplate.entityModel = modelArmor.entityModel = model;
 		modelBipedMain.entity = modelArmorChestplate.entity = modelArmor.entity = entity;
 	}
