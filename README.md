@@ -45,7 +45,6 @@ This mod is an ***update*** to MorePlayerModels and not an add-on. Do not instal
 
 [CustomNPC+ Dark Mode](https://github.com/KAMKEEL/CustomNPC-Plus-Dark-Mode) is a resource pack for CustomNPC+ that alters all GUIs within the mod to a dark variant that is both clean and pleasing to look at.
 
-[![Discord Badge](https://img.shields.io/badge/CustomNPC-7289DA?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/rgeWsmQaKa)
 [![Discord Badge](https://img.shields.io/badge/CustomNPC+-7289DA?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/pQqRTvFeJ5)
 [![Download CustomNPC+](https://img.shields.io/badge/Download⠀CustomNPC⠀Plus!-0081CB?style=for-the-badge&logo=material-ui&logoColor=white)](https://www.curseforge.com/minecraft/mc-mods/customnpc-plus)
 [![Download PluginMod](https://img.shields.io/badge/Download⠀Plugin⠀Mod!-0081CB?style=for-the-badge&logo=material-ui&logoColor=white)](https://github.com/KAMKEEL/Plugin-Mod)
