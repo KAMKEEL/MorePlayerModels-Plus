@@ -7,6 +7,7 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.zip.GZIPInputStream;
 
 import net.minecraft.client.Minecraft;
@@ -41,6 +42,14 @@ public class PacketHandlerClient extends PacketHandlerServer{
 	private void handlePacket(ByteBuf buffer, EntityPlayer player, EnumPackets type) throws IOException {
 		if(type == EnumPackets.PING){
 			MorePlayerModels.HasServerSide = true;
+		}
+		else if(type == EnumPackets.RELOAD_SKINS) {
+			Minecraft mc = Minecraft.getMinecraft();
+			List<EntityPlayer> players = mc.theWorld.playerEntities;
+			for(EntityPlayer p : players){
+				ModelData data = PlayerDataController.instance.getPlayerData(p);
+				data.loaded = false;
+			}
 		}
 		else if(type == EnumPackets.SEND_PLAYER_DATA){
 			String username = Server.readString(buffer);

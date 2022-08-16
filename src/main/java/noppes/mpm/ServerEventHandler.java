@@ -85,50 +85,6 @@ public class ServerEventHandler {
 	}
 
 	@SubscribeEvent
-	public void onPlayerTick(TickEvent.PlayerTickEvent event){
-		if(event.side == Side.CLIENT)
-			return;
-    	EntityPlayerMP player = (EntityPlayerMP) event.player;
-    	ModelData data = PlayerDataController.instance.getPlayerData(player);
-    	ItemStack item = player.inventory.mainInventory[0];
-    	if(data.backItem == item)
-    		return;
-    	if(item == null){
-    		Server.sendAssociatedData(player, EnumPackets.BACK_ITEM_REMOVE, player.getCommandSenderName());
-    	}
-    	else{
-    		NBTTagCompound tag = item.writeToNBT(new NBTTagCompound());
-    		Server.sendAssociatedData(player, EnumPackets.BACK_ITEM_UPDATE, player.getCommandSenderName(), tag);
-    		
-    		
-    	}
-    	data.backItem = item;
-        if(data.animation != EnumAnimation.NONE)
-        	checkAnimation(player, data);
-	}
-	public static void checkAnimation(EntityPlayer player, ModelData data){
-    	double motionX = player.prevPosX - player.posX;
-    	double motionY = player.prevPosY - player.posY;
-    	double motionZ = player.prevPosZ - player.posZ;
-
-    	double speed = motionX * motionX +  motionZ * motionZ;
-    	boolean isJumping = motionY * motionY > 0.08;
-
-    	if(data.animationTime > 0)
-    		data.animationTime--;
-
-    	if(player.isPlayerSleeping() || player.isRiding() || data.animationTime == 0 && data.animation == EnumAnimation.WAVING || data.animation == EnumAnimation.BOW && player.isSneaking())
-    		data.animation = EnumAnimation.NONE;
-    	    	
-    	if(!isJumping && player.isSneaking() && (data.animation == EnumAnimation.HUG || data.animation == EnumAnimation.CRAWLING || 
-    			data.animation == EnumAnimation.SITTING || data.animation == EnumAnimation.DANCING))
-    		return;
-
-    	if(speed > 0.01 || isJumping || player.isPlayerSleeping() || player.isRiding() || data.isSleeping() && speed > 0.001)
-    		data.animation = EnumAnimation.NONE;
-	}
-
-	@SubscribeEvent
 	public void onNameSet(PlayerEvent.NameFormat event){
 		ModelData data = PlayerDataController.instance.getPlayerData(event.entityPlayer);
 		if(!data.displayName.isEmpty()){

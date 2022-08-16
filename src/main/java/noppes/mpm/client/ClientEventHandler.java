@@ -11,11 +11,7 @@ import net.minecraft.entity.MPMEntityUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import noppes.mpm.ModelData;
-import noppes.mpm.ModelPartData;
-import noppes.mpm.MorePlayerModels;
-import noppes.mpm.PlayerDataController;
-import noppes.mpm.ServerEventHandler;
+import noppes.mpm.*;
 import noppes.mpm.client.fx.EntityEnderFX;
 import noppes.mpm.client.fx.EntityRainbowFX;
 import noppes.mpm.client.gui.GuiCreationScreen;
@@ -173,7 +169,7 @@ public class ClientEventHandler {
             }
         }
         if(data.animation != EnumAnimation.NONE)
-        	ServerEventHandler.checkAnimation(player, data);
+        	ServerTickHandler.checkAnimation(player, data);
         
         ModelPartData particles = data.getPartData("particles");
         if(particles != null)
