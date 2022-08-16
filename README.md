@@ -24,16 +24,13 @@ This mod is an ***update*** to MorePlayerModels and not an add-on. Do not instal
 --- Please Suggest New Features!
 
 
-## 🔰 Skin Model Feature:
-###### **Majority of these cape designs are taken from the internet with fair-usage.*
-##### ❔ Please note all *local* skins in this version of CustomNPC, must match the model selected.
-<img src="images/skinAnimation.gif" width="474" height="260"/>
+## 🔰 Images:
 
-#### Scale/Puppet Reset:
-<img src="images/guiAnimation.gif" width="474" height="260"/>
+#### POV:
+<img src="images/POV.png" width="474" height="260"/>
 
-#### Url64:
-<img src="images/Url64Example.gif" width="474" height="260"/>
+#### Steve64:
+<img src="images/Steve64.png" width="474" height="260"/>
 
 
 ## 🔗 Want to check out my other projects?
