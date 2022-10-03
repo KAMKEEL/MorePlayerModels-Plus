@@ -130,13 +130,9 @@ public class GuiEntitySelection extends GuiScreen implements GuiListActionListen
 		this.mc.displayGuiScreen(parent);
 	}
 
-//	public FontRenderer getFontRenderer() {
-//		return this.fontRenderer;
-//	}
 	protected void actionPerformed(GuiButton guibutton)
     {
 		close();
     }
-
 
 }
