@@ -187,6 +187,7 @@ public class RenderMPM extends RenderPlayer{
 			map = mc.func_152347_ac().getTextures(mc.func_152347_ac().fillProfileProperties(player.getGameProfile(), false), false);
 		}
 		if(!map.containsKey(Type.SKIN)){
+			player.func_152121_a(Type.SKIN, AbstractClientPlayer.locationStevePng);
 			return;
 		}
 
