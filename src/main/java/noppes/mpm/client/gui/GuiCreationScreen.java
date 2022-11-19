@@ -307,12 +307,15 @@ public class GuiCreationScreen extends GuiModelInterface implements ITextfieldLi
     	if(button.id == 250){
 			if(playerdata.modelType == 0){
 				playerdata.modelType = 1;
+				playerdata.urlType = 1;
 			}
 			else if(playerdata.modelType == 1){
 				playerdata.modelType = 2;
+				playerdata.urlType = 1;
 			}
 			else {
 				playerdata.modelType = 0;
+				playerdata.urlType = 0;
 			}
 			playerdata.loaded = false;
 		}
