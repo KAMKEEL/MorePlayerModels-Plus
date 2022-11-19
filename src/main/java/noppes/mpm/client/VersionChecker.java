@@ -17,7 +17,7 @@ public class VersionChecker extends Thread{
 		
 	}
 	public void run(){
-		String name = '\u00A7'+ "2MorePlayerModels" + '\u00A7' + "f";
+		String name = '\u00A7'+ "2MorePlayerModels+" + '\u00A7' + "f";
 		String link = '\u00A7'+"9"+'\u00A7' + "nClick here"; 
 		String text =  name +" installed. More info at " + link;
 		if(hasUpdate())
@@ -38,7 +38,7 @@ public class VersionChecker extends Thread{
 			}
         }
         ChatComponentTranslation message = new ChatComponentTranslation(text);
-        message.getChatStyle().setChatClickEvent(new ClickEvent(Action.OPEN_URL, "http://www.kodevelopment.nl/minecraft/moreplayermodels/"));
+        message.getChatStyle().setChatClickEvent(new ClickEvent(Action.OPEN_URL, "https://www.curseforge.com/minecraft/mc-mods/moreplayermodels-plus"));
         player.addChatMessage(message);
 	}
 	private boolean hasUpdate(){
