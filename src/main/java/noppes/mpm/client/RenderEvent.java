@@ -31,27 +31,26 @@ import noppes.mpm.PlayerDataController;
 import noppes.mpm.constants.EnumAnimation;
 
 public class RenderEvent {
-
+	public static RenderEvent Instance;
 	public static RenderMPM renderer = new RenderMPM();
 	public static long lastSkinTick = 0;
 	public final static long MaxSkinTick = 6;
 	private ModelData data;
 	
-	public RenderEvent(){ 
+	public RenderEvent(){
+		Instance = this;
 	}
 
-	@SubscribeEvent(priority=EventPriority.LOWEST)
-	public void pre(RenderPlayerEvent.Pre event){
-		EntityPlayer player = event.entityPlayer;
+	public void setPlayerData(EntityPlayer player, RenderPlayer renderPlayer) {
 		data = PlayerDataController.instance.getPlayerData(player);
 		renderer.setModelData(data, player);
-		setModels(event.renderer);
+		setModels(renderPlayer);
 		if(!data.loaded && lastSkinTick > MaxSkinTick){
 			renderer.loadResource((AbstractClientPlayer) player);
-	    	lastSkinTick = 0;
+			lastSkinTick = 0;
 			data.loaded = true;
 		}
-		if(!(event.renderer instanceof RenderMPM)){
+		if(!(renderPlayer instanceof RenderMPM)){
 			RenderManager.instance.entityRenderMap.put(EntityPlayer.class, renderer);
 			RenderManager.instance.entityRenderMap.put(EntityPlayerSP.class, renderer);
 			RenderManager.instance.entityRenderMap.put(EntityPlayerMP.class, renderer);
@@ -59,14 +58,13 @@ public class RenderEvent {
 			RenderManager.instance.entityRenderMap.put(EntityClientPlayerMP.class, renderer);
 			RenderManager.instance.entityRenderMap.put(AbstractClientPlayer.class, renderer);
 		}
-		
+
 		EntityLivingBase entity = data.getEntity(player.worldObj, player);
 		renderer.setEntity(entity);
 		if(player == Minecraft.getMinecraft().thePlayer){
 			player.yOffset = 1.62f;
 			data.backItem = player.inventory.mainInventory[0];
 		}
-
 	}
 
 	@SubscribeEvent(priority=EventPriority.LOWEST)
