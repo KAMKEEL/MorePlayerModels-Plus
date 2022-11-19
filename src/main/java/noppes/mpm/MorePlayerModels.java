@@ -35,7 +35,7 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.FMLEventChannel;
 import cpw.mods.fml.common.network.NetworkRegistry;
 
-@Mod(modid = "moreplayermodels", name = "MorePlayerModels", version = "1.7.10b")
+@Mod(modid = "moreplayermodels", name = "MorePlayerModels", version = "1.2")
 public class MorePlayerModels {
 	@ConfigProp
 	public static int Tooltips = 2;
