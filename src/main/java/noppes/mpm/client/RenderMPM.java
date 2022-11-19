@@ -87,11 +87,14 @@ public class RenderMPM extends RenderPlayer{
 	
 	public void setModelData(ModelData data, EntityLivingBase entity){
 		this.data = data;
+		if (this.mainModel instanceof ModelMPM) {
+			((ModelMPM) this.mainModel).setPlayerData(this.data, entity);
+		}
 		modelBipedMain.setPlayerData(data, entity);
 		modelArmorChestplate.setPlayerData(data, entity);
 		modelArmor.setPlayerData(data, entity);
 	}
-	
+
 	@Override
     protected void passSpecialRender(EntityLivingBase base, double x, double y, double z)
     {
@@ -116,6 +119,8 @@ public class RenderMPM extends RenderPlayer{
 
 	@Override
     public void doRender(AbstractClientPlayer player, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_){
+		if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.RenderPlayerEvent.Pre(player, this, p_76986_9_))) return;
+
 		ItemStack itemstack = player.getHeldItem();
 		this.modelArmorChestplate.heldItemRight = this.modelArmor.heldItemRight = this.modelBipedMain.heldItemRight = itemstack != null ? 1 : 0;
 		if (itemstack != null && player.getItemInUseCount() > 0)

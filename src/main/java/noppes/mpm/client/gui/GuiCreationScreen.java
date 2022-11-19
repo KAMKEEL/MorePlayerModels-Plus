@@ -330,10 +330,11 @@ public class GuiCreationScreen extends GuiModelInterface implements ITextfieldLi
     @Override
     public void close(){
     	super.close();
-    	if(!hash.equals(playerdata.getHash() + playerdata.extra)){
+    	//if(!hash.equals(playerdata.getHash() + playerdata.extra)){
+			playerdata.loaded = false;
     		PlayerDataController.instance.savePlayerData(this.mc.thePlayer, playerdata);
     		Client.sendData(EnumPackets.UPDATE_PLAYER_DATA, playerdata.writeToNBT());
-    	}
+    	//}
     }
 
 	@Override
