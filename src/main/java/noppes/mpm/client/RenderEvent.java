@@ -41,16 +41,18 @@ public class RenderEvent {
 		Instance = this;
 	}
 
-	public void setPlayerData(EntityPlayer player, RenderPlayer renderPlayer) {
+	@SubscribeEvent(priority=EventPriority.LOWEST)
+	public void pre(RenderPlayerEvent.Pre event){
+		EntityPlayer player = event.entityPlayer;
 		data = PlayerDataController.instance.getPlayerData(player);
 		renderer.setModelData(data, player);
-		setModels(renderPlayer);
+		setModels(event.renderer);
 		if(!data.loaded && lastSkinTick > MaxSkinTick){
 			renderer.loadResource((AbstractClientPlayer) player);
 			lastSkinTick = 0;
 			data.loaded = true;
 		}
-		if(!(renderPlayer instanceof RenderMPM)){
+		if(!(event.renderer instanceof RenderMPM)){
 			RenderManager.instance.entityRenderMap.put(EntityPlayer.class, renderer);
 			RenderManager.instance.entityRenderMap.put(EntityPlayerSP.class, renderer);
 			RenderManager.instance.entityRenderMap.put(EntityPlayerMP.class, renderer);
@@ -65,6 +67,7 @@ public class RenderEvent {
 			player.yOffset = 1.62f;
 			data.backItem = player.inventory.mainInventory[0];
 		}
+
 	}
 
 	@SubscribeEvent(priority=EventPriority.LOWEST)
