@@ -10,7 +10,7 @@ import noppes.mpm.client.model.ModelMPM;
 import noppes.mpm.client.model.ModelPartInterface;
 
 public class ModelWings extends ModelPartInterface {
-	
+
 	private Model2DRenderer lWing;
 	private Model2DRenderer rWing;
 
@@ -33,29 +33,29 @@ public class ModelWings extends ModelPartInterface {
 
 	@Override
 	public void setRotationAngles(float par1, float par2, float par3,
-			float par4, float par5, float par6, Entity entity) {
+								  float par4, float par5, float par6, Entity entity) {
 		rWing.rotateAngleX = 0.7141593F;
 		rWing.rotateAngleZ = 0.5090659F;
-		
+
 		lWing.rotateAngleX = 0.7141593F;
 		lWing.rotateAngleZ = -0.5090659F;
 
 		float motion = Math.abs(MathHelper.sin(par1 * 0.033F + (float)Math.PI) * 0.4F) * par2;
-		if(!entity.onGround || motion > 0.01){	
+		if(!entity.onGround || motion > 0.1D){
 			float speed = (float) (0.55f + 0.5f * motion);
-            float y = MathHelper.sin(par3 * 0.55F);
+			float y = MathHelper.sin(par3 * 0.55F);
 
-            rWing.rotateAngleZ += y * 0.5f * speed;
-            rWing.rotateAngleX += y * 0.5f * speed;
+			rWing.rotateAngleZ += y * 0.5f * speed;
+			rWing.rotateAngleX += y * 0.5f * speed;
 
-            lWing.rotateAngleZ -= y * 0.5f * speed;
-            lWing.rotateAngleX += y * 0.5f * speed;
+			lWing.rotateAngleZ -= y * 0.5f * speed;
+			lWing.rotateAngleX += y * 0.5f * speed;
 		}
-		else{
-	        lWing.rotateAngleZ += MathHelper.cos(par3 * 0.09F) * 0.05F + 0.05F;
-	        rWing.rotateAngleZ -= MathHelper.cos(par3 * 0.09F) * 0.05F + 0.05F;
-	        lWing.rotateAngleX += MathHelper.sin(par3 * 0.067F) * 0.05F;
-	        rWing.rotateAngleX += MathHelper.sin(par3 * 0.067F) * 0.05F;
+		else {
+			lWing.rotateAngleZ += MathHelper.cos(par3 * 0.09F) * 0.05F + 0.05F;
+			rWing.rotateAngleZ -= MathHelper.cos(par3 * 0.09F) * 0.05F + 0.05F;
+			lWing.rotateAngleX += MathHelper.sin(par3 * 0.067F) * 0.05F;
+			rWing.rotateAngleX += MathHelper.sin(par3 * 0.067F) * 0.05F;
 		}
 	}
 

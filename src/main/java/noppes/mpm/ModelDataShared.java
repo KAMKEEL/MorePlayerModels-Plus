@@ -118,7 +118,6 @@ public class ModelDataShared{
 			parts.put(item.getString("PartName"), part);
 		}
 		this.parts = parts;
-		
 	}
 
 	private void setEntityClass(String string) {
