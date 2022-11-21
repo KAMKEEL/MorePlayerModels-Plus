@@ -66,8 +66,8 @@ public class ModelMPM extends ModelBiped{
 	// Steve
 	public final static ModelMPM steve32 = new ModelMPM(0, 0);
 	public final static ModelMPM steve64 = new ModelMPM(0, false);
-	public final static ModelMPM steveArmorChest = new ModelMPM(1.0f,0);
-	public final static ModelMPM steveArmor = new ModelMPM(0.5f,0);
+	public final static ModelMPM steveArmorChest = new ModelMPM(1,0);
+	public final static ModelMPM steveArmor = new ModelMPM(0.5F,0);
 
 	// Alex
 	public final static ModelMPM alex = new ModelMPM(0, true);
@@ -87,6 +87,7 @@ public class ModelMPM extends ModelBiped{
 		this.bipedCloak.addBox(-5.0F, 0.0F, -1.0F, 10, 16, 1, par1);
 
 		this.bipedEars = new ModelRenderer(this, 24, 0);
+		this.bipedEars.setTextureSize(64, 32);
 		this.bipedEars.addBox(-3.0F, -6.0F, -1.0F, 6, 6, 1, par1);
 
 		this.bipedHead = (new ModelScaleRenderer(this, 0, 0));
@@ -313,7 +314,6 @@ public class ModelMPM extends ModelBiped{
 	
 	public void setPlayerData(ModelData data, EntityLivingBase entity){
 		this.data = data;
-
 		AbstractClientPlayer player = (AbstractClientPlayer) entity;
 		if(!isArmor){
 			mohawk.setData(data, player);
@@ -330,7 +330,7 @@ public class ModelMPM extends ModelBiped{
 			horns.setData(data, player);
 		}
 		breasts.setData(data, player);
-		legs.setData(data, entity);
+		legs.setData(data, player);
 	}
 	
     @Override

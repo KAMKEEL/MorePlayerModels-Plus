@@ -56,7 +56,7 @@ public class ModelLegs extends ModelScaleRenderer{
     private ModelRenderer frontRightLeg;
     private ModelRenderer frontRightShin;
     private ModelRenderer frontRightHoof;
-            
+
     private ModelMPM base;
 
 	public ModelLegs(ModelMPM base, ModelScaleRenderer leg1, ModelScaleRenderer leg2, int textWidth, int textHeight) {
@@ -209,7 +209,8 @@ public class ModelLegs extends ModelScaleRenderer{
 		this.frontRightHoof.setRotationPoint(0F, 7, 0);
 		frontRightLeg.addChild(frontRightHoof);
 
-		naga = new ModelNagaLegs(base);
+		this.naga = new ModelNagaLegs(base);
+		this.naga.setTextureSize(textWidth, textHeight);
 		this.addChild(naga);
 
 		// Add Mermaid Legs
@@ -317,9 +318,17 @@ public class ModelLegs extends ModelScaleRenderer{
 			naga.isSneaking = base.isSneak;
 			naga.setRotationAngles(par1, par2, par3, par4, par5, par6, entity);
 		}
-		else if(part.type == 4){
-			mermaid.setRotationAngles(par1, par2, par3, par4, par5, par6, entity, this.data);
-			mermaid2.setRotationAngles(par1, par2, par3, par4, par5, par6, entity, this.data);
+		else if(part.type == 4 || part.type == 6){
+			mermaid.isRiding = base.isRiding;
+			mermaid.isSleeping = base.isSleeping(entity);
+			mermaid.isCrawling = data.animation == EnumAnimation.CRAWLING;
+			mermaid.isSneaking = base.isSneak;
+			mermaid2.isRiding = base.isRiding;
+			mermaid2.isSleeping = base.isSleeping(entity);
+			mermaid2.isCrawling = data.animation == EnumAnimation.CRAWLING;
+			mermaid2.isSneaking = base.isSneak;
+			mermaid.setRotationAngles(par1, par2, par3, par4, par5, par6, entity);
+			mermaid2.setRotationAngles(par1, par2, par3, par4, par5, par6, entity);
 		}
 		else if(part.type == 5){
 			digitigrade.setRotationAngles(par1, par2, par3, par4, par5, par6, entity);
@@ -335,6 +344,8 @@ public class ModelLegs extends ModelScaleRenderer{
 		if(part.type < 0)
 			return;
 		GL11.glPushMatrix();
+		if(part.type == 4)
+			part.playerTexture = false;
 		if(!base.isArmor){
 			if(!part.playerTexture){
 				ClientProxy.bindTexture(part.getResource());
@@ -357,7 +368,7 @@ public class ModelLegs extends ModelScaleRenderer{
 			spider.isHidden = part.type != 2;
 			horse.isHidden = part.type != 3;
 			mermaid.isHidden = part.type != 4;
-			mermaid2.isHidden = part.type != 4;
+			mermaid2.isHidden = part.type != 6;
 			digitigrade.isHidden = part.type != 5;
 	
 			if(!horse.isHidden){
@@ -373,7 +384,7 @@ public class ModelLegs extends ModelScaleRenderer{
 				x = 0;
 				y *= 2f;
 			}
-			else if(!mermaid.isHidden || !digitigrade.isHidden){
+			else if(!mermaid.isHidden || !mermaid2.isHidden || !digitigrade.isHidden){
 				x = 0;
 				y *= 2f;
 			}

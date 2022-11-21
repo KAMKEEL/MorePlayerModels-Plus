@@ -18,6 +18,11 @@ public class ModelMermaidLegs2 extends ModelRenderer {
 	ModelRenderer Tail7;
 	ModelRenderer Tail8;
 
+	public boolean isRiding = false;
+	public boolean isSneaking = false;
+	public boolean isSleeping = false;
+	public boolean isCrawling = false;
+
 	public ModelMermaidLegs2(ModelBase base) {
 		super(base);
 		textureWidth = 64;
@@ -86,12 +91,12 @@ public class ModelMermaidLegs2 extends ModelRenderer {
 	}
 
 	public void setRotationAngles(float par1, float par2, float par3, float par4, float par5, float par6,
-			Entity entity, ModelData data) {
+								  Entity entity) {
 		Tail1.setRotationPoint(-4F, 12F, -2F);
 		float ani = MathHelper.sin(par1 * 0.6662F);
 		if (ani > 0.2)
 			ani /= 3f;
-		if(data.isSleeping() || data.animation == EnumAnimation.CRAWLING){
+		if(this.isSleeping || this.isCrawling){
 			Tail1.rotateAngleX = Tail2.rotateAngleX = Tail3.rotateAngleX = Tail4.rotateAngleX = 0;
 		}
 		else{

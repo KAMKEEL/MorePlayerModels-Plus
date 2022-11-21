@@ -26,6 +26,7 @@ public class ModelNagaLegs extends ModelRenderer{
 		super(base);
 
 		nagaPart1 = new ModelRenderer(base,0,0);
+
 		ModelRenderer legPart = new ModelRenderer(base,0,16);
 		legPart.addBox(0, -2, -2, 4, 4, 4);
 		legPart.setRotationPoint(-4, 0, 0);
@@ -39,6 +40,7 @@ public class ModelNagaLegs extends ModelRenderer{
 		nagaPart2.childModels = nagaPart1.childModels;
 
 		nagaPart3 = new ModelRenderer(base,0,0);
+
 		ModelPlaneRenderer plane = new ModelPlaneRenderer(base, 4, 24);
 		plane.addBackPlane(0,-2, 0, 4, 4);
 		plane.setRotationPoint(-4, 0, 0);
@@ -47,6 +49,7 @@ public class ModelNagaLegs extends ModelRenderer{
 		plane.mirror = true;
 		plane.addBackPlane(0,-2, 0, 4, 4);
 		nagaPart3.addChild(plane);
+
 		plane = new ModelPlaneRenderer(base, 8, 24);
 		plane.addBackPlane(0,-2, 6, 4, 4);
 		plane.setRotationPoint(-4, 0, 0);
@@ -88,7 +91,9 @@ public class ModelNagaLegs extends ModelRenderer{
 
 		nagaPart4 = new ModelRenderer(base,0,0);
 		nagaPart4.childModels = nagaPart3.childModels;
+
 		nagaPart5 = new ModelRenderer(base,0,0);
+
 		legPart = new ModelRenderer(base,56,20);
 		legPart.addBox(0, 0, -2, 2, 5, 2);
 		legPart.setRotationPoint(-2, 0, 0);

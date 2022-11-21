@@ -11,10 +11,7 @@ import noppes.mpm.ModelPartData;
 import noppes.mpm.client.ClientProxy;
 import noppes.mpm.client.model.ModelMPM;
 import noppes.mpm.client.model.ModelScaleRenderer;
-import noppes.mpm.client.model.part.tails.ModelDragonTail;
-import noppes.mpm.client.model.part.tails.ModelRodentTail;
-import noppes.mpm.client.model.part.tails.ModelSquirrelTail;
-import noppes.mpm.client.model.part.tails.ModelTailFin;
+import noppes.mpm.client.model.part.tails.*;
 import noppes.mpm.constants.EnumAnimation;
 
 import org.lwjgl.opengl.GL11;
@@ -30,6 +27,7 @@ public class ModelTail extends ModelScaleRenderer {
 	private ModelRenderer horse;
 	private ModelRenderer fin;
 	private ModelRenderer rodent;
+	private ModelRenderer feather;
 	
 	private int color = 0xFFFFFF;
 	
@@ -41,6 +39,7 @@ public class ModelTail extends ModelScaleRenderer {
 		this.rotationPointY = 11;
 
 		tail = new ModelRenderer(base, 56, 21);
+		tail.setTextureSize(64, 32);
 		tail.addBox(-1F, 0F, 0F, 2, 9, 2);
 		tail.setRotationPoint(0F, 0, 1F);
 		setRotation(tail, 0.8714253F, 0F, 0F);
@@ -52,21 +51,21 @@ public class ModelTail extends ModelScaleRenderer {
 		this.addChild(horse);
 
 		ModelRenderer tailBase = new ModelRenderer(base, 0, 26);
-        tailBase.setTextureSize(32, 32);
-        tailBase.addBox(-1.0F, -1.0F, 0.0F, 2, 2, 3);
-        setRotation(tailBase, -1.134464F, 0.0F, 0.0F);
-        horse.addChild(tailBase);
-        ModelRenderer tailMiddle = new ModelRenderer(base, 0, 13);
-        tailMiddle.setTextureSize(32, 32);
-        tailMiddle.addBox(-1.5F, -2.0F, 3.0F, 3, 4, 7);
-        setRotation(tailMiddle, -1.134464F, 0.0F, 0.0F);
-        horse.addChild(tailMiddle);
-        ModelRenderer tailTip = new ModelRenderer(base, 0, 0);
-        tailTip.setTextureSize(32, 32);
-        tailTip.addBox(-1.5F, -4.5F, 9.0F, 3, 4, 7);
-        setRotation(tailTip, -1.40215F, 0.0F, 0.0F);
-        horse.addChild(tailTip);
-        horse.rotateAngleX = 0.5f;
+		tailBase.setTextureSize(32, 32);
+		tailBase.addBox(-1.0F, -1.0F, 0.0F, 2, 2, 3);
+		setRotation(tailBase, -1.134464F, 0.0F, 0.0F);
+		horse.addChild(tailBase);
+		ModelRenderer tailMiddle = new ModelRenderer(base, 0, 13);
+		tailMiddle.setTextureSize(32, 32);
+		tailMiddle.addBox(-1.5F, -2.0F, 3.0F, 3, 4, 7);
+		setRotation(tailMiddle, -1.134464F, 0.0F, 0.0F);
+		horse.addChild(tailMiddle);
+		ModelRenderer tailTip = new ModelRenderer(base, 0, 0);
+		tailTip.setTextureSize(32, 32);
+		tailTip.addBox(-1.5F, -4.5F, 9.0F, 3, 4, 7);
+		setRotation(tailTip, -1.40215F, 0.0F, 0.0F);
+		horse.addChild(tailTip);
+		horse.rotateAngleX = 0.5f;
 
 
 		this.addChild(dragon = new ModelDragonTail(base));
@@ -75,6 +74,8 @@ public class ModelTail extends ModelScaleRenderer {
 
 		this.addChild(fin = new ModelTailFin(base));
 		this.addChild(rodent = new ModelRodentTail(base));
+
+		this.addChild(feather = new ModelFeatherTail(base));
 	}
 
 	public void setData(ModelData data, EntityLivingBase entity) {
@@ -131,6 +132,7 @@ public class ModelTail extends ModelScaleRenderer {
 		squirrel.isHidden = config.type != 3;
 		fin.isHidden = config.type != 4;
 		rodent.isHidden = config.type != 5;
+		feather.isHidden = config.type != 6;
 		
 		if(!config.playerTexture){
 			location = (ResourceLocation) config.getResource();
