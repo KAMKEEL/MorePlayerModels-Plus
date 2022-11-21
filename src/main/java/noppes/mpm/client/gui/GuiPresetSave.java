@@ -2,12 +2,14 @@ package noppes.mpm.client.gui;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.inventory.GuiInventory;
 import noppes.mpm.ModelData;
 import noppes.mpm.client.Preset;
 import noppes.mpm.client.PresetController;
 import noppes.mpm.client.gui.util.GuiInterface;
 import noppes.mpm.client.gui.util.GuiNpcButton;
 import noppes.mpm.client.gui.util.GuiNpcTextField;
+import org.lwjgl.opengl.GL11;
 
 public class GuiPresetSave extends GuiInterface{
 	private ModelData data;

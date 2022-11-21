@@ -5,9 +5,12 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.HashMap;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import noppes.mpm.ModelData;
+import noppes.mpm.PlayerDataController;
 
 public class PresetController {
 
@@ -15,6 +18,7 @@ public class PresetController {
 	
 	private File dir;
 	public static PresetController instance;
+	public String selected = "Default";
 	
 	public PresetController(File dir){
 		instance = this;
@@ -24,13 +28,21 @@ public class PresetController {
 	public Preset getPreset(String username) {
 		if(presets.isEmpty())
 			load();
+		if(username == null || username.isEmpty())
+			return null;
 		return presets.get(username.toLowerCase());
 	}
-	
+
+	public void addDefaults(){
+		Preset.FillDefault(presets);
+	}
+
 	public void load(){
 		NBTTagCompound compound = loadPreset();
 		HashMap<String,Preset> presets = new HashMap<String, Preset>();
 		if(compound != null){
+			if(compound.hasKey("PresetSelected"))
+				selected = compound.getString("PresetSelected");
 			NBTTagList list = compound.getTagList("Presets", 10);
 			for(int i = 0; i < list.tagCount(); i++){
 				NBTTagCompound comp = list.getCompoundTagAt(i);
@@ -39,9 +51,21 @@ public class PresetController {
 				presets.put(preset.name.toLowerCase(), preset);
 			}
 		}
-		Preset.FillDefault(presets);
+		if(presets.isEmpty()){
+			Preset preset = new Preset();
+			preset.data = PlayerDataController.instance.getPlayerData(Minecraft.getMinecraft().thePlayer);
+			preset.name = "Default";
+			presets.put("default", preset);
+
+			ModelData data = new ModelData();
+			preset = new Preset();
+			preset.name = "Normal";
+			preset.data = data;
+			presets.put("normal", preset);
+		}
 		this.presets = presets;
 	}
+
 
 	private NBTTagCompound loadPreset(){
 		String filename = "presets.dat";
@@ -66,15 +90,16 @@ public class PresetController {
 		}
 		return null;
 	}
-	
+
 	public void save(){
 		NBTTagCompound compound = new NBTTagCompound();
 		NBTTagList list = new NBTTagList();
 		for(Preset preset : presets.values()){
 			list.appendTag(preset.writeToNBT());
 		}
-		
+
 		compound.setTag("Presets", list);
+		compound.setString("PresetSelected", selected);
 		savePreset(compound);
 	}
 
@@ -105,9 +130,6 @@ public class PresetController {
 	}
 
 	public void addPreset(Preset preset) {
-		while(presets.containsKey(preset.name.toLowerCase())){
-			preset.name += "_";
-		}
 		presets.put(preset.name.toLowerCase(), preset);
 		save();
 	}

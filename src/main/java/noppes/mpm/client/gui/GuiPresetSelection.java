@@ -64,7 +64,8 @@ public class GuiPresetSelection extends GuiInterface implements GuiListActionLis
 
     	this.buttonList.add(new GuiNpcButton(2, width / 2 - 100, height - 44,98, 20, "gui.back"));
     	this.buttonList.add(new GuiNpcButton(3, width / 2 + 2, height - 44,98, 20, "gui.load"));
-    	this.buttonList.add(new GuiNpcButton(4, width / 2 - 49, height - 22,98, 20, "gui.remove"));
+    	this.buttonList.add(new GuiNpcButton(4, width / 2 - 100, height - 22,98, 20, "gui.remove"));
+        this.buttonList.add(new GuiNpcButton(5, width / 2 + 2, height - 22,98, 20, "gui.restore"));
     }
 
 
@@ -158,6 +159,16 @@ public class GuiPresetSelection extends GuiInterface implements GuiListActionLis
 			slot.setList(list);
 			slot.selected = "";
 		}
+        if(guibutton.id == 5){
+            PresetController.instance.addDefaults();
+            Vector<String> list = new Vector<String>();
+            for(Preset preset : PresetController.instance.presets.values())
+                list.add(preset.name);
+
+            Collections.sort(list,String.CASE_INSENSITIVE_ORDER);
+            slot.setList(list);
+            slot.selected = "";
+        }
     }
 
 
