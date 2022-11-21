@@ -48,6 +48,7 @@ public class PacketHandlerClient extends PacketHandlerServer{
 			List<EntityPlayer> players = mc.theWorld.playerEntities;
 			for(EntityPlayer p : players){
 				ModelData data = PlayerDataController.instance.getPlayerData(p);
+				data.playerLoaded = false;
 				data.loaded = false;
 			}
 		}

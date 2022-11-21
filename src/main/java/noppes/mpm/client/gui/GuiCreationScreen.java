@@ -272,6 +272,7 @@ public class GuiCreationScreen extends GuiModelInterface implements ITextfieldLi
     		for(EntityPlayer player : players){
     			ModelData data = PlayerDataController.instance.getPlayerData(player);
     	    	data.loaded = false;
+				data.playerLoaded = false;
     		}
     	}
     	if(button.id == 47){
@@ -314,14 +315,15 @@ public class GuiCreationScreen extends GuiModelInterface implements ITextfieldLi
 				playerdata.urlType = 1;
 			}
 			else {
+				playerdata.bodywear = 0;
+				playerdata.armwear = 0;
+				playerdata.legwear = 0;
 				playerdata.modelType = 0;
 				playerdata.urlType = 0;
 			}
-			playerdata.loaded = false;
 		}
 		if(button.id == 251){
 			playerdata.urlType = (byte) button.getValue();
-			playerdata.loaded = false;
 		}
     }
     
@@ -335,6 +337,7 @@ public class GuiCreationScreen extends GuiModelInterface implements ITextfieldLi
     	super.close();
     	//if(!hash.equals(playerdata.getHash() + playerdata.extra)){
 			playerdata.loaded = false;
+			playerdata.playerLoaded = false;
     		PlayerDataController.instance.savePlayerData(this.mc.thePlayer, playerdata);
     		Client.sendData(EnumPackets.UPDATE_PLAYER_DATA, playerdata.writeToNBT());
     	//}

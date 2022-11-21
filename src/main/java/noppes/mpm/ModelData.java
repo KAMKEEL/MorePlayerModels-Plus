@@ -25,6 +25,7 @@ import noppes.mpm.constants.EnumAnimation;
 
 public class ModelData extends ModelDataShared implements IExtendedEntityProperties{
 	public boolean loaded = false;
+	public boolean playerLoaded = false;
 	public EntityPlayer player = null;
 	
 	public int rev = MorePlayerModels.Revision;
@@ -42,11 +43,10 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 	public byte urlType = 0;	//	0:url, 1:url64
 	public String url= "";
 	public String displayName = "";
+	public int modelType = 0; 	// For Alex / Steve 3D Layers
 
-	// For Alex / Steve 3D Layers
-	public int modelType = 0;
 	public ModelData(){
-		
+
 	}
 	public NBTTagCompound writeToNBT(){
 		NBTTagCompound compound = super.writeToNBT();
@@ -111,10 +111,33 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 					living.setCurrentItemOrArmor(4, player.inventory.armorItemInSlot(0));
 				}
 			} catch (Exception e) {
-			} 
+			}
 		}
 		return entity;
 	}
+
+	public EntityLivingBase getEntity(EntityPlayer player){
+		if(entityClass == null)
+			return null;
+		if(entity == null){
+			try {
+				entity = entityClass.getConstructor(new Class[] {World.class}).newInstance(new Object[] {player.worldObj});
+
+				entity.readEntityFromNBT(extra);
+				if(entity instanceof EntityLiving){
+					EntityLiving living = (EntityLiving)entity;
+					living.setCurrentItemOrArmor(0, player.getHeldItem());
+					living.setCurrentItemOrArmor(1, player.inventory.armorItemInSlot(3));
+					living.setCurrentItemOrArmor(2, player.inventory.armorItemInSlot(2));
+					living.setCurrentItemOrArmor(3, player.inventory.armorItemInSlot(1));
+					living.setCurrentItemOrArmor(4, player.inventory.armorItemInSlot(0));
+				}
+			} catch (Exception e) {
+			}
+		}
+		return entity;
+	}
+
 
 	public String getHash(){
 		try {
@@ -144,6 +167,8 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 	public ModelData copy(){
 		ModelData data = new ModelData();
 		data.readFromNBT(this.writeToNBT());
+		data.playerLoaded = playerLoaded;
+		data.player = player;
 		return data;
 	}
 
@@ -173,7 +198,29 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 	public void init(Entity entity, World world) {
 		
 	}
-	
+
+	public float getOffsetCamera(EntityPlayer player){
+		if(!MorePlayerModels.EnablePOV)
+			return 0;
+		float offset = -offsetY();
+		if(animation == EnumAnimation.SITTING){
+			offset += 0.5f - getLegsY();
+		}
+		if(isSleeping())
+			offset = 1.18f;
+		if(animation == EnumAnimation.CRAWLING)
+			offset = 0.8f;
+		if(offset < -0.2f && isBlocked(player))
+			offset = -0.2f;
+		return offset;
+	}
+
+	private boolean isBlocked(EntityPlayer player) {
+		return !player.worldObj.isAirBlock((int)player.posX, (int)player.posY + 2, (int)player.posZ);
+	}
+
+
+
 	public void setExtra(EntityLivingBase entity, String key, String value){
 		key = key.toLowerCase();
 		

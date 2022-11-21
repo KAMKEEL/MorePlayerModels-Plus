@@ -1,7 +1,5 @@
 package noppes.mpm.client;
 
-import org.lwjgl.opengl.GL11;
-
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.ReflectionHelper;
@@ -10,13 +8,10 @@ import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.client.model.ModelSheep2;
 import net.minecraft.client.renderer.entity.MPMRendererHelper;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderPlayer;
-import net.minecraft.client.renderer.entity.RenderSheep;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -29,6 +24,7 @@ import noppes.mpm.ModelData;
 import noppes.mpm.MorePlayerModels;
 import noppes.mpm.PlayerDataController;
 import noppes.mpm.constants.EnumAnimation;
+import org.lwjgl.opengl.GL11;
 
 public class RenderEvent {
 	public static RenderEvent Instance;
@@ -36,7 +32,7 @@ public class RenderEvent {
 	public static long lastSkinTick = 0;
 	public final static long MaxSkinTick = 6;
 	private ModelData data;
-	
+
 	public RenderEvent(){
 		Instance = this;
 	}
@@ -67,13 +63,12 @@ public class RenderEvent {
 			player.yOffset = 1.62f;
 			data.backItem = player.inventory.mainInventory[0];
 		}
-
 	}
 
 	@SubscribeEvent(priority=EventPriority.LOWEST)
-	public void pre(RenderLivingEvent.Post event){
+	public void post(RenderLivingEvent.Post event){
 	}
-	
+
 	private void setModels(RenderPlayer render){
 		if(MPMRendererHelper.getMainModel(render) == renderer.modelBipedMain)
 			return;
@@ -120,35 +115,35 @@ public class RenderEvent {
 		if(event.type != ElementType.ALL)
 			return;
 
-    	Minecraft mc = Minecraft.getMinecraft();
-    	if(mc.currentScreen != null || MorePlayerModels.Tooltips == 0)
-    		return;
+		Minecraft mc = Minecraft.getMinecraft();
+		if(mc.currentScreen != null || MorePlayerModels.Tooltips == 0)
+			return;
 		ItemStack item = mc.thePlayer.getCurrentEquippedItem();
 		if(item == null)
 			return;
-		
+
 		String name = item.getDisplayName();
 		int x = event.resolution.getScaledWidth() - mc.fontRenderer.getStringWidth(name);
-		
+
 		int posX = 4;
 		int posY = 4;
 		if(MorePlayerModels.Tooltips % 2 == 0)
 			posX = x - 4;
-		
+
 		if(MorePlayerModels.Tooltips > 2)
 			posY = event.resolution.getScaledHeight() - 24;
 
 		mc.fontRenderer.drawStringWithShadow(name, posX, posY, 0xffffff);
 		if(item.isItemStackDamageable()){
 			int max = item.getMaxDamage();
-			
+
 			String dam = (max - item.getItemDamage()) + "/" + max;
 
 			x = event.resolution.getScaledWidth() - mc.fontRenderer.getStringWidth(dam);
 
 			if(MorePlayerModels.Tooltips == 2 || MorePlayerModels.Tooltips == 4)
 				posX = x - 4;
-			
+
 			mc.fontRenderer.drawStringWithShadow(dam, posX, posY + 12, 0xffffff);
 		}
 	}

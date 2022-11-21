@@ -65,28 +65,17 @@ public class RenderMPM extends RenderPlayer{
 	private EntityLivingBase entity;
 	private ModelRenderPassHelper renderpass = new ModelRenderPassHelper();
 
-	protected final static ModelMPM originalBipedMain = new ModelMPM(0,0);
-
-	// Steve 64x64
-	protected final static ModelMPM steve64 = new ModelMPM(0, false);
-	protected final static ModelMPM steveArmorChest = new ModelMPM(1,0);
-	protected final static ModelMPM steveArmor = new ModelMPM(0.5F,0);
-
-	// Stvee 64x32
-	protected final static ModelMPM alex = new ModelMPM(0, true);
-	protected final static ModelMPM alex32armorChest = new ModelMPM(1,1);
-	protected final static ModelMPM alex32armor = new ModelMPM(0.5F,1);
-
 	public RenderMPM() {
 		super();
 		this.setRenderManager(RenderManager.instance);
-		this.modelBipedMain = new ModelMPM(0, 0);
-		this.modelArmor = new ModelMPM(0.5f, 0);
-		this.modelArmorChestplate = new ModelMPM(1.0f, 0);
+		this.modelBipedMain = ModelMPM.steve32;
+		this.modelArmor = ModelMPM.steveArmor;
+		this.modelArmorChestplate = ModelMPM.steveArmorChest;
 	}
-	
+
 	public void setModelData(ModelData data, EntityLivingBase entity){
 		this.data = data;
+		this.setModelType(data);
 		if (this.mainModel instanceof ModelMPM) {
 			((ModelMPM) this.mainModel).setPlayerData(this.data, entity);
 		}
@@ -177,32 +166,32 @@ public class RenderMPM extends RenderPlayer{
 				}
 			}
 			return;
-		}
-		
-		Minecraft mc = Minecraft.getMinecraft();
-		SkinManager skinmanager = mc.func_152342_ad();
-		
-		Map map = skinmanager.func_152788_a(player.getGameProfile());
-		if(map.isEmpty()){
-			map = mc.func_152347_ac().getTextures(mc.func_152347_ac().fillProfileProperties(player.getGameProfile(), false), false);
-		}
-		if(!map.containsKey(Type.SKIN)){
-			player.func_152121_a(Type.SKIN, AbstractClientPlayer.locationStevePng);
+		} else if(!data.playerLoaded){
+			Minecraft mc = Minecraft.getMinecraft();
+			SkinManager skinmanager = mc.func_152342_ad();
+
+			Map map = skinmanager.func_152788_a(player.getGameProfile());
+			if(map.isEmpty()){
+				map = mc.func_152347_ac().getTextures(mc.func_152347_ac().fillProfileProperties(player.getGameProfile(), false), false);
+			}
+			if(!map.containsKey(Type.SKIN)){
+				return;
+			}
+
+			MinecraftProfileTexture profile = (MinecraftProfileTexture) map.get(Type.SKIN);
+			url = profile.getUrl();
+			File dir = new File((File)ObfuscationReflectionHelper.getPrivateValue(SkinManager.class, skinmanager, 3), profile.getHash().substring(0, 2));
+			File file = new File(dir, profile.getHash());
+			ResourceLocation location = new ResourceLocation("skins/" + profile.getHash());
+			if(file.exists())
+				file.delete();
+			loadTexture(file, location, url, false);
+			player.func_152121_a(Type.SKIN, location);
+			data.playerLoaded = true;
 			return;
 		}
-
-		MinecraftProfileTexture profile = (MinecraftProfileTexture) map.get(Type.SKIN);
-		url = profile.getUrl();		
-        File dir = new File((File)ObfuscationReflectionHelper.getPrivateValue(SkinManager.class, skinmanager, 3), profile.getHash().substring(0, 2));
-        File file = new File(dir, profile.getHash());
-        ResourceLocation location = new ResourceLocation("skins/" + profile.getHash());
-		if(file.exists())
-			file.delete();
-		loadTexture(file, location, url, false);
-		player.func_152121_a(Type.SKIN, location);
-		return;
 	}
-	
+
 	@Override
     public void renderFirstPersonArm(EntityPlayer player){
 		data = PlayerDataController.instance.getPlayerData(player);
@@ -501,29 +490,6 @@ public class RenderMPM extends RenderPlayer{
 			renderPassModel = renderpass;
 			renderpass.renderer = renderEntity;
 			renderpass.entity = entity;
-		} else {
-			int modelVal = data.modelType;
-			if(modelVal ==  1){
-				this.mainModel = steve64;
-				this.modelBipedMain = steve64;
-				this.modelArmorChestplate = steveArmorChest;
-				this.modelArmor = steveArmor;
-			}
-			else if(modelVal ==  2){
-				this.mainModel = alex;
-				this.modelBipedMain = alex;
-				this.modelArmorChestplate = alex32armorChest;
-				this.modelArmor = alex32armor;
-			}
-			else{
-				data.bodywear = 0;
-				data.armwear = 0;
-				data.legwear = 0;
-				this.mainModel = originalBipedMain;
-				this.modelBipedMain = originalBipedMain;
-				this.modelArmorChestplate = steveArmorChest;
-				this.modelArmor = steveArmor;
-			}
 		}
 		modelBipedMain.entityModel = modelArmorChestplate.entityModel = modelArmor.entityModel = model;
 		modelBipedMain.entity = modelArmorChestplate.entity = modelArmor.entity = entity;
@@ -567,4 +533,26 @@ public class RenderMPM extends RenderPlayer{
     protected ResourceLocation getEntityTexture(AbstractClientPlayer player){
 		return MPMRendererHelper.getResource(player, renderEntity, entity);
     }
+
+	public void setModelType(ModelData data){
+		int modelVal = data.modelType;
+		if(modelVal ==  1){
+			this.mainModel = ModelMPM.steve64;
+			this.modelBipedMain = ModelMPM.steve64;
+			this.modelArmorChestplate = ModelMPM.steveArmorChest;
+			this.modelArmor = ModelMPM.steveArmor;
+		}
+		else if(modelVal ==  2){
+			this.mainModel = ModelMPM.alex;
+			this.modelBipedMain = ModelMPM.alex;
+			this.modelArmorChestplate = ModelMPM.alex32armorChest;
+			this.modelArmor = ModelMPM.alex32armor;
+		}
+		else{
+			this.mainModel = ModelMPM.steve32;
+			this.modelBipedMain = ModelMPM.steve32;
+			this.modelArmorChestplate = ModelMPM.steveArmorChest;
+			this.modelArmor = ModelMPM.steveArmor;
+		}
+	}
 }

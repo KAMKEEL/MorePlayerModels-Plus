@@ -60,7 +60,7 @@ public class MorePlayerModels {
 	public static boolean EnableBackItem = true;
 
 	@ConfigProp(info="Enables chat bubbles")
-	public static boolean EnableChatBubbles = true;
+	public static boolean EnableChatBubbles = false;
 
 	@ConfigProp(info="Enables MorePlayerModels startup update message")
 	public static boolean EnableUpdateChecker = true;
