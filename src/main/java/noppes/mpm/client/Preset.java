@@ -26,7 +26,7 @@ public class Preset {
 	public static void FillDefault(HashMap<String,Preset> presets){
 		ModelData data = new ModelData();
 		Preset preset = new Preset();
-		preset.name = "~Elf Male";
+		preset.name = "Elf Male";
 		preset.data = data;
 		data.legs.setScale(0.85f,1.15f);
 		data.arms.setScale(0.85f,1.15f);
@@ -36,7 +36,7 @@ public class Preset {
 		
 		data = new ModelData();
 		preset = new Preset();
-		preset.name = "~Elf Female";
+		preset.name = "Elf Female";
 		preset.data = data;
 		data.breasts = 2;
 		data.legs.setScale(0.8f,1.05f);
@@ -47,7 +47,7 @@ public class Preset {
 
 		data = new ModelData();
 		preset = new Preset();
-		preset.name = "~Dwarf Male";
+		preset.name = "Dwarf Male";
 		preset.data = data;
 		data.legs.setScale(1.1f,0.7f, 0.9f);
 		data.arms.setScale(0.9f,0.7f);
@@ -57,7 +57,7 @@ public class Preset {
 
 		data = new ModelData();
 		preset = new Preset();
-		preset.name = "~Dwarf Female";
+		preset.name = "Dwarf Female";
 		preset.data = data;
 		data.breasts = 2;
 		data.legs.setScale(0.9f,0.65f);
@@ -68,7 +68,7 @@ public class Preset {
 
 		data = new ModelData();
 		preset = new Preset();
-		preset.name = "~Orc Male";
+		preset.name = "Orc Male";
 		preset.data = data;
 		data.legs.setScale(1.2f,1.05f);
 		data.arms.setScale(1.2f,1.05f);
@@ -78,7 +78,7 @@ public class Preset {
 
 		data = new ModelData();
 		preset = new Preset();
-		preset.name = "~Orc Female";
+		preset.name = "Orc Female";
 		preset.data = data;
 		data.breasts = 2;
 		data.legs.setScale(1.1f,1);
@@ -88,13 +88,13 @@ public class Preset {
 
 		data = new ModelData();
 		preset = new Preset();
-		preset.name = "~Human Male";
+		preset.name = "Human Male";
 		preset.data = data;
 		presets.put("human male", preset);
 
 		data = new ModelData();
 		preset = new Preset();
-		preset.name = "~Human Female";
+		preset.name = "Human Female";
 		preset.data = data;
 		data.breasts = 2;
 		data.head.setScale(0.95f,0.95f);
@@ -105,7 +105,7 @@ public class Preset {
 
 		data = new ModelData();
 		preset = new Preset();
-		preset.name = "~Cat Male";
+		preset.name = "Cat Male";
 		preset.data = data;
 		ModelPartData ears = data.getOrCreatePart("ears");
 		ears.setTexture("ears/type1", 0);
@@ -120,7 +120,7 @@ public class Preset {
 
 		data = new ModelData();
 		preset = new Preset();
-		preset.name = "~Cat Female";
+		preset.name = "Cat Female";
 		preset.data = data;
 		ears = data.getOrCreatePart("ears");
 		ears.setTexture("ears/type1", 0);
@@ -140,7 +140,7 @@ public class Preset {
 
 		data = new ModelData();
 		preset = new Preset();
-		preset.name = "~Wolf Male";
+		preset.name = "Wolf Male";
 		preset.data = data;
 		ears = data.getOrCreatePart("ears");
 		ears.setTexture("ears/type1", 0);
@@ -155,7 +155,7 @@ public class Preset {
 
 		data = new ModelData();
 		preset = new Preset();
-		preset.name = "~Wolf Female";
+		preset.name = "Wolf Female";
 		preset.data = data;
 		ears = data.getOrCreatePart("ears");
 		ears.setTexture("ears/type1", 0);
@@ -175,7 +175,7 @@ public class Preset {
 
 		data = new ModelData();
 		preset = new Preset();
-		preset.name = "~Enderchibi";
+		preset.name = "Enderchibi";
 		preset.data = data;
 		data.legs.setScale(0.65f,0.75f);
 		data.arms.setScale(0.50f,1.45f);

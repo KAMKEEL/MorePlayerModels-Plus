@@ -27,11 +27,6 @@ import noppes.mpm.client.gui.util.GuiNpcButton;
 
 import org.lwjgl.opengl.GL11;
 
-// Referenced classes of package net.minecraft.src:
-//            GuiScreen, GuiButton, StatCollector, GuiOptions, 
-//            StatList, StatFileWriter, World, GuiMainMenu, 
-//            GuiAchievements, GuiStats, MathHelper
-
 public class GuiPresetSelection extends GuiInterface implements GuiListActionListener
 {
 	private GuiNPCStringSlot slot;
@@ -65,7 +60,7 @@ public class GuiPresetSelection extends GuiInterface implements GuiListActionLis
     	this.buttonList.add(new GuiNpcButton(2, width / 2 - 100, height - 44,98, 20, "gui.back"));
     	this.buttonList.add(new GuiNpcButton(3, width / 2 + 2, height - 44,98, 20, "gui.load"));
     	this.buttonList.add(new GuiNpcButton(4, width / 2 - 100, height - 22,98, 20, "gui.remove"));
-        this.buttonList.add(new GuiNpcButton(5, width / 2 + 2, height - 22,98, 20, "gui.restore"));
+        this.buttonList.add(new GuiNpcButton(5, width / 2 + 2, height - 22,98, 20, "gui.defaults"));
     }
 
 
@@ -170,6 +165,4 @@ public class GuiPresetSelection extends GuiInterface implements GuiListActionLis
             slot.selected = "";
         }
     }
-
-
 }

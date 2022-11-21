@@ -18,8 +18,7 @@ public class PresetController {
 	
 	private File dir;
 	public static PresetController instance;
-	public String selected = "Default";
-	
+
 	public PresetController(File dir){
 		instance = this;
 		this.dir = dir;
@@ -41,8 +40,6 @@ public class PresetController {
 		NBTTagCompound compound = loadPreset();
 		HashMap<String,Preset> presets = new HashMap<String, Preset>();
 		if(compound != null){
-			if(compound.hasKey("PresetSelected"))
-				selected = compound.getString("PresetSelected");
 			NBTTagList list = compound.getTagList("Presets", 10);
 			for(int i = 0; i < list.tagCount(); i++){
 				NBTTagCompound comp = list.getCompoundTagAt(i);
@@ -99,7 +96,6 @@ public class PresetController {
 		}
 
 		compound.setTag("Presets", list);
-		compound.setString("PresetSelected", selected);
 		savePreset(compound);
 	}
 
