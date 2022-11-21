@@ -62,20 +62,20 @@ public class ClientProxy extends CommonProxy{
 			checker.start();
 		}
 	}
-	
-	public static void bindTexture(ResourceLocation location){
-		if(location == null)
-			return;
-        TextureManager texturemanager = Minecraft.getMinecraft().getTextureManager();
-        try{
-        	texturemanager.bindTexture(location);
-        }
-        catch(ReportedException ex){
-        	
-        }
-        catch(NullPointerException e){
-        	
-        }
-        
+
+	public static void bindTexture(ResourceLocation location) {
+		try{
+			if(location == null)
+				return;
+			TextureManager texturemanager = Minecraft.getMinecraft().getTextureManager();
+			if(location != null)
+				texturemanager.bindTexture((ResourceLocation) location);
+		}
+		catch(NullPointerException ex){
+
+		}
+		catch(ReportedException ex){
+
+		}
 	}
 }
