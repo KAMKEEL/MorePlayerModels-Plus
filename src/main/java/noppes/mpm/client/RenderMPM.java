@@ -203,58 +203,6 @@ public class RenderMPM extends RenderPlayer{
 		}
 	}
 
-
-	private void loadPlayerTexture(ResourceLocation resourceLocation, boolean version, int modelType, MinecraftProfileTexture profile){
-		//			MinecraftProfileTexture profile = (MinecraftProfileTexture)map.get(Type.SKIN);
-		//			ResourceLocation resourceLocation;
-		//			boolean version;
-		//			if (data.modelType > 0) {
-		//				resourceLocation = new ResourceLocation("skins64/" + profile.getHash());
-		//				version = true;
-		//			} else {
-		//				resourceLocation = new ResourceLocation("skins/" + profile.getHash());
-		//				version = false;
-		//			}
-		//			loadPlayerTexture(resourceLocation, version, data.modelType, profile);
-		//			player.func_152121_a(Type.SKIN, resourceLocation);
-
-
-		Minecraft mc = Minecraft.getMinecraft();
-		SkinManager skinmanager = mc.func_152342_ad();
-		TextureManager texturemanager = Minecraft.getMinecraft().getTextureManager();
-		ITextureObject object = texturemanager.getTexture(resourceLocation);
-		if (object != null)
-		{
-
-		} else {
-			ResourceLocation defaultLoc = getDefaultSkin(modelType);
-			File file1 = new File((File)ObfuscationReflectionHelper.getPrivateValue(SkinManager.class, skinmanager, 3), profile.getHash().substring(0, 2));
-			File file2 = new File(file1, profile.getHash());
-			final ImageBufferDownload imagebufferdownload = new ImageBufferDownloadAlt(version);
-			ThreadDownloadImageData threaddownloadimagedata = new ThreadDownloadImageData(file2, profile.getUrl(), defaultLoc, new IImageBuffer()
-			{
-				private static final String __OBFID = "CL_00001828";
-				public BufferedImage parseUserSkin(BufferedImage bufferedImage)
-				{
-					if (imagebufferdownload != null)
-					{
-						bufferedImage = imagebufferdownload.parseUserSkin(bufferedImage);
-					}
-
-					return bufferedImage;
-				}
-				public void func_152634_a()
-				{
-					if (imagebufferdownload != null)
-					{
-						imagebufferdownload.func_152634_a();
-					}
-				}
-			});
-			texturemanager.loadTexture(resourceLocation, threaddownloadimagedata);
-		}
-	}
-
 	@Override
 	public void renderFirstPersonArm(EntityPlayer player){
 		data = PlayerDataController.instance.getPlayerData(player);
