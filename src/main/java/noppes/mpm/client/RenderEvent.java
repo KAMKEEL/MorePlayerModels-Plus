@@ -40,7 +40,7 @@ public class RenderEvent {
 	@SubscribeEvent(priority=EventPriority.LOWEST)
 	public void pre(RenderPlayerEvent.Pre event){
 		EntityPlayer player = event.entityPlayer;
-		data = PlayerDataController.instance.getPlayerData(player);
+		this.data = PlayerDataController.instance.getPlayerData(player);
 		renderer.setModelData(data, player);
 		setModels(event.renderer);
 		if(!data.loaded && lastSkinTick > MaxSkinTick){
