@@ -17,6 +17,7 @@ import noppes.mpm.ModelData;
 import noppes.mpm.client.gui.util.GuiListActionListener;
 import noppes.mpm.client.gui.util.GuiNPCStringSlot;
 
+import noppes.mpm.client.gui.util.GuiNpcButton;
 import org.lwjgl.opengl.GL11;
 
 public class GuiEntitySelection extends GuiScreen implements GuiListActionListener
@@ -51,8 +52,9 @@ public class GuiEntitySelection extends GuiScreen implements GuiListActionListen
         	slot.selected = "Player";
         }
         slot.registerScrollButtons(4, 5);
-        
-    	this.buttonList.add(new GuiButton(2, width / 2 - 100, height - 44,98, 20, "Back"));
+
+        this.buttonList.add(new GuiNpcButton(2, width / 2 - 100, height - 44,98, 20, "gui.back"));
+        this.buttonList.add(new GuiNpcButton(10, width / 2 + 2, height - 44,98, 20, "gui.resettoplayer"));
     }
 
     @Override
@@ -132,7 +134,12 @@ public class GuiEntitySelection extends GuiScreen implements GuiListActionListen
 
 	protected void actionPerformed(GuiButton guibutton)
     {
-		close();
+        if(guibutton.id == 10){
+            playerdata.setEntityClass(null);
+            slot.selected = "Player";
+            initGui();
+        } else {
+            close();
+        }
     }
-
 }

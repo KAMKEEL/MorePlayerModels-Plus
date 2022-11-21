@@ -24,9 +24,8 @@ public class ModelNagaLegs extends ModelRenderer{
     
 	public ModelNagaLegs(ModelBase base) {
 		super(base);
-		
+
 		nagaPart1 = new ModelRenderer(base,0,0);
-		
 		ModelRenderer legPart = new ModelRenderer(base,0,16);
 		legPart.addBox(0, -2, -2, 4, 4, 4);
 		legPart.setRotationPoint(-4, 0, 0);
@@ -40,7 +39,6 @@ public class ModelNagaLegs extends ModelRenderer{
 		nagaPart2.childModels = nagaPart1.childModels;
 
 		nagaPart3 = new ModelRenderer(base,0,0);
-		
 		ModelPlaneRenderer plane = new ModelPlaneRenderer(base, 4, 24);
 		plane.addBackPlane(0,-2, 0, 4, 4);
 		plane.setRotationPoint(-4, 0, 0);
@@ -49,7 +47,6 @@ public class ModelNagaLegs extends ModelRenderer{
 		plane.mirror = true;
 		plane.addBackPlane(0,-2, 0, 4, 4);
 		nagaPart3.addChild(plane);
-		
 		plane = new ModelPlaneRenderer(base, 8, 24);
 		plane.addBackPlane(0,-2, 6, 4, 4);
 		plane.setRotationPoint(-4, 0, 0);
@@ -91,9 +88,7 @@ public class ModelNagaLegs extends ModelRenderer{
 
 		nagaPart4 = new ModelRenderer(base,0,0);
 		nagaPart4.childModels = nagaPart3.childModels;
-		
 		nagaPart5 = new ModelRenderer(base,0,0);
-		
 		legPart = new ModelRenderer(base,56,20);
 		legPart.addBox(0, 0, -2, 2, 5, 2);
 		legPart.setRotationPoint(-2, 0, 0);
@@ -111,11 +106,11 @@ public class ModelNagaLegs extends ModelRenderer{
 		this.addChild(nagaPart4);
 		this.addChild(nagaPart5);
 
-        nagaPart1.setRotationPoint(0F, 14.0F, 0.0F);
-        nagaPart2.setRotationPoint(0, 18.0F, 0.6F);
-        nagaPart3.setRotationPoint(0F, 22.0F, -0.3F);
-        nagaPart4.setRotationPoint(0F, 22.0F, 5F);
-        nagaPart5.setRotationPoint(0F, 22.0F, 10F);
+		nagaPart1.setRotationPoint(0F, 14.0F, 0.0F);
+		nagaPart2.setRotationPoint(0, 18.0F, 0.6F);
+		nagaPart3.setRotationPoint(0F, 22.0F, -0.3F);
+		nagaPart4.setRotationPoint(0F, 22.0F, 5F);
+		nagaPart5.setRotationPoint(0F, 22.0F, 10F);
 	}
     public void setRotationAngles(float par1, float par2, float par3, float par4, float par5, float par6, Entity entity)
     {
