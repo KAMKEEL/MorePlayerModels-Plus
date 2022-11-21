@@ -1,35 +1,37 @@
 package noppes.mpm;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.lang.reflect.Method;
 import java.security.MessageDigest;
-import java.util.Collection;
-import java.util.HashMap;
+import java.util.UUID;
+import java.util.concurrent.*;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
-import noppes.mpm.client.gui.util.GuiNpcButton;
 import noppes.mpm.constants.EnumAnimation;
 
 
 public class ModelData extends ModelDataShared implements IExtendedEntityProperties{
+	public static ExecutorService saveExecutor = Executors.newSingleThreadExecutor();
+
+	public static Capability<ModelData> MODELDATA_CAPABILITY = null;
 	public boolean loaded = false;
 	public boolean playerLoaded = false;
 	public EntityPlayer player = null;
 	
 	public int rev = MorePlayerModels.Revision;
-	
+
 	public ItemStack backItem;
 	
 	public int inLove = 0;
@@ -203,21 +205,37 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 		
 	}
 
-	public float getOffsetCamera(EntityPlayer player){
-		if(!MorePlayerModels.EnablePOV)
-			return 0;
-		float offset = -offsetY();
-		if(animation == EnumAnimation.SITTING){
-			offset += 0.5f - getLegsY();
-		}
-		if(isSleeping())
-			offset = 1.18f;
-		if(animation == EnumAnimation.CRAWLING)
-			offset = 0.8f;
-		if(offset < -0.2f && isBlocked(player))
-			offset = -0.2f;
-		return offset;
+	public void save(){
+		if(player == null)
+			return;
+		final EntityPlayer player = this.player;
+		saveExecutor.submit(() -> {
+			try {
+				String filename = player.getUniqueID().toString().toLowerCase();
+				if(filename.isEmpty())
+					filename = "noplayername";
+				filename += ".dat";
+				File file = new File(MorePlayerModels.dir, filename+"_new");
+				File file1 = new File(MorePlayerModels.dir, filename+"_old");
+				File file2 = new File(MorePlayerModels.dir, filename);
+				CompressedStreamTools.writeCompressed(writeToNBT(), new FileOutputStream(file));
+				if(file1.exists()){
+					file1.delete();
+				}
+				file2.renameTo(file1);
+				if(file2.exists()){
+					file2.delete();
+				}
+				file.renameTo(file2);
+				if(file.exists()){
+					file.delete();
+				}
+			} catch (Exception e) {
+				LogWriter.except(e);
+			}
+		});
 	}
+
 
 	private boolean isBlocked(EntityPlayer player) {
 		return !player.worldObj.isAirBlock((int)player.posX, (int)player.posY + 2, (int)player.posZ);

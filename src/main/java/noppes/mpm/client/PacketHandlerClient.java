@@ -21,6 +21,7 @@ import noppes.mpm.MorePlayerModels;
 import noppes.mpm.PacketHandlerServer;
 import noppes.mpm.PlayerDataController;
 import noppes.mpm.Server;
+import noppes.mpm.client.gui.GuiCreationScreen;
 import noppes.mpm.constants.EnumPackets;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.network.FMLNetworkEvent.ClientCustomPacketEvent;
@@ -41,7 +42,19 @@ public class PacketHandlerClient extends PacketHandlerServer{
 
 	private void handlePacket(ByteBuf buffer, EntityPlayer player, EnumPackets type) throws IOException {
 		if(type == EnumPackets.PING){
-			MorePlayerModels.HasServerSide = true;
+			int version = buffer.readInt();
+			if(version == MorePlayerModels.Revision){
+				MorePlayerModels.HasServerSide = true;
+				GuiCreationScreen.Message = "";
+			}
+			else if(version < MorePlayerModels.Revision){
+				MorePlayerModels.HasServerSide = false;
+				GuiCreationScreen.Message = "message.lowerversion";
+			}
+			else if(version > MorePlayerModels.Revision){
+				MorePlayerModels.HasServerSide = false;
+				GuiCreationScreen.Message = "message.higherversion";
+			}
 		}
 		else if(type == EnumPackets.RELOAD_SKINS) {
 			Minecraft mc = Minecraft.getMinecraft();

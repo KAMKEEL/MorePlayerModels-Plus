@@ -116,8 +116,9 @@ public class ClientEventHandler {
     	World world = mc.theWorld;
     	if(world != null && prevWorld != world){
 			MorePlayerModels.HasServerSide = false;
+			GuiCreationScreen.Message = "message.noserver";
 			ModelData data = PlayerDataController.instance.getPlayerData(mc.thePlayer);
-			Client.sendData(EnumPackets.PING, data.writeToNBT());
+			Client.sendData(EnumPackets.PING, MorePlayerModels.Revision, data.writeToNBT());
 			prevWorld = world;
     	}
     	if(MorePlayerModels.HasServerSide && mc.thePlayer != null && world != null && world.getWorldTime() % 20 == 0){

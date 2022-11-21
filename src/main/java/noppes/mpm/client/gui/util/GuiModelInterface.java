@@ -18,6 +18,7 @@ import org.lwjgl.opengl.GL12;
 
 public class GuiModelInterface extends GuiInterface{
 	public ModelData playerdata;
+    public static String Message = "";
 		
 	private static int rotation = 0;
 	
@@ -33,7 +34,6 @@ public class GuiModelInterface extends GuiInterface{
 		xSize = 380;
 		player = Minecraft.getMinecraft().thePlayer;
 		playerdata = PlayerDataController.instance.getPlayerData(Minecraft.getMinecraft().thePlayer);
-		//player.registerExtendedProperties("MPMData", playerdata);
 	}
 
     @Override
@@ -46,6 +46,9 @@ public class GuiModelInterface extends GuiInterface{
     	addButton(right = new GuiNpcButton(669, guiLeft + 192 + xOffset, guiTop + 200, 20, 20, ">"));
 
     	addButton(new GuiNpcButton(66, width - 22, 2, 20, 20, "X"));
+
+        addLabel(new GuiNpcLabel(0, Message, guiLeft + 120, guiTop + ySize - 10, 0xff0000));
+        getLabel(0).center(xSize - 120);
     }
 
     @Override

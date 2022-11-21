@@ -30,19 +30,22 @@ public class PacketHandlerServer{
 
 	private void handlePacket(ByteBuf buffer, EntityPlayerMP player, EnumPackets type) throws IOException {
 		if(type == EnumPackets.PING){
-			ModelData data = PlayerDataController.instance.getPlayerData(player);
-			data.readFromNBT(Server.readNBT(buffer));
-			
-			if(!player.worldObj.getGameRules().getGameRuleBooleanValue("mpmAllowEntityModels"))
-				data.entityClass = null;
-			
-			//PlayerDataController.instance.savePlayerData(player, data);
-			Server.sendAssociatedData(player, EnumPackets.SEND_PLAYER_DATA, player.getCommandSenderName(), data.writeToNBT());
-			
+			int version = buffer.readInt();
+			if(version == MorePlayerModels.Revision){
+				ModelData data = PlayerDataController.instance.getPlayerData(player);
+				data.readFromNBT(Server.readNBT(buffer));
+
+				if(!player.worldObj.getGameRules().getGameRuleBooleanValue("mpmAllowEntityModels"))
+					data.entityClass = null;
+
+				data.save();
+				Server.sendAssociatedData(player, EnumPackets.SEND_PLAYER_DATA, player.getUniqueID(), data.writeToNBT());
+			}
 			ItemStack back = player.inventory.mainInventory[0];
 			if(back != null)
-				Server.sendAssociatedData(player, EnumPackets.BACK_ITEM_UPDATE, player.getCommandSenderName(), back.writeToNBT(new NBTTagCompound()));
-			Server.sendData(player, EnumPackets.PING);
+				Server.sendAssociatedData(player, EnumPackets.BACK_ITEM_UPDATE, player.getUniqueID(), back.writeToNBT(new NBTTagCompound()));
+
+			Server.sendData(player, EnumPackets.PING, MorePlayerModels.Revision);
 		}
 		else if(type == EnumPackets.REQUEST_PLAYER_DATA){
 			EntityPlayer pl = player.worldObj.getPlayerEntityByName(Server.readString(buffer));

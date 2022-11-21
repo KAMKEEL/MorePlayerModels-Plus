@@ -66,10 +66,6 @@ public class ServerTickHandler {
 		data.backItem = item;
 		if(data.animation != EnumAnimation.NONE)
 			checkAnimation(player, data);
-
-		if (event.player.ticksExisted == 10) {
-			Server.sendData((EntityPlayerMP) event.player, EnumPackets.RELOAD_SKINS);
-		}
 	}
 
 	@SideOnly(Side.CLIENT)

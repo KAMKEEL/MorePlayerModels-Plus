@@ -49,7 +49,7 @@ public class MorePlayerModels {
 	
 	public static int Revision = 5;
 	
-	public File dir;
+	public static File dir;
 	
 	public static boolean HasServerSide = false;
 	
@@ -92,11 +92,11 @@ public class MorePlayerModels {
 		else
 			dir = Minecraft.getMinecraft().mcDataDir.getAbsolutePath();
 		
-		this.dir = new File(dir,"moreplayermodels");
-		if(!this.dir.exists())
-			this.dir.mkdir();
+		MorePlayerModels.dir = new File(dir,"moreplayermodels");
+		if(!MorePlayerModels.dir.exists())
+			MorePlayerModels.dir.mkdir();
 		
-		new PlayerDataController(this.dir);
+		new PlayerDataController(MorePlayerModels.dir);
 
 		configLoader = new ConfigLoader(this.getClass(), new File(dir, "config"), "MorePlayerModels");
 		configLoader.loadConfig();
