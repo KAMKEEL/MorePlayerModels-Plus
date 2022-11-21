@@ -39,7 +39,7 @@ public class GuiCreationScreen extends GuiModelInterface implements ITextfieldLi
 	public HashMap<String,Class<? extends EntityLivingBase>> data = new HashMap<String, Class<? extends EntityLivingBase>>();
 	private List<String> list;
 	private final String[] ignoredTags = {"CanBreakDoors", "Bred", "PlayerCreated", "Tame", "HasReproduced"};
-	private final static String[] urlTypes = new String[]{"Default", "Full"};
+	private final static String[] urlTypes = new String[]{"url.default", "url.full"};
 
 	private GuiNpcButton prev,next;
 
@@ -85,19 +85,19 @@ public class GuiCreationScreen extends GuiModelInterface implements ITextfieldLi
 		prev.enabled = getCurrentEntityIndex() >= 0;
 		next.enabled = getCurrentEntityIndex() < list.size() - 1;
 
-		addButton(new GuiNpcButton(46, guiLeft + 310, guiTop + 58, 80, 20, "Reload Skins"));
-		addButton(new GuiNpcButton(51, guiLeft + 310, guiTop + 80, 80, 20, "Edit Buttons"));
+		addButton(new GuiNpcButton(46, guiLeft + 310, guiTop + 58, 80, 20, "config.reloadskins"));
+		addButton(new GuiNpcButton(51, guiLeft + 310, guiTop + 80, 80, 20, "config.editbuttons"));
 
-		addLabel(new GuiNpcLabel(47, "Point of View", guiLeft + 270, guiTop + 139, 0xFFFFFF));
+		addLabel(new GuiNpcLabel(47, "config.pov", guiLeft + 270, guiTop + 139, 0xFFFFFF));
 		addButton(new GuiNpcButton(47, guiLeft + 350, guiTop + 134, 50, 20, new String[]{"gui.no","gui.yes"}, MorePlayerModels.EnablePOV?1:0));
 
-		addLabel(new GuiNpcLabel(48, "Chatbubbles", guiLeft + 270, guiTop + 161, 0xFFFFFF));
+		addLabel(new GuiNpcLabel(48, "config.chatbubbles", guiLeft + 270, guiTop + 161, 0xFFFFFF));
 		addButton(new GuiNpcButton(48, guiLeft + 350, guiTop + 156, 50, 20, new String[]{"gui.no","gui.yes"}, MorePlayerModels.EnableChatBubbles?1:0));
 
-		addLabel(new GuiNpcLabel(49, "BackItem", guiLeft + 270, guiTop + 183, 0xFFFFFF));
+		addLabel(new GuiNpcLabel(49, "config.backitem", guiLeft + 270, guiTop + 183, 0xFFFFFF));
 		addButton(new GuiNpcButton(49, guiLeft + 350, guiTop + 178, 50, 20, new String[]{"gui.no","gui.yes"}, MorePlayerModels.EnableBackItem?1:0));
 
-		addLabel(new GuiNpcLabel(50, "Tooltip", guiLeft + 270, guiTop + 205, 0xFFFFFF));
+		addLabel(new GuiNpcLabel(50, "config.tooltip", guiLeft + 270, guiTop + 205, 0xFFFFFF));
 		addButton(new GuiNpcButton(50, guiLeft + 350, guiTop + 200, 50, 20, new String[]{"gui.no","1","2","3","4"}, MorePlayerModels.Tooltips));
 
 		if(entity == null)
@@ -112,29 +112,29 @@ public class GuiCreationScreen extends GuiModelInterface implements ITextfieldLi
 		addButton(new GuiNpcButton(8, guiLeft + 4, y += 22, 96, 20, "Scale"));
 
 		addButton(new GuiNpcButton(250, guiLeft + 50, y += 22, 50, 20, new String[]{"Default","Steve64","Alex"}, playerdata.modelType));
-		addLabel(new GuiNpcLabel(250, "Model", guiLeft, y + 5, 0xFFFFFF));
+		addLabel(new GuiNpcLabel(250, "gui.model", guiLeft, y + 5, 0xFFFFFF));
 
 		addButton(new GuiNpcButton(4, guiLeft + 50, y += 22, 50, 20, "selectServer.edit"));
-		addLabel(new GuiNpcLabel(1, "Head", guiLeft, y + 5, 0xFFFFFF));
+		addLabel(new GuiNpcLabel(1, "part.head", guiLeft, y + 5, 0xFFFFFF));
 
 		addButton(new GuiNpcButton(5, guiLeft + 50, y += 22, 50, 20, "selectServer.edit"));
-		addLabel(new GuiNpcLabel(2, "Body", guiLeft, y + 5, 0xFFFFFF));
+		addLabel(new GuiNpcLabel(2, "part.body", guiLeft, y + 5, 0xFFFFFF));
 
 		addButton(new GuiNpcButton(6, guiLeft + 50, y += 22, 50, 20, "selectServer.edit"));
-		addLabel(new GuiNpcLabel(3, "Arms", guiLeft, y + 5, 0xFFFFFF));
+		addLabel(new GuiNpcLabel(3, "part.arms", guiLeft, y + 5, 0xFFFFFF));
 
 		addButton(new GuiNpcButton(7, guiLeft + 50, y += 22, 50, 20, "selectServer.edit"));
-		addLabel(new GuiNpcLabel(4, "Legs", guiLeft, y + 5, 0xFFFFFF));
+		addLabel(new GuiNpcLabel(4, "part.legs", guiLeft, y + 5, 0xFFFFFF));
 
 		addButton(new GuiNpcButton(9, guiLeft + 50, y += 22, 50, 20, new String[]{"Default", "Female", "Male", "Goblin Male"}, playerdata.soundType));
-		addLabel(new GuiNpcLabel(5, "Sounds", guiLeft, y + 5, 0xFFFFFF));
+		addLabel(new GuiNpcLabel(5, "config.sounds", guiLeft, y + 5, 0xFFFFFF));
 
-		addButton(new GuiNpcButton(44, guiLeft + 310, guiTop + 14, 80, 20, "Save Settings"));
-		addButton(new GuiNpcButton(45, guiLeft + 310, guiTop + 36, 80, 20, "Load Settings"));
-		addLabel(new GuiNpcLabel(52, "Skin Url", guiLeft, guiTop + 183, 0xFFFFFF));
+		addButton(new GuiNpcButton(44, guiLeft + 310, guiTop + 14, 80, 20, "gui.save"));
+		addButton(new GuiNpcButton(45, guiLeft + 310, guiTop + 36, 80, 20, "gui.load"));
+		addLabel(new GuiNpcLabel(52, "config.skinurl", guiLeft, guiTop + 183, 0xFFFFFF));
 		addTextField(new GuiNpcTextField(52, this, guiLeft, guiTop + 193, 140, 20, playerdata.url));
 
-		addLabel(new GuiNpcLabel(251, "URL Type", guiLeft + 270, guiTop + 117, 0xFFFFFF));
+		addLabel(new GuiNpcLabel(251, "config.urltype", guiLeft + 270, guiTop + 117, 0xFFFFFF));
 		addButton(new GuiNpcButton(251, guiLeft + 350, guiTop + 112, 50, 20, urlTypes, playerdata.urlType));
 	}
 

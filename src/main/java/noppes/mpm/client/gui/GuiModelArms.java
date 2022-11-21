@@ -9,10 +9,10 @@ import noppes.mpm.client.gui.util.GuiModelInterface;
 
 public class GuiModelArms extends GuiModelInterface{
 
-	private final String[] arrParticles = new String[]{"gui.no","Both","Left","Right"};
-	private final String[] arrArm = new String[]{"gui.no","Both","Right","Left"};
-	private final String[] arrArmwear = new String[]{"gui.no","Both","Left","Right"};
-	private final String[] arrSolidArmwear = new String[]{"gui.no","Both","Left","Right"};
+	private final String[] arrParticles = new String[]{"gui.no","part.both","part.left","part.right"};
+	private final String[] arrArm = new String[]{"gui.no","part.both","part.right","part.left"};
+	private final String[] arrArmwear = new String[]{"gui.no","part.both","part.left","part.right"};
+	private final String[] arrSolidArmwear = new String[]{"gui.no","part.both","part.left","part.right"};
 
 	private GuiScreen parent;
 	public GuiModelArms(GuiScreen parent){
@@ -26,7 +26,7 @@ public class GuiModelArms extends GuiModelInterface{
 		int y = guiTop + 20;
 
 		addButton(new GuiNpcButton(30, guiLeft + 50, y += 22, 70, 20, arrArm, playerdata.hideArms));
-		addLabel(new GuiNpcLabel(30, "Hide", guiLeft, y + 5, 0xFFFFFF));
+		addLabel(new GuiNpcLabel(30, "gui.hide", guiLeft, y + 5, 0xFFFFFF));
 
 		if (playerdata.modelType == 1 || playerdata.modelType == 2) {
 			addButton(new GuiNpcButton(8, guiLeft + 50, y += 22, 70, 20, arrArmwear, playerdata.armwear));

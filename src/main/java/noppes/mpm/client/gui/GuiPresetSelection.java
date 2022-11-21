@@ -62,9 +62,9 @@ public class GuiPresetSelection extends GuiInterface implements GuiListActionLis
         slot = new GuiNPCStringSlot(list,this,false,18);
         slot.registerScrollButtons(4, 5);
 
-    	this.buttonList.add(new GuiNpcButton(2, width / 2 - 100, height - 44,98, 20, "Back"));
-    	this.buttonList.add(new GuiNpcButton(3, width / 2 + 2, height - 44,98, 20, "Load"));
-    	this.buttonList.add(new GuiNpcButton(4, width / 2 - 49, height - 22,98, 20, "Remove"));
+    	this.buttonList.add(new GuiNpcButton(2, width / 2 - 100, height - 44,98, 20, "gui.back"));
+    	this.buttonList.add(new GuiNpcButton(3, width / 2 + 2, height - 44,98, 20, "gui.load"));
+    	this.buttonList.add(new GuiNpcButton(4, width / 2 - 49, height - 22,98, 20, "gui.remove"));
     }
 
 

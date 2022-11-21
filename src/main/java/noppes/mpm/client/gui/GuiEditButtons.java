@@ -14,7 +14,7 @@ import org.lwjgl.input.Keyboard;
 public class GuiEditButtons extends GuiModelInterface{
 
 	private GuiScreen parent;
-	private final String[] animations = new String[]{"None","Sleep","Crawl","Hug","Sit","Dance","Wave","Wag","Bow","Cry"};
+	private final String[] animations = new String[]{"gui.none", "animation.sleep", "animation.crawl", "animation.hug", "animation.sit", "animation.dance", "animation.wave", "animation.wag", "animation.bow", "animation.cry"};
 	
 	public GuiEditButtons(GuiScreen parent){
 		this.parent = parent;

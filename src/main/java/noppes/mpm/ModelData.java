@@ -24,8 +24,6 @@ import noppes.mpm.constants.EnumAnimation;
 
 public class ModelData extends ModelDataShared implements IExtendedEntityProperties{
 	public static ExecutorService saveExecutor = Executors.newSingleThreadExecutor();
-
-	public static Capability<ModelData> MODELDATA_CAPABILITY = null;
 	public boolean loaded = false;
 	public boolean playerLoaded = false;
 	public EntityPlayer player = null;

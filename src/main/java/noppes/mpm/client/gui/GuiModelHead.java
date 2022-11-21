@@ -11,14 +11,15 @@ public class GuiModelHead extends GuiModelInterface{
 
 	private GuiScreen parent;
 
-	private final String[] arrHeadwear = new String[]{"gui.no","gui.yes","Solid"};
-	private final String[] arrHair = new String[]{"gui.no","Player","Long","Thin","Stylish","Ponytail"};
-	private final String[] arrBeard = new String[]{"gui.no","Player","Standard","Viking","Long","Short"};
-	private final String[] arrMohawk = new String[]{"gui.no","Type1"};
-	private final String[] arrSnout = new String[]{"gui.no","Player Small","Player Medium", "Player Large", "Player Bunny",
-			"Small1", "Medium1", "Large1", "Bunny1", "Beak1"};
-	private final String[] arrEars = new String[]{"gui.no","Player","Player Bunny","Bunny","Type1"};
-	private final String[] arrHorns = new String[]{"gui.no","Player Bull", "Player Antlers","Player AntennasB", "Player AntennasF", "Bull", "Antlers", "AntennasB", "AntennasF"};
+	private final String[] arrHead = new String[]{"gui.no","gui.yes"};
+	private final String[] arrHeadwear = new String[]{"gui.no","gui.yes","part.solid"};
+	private final String[] arrHair = new String[]{"gui.no","gui.player","hair.long", "hair.thin","hair.stylish","hair.ponytail"};
+	private final String[] arrBeard = new String[]{"gui.no","gui.player","beard.standard","beard.viking", "beard.long", "beard.short"};
+	private final String[] arrMohawk = new String[]{"gui.no","1"};
+	private final String[] arrSnout = new String[]{"gui.no","snout.player_small","snout.player_medium", "snout.player_large", "snout.player_bunny",
+			"snout.small", "snout.medium", "snout.large", "snout.bunny", "snout.beak"};
+	private final String[] arrEars = new String[]{"gui.no","gui.player","snout.player_bunny","ears.bunny","ears.bear"};
+	private final String[] arrHorns = new String[]{"gui.no", "horns.player_bull", "horns.player_antlers", "horns.player_antennab", "horns.player_antennaf", "horns.bull", "horns.antlers", "horns.antennab", "horns.antennaf"};
 	public GuiModelHead(GuiScreen parent){
 		this.parent = parent;
 		this.xOffset = 60;
@@ -29,43 +30,46 @@ public class GuiModelHead extends GuiModelInterface{
     	super.initGui();
 
 		int y = guiTop + 20;
-		
+
+		addButton(new GuiNpcButton(172, guiLeft + 50, y += 22, 70, 20, arrHead, playerdata.hideHead));
+		addLabel(new GuiNpcLabel(172, "gui.hide", guiLeft, y + 5, 0xFFFFFF));
+
     	addButton(new GuiNpcButton(0, guiLeft + 50, y += 22, 70, 20, arrHeadwear, playerdata.headwear));
-		addLabel(new GuiNpcLabel(0, "Headwear", guiLeft, y + 5, 0xFFFFFF));
+		addLabel(new GuiNpcLabel(0, "gui.headwear", guiLeft, y + 5, 0xFFFFFF));
 
 		ModelPartData hair = playerdata.getPartData("hair");
     	addButton(new GuiNpcButton(1, guiLeft + 50, y += 22, 70, 20, arrHair, hair == null?0:hair.type + 1));
-		addLabel(new GuiNpcLabel(1, "Hair", guiLeft, y + 5, 0xFFFFFF));
+		addLabel(new GuiNpcLabel(1, "part.hair", guiLeft, y + 5, 0xFFFFFF));
 		if(hair != null)
 			addButton(new GuiNpcButton(11, guiLeft + 122, y, 40, 20, hair.getColor()));
 
 		ModelPartData mohawk = playerdata.getPartData("mohawk");
     	addButton(new GuiNpcButton(2, guiLeft + 50, y += 22, 70, 20, arrMohawk, mohawk == null?0:mohawk.type));
-		addLabel(new GuiNpcLabel(2, "Mohawk", guiLeft, y + 5, 0xFFFFFF));
+		addLabel(new GuiNpcLabel(2, "part.mohawk", guiLeft, y + 5, 0xFFFFFF));
 		if(mohawk != null)
 			addButton(new GuiNpcButton(12, guiLeft + 122, y, 40, 20, mohawk.getColor()));
 
 		ModelPartData beard = playerdata.getPartData("beard");
     	addButton(new GuiNpcButton(3, guiLeft + 50, y += 22, 70, 20, arrBeard, beard == null?0:beard.type + 1));
-		addLabel(new GuiNpcLabel(3, "Beard", guiLeft, y + 5, 0xFFFFFF));
+		addLabel(new GuiNpcLabel(3, "part.beard", guiLeft, y + 5, 0xFFFFFF));
 		if(beard != null)
 			addButton(new GuiNpcButton(13, guiLeft + 122, y, 40, 20, beard.getColor()));
 
 		ModelPartData snout = playerdata.getPartData("snout");
     	addButton(new GuiNpcButton(4, guiLeft + 50, y += 22, 70, 20, arrSnout, snout == null?0:snout.type + (snout.playerTexture?1:5)));
-		addLabel(new GuiNpcLabel(4, "Snout", guiLeft, y + 5, 0xFFFFFF));
+		addLabel(new GuiNpcLabel(4, "part.snout", guiLeft, y + 5, 0xFFFFFF));
 		if(snout != null)
 			addButton(new GuiNpcButton(14, guiLeft + 122, y, 40, 20, snout.getColor()));
 
 		ModelPartData ears = playerdata.getPartData("ears");
     	addButton(new GuiNpcButton(5, guiLeft + 50, y += 22, 70, 20, arrEars, getEars(ears)));
-		addLabel(new GuiNpcLabel(5, "Ears", guiLeft, y + 5, 0xFFFFFF));
+		addLabel(new GuiNpcLabel(5, "part.ears", guiLeft, y + 5, 0xFFFFFF));
 		if(ears != null)
 			addButton(new GuiNpcButton(15, guiLeft + 122, y, 40, 20, ears.getColor()));
 		
 		ModelPartData horns = playerdata.getPartData("horns");
     	addButton(new GuiNpcButton(6, guiLeft + 50, y += 22, 70, 20, arrHorns, getHorns(horns)));
-		addLabel(new GuiNpcLabel(6, "Horns", guiLeft, y + 5, 0xFFFFFF));
+		addLabel(new GuiNpcLabel(6, "part.horns", guiLeft, y + 5, 0xFFFFFF));
 		if(horns != null)
 			addButton(new GuiNpcButton(16, guiLeft + 122, y, 40, 20, horns.getColor()));
 
@@ -104,6 +108,10 @@ public class GuiModelHead extends GuiModelInterface{
     	if(button.id == 0){
     		playerdata.headwear = (byte) button.getValue();
     	}
+
+		if(button.id == 172){
+			playerdata.hideHead = (byte) button.getValue();
+		}
 
     	if(button.id == 1){
     		if(button.getValue() == 0)

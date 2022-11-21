@@ -89,11 +89,10 @@ public class GuiInterface extends GuiScreen{
     }
 
 	@Override
-    public void mouseClicked(int i, int j, int k)
-    {
-    	for(GuiNpcTextField tf : textfields.values().toArray(new GuiNpcTextField[textfields.size()]))
-    		if(tf.enabled)
-    			tf.mouseClicked(i, j, k);
-    	super.mouseClicked(i, j, k);
-    }
+    public void mouseClicked(int i, int j, int k) {
+		for (GuiNpcTextField tf : textfields.values().toArray(new GuiNpcTextField[textfields.size()]))
+			if (tf.enabled)
+				tf.mouseClicked(i, j, k);
+		super.mouseClicked(i, j, k);
+	}
 }

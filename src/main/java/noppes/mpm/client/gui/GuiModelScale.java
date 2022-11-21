@@ -29,43 +29,43 @@ public class GuiModelScale extends GuiModelInterface implements ISliderListener{
 
 		int y = guiTop + 2;
 
-		addLabel(new GuiNpcLabel(20, "Head", guiLeft + 55, y + 5, 0xFFFFFF));
+		addLabel(new GuiNpcLabel(20, "part.head", guiLeft + 55, y + 5, 0xFFFFFF));
 		if(type == 0){
 			drawSlider(y, data.head);
 			y += 88;
 		}
 		else{
-			addButton(new GuiNpcButton(0, guiLeft + 110, y , 60, 20, "Edit"));
+			addButton(new GuiNpcButton(0, guiLeft + 110, y , 60, 20, "selectServer.edit"));
 			y += 24;
 		}
 		
-		addLabel(new GuiNpcLabel(21, "Body", guiLeft + 55, y + 5, 0xFFFFFF));
+		addLabel(new GuiNpcLabel(21, "part.body", guiLeft + 55, y + 5, 0xFFFFFF));
 		if(type == 1){
 			drawSlider(y, data.body);
 			y += 88;
 		}
 		else{
-			addButton(new GuiNpcButton(1, guiLeft + 110, y , 60, 20, "Edit"));
+			addButton(new GuiNpcButton(1, guiLeft + 110, y , 60, 20, "selectServer.edit"));
 			y += 24;
 		}
 		
-		addLabel(new GuiNpcLabel(22, "Arms", guiLeft + 55, y + 5, 0xFFFFFF));
+		addLabel(new GuiNpcLabel(22, "part.arms", guiLeft + 55, y + 5, 0xFFFFFF));
 		if(type == 2){
 			drawSlider(y, data.arms);
 			y += 88;
 		}
 		else{
-			addButton(new GuiNpcButton(2, guiLeft + 110, y , 60, 20, "Edit"));
+			addButton(new GuiNpcButton(2, guiLeft + 110, y , 60, 20, "selectServer.edit"));
 			y += 24;
 		}
 		
-		addLabel(new GuiNpcLabel(23, "Legs", guiLeft + 55, y + 5, 0xFFFFFF));
+		addLabel(new GuiNpcLabel(23, "part.legs", guiLeft + 55, y + 5, 0xFFFFFF));
 		if(type == 3){
 			drawSlider(y, data.legs);
 			y += 88;
 		}
 		else{
-			addButton(new GuiNpcButton(3, guiLeft + 110, y , 60, 20, "Edit"));
+			addButton(new GuiNpcButton(3, guiLeft + 110, y , 60, 20, "selectServer.edit"));
 			y += 24;
 		}
 
@@ -73,13 +73,13 @@ public class GuiModelScale extends GuiModelInterface implements ISliderListener{
     
     private void drawSlider(int y, ModelPartConfig config){
 		y += 15;
-		addLabel(new GuiNpcLabel(10, "Width", guiLeft, y + 5, 0xFFFFFF));
+		addLabel(new GuiNpcLabel(10, "scale.width=", guiLeft, y + 5, 0xFFFFFF));
 		addSlider(new GuiNpcSlider(this, 10, guiLeft + 50, y, config.scaleX - 0.5f));
 		y += 22;
-		addLabel(new GuiNpcLabel(11, "Height", guiLeft, y + 5, 0xFFFFFF));
+		addLabel(new GuiNpcLabel(11, "scale.height", guiLeft, y + 5, 0xFFFFFF));
 		addSlider(new GuiNpcSlider(this, 11, guiLeft + 50, y, config.scaleY - 0.5f));
 		y += 22;
-		addLabel(new GuiNpcLabel(12, "Depth", guiLeft, y + 5, 0xFFFFFF));
+		addLabel(new GuiNpcLabel(12, "scale.depth", guiLeft, y + 5, 0xFFFFFF));
 		addSlider(new GuiNpcSlider(this, 12, guiLeft + 50, y, config.scaleZ - 0.5f));
     }
 

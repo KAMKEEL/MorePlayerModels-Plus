@@ -11,13 +11,13 @@ public class GuiModelBody extends GuiModelInterface{
 
 	private GuiScreen parent;
 	private final String[] arrBody = new String[]{"gui.no","gui.yes"};
-	private final String[] arrBodywear = new String[]{"gui.no","gui.yes","Solid"};
-	private final String[] arrWing = new String[]{"gui.no","Player","Type1","Type2","Type3","Type4","Type5","Type6","Type7","Type8","Type9",
-			"Type10","Type11","Type12","Type13"};
-	private final String[] arrBreasts = new String[]{"gui.no","Type1","Type2","Type3"};
-	private final String[] arrParticles = new String[]{"gui.no","Player","Type1","Type2", "Rainbow"};
-	private final String[] arrfins = new String[]{"gui.no","Player","Type1","Type2","Type3","Type4","Type5","Type6"};
-	private final String[] arrskirt = new String[]{"gui.no","Player","Type1"};
+	private final String[] arrBodywear = new String[]{"gui.no","gui.yes","part.solid"};
+	private final String[] arrWing = new String[]{"gui.no","gui.player","1","2","3","4","5","6","7","8","9",
+			"10","11","12","13"};
+	private final String[] arrBreasts = new String[]{"gui.no","1","2","3"};
+	private final String[] arrParticles = new String[]{"gui.no","gui.player","1","2", "particle.rainbow"};
+	private final String[] arrfins = new String[]{"gui.no","gui.player","1","2","3","4","5","6"};
+	private final String[] arrskirt = new String[]{"gui.no","gui.player","1"};
 	
 	public GuiModelBody(GuiScreen parent){
 		this.parent = parent;
@@ -30,37 +30,37 @@ public class GuiModelBody extends GuiModelInterface{
 		int y = guiTop + 20;
 
 		addButton(new GuiNpcButton(30, guiLeft + 50, y += 22, 70, 20, arrBody, playerdata.hideBody));
-		addLabel(new GuiNpcLabel(30, "Hide", guiLeft, y + 5, 0xFFFFFF));
+		addLabel(new GuiNpcLabel(30, "gui.hide", guiLeft, y + 5, 0xFFFFFF));
 
 		if (playerdata.modelType == 1 || playerdata.modelType == 2) {
 			addButton(new GuiNpcButton(8, guiLeft + 50, y += 22, 70, 20, arrBodywear, playerdata.bodywear));
-			addLabel(new GuiNpcLabel(8, "Bodywear", guiLeft, y + 5, 0xFFFFFF));
+			addLabel(new GuiNpcLabel(8, "gui.bodywear", guiLeft, y + 5, 0xFFFFFF));
 		}
 
     	addButton(new GuiNpcButton(1, guiLeft + 50, y += 22, 70, 20, arrBreasts, playerdata.breasts));
-		addLabel(new GuiNpcLabel(1, "Breasts", guiLeft, y + 5, 0xFFFFFF));
+		addLabel(new GuiNpcLabel(1, "part.breasts", guiLeft, y + 5, 0xFFFFFF));
 
 		ModelPartData wing = playerdata.getPartData("wings");
     	addButton(new GuiNpcButton(0, guiLeft + 50, y += 22, 70, 20, arrWing, wing == null?0:wing.type + 1));
-		addLabel(new GuiNpcLabel(0, "Wings", guiLeft, y + 5, 0xFFFFFF));
+		addLabel(new GuiNpcLabel(0, "part.wings", guiLeft, y + 5, 0xFFFFFF));
 		if(wing != null)
 			addButton(new GuiNpcButton(11, guiLeft + 122, y, 40, 20, wing.getColor()));
 
 		ModelPartData particles = playerdata.getPartData("particles");
     	addButton(new GuiNpcButton(2, guiLeft + 50, y += 22, 70, 20, arrParticles, getParticleIndex(particles)));
-		addLabel(new GuiNpcLabel(2, "Particles", guiLeft, y + 5, 0xFFFFFF));
+		addLabel(new GuiNpcLabel(2, "part.particles", guiLeft, y + 5, 0xFFFFFF));
 		if(particles != null && particles.type != 1)
 			addButton(new GuiNpcButton(12, guiLeft + 122, y, 40, 20, particles.getColor()));
 
 		ModelPartData fin = playerdata.getPartData("fin");
     	addButton(new GuiNpcButton(3, guiLeft + 50, y += 22, 70, 20, arrfins, getFinIndex(fin)));
-		addLabel(new GuiNpcLabel(3, "Fin", guiLeft, y + 5, 0xFFFFFF));
+		addLabel(new GuiNpcLabel(3, "tail.fin", guiLeft, y + 5, 0xFFFFFF));
 		if(fin != null)
 			addButton(new GuiNpcButton(13, guiLeft + 122, y, 40, 20, fin.getColor()));
 
 		ModelPartData skirt = playerdata.getPartData("skirt");
     	addButton(new GuiNpcButton(4, guiLeft + 50, y += 22, 70, 20, arrskirt, getSkirtIndex(skirt)));
-		addLabel(new GuiNpcLabel(4, "Skirt", guiLeft, y + 5, 0xFFFFFF));
+		addLabel(new GuiNpcLabel(4, "part.skirt", guiLeft, y + 5, 0xFFFFFF));
 		if(skirt != null)
 			addButton(new GuiNpcButton(14, guiLeft + 122, y, 40, 20, skirt.getColor()));
 

@@ -23,8 +23,8 @@ public class GuiPresetSave extends GuiInterface{
 	public void initGui(){
 		super.initGui();
 		this.addTextField(new GuiNpcTextField(0, this, guiLeft, guiTop + 70,200, 20, ""));
-		this.addButton(new GuiNpcButton(0,guiLeft, guiTop + 100,98, 20, "Save"));
-		this.addButton(new GuiNpcButton(1,guiLeft + 100, guiTop + 100, 98, 20, "Cancel"));
+		this.addButton(new GuiNpcButton(0,guiLeft, guiTop + 100,98, 20, "gui.save"));
+		this.addButton(new GuiNpcButton(1,guiLeft + 100, guiTop + 100, 98, 20, "gui.cancel"));
 	}
     @Override
     protected void actionPerformed(GuiButton btn) {

@@ -10,11 +10,11 @@ import noppes.mpm.client.gui.util.GuiModelInterface;
 public class GuiModelLegs extends GuiModelInterface{
 
 	private GuiScreen parent;
-	private final String[] arrLeg = new String[]{"gui.no","Both","Right","Left"};
-	private final String[] arrLegwear = new String[]{"gui.no","Both","Left","Right"};
-	private final String[] arrSolidLegwear = new String[]{"gui.no","Both","Left","Right"};
-	private final String[] arrLegs = new String[]{"gui.no","Player","Player Naga","Spider","Horse","Naga", "Mermaid","Digitigrade"};
-	private final String[] arrTail = new String[]{"gui.no","Player", "Player Dragon","Cat","Wolf","Horse","Dragon", "Squirrel", "Fin", "Rodent"};
+	private final String[] arrLeg = new String[]{"gui.none","part.both","part.right","part.left"};
+	private final String[] arrLegwear = new String[]{"gui.none","part.both","part.left","part.right"};
+	private final String[] arrSolidLegwear = new String[]{"gui.none","part.both","part.left","part.right"};
+	private final String[] arrLegs = new String[]{"gui.none","gui.player", "legs.player_naga", "legs.spider", "legs.horse", "legs.naga", "legs.mermaid","legs.digitigrade"};
+	private final String[] arrTail = new String[]{"gui.none","gui.player", "tail.player_dragon", "tail.cat", "tail.wolf", "tail.horse", "tail.dragon", "tail.squirrel", "tail.fin", "tail.rodent"};
 	public GuiModelLegs(GuiScreen parent){
 		this.parent = parent;
 		this.xOffset = 60;
@@ -26,24 +26,24 @@ public class GuiModelLegs extends GuiModelInterface{
 		int y = guiTop + 20;
 
 		addButton(new GuiNpcButton(30, guiLeft + 50, y += 22, 70, 20, arrLeg, playerdata.hideLegs));
-		addLabel(new GuiNpcLabel(30, "Hide", guiLeft, y + 5, 0xFFFFFF));
+		addLabel(new GuiNpcLabel(30, "gui.hide", guiLeft, y + 5, 0xFFFFFF));
 
 		if (playerdata.modelType == 1 || playerdata.modelType == 2) {
 			addButton(new GuiNpcButton(8, guiLeft + 50, y += 22, 70, 20, arrLegwear, playerdata.legwear));
-			addLabel(new GuiNpcLabel(8, "Legwear", guiLeft, y + 5, 0xFFFFFF));
+			addLabel(new GuiNpcLabel(8, "gui.legwear", guiLeft, y + 5, 0xFFFFFF));
 
 			addButton(new GuiNpcButton(9, guiLeft + 50, y += 22, 70, 20, arrSolidLegwear, playerdata.solidLegwear));
-			addLabel(new GuiNpcLabel(9, "Solid", guiLeft, y + 5, 0xFFFFFF));
+			addLabel(new GuiNpcLabel(9, "part.solid", guiLeft, y + 5, 0xFFFFFF));
 		}
 
     	addButton(new GuiNpcButton(1, guiLeft + 50, y += 22, 70, 20, arrLegs, getNagaIndex(playerdata.legParts)));
-		addLabel(new GuiNpcLabel(1, "Legs", guiLeft, y + 5, 0xFFFFFF));
+		addLabel(new GuiNpcLabel(1, "part.legs", guiLeft, y + 5, 0xFFFFFF));
 		if(playerdata.legParts.type > 0)
 			addButton(new GuiNpcButton(11, guiLeft + 122, y, 40, 20, playerdata.legParts.getColor()));
 
 		ModelPartData tail = playerdata.getPartData("tail");
     	addButton(new GuiNpcButton(2, guiLeft + 50, y += 22, 70, 20, arrTail, getTailIndex(tail)));
-		addLabel(new GuiNpcLabel(2, "Tail", guiLeft, y + 5, 0xFFFFFF));
+		addLabel(new GuiNpcLabel(2, "part.tail", guiLeft, y + 5, 0xFFFFFF));
 		if(tail != null)
 			addButton(new GuiNpcButton(12, guiLeft + 122, y, 40, 20, tail.getColor()));
     }
