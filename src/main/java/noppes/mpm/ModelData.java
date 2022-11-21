@@ -43,7 +43,7 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 	public byte urlType = 0;	//	0:url, 1:url64
 	public String url= "";
 	public String displayName = "";
-	public int modelType = 0; 	// For Alex / Steve 3D Layers
+	public int modelType = 0; 	// 	0: Steve, 1: Steve64, 2: Alex
 
 	public ModelData(){
 
@@ -75,14 +75,18 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 			player.refreshDisplayName();
 		
 		String prevUrl = url;
+		byte prevUrlType = urlType;
+		int prevModelType = modelType;
 		url = compound.getString("CustomSkinUrl");
 		urlType = compound.getByte("UrlType");
 		modelType = compound.getInteger("ModelType");
 
 		setAnimation(compound.getInteger("Animation"));
 		
-		if(loaded && !prevUrl.equals(url))
+		if(!prevUrl.equals(url) || prevUrlType != urlType || prevModelType != modelType){
 			loaded = false;
+			playerLoaded = false;
+		}
 	}
 
 	public void setAnimation(int i) {
