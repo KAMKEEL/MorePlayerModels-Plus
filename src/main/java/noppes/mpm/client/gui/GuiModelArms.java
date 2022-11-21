@@ -9,10 +9,10 @@ import noppes.mpm.client.gui.util.GuiModelInterface;
 
 public class GuiModelArms extends GuiModelInterface{
 
-	private final String[] arrParticles = new String[]{"gui.no","part.both","part.left","part.right"};
 	private final String[] arrArm = new String[]{"gui.no","part.both","part.right","part.left"};
 	private final String[] arrArmwear = new String[]{"gui.no","part.both","part.left","part.right"};
 	private final String[] arrSolidArmwear = new String[]{"gui.no","part.both","part.left","part.right"};
+	private final String[] arrClaws = new String[]{"gui.no","part.both","part.left","part.right"};
 
 	private GuiScreen parent;
 	public GuiModelArms(GuiScreen parent){
@@ -38,7 +38,7 @@ public class GuiModelArms extends GuiModelInterface{
 
 
 		ModelPartData claws = playerdata.getPartData("claws");
-    	addButton(new GuiNpcButton(0, guiLeft + 50, y += 22, 70, 20, arrParticles, claws == null?0:claws.type + 1));
+    	addButton(new GuiNpcButton(0, guiLeft + 50, y += 22, 70, 20, arrClaws, claws == null?0:claws.type + 1));
 		addLabel(new GuiNpcLabel(0, "Claws", guiLeft, y + 5, 0xFFFFFF));
 		if(claws != null)
 			addButton(new GuiNpcButton(10, guiLeft + 122, y, 40, 20, claws.getColor()));

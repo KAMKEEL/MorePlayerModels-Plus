@@ -13,9 +13,9 @@ public class GuiModelBody extends GuiModelInterface{
 	private final String[] arrBody = new String[]{"gui.no","gui.yes"};
 	private final String[] arrBodywear = new String[]{"gui.no","gui.yes","part.solid"};
 	private final String[] arrWing = new String[]{"gui.no","gui.player","1","2","3","4","5","6","7","8","9",
-			"10","11","12","13"};
+			"10","11","12","13","14","15"};
 	private final String[] arrBreasts = new String[]{"gui.no","1","2","3"};
-	private final String[] arrParticles = new String[]{"gui.no","gui.player","1","2", "particle.rainbow"};
+	private final String[] arrParticles = new String[]{"gui.no","gui.player","1","2", "particle.rainbow", "3", "4", "5", "6", "7"};
 	private final String[] arrfins = new String[]{"gui.no","gui.player","1","2","3","4","5","6"};
 	private final String[] arrskirt = new String[]{"gui.no","gui.player","1"};
 	
@@ -59,7 +59,7 @@ public class GuiModelBody extends GuiModelInterface{
 			addButton(new GuiNpcButton(13, guiLeft + 122, y, 40, 20, fin.getColor()));
 
 		ModelPartData skirt = playerdata.getPartData("skirt");
-    	addButton(new GuiNpcButton(4, guiLeft + 50, y += 22, 70, 20, arrskirt, getSkirtIndex(skirt)));
+    	addButton(new GuiNpcButton(4, guiLeft + 50, y += 22, 70, 20, arrskirt, getSkirtindex(skirt)));
 		addLabel(new GuiNpcLabel(4, "part.skirt", guiLeft, y + 5, 0xFFFFFF));
 		if(skirt != null)
 			addButton(new GuiNpcButton(14, guiLeft + 122, y, 40, 20, skirt.getColor()));
@@ -89,7 +89,7 @@ public class GuiModelBody extends GuiModelInterface{
 		return 0;
 	}
 
-	private int getSkirtIndex(ModelPartData skirt) {
+	private int getSkirtindex(ModelPartData skirt) {
 		if(skirt == null)
 			return 0;
 		if(skirt.type == 0){
@@ -97,25 +97,45 @@ public class GuiModelBody extends GuiModelInterface{
 				return 1;
 			if(skirt.texture.contains("1"))
 				return 2;
+			if(skirt.texture.contains("2"))
+				return 3;
+			if(skirt.texture.contains("3"))
+				return 4;
+			if(skirt.texture.contains("4"))
+				return 5;
+			if(skirt.texture.contains("5"))
+				return 6;
+			if(skirt.texture.contains("6"))
+				return 7;
 		}
 		return 0;
 	}
 
 	private int getParticleIndex(ModelPartData particles) {
-    	if(particles == null)
-    		return 0;
-    	if(particles.type == 0){
-    		if(particles.playerTexture)
-    			return 1;
-    		if(particles.texture.contains("1"))
-    			return 2;
-    		if(particles.texture.contains("2"))
-    			return 3;
-    	}
-    	if(particles.type == 1){
-    		return 4;
-    	}
-    				
+		if(particles == null)
+			return 0;
+		if(particles.type == 0){
+			if(particles.playerTexture)
+				return 1;
+			if(particles.texture.contains("1"))
+				return 2;
+			if(particles.texture.contains("2"))
+				return 3;
+			if(particles.texture.contains("3"))
+				return 5;
+			if(particles.texture.contains("4"))
+				return 6;
+			if(particles.texture.contains("5"))
+				return 7;
+			if(particles.texture.contains("6"))
+				return 8;
+			if(particles.texture.contains("7"))
+				return 9;
+		}
+		if(particles.type == 1){
+			return 4;
+		}
+
 		return 0;
 	}
 
@@ -124,36 +144,46 @@ public class GuiModelBody extends GuiModelInterface{
     	super.actionPerformed(btn);
     	GuiNpcButton button = (GuiNpcButton) btn;
 
-    	if(button.id == 0){
-    		if(button.getValue() == 0)
-    			playerdata.removePart("wings");
-    		else{
-    			ModelPartData data = playerdata.getOrCreatePart("wings");
-    			if(button.getValue() > 1)
-    				data.setTexture("wings/wing" + (button.getValue() - 1), button.getValue() - 1);
-    		}
-    		initGui();
-    	}
+		if(button.id == 0){
+			if(button.getValue() == 0)
+				playerdata.removePart("wings");
+			else{
+				ModelPartData data = playerdata.getOrCreatePart("wings");
+				if(button.getValue() > 1)
+					data.setTexture("wings/wing" + (button.getValue() - 1), button.getValue() - 1);
+			}
+			initGui();
+		}
     	if(button.id == 1){
     		playerdata.breasts = (byte) button.getValue();
     	}
-    	if(button.id == 2){
-    		int value = button.getValue();
-    		if(value == 0)
-    			playerdata.removePart("particles");
-    		else{
-    			ModelPartData particles = playerdata.getOrCreatePart("particles");
-	    		if(value == 1)
-	    			particles.setTexture("", 0);
-	    		if(value == 2)
-	    			particles.setTexture("particle/type1", 0);
-	    		if(value == 3)
-	    			particles.setTexture("particle/type2", 0);
-	    		if(value == 4)
-	    			particles.setTexture("", 1);
-    		}
-    		initGui();
-    	}
+		if(button.id == 2){
+			int value = button.getValue();
+			if(value == 0)
+				playerdata.removePart("particles");
+			else{
+				ModelPartData particles = playerdata.getOrCreatePart("particles");
+				if(value == 1)
+					particles.setTexture("", 0);
+				if(value == 2)
+					particles.setTexture("particle/type1", 0);
+				if(value == 3)
+					particles.setTexture("particle/type2", 0);
+				if(value == 4)
+					particles.setTexture("", 1);
+				if(value == 5)
+					particles.setTexture("particle/type3", 0);
+				if(value == 6)
+					particles.setTexture("particle/type4", 0);
+				if(value == 7)
+					particles.setTexture("particle/type5", 0);
+				if(value == 8)
+					particles.setTexture("particle/type6", 0);
+				if(value == 9)
+					particles.setTexture("particle/type7", 0);
+			}
+			initGui();
+		}
 		if(button.id == 3){
 			int value = button.getValue();
 			if(value == 0)
@@ -179,16 +209,16 @@ public class GuiModelBody extends GuiModelInterface{
 			initGui();
 		}
     	if(button.id == 4){
-    		int value = button.getValue();
-    		if(value == 0)
-    			playerdata.removePart("skirt");
-    		else{
-    			ModelPartData particles = playerdata.getOrCreatePart("skirt");
-	    		if(value == 1)
-	    			particles.setTexture("", 0);
-	    		if(value == 2)
-	    			particles.setTexture("skirt/skirt1", 0);
-    		}
+			int value = button.getValue();
+			if(value == 0)
+				playerdata.removePart("skirt");
+			else{
+				ModelPartData skirt = playerdata.getOrCreatePart("skirt");
+				if(value == 1)
+					skirt.setTexture("", 0);
+				if(value == 2)
+					skirt.setTexture("skirt/skirt1", 0);
+			}
     		initGui();
     	}
 

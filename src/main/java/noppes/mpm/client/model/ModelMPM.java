@@ -194,8 +194,6 @@ public class ModelMPM extends ModelBiped{
 
 			this.bipedBody.addChild(wings = new ModelWings(this));
 			this.bipedBody.addChild(fin = new ModelFin(this));
-
-			// Fix This
 			this.bipedBody.addChild(skirt = new ModelSkirt(this));
 			this.bipedLeftArm.addChild(clawsL = new ModelClaws(this, false));
 			this.bipedRightArm.addChild(clawsR = new ModelClaws(this, true));
