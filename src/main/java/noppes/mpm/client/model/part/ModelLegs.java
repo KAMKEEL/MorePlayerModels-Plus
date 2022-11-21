@@ -210,7 +210,6 @@ public class ModelLegs extends ModelScaleRenderer{
 		frontRightLeg.addChild(frontRightHoof);
 
 		this.naga = new ModelNagaLegs(base);
-		this.naga.setTextureSize(textWidth, textHeight);
 		this.addChild(naga);
 
 		// Add Mermaid Legs

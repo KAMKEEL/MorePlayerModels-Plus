@@ -112,12 +112,7 @@ public class GuiModelLegs extends GuiModelInterface{
 			if(value == 3)
 				data.setTexture("legs/horse1", 3);
 			if(value == 4){
-				if (playerdata.modelType == 1 || playerdata.modelType == 2){
-					data.setTexture("legs/naga2", 1);
-				}
-				else{
-					data.setTexture("legs/naga1", 1);
-				}
+				data.setTexture("legs/naga1", 1);
 			}
 			if(value == 5)
 				data.setTexture("legs/mermaid1", 4);
