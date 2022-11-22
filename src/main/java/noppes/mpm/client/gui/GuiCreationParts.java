@@ -24,20 +24,22 @@ public class GuiCreationParts extends GuiCreationScreenInterface implements ITex
 	private GuiCustomScroll scroll;
 	
 	private GuiPart[] parts = {
-			new GuiPart(EnumParts.EARS).setTypes(new String[]{"gui.none", "gui.normal", "ears.bunny"}), 
-			new GuiPartHorns(), 
-			new GuiPartHair(), 
-			new GuiPart(EnumParts.MOHAWK).setTypes(new String[]{"gui.none", "1", "2"}).noPlayerOptions(), 
-			new GuiPartSnout(), 
-			new GuiPartBeard(), 
-			new GuiPart(EnumParts.FIN).setTypes(new String[]{"gui.none", "fin.shark", "fin.reptile"}), 
-			new GuiPart(EnumParts.BREASTS).setTypes(new String[]{"gui.none", "1", "2", "3"}).noPlayerOptions(), 
-			new GuiPart(EnumParts.WINGS).setTypes(new String[]{"gui.no","gui.player","1","2","3","4","5","6","7","8","9",
+			new GuiPart(EnumParts.BREASTS).setTypes(new String[]{"gui.none", "1", "2", "3"}).noPlayerOptions(),
+			new GuiPart(EnumParts.WINGS).setTypes(new String[]{"gui.no","1","2","3","4","5","6","7","8","9",
 					"10","11","12","13","14","15"}),
-			new GuiPartClaws(), 
-			new GuiPart(EnumParts.SKIRT).setTypes(new String[]{"gui.none", "gui.normal"}).noPlayerOptions(), 
-			new GuiPartLegs(), 
-			new GuiPartTail()
+			new GuiPart(EnumParts.FIN).setTypes(new String[]{"gui.none", "1","2","3","4","5","6"}),
+			new GuiPartParticles(),
+			new GuiPartLegs(),
+			new GuiPartTail(),
+			new GuiPartSnout(),
+			new GuiPart(EnumParts.EARS).setTypes(new String[]{"gui.none", "gui.normal", "ears.bunny"}),
+			new GuiPartHorns(),
+			new GuiPartHair(),
+			new GuiPart(EnumParts.MOHAWK).setTypes(new String[]{"gui.none", "1", "2"}).noPlayerOptions(),
+			new GuiPartBeard(),
+			new GuiPart(EnumParts.SKIRT).setTypes(new String[]{"gui.none", "gui.normal"}).noPlayerOptions(),
+			new GuiPartClaws(),
+
 		};
 
 	private static int selected = 0;
@@ -108,7 +110,6 @@ public class GuiCreationParts extends GuiCreationScreenInterface implements ITex
 	}
 	class GuiPart{
 		EnumParts part;
-		private int paterns = 0;
 		protected String[] types = {"gui.none"};
 		protected ModelPartData data;
 		protected boolean hasPlayerOption = true;
@@ -158,6 +159,7 @@ public class GuiCreationParts extends GuiCreationScreenInterface implements ITex
 	    	}
 	    	if(btn.id == 21){
 	    		data.playerTexture = ((GuiNpcButtonYesNo)btn).getBoolean();
+				data.color = 0xFFFFFF;
 	    		GuiCreationParts.this.initGui();
 	    	}
 	    	if(btn.id == 23){
@@ -182,7 +184,8 @@ public class GuiCreationParts extends GuiCreationScreenInterface implements ITex
 	class GuiPartTail extends GuiPart{
 		public GuiPartTail() {
 			super(EnumParts.TAIL);
-			types = new String[]{"gui.none","gui.player", "tail.player_dragon", "tail.cat", "tail.wolf", "tail.horse", "tail.dragon", "tail.squirrel", "tail.fin", "tail.rodent", "tail.feather"};
+			types = new String[]{"gui.none", "tail.cat", "tail.dragon",
+					"tail.horse", "tail.squirrel", "tail.fin", "tail.rodent", "tail.feather", "tail.fox"};
 		}
 
 		@Override
@@ -197,7 +200,23 @@ public class GuiCreationParts extends GuiCreationScreenInterface implements ITex
 			return y;
 		}
 	}
-	
+
+	class GuiPartParticles extends GuiPart{
+		public GuiPartParticles() {
+			super(EnumParts.PARTICLES);
+			hasPlayerOption = data != null && data.type != 3;
+			types = new String[]{"gui.none", "1", "2", "Rainbow", "3", "4", "5", "6", "7"};
+		}
+
+		@Override
+		public int initGui(){
+			int y = super.initGui();
+			if(data == null)
+				return y;
+			return y;
+		}
+	}
+
 	class GuiPartHorns extends GuiPart{
 		public GuiPartHorns() {
 			super(EnumParts.HORNS);
@@ -253,13 +272,14 @@ public class GuiCreationParts extends GuiCreationScreenInterface implements ITex
 	class GuiPartLegs extends GuiPart{
 		public GuiPartLegs() {
 			super(EnumParts.LEGS);
-			types = new String[]{"gui.no","gui.player", "legs.spider",
-					"legs.horse","legs.naga", "legs.mermaid", "Mermaid 2", "legs.digitigrade"};
+			types = new String[]{"gui.none", "gui.normal", "legs.naga", "legs.spider",
+					"legs.horse", "legs.mermaid", "legs.two_mermaid", "legs.digitigrade"};
+
 			canBeDeleted = false;
 		}
 		@Override
 		public int initGui(){
-			hasPlayerOption = data.type == 4 || data.type == 7;
+			hasPlayerOption = data.type == 1 || data.type == 6;
 			return super.initGui();
 		}
 

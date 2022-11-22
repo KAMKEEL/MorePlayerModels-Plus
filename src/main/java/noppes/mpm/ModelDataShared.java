@@ -190,7 +190,7 @@ public class ModelDataShared{
 	}
 
 	public void removePart(EnumParts type) {
-		parts.remove(type.name);
+		parts.remove(type);
 	}
 
 	public ModelPartData getOrCreatePart(EnumParts type) {
@@ -203,12 +203,13 @@ public class ModelDataShared{
 	}
 
 	public float getBodyY(){
-		if(legParts.type == 3)
-			return (0.9f - body.scaleY) * 0.75f + getLegsY();
-		if(legParts.type == 3)
-			return (0.5f - body.scaleY) * 0.75f + getLegsY();
+//		if(legParts.type == 3)
+//			return (0.9f - body.scaleY) * 0.75f + getLegsY();
+//		if(legParts.type == 3)
+//			return (0.5f - body.scaleY) * 0.75f + getLegsY();
 		return (1 - body.scaleY) * 0.75f + getLegsY();
 	}
+
 
 	public float getLegsY() {
 		if(legParts.type == 3)

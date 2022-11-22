@@ -9,7 +9,7 @@ public class MPMEntityUtil {
 
 	public static void Copy(EntityLivingBase copied, EntityLivingBase entity){
 		entity.worldObj = copied.worldObj;
-		
+
 		entity.deathTime = copied.deathTime;
 		entity.distanceWalkedModified = copied.distanceWalkedModified;
 		entity.prevDistanceWalkedModified = copied.distanceWalkedModified;
@@ -20,33 +20,35 @@ public class MPMEntityUtil {
 		entity.onGround = copied.onGround;
 		entity.fallDistance = copied.fallDistance;
 		entity.isJumping = copied.isJumping;
-		
-		entity.setPosition(copied.posX, copied.posY, copied.posZ);
-		entity.boundingBox.setBB(copied.boundingBox);
-		
+		entity.setSneaking(copied.isSneaking());
+
 		entity.prevPosX = copied.prevPosX;
 		entity.prevPosY = copied.prevPosY;
 		entity.prevPosZ = copied.prevPosZ;
-		
+
+		entity.posX = copied.posX;
+		entity.posY = copied.posY;
+		entity.posZ = copied.posZ;
+		entity.boundingBox.setBB(copied.boundingBox);
+
+		entity.lastTickPosX = copied.lastTickPosX;
+		entity.lastTickPosY = copied.lastTickPosY;
+		entity.lastTickPosZ = copied.lastTickPosZ;
+
 		entity.motionX = copied.motionX;
 		entity.motionY = copied.motionY;
 		entity.motionZ = copied.motionZ;
-		
+
 		entity.rotationYaw = copied.rotationYaw;
 		entity.rotationPitch = copied.rotationPitch;
 		entity.prevRotationYaw = copied.prevRotationYaw;
 		entity.prevRotationPitch = copied.prevRotationPitch;
 		entity.rotationYawHead = copied.rotationYawHead;
 		entity.prevRotationYawHead = copied.prevRotationYawHead;
+		entity.renderYawOffset = copied.renderYawOffset;
 		entity.prevRenderYawOffset = copied.prevRenderYawOffset;
 		entity.cameraPitch = copied.cameraPitch;
 		entity.prevCameraPitch = copied.prevCameraPitch;
-		
-		entity.renderYawOffset = copied.renderYawOffset;
-				
-		entity.lastTickPosX = copied.lastTickPosX;
-		entity.lastTickPosY = copied.lastTickPosY;
-		entity.lastTickPosZ = copied.lastTickPosZ;
 
 		entity.limbSwingAmount = copied.limbSwingAmount;
 		entity.prevLimbSwingAmount = copied.prevLimbSwingAmount;
@@ -56,9 +58,11 @@ public class MPMEntityUtil {
 		entity.prevSwingProgress = copied.prevSwingProgress;
 		entity.isSwingInProgress = copied.isSwingInProgress;
 		entity.swingProgressInt = copied.swingProgressInt;
-		
+
 		entity.ticksExisted = copied.ticksExisted;
-		
+
+		entity.riddenByEntity = copied.riddenByEntity;
+
 		if(entity instanceof EntityPlayer && copied instanceof EntityPlayer){
 			EntityPlayer ePlayer = (EntityPlayer) entity;
 			EntityPlayer cPlayer = (EntityPlayer) copied;
@@ -73,17 +77,14 @@ public class MPMEntityUtil {
 			ePlayer.field_71095_bQ = cPlayer.field_71095_bQ;
 			ePlayer.field_71085_bR = cPlayer.field_71085_bR;
 		}
-		
+
 		for(int i = 0; i < 5; i++){
 			entity.setCurrentItemOrArmor(i, copied.getEquipmentInSlot(i));
 		}
-		
+
 		if(entity instanceof EntityDragon){
 			entity.rotationYaw += 180;
 		}
 	}
-
-	public static void setSize(Entity entity, float width, float height){
-		entity.setSize(width, height);
-	}
 }
+

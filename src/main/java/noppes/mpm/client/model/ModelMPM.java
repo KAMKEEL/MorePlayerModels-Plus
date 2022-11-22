@@ -15,7 +15,17 @@ import noppes.mpm.ModelPartData;
 import noppes.mpm.client.ClientProxy;
 import noppes.mpm.client.model.animation.AniCrawling;
 import noppes.mpm.client.model.animation.AniHug;
-import noppes.mpm.client.model.part.*;
+import noppes.mpm.client.model.part.ModelLimbWear;
+import noppes.mpm.client.model.part.arm.ModelClaws;
+import noppes.mpm.client.model.part.body.ModelBodywear;
+import noppes.mpm.client.model.part.body.ModelBreasts;
+import noppes.mpm.client.model.part.body.ModelFin;
+import noppes.mpm.client.model.part.body.ModelWings;
+import noppes.mpm.client.model.part.head.*;
+import noppes.mpm.client.model.part.head.snout.ModelSnout;
+import noppes.mpm.client.model.part.leg.ModelLegs;
+import noppes.mpm.client.model.part.leg.ModelSkirt;
+import noppes.mpm.client.model.part.leg.ModelTail;
 import noppes.mpm.constants.EnumAnimation;
 
 import noppes.mpm.constants.EnumParts;

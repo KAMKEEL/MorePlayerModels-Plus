@@ -178,29 +178,29 @@ public class ClientEventHandler {
 	}
 	
 	private void spawnParticles(EntityPlayer player, ModelData data, ModelPartData particles) {
+		if(!MorePlayerModels.EnableParticles)
+			return;
 		Minecraft minecraft =  Minecraft.getMinecraft();
 		double height = player.getYOffset() + data.getBodyY();
 		Random rand = player.getRNG();
-		if(particles.type == 0){
-			for(int i = 0; i< 2; i++){
-				EntityEnderFX fx = new EntityEnderFX((AbstractClientPlayer) player, (rand.nextDouble() - 0.5D) * (double)player.width, (rand.nextDouble() * (double)player.height) - height - 0.25D, (rand.nextDouble() - 0.5D) * (double)player.width, (rand.nextDouble() - 0.5D) * 2D, -rand.nextDouble(), (rand.nextDouble() - 0.5D) * 2D, particles);
+		if(particles.type == 1){
+			for(int i = 0; i < 2; i++){
+				double x = player.posX + (rand.nextDouble() - 0.5D) * 0.9;
+				double y = (player.posY + rand.nextDouble() * 1.9) - 0.25D - height;
+				double z = player.posZ + (rand.nextDouble() - 0.5D) * 0.9;
+
+
+				double f = (rand.nextDouble() - 0.5D) * 2D;
+				double f1 =  -rand.nextDouble();
+				double f2 = (rand.nextDouble() - 0.5D) * 2D;
+
+				minecraft.effectRenderer.addEffect(new EntityRainbowFX(player.worldObj, x, y, z, f, f1, f2));
+			}
+		} else {
+			for(int i = 0; i< 2; i++) {
+				EntityEnderFX fx = new EntityEnderFX((AbstractClientPlayer) player, (rand.nextDouble() - 0.5D) * (double) player.width, (rand.nextDouble() * (double) player.height) - height - 0.25D, (rand.nextDouble() - 0.5D) * (double) player.width, (rand.nextDouble() - 0.5D) * 2D, -rand.nextDouble(), (rand.nextDouble() - 0.5D) * 2D, particles);
 				minecraft.effectRenderer.addEffect(fx);
 			}
-    		
-		}
-		else if(particles.type == 1){
-        	for(int i = 0; i < 2; i++){
-	            double x = player.posX + (rand.nextDouble() - 0.5D) * 0.9;
-	            double y = (player.posY + rand.nextDouble() * 1.9) - 0.25D - height;
-	            double z = player.posZ + (rand.nextDouble() - 0.5D) * 0.9;
-	
-	            
-	            double f = (rand.nextDouble() - 0.5D) * 2D;
-	            double f1 =  -rand.nextDouble();
-	            double f2 = (rand.nextDouble() - 0.5D) * 2D;
-	            
-	            minecraft.effectRenderer.addEffect(new EntityRainbowFX(player.worldObj, x, y, z, f, f1, f2));
-        	}
 		}
 	}
 }

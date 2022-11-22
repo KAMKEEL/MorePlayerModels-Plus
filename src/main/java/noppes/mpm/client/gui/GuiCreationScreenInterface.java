@@ -22,6 +22,7 @@ import noppes.mpm.client.gui.util.SubGuiInterface;
 import noppes.mpm.constants.EnumPackets;
 
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 
 public class GuiCreationScreenInterface extends GuiNPCInterface implements ISubGuiListener, ISliderListener{
 	public static String Message = "";
@@ -34,7 +35,10 @@ public class GuiCreationScreenInterface extends GuiNPCInterface implements ISubG
 	private EntityPlayer player;
 	public int xOffset = 0;
 	public ModelData playerdata;
-	
+
+	private GuiNpcButton zoom, unzoom;
+	private static float zoomed = 80;
+
 	public static GuiCreationScreenInterface Gui = new GuiCreationParts();
 	
 	protected NBTTagCompound original = new NBTTagCompound();
@@ -57,11 +61,15 @@ public class GuiCreationScreenInterface extends GuiNPCInterface implements ISubG
     	super.initGui();
     	entity = playerdata.getEntity(mc.thePlayer);
     	Keyboard.enableRepeatEvents(true);
-
+		guiTop += 2;
     	addButton(new GuiNpcButton(0, guiLeft, guiTop, 60, 20, "gui.config"));
     	addButton(new GuiNpcButton(1, guiLeft + 62, guiTop, 60, 20, "gui.entity"));
-    	if(entity == null)
-    		addButton(new GuiNpcButton(2, guiLeft, guiTop + 23, 60, 20, "gui.parts"));
+
+		if(entity == null){
+			addButton(new GuiNpcButton(2, guiLeft, guiTop + 23, 60, 20, "gui.parts"));
+			addButton(new GuiNpcButton(250, guiLeft + 124, guiTop, 60, 20, new String[]{"Steve","Steve64","Alex"}, playerdata.modelType));
+			addButton(new GuiNpcButton(251, guiLeft + 124, guiTop + 23, 60, 20, "gui.limbs"));
+		}
     	else{
     		GuiCreationExtra gui = new GuiCreationExtra();
     		gui.playerdata = playerdata;
@@ -79,12 +87,13 @@ public class GuiCreationScreenInterface extends GuiNPCInterface implements ISubG
     		addButton(new GuiNpcButton(5, guiLeft + 62, guiTop + ySize - 24, 60, 20, "gui.load"));
     	}
     	getButton(active).enabled = false;
+		addButton(unzoom = new GuiNpcButton(666, guiLeft + xSize - 79, guiTop, 20, 20, "-"));
+		addButton(zoom = new GuiNpcButton(667, guiLeft + xSize - 57 , guiTop, 20, 20, "+"));
     	addButton(new GuiNpcButton(66, guiLeft + xSize - 20, guiTop, 20, 20, "X"));
     	    	
     	addLabel(new GuiNpcLabel(0, Message, guiLeft + 120, guiTop + ySize - 10, 0xff0000));
     	getLabel(0).center(xSize - 120);
-    	
-    	addSlider(new GuiNpcSlider(this, 500, guiLeft + xOffset + 142, guiTop + 210, 120, 20, rotation));
+		addSlider(new GuiNpcSlider(this, 500, guiLeft + xOffset + 142, guiTop + 210, 120, 20, rotation));
     }
 
     @Override
@@ -111,6 +120,35 @@ public class GuiCreationScreenInterface extends GuiNPCInterface implements ISubG
     	if(btn.id == 5){
     		openGui(new GuiCreationLoad());
     	}
+		if(btn.id == 250){
+			if(playerdata.modelType == 0){
+				playerdata.modelType = 1;
+				playerdata.urlType = 1;
+			}
+			else if(playerdata.modelType == 1){
+				playerdata.modelType = 2;
+				playerdata.urlType = 1;
+			}
+			else {
+				playerdata.bodywear = 0;
+				playerdata.armwear = 0;
+				playerdata.legwear = 0;
+				playerdata.modelType = 0;
+				playerdata.urlType = 0;
+			}
+			playerdata.loaded = false;
+			playerdata.playerLoaded = false;
+			this.initGui();
+		}
+		if(btn.id == 251){
+			openGui(new GuiCreationLimbs());
+		}
+//		if(btn.id == 251){
+//			GuiNpcButton button = (GuiNpcButton) btn;
+//			playerdata.urlType = (byte) button.getValue();
+//			playerdata.loaded = false;
+//			playerdata.playerLoaded = false;
+//		}
     	if(btn.id == 66){
     		close();
     	}
@@ -122,20 +160,30 @@ public class GuiCreationScreenInterface extends GuiNPCInterface implements ISubG
     		super.mouseClicked(i, j, k);
     }
     
-    @Override
-    public void drawScreen(int x, int y, float f){
-    	super.drawScreen(x, y, f);
-    	entity = playerdata.getEntity(mc.thePlayer);
-    	EntityLivingBase entity = this.entity;
-    	if(entity == null)
-    		entity = this.player;
-    	else
-    		MPMEntityUtil.Copy(mc.thePlayer, player);
-    	
-    	drawNpc(entity, xOffset + 200, 200, 1, (int)(rotation * 360 - 180));
-    }
-    
-    @Override
+	@Override
+	public void drawScreen(int x, int y, float f){
+		super.drawScreen(x, y, f);
+		entity = playerdata.getEntity(mc.thePlayer);
+		EntityLivingBase entity = this.entity;
+		int yOffset = 180;
+		if(entity == null){
+			entity = this.player;
+			yOffset = 80;
+		}
+		else
+			MPMEntityUtil.Copy(mc.thePlayer, player);
+
+		if(Mouse.isButtonDown(0)){
+			if(zoom.mousePressed(mc, x, y) && zoomed < 150)
+				zoomed++;
+			else if(unzoom.mousePressed(mc, x, y) && zoomed > 50)
+				zoomed--;
+		}
+		float zoom = 1 * (zoomed / 100);
+		drawNpc(entity, xOffset + 200, yOffset, zoom, (int)(rotation * 360 - 180));
+	}
+
+	@Override
     public void onGuiClosed(){
         Keyboard.enableRepeatEvents(false);
     }

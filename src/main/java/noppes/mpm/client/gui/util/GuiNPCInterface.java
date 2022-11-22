@@ -39,6 +39,8 @@ public abstract class GuiNPCInterface extends GuiScreen
 	public int guiLeft,guiTop,xSize,ySize;
 	private SubGuiInterface subgui;
 	public int mouseX, mouseY;
+	private static float zoomed = 60;
+	private GuiNpcButton zoom,unzoom;
 	
     public GuiNPCInterface()
     {
@@ -172,40 +174,41 @@ public abstract class GuiNPCInterface extends GuiScreen
     public abstract void save();
     
     @Override
-    public void drawScreen(int i, int j, float f){
-    	mouseX = i;
-    	mouseY = j;
-    	if(drawDefaultBackground)
-    		drawDefaultBackground();
-    	
-    	if(background != null && mc.renderEngine != null){
-    		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-    		mc.renderEngine.bindTexture(background);
-    		if(xSize > 256){
-    			drawTexturedModalRect(guiLeft, guiTop, 0, 0, 250, ySize);
-    			drawTexturedModalRect(guiLeft + 250, guiTop, 256 - (xSize - 250), 0, xSize - 250, ySize);
-    		}
-    		else
-        		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
-    	}
-    	
-        drawCenteredString(fontRendererObj, title, width / 2, guiTop + 4, 0xffffff);
-        for(GuiNpcLabel label : labels.values())
-        	label.drawLabel(this,fontRendererObj);
-    	for(GuiNpcTextField tf : textfields.values()){
-    		tf.drawTextBox();
-    	}
-        for(GuiCustomScroll scroll : scrolls.values())
-            scroll.drawScreen(i, j, f, hasSubGui()?0:Mouse.getDWheel());
-        for(GuiScreen gui : extra.values())
-        	gui.drawScreen(i, j, f);
-        super.drawScreen(i, j, f);
-        if(subgui != null){
-        	GL11.glTranslatef(0, 0, 150F);
-    		subgui.drawScreen(i,j,f);
-    		GL11.glTranslatef(0, 0, -150F);
-        }
-    }
+	public void drawScreen(int i, int j, float f){
+		mouseX = i;
+		mouseY = j;
+		if(subgui == null || subgui.drawSubGuiBackground()){
+			if(drawDefaultBackground)
+				drawDefaultBackground();
+
+			if(background != null && mc.renderEngine != null){
+				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+				mc.renderEngine.bindTexture(background);
+				if(xSize > 256){
+					drawTexturedModalRect(guiLeft, guiTop, 0, 0, 250, ySize);
+					drawTexturedModalRect(guiLeft + 250, guiTop, 256 - (xSize - 250), 0, xSize - 250, ySize);
+				}
+				else
+					drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
+			}
+			for(GuiNpcLabel label : labels.values())
+				label.drawLabel(this,fontRendererObj);
+			for(GuiNpcTextField tf : textfields.values()){
+				tf.drawTextBox();
+			}
+			for(GuiCustomScroll scroll : scrolls.values())
+				scroll.drawScreen(i, j, f, hasSubGui()?0:Mouse.getDWheel());
+			for(GuiScreen gui : extra.values())
+				gui.drawScreen(i, j, f);
+			super.drawScreen(i, j, f);
+		}
+		if(subgui != null){
+			GL11.glTranslatef(0, 0, 260F);
+			subgui.drawScreen(i,j,f);
+			GL11.glTranslatef(0, 0, -260F);
+		}
+	}
+
 	public FontRenderer getFontRenderer() {
 		return this.fontRendererObj;
 	}
@@ -221,7 +224,11 @@ public abstract class GuiNPCInterface extends GuiScreen
 	
 	public void doubleClicked() {
 	}
-	
+
+	public boolean drawSubGuiBackground(){
+		return true;
+	}
+
 	public boolean isInventoryKey(int i){
         return i == mc.gameSettings.keyBindInventory.getKeyCode(); //inventory key
 	}
@@ -240,35 +247,39 @@ public abstract class GuiNPCInterface extends GuiScreen
 		subgui.parent = this;
     	initGui();
     }
+
 	public void closeSubGui(SubGuiInterface gui) {
 		subgui = null;
+		if(this instanceof ISubGuiListener){
+			((ISubGuiListener)this).subGuiClosed(gui);
+		}
+		initGui();
 	}
+
 	public boolean hasSubGui() {
 		return subgui != null;
 	}
-	public SubGuiInterface getSubGui() {
+
+	public GuiNPCInterface getSubGui() {
 		if(hasSubGui() && subgui.hasSubGui())
 			return subgui.getSubGui();
 		return subgui;
 	}
-	
+
 	public void drawNpc(EntityLivingBase npc, int x, int y, float zoomed, int rotation){
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		GL11.glEnable(GL11.GL_COLOR_MATERIAL);
 		GL11.glPushMatrix();
 		GL11.glTranslatef(guiLeft + x, guiTop + y, 50F);
-        float scale = 1;
-        if(npc.height > 2.4)
-        	scale = 2 / npc.height;
-        if(npc instanceof EntityPlayer){
-        	//GL11.translate(0, -data * scale * zoomed * 60, 0);
-        }
-        GL11.glScalef(-60 * scale * zoomed, 60 * scale * zoomed, 60 * scale * zoomed);
-        GL11.glRotatef(180F, 0.0F, 0.0F, 1.0F);
-		//GL11.disableLighting();
-        RenderHelper.enableStandardItemLighting();
-		
+		float scale = 1;
+		if(npc.height > 2.4)
+			scale = 2 / npc.height;
+		if(npc instanceof EntityPlayer){
+			// GL11.glTranslatef(0,  scale * zoomed * 60, 0);
+		}
+		GL11.glScalef(-60 * scale * zoomed, 60 * scale * zoomed, 60 * scale * zoomed);
+		GL11.glRotatef(180F, 0.0F, 0.0F, 1.0F);
 		float f2 = npc.renderYawOffset;
 		float f3 = npc.rotationYaw;
 		float f4 = npc.rotationPitch;
@@ -276,6 +287,7 @@ public abstract class GuiNPCInterface extends GuiScreen
 		float f5 = (float) (guiLeft + x) - mouseX;
 		float f6 = (float) ((guiTop + y) - 100 * scale * zoomed) - mouseY;
 		GL11.glRotatef(135F, 0.0F, 1.0F, 0.0F);
+		RenderHelper.enableStandardItemLighting();
 		GL11.glRotatef(-135F, 0.0F, 1.0F, 0.0F);
 		GL11.glRotatef(-(float) Math.atan(f6 / 40F) * 20F, 1.0F, 0.0F, 0.0F);
 		npc.renderYawOffset = rotation;
@@ -283,18 +295,19 @@ public abstract class GuiNPCInterface extends GuiScreen
 		npc.rotationPitch = -(float) Math.atan(f6 / 40F) * 20F;
 		npc.rotationYawHead = npc.rotationYaw;
 		RenderManager.instance.playerViewY = 180F;
-		RenderManager.instance.renderEntityWithPosYaw(npc, 0, 0, 0,	0, 1);
+		try{
+			RenderManager.instance.renderEntityWithPosYaw(npc, 0, 0, 0,	0, 1);
+		} catch (Exception ignored){}
 		npc.prevRenderYawOffset = npc.renderYawOffset = f2;
 		npc.prevRotationYaw = npc.rotationYaw = f3;
 		npc.prevRotationPitch = npc.rotationPitch = f4;
 		npc.prevRotationYawHead = npc.rotationYawHead = f7;
 		GL11.glPopMatrix();
-        RenderHelper.disableStandardItemLighting();
+		RenderHelper.disableStandardItemLighting();
 		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		OpenGlHelper.setActiveTexture(OpenGlHelper.lightmapTexUnit);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
-
 	}
 	
     public void openLink(String link){

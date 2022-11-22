@@ -20,7 +20,6 @@ public enum EnumParts {
 	ARMS("arms");
 
 	public String name;
-	public int patterns = 1;
 
 	EnumParts(String name) {
 		this.name = name;
