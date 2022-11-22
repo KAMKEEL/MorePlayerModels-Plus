@@ -114,6 +114,9 @@ public class ModelLegs extends ModelScaleRenderer{
 		GL11.glPushMatrix();
 		if(part.type == 4)
 			part.playerTexture = false;
+		if(part.type == 0){
+			part.playerTexture = true;
+		}
 		if(!base.isArmor){
 			if(!part.playerTexture){
 				ClientProxy.bindTexture(part.getResource());
