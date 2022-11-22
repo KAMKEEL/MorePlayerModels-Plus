@@ -8,6 +8,7 @@ import noppes.mpm.ModelData;
 import noppes.mpm.client.model.Model2DRenderer;
 import noppes.mpm.client.model.ModelMPM;
 import noppes.mpm.client.model.ModelPartInterface;
+import noppes.mpm.constants.EnumParts;
 
 public class ModelWings extends ModelPartInterface {
 
@@ -61,7 +62,7 @@ public class ModelWings extends ModelPartInterface {
 
 	@Override
 	public void initData(ModelData data) {
-		ModelPartData config = data.getPartData("wings");
+		ModelPartData config = data.getPartData(EnumParts.WINGS);
 		if(config == null)
 		{
 			isHidden = true;

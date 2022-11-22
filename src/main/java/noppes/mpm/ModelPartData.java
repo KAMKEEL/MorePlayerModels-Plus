@@ -3,30 +3,26 @@ package noppes.mpm;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class ModelPartData {
+	private static Map<String, ResourceLocation> resources = new HashMap<String, ResourceLocation>();
 	public int color = 0xFFFFFF;
-	public String texture;
 	public byte type = 0;
 	public byte pattern = 0;
 	public boolean playerTexture;
-	
+	public String name;
 	private ResourceLocation location;
-	
-	public ModelPartData(){
-		playerTexture = true;
-	}
 
-	public ModelPartData(String texture) {
-		this.texture = texture;
-		playerTexture = false;
+	public ModelPartData(String name) {
+		this.name = name;
 	}
 
 	public NBTTagCompound writeToNBT(){
 		NBTTagCompound compound = new NBTTagCompound();
 		compound.setByte("Type", type);
 		compound.setInteger("Color", color);
-		if(texture != null && !texture.isEmpty())
-			compound.setString("Texture", texture);
 		compound.setBoolean("PlayerTexture", playerTexture);
 		compound.setByte("Pattern", pattern);
 		return compound;
@@ -35,32 +31,24 @@ public class ModelPartData {
 	public void readFromNBT(NBTTagCompound compound){
 		type = compound.getByte("Type");
 		color = compound.getInteger("Color");
-		texture = compound.getString("Texture");
 		playerTexture = compound.getBoolean("PlayerTexture");
 		pattern = compound.getByte("Pattern");
 		location = null;
 	}
-	
+
 	public ResourceLocation getResource(){
 		if(location != null)
 			return location;
-		location = new ResourceLocation(texture);		
+		String texture = name + "/" + type;
+
+		if((location = resources.get(texture)) != null)
+			return location;
+
+		location = new ResourceLocation("moreplayermodels:textures/" + texture + ".png");
+		resources.put(texture, location);
 		return location;
 	}
 
-	public void setTexture(String texture, int type) {
-		this.type = (byte) type;
-		this.location = null;
-		if(texture.isEmpty()){
-			playerTexture = true;
-			this.texture = texture;
-		}
-		else{
-			this.texture = "moreplayermodels:textures/"+ texture + ".png";
-			playerTexture = false;
-		}
-	}
-	
 	public String toString(){
 		return "Color: " + color + " Type: " + type;
 	}

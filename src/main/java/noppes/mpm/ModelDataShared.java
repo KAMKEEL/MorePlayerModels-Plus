@@ -18,14 +18,14 @@ public class ModelDataShared{
 	public ModelPartConfig legs = new ModelPartConfig();
 	public ModelPartConfig head = new ModelPartConfig();
 
-	public ModelPartData legParts = new ModelPartData();
+	public ModelPartData legParts = new ModelPartData("legs");
 	
 	public Class<? extends EntityLivingBase> entityClass;
 	protected EntityLivingBase entity;
 	
 	public NBTTagCompound extra = new NBTTagCompound();
-	
-	protected HashMap<String,ModelPartData> parts = new HashMap<String,ModelPartData>();
+
+	protected HashMap<EnumParts, ModelPartData> parts = new HashMap<EnumParts, ModelPartData>();
 	public byte breasts = 0;
 
 	// 3D Layers
@@ -72,11 +72,11 @@ public class ModelDataShared{
 
 		compound.setByte("Breasts", breasts);
 		compound.setTag("ExtraData", extra);
-		
+
 		NBTTagList list = new NBTTagList();
-		for(String name : parts.keySet()){
-			NBTTagCompound item = parts.get(name).writeToNBT();
-			item.setString("PartName", name);
+		for(EnumParts e : parts.keySet()){
+			NBTTagCompound item = parts.get(e).writeToNBT();
+			item.setString("PartName", e.name);
 			list.appendTag(item);
 		}
 		compound.setTag("Parts", list);
@@ -109,16 +109,20 @@ public class ModelDataShared{
 
 		breasts = compound.getByte("Breasts");
 		extra = compound.getCompoundTag("ExtraData");
-				
-		HashMap<String,ModelPartData> parts = new HashMap<String,ModelPartData>();
+
+		HashMap<EnumParts,ModelPartData> parts = new HashMap<EnumParts,ModelPartData>();
 		NBTTagList list = compound.getTagList("Parts", 10);
 		for (int i = 0; i < list.tagCount(); i++) {
 			NBTTagCompound item = list.getCompoundTagAt(i);
-			ModelPartData part = new ModelPartData();
+			String name = item.getString("PartName");
+			ModelPartData part = new ModelPartData(name);
 			part.readFromNBT(item);
-			parts.put(item.getString("PartName"), part);
+			EnumParts e = EnumParts.FromName(name);
+			if(e != null)
+				parts.put(e, part);
 		}
 		this.parts = parts;
+		updateTransate();
 	}
 
 	private void setEntityClass(String string) {
@@ -133,7 +137,32 @@ public class ModelDataShared{
 			
 		}
 	}
-	
+
+	private void updateTransate(){
+		for(EnumParts part : EnumParts.values()){
+			ModelPartConfig config = getPartConfig(part);
+			if(config == null)
+				continue;
+			if(part == EnumParts.HEAD){
+				config.setTranslate(0, getBodyY(), 0);
+			}
+			else if(part == EnumParts.ARMS){
+				ModelPartConfig body = getPartConfig(EnumParts.BODY);
+				float x = (1 - body.scaleX) * 0.25f + (1 - config.scaleX) * 0.075f;
+				float y = getBodyY() + (1 - config.scaleY) * -0.1f;
+				config.setTranslate(-x, y, 0);
+			}
+			else if(part == EnumParts.LEGS){
+				config.setTranslate((config.scaleX) * 0.125f - 0.113f, getLegsY(), 0);
+			}
+			else if(part == EnumParts.BODY){
+				config.setTranslate(0, getBodyY(), 0);
+			}
+		}
+	}
+
+
+
 	public void setEntityClass(Class<? extends EntityLivingBase> entityClass){
 		this.entityClass = entityClass;
 		entity = null;
@@ -153,31 +182,15 @@ public class ModelDataShared{
 	public void clearEntity() {
 		entity = null;
 	}
-	
-	
-	public ModelPartData getPartData(String type){
-		return parts.get(type);
-	}
 
 	public ModelPartData getPartData(EnumParts type){
 		if(type == EnumParts.LEGS)
 			return legParts;
-		return parts.get(type.name);
-	}
-
-	public void removePart(String type) {
-		parts.remove(type);
+		return parts.get(type);
 	}
 
 	public void removePart(EnumParts type) {
 		parts.remove(type.name);
-	}
-
-	public ModelPartData getOrCreatePart(String type) {
-		ModelPartData part = parts.get(type);
-		if(part == null)
-			parts.put(type, part = new ModelPartData());
-		return part;
 	}
 
 	public ModelPartData getOrCreatePart(EnumParts type) {
@@ -185,10 +198,9 @@ public class ModelDataShared{
 			return null;
 		ModelPartData part = getPartData(type);
 		if(part == null)
-			parts.put(type.name, part = new ModelPartData(type.name));
+			parts.put(type, part = new ModelPartData(type.name));
 		return part;
 	}
-
 
 	public float getBodyY(){
 		if(legParts.type == 3)

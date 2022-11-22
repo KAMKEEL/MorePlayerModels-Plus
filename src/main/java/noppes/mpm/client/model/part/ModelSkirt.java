@@ -2,6 +2,7 @@ package noppes.mpm.client.model.part;
 
 import java.util.List;
 
+import noppes.mpm.constants.EnumParts;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.model.ModelRenderer;
@@ -59,7 +60,7 @@ public class ModelSkirt extends ModelPartInterface {
 
 	@Override
 	public void initData(ModelData data) {
-		ModelPartData config = data.getPartData("skirt");
+		ModelPartData config = data.getPartData(EnumParts.SKIRT);
 		if(config == null)
 		{
 			isHidden = true;

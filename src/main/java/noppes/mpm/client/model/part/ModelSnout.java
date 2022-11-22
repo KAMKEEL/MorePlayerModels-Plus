@@ -7,6 +7,7 @@ import noppes.mpm.ModelPartData;
 import noppes.mpm.ModelData;
 import noppes.mpm.client.model.ModelMPM;
 import noppes.mpm.client.model.ModelPartInterface;
+import noppes.mpm.constants.EnumParts;
 
 public class ModelSnout extends ModelPartInterface {
 	private ModelRenderer small;
@@ -56,7 +57,7 @@ public class ModelSnout extends ModelPartInterface {
 
 	@Override
 	public void initData(ModelData data) {
-		ModelPartData config = data.getPartData("snout");
+		ModelPartData config = data.getPartData(EnumParts.SNOUT);
 		if(config == null)
 		{
 			isHidden = true;

@@ -14,6 +14,7 @@ import noppes.mpm.client.model.ModelScaleRenderer;
 import noppes.mpm.client.model.part.tails.*;
 import noppes.mpm.constants.EnumAnimation;
 
+import noppes.mpm.constants.EnumParts;
 import org.lwjgl.opengl.GL11;
 
 public class ModelTail extends ModelScaleRenderer {
@@ -118,7 +119,7 @@ public class ModelTail extends ModelScaleRenderer {
     }
 
 	public void initData(ModelData data) {
-		ModelPartData config = data.getPartData("tail");
+		ModelPartData config = data.getPartData(EnumParts.TAIL);
 		if(config == null)
 		{
 			isHidden = true;

@@ -11,6 +11,7 @@ import noppes.mpm.client.model.part.horns.ModelAntennasBack;
 import noppes.mpm.client.model.part.horns.ModelAntennasFront;
 import noppes.mpm.client.model.part.horns.ModelAntlerHorns;
 import noppes.mpm.client.model.part.horns.ModelBullHorns;
+import noppes.mpm.constants.EnumParts;
 
 public class ModelHorns extends ModelPartInterface {
 	private ModelRenderer bull;
@@ -35,7 +36,7 @@ public class ModelHorns extends ModelPartInterface {
 
 	@Override
 	public void initData(ModelData data) {
-		ModelPartData config = data.getPartData("horns");
+		ModelPartData config = data.getPartData(EnumParts.HORNS);
 		if(config == null)
 		{
 			isHidden = true;

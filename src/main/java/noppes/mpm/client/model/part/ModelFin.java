@@ -6,6 +6,7 @@ import noppes.mpm.ModelPartData;
 import noppes.mpm.client.model.Model2DRenderer;
 import noppes.mpm.client.model.ModelMPM;
 import noppes.mpm.client.model.ModelPartInterface;
+import noppes.mpm.constants.EnumParts;
 
 public class ModelFin extends ModelPartInterface {
 
@@ -22,7 +23,7 @@ public class ModelFin extends ModelPartInterface {
 
 	@Override
 	public void initData(ModelData data) {
-		ModelPartData config = data.getPartData("fin");
+		ModelPartData config = data.getPartData(EnumParts.FIN);
 		if(config == null)
 		{
 			isHidden = true;

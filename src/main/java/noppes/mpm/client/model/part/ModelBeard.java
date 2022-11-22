@@ -7,6 +7,7 @@ import noppes.mpm.ModelData;
 import noppes.mpm.client.model.Model2DRenderer;
 import noppes.mpm.client.model.ModelMPM;
 import noppes.mpm.client.model.ModelPartInterface;
+import noppes.mpm.constants.EnumParts;
 
 public class ModelBeard extends ModelPartInterface {
 
@@ -31,7 +32,7 @@ public class ModelBeard extends ModelPartInterface {
 
 	@Override
 	public void initData(ModelData data) {
-		ModelPartData config = data.getPartData("beard");
+		ModelPartData config = data.getPartData(EnumParts.BEARD);
 		if(config == null)
 		{
 			isHidden = true;

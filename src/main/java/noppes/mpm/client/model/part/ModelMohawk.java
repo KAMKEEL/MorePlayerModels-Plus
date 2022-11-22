@@ -7,6 +7,7 @@ import noppes.mpm.ModelData;
 import noppes.mpm.client.model.Model2DRenderer;
 import noppes.mpm.client.model.ModelMPM;
 import noppes.mpm.client.model.ModelPartInterface;
+import noppes.mpm.constants.EnumParts;
 
 public class ModelMohawk extends ModelPartInterface {
 	private Model2DRenderer model;
@@ -29,7 +30,7 @@ public class ModelMohawk extends ModelPartInterface {
 
 	@Override
 	public void initData(ModelData data) {
-		ModelPartData config = data.getPartData("mohawk");
+		ModelPartData config = data.getPartData(EnumParts.MOHAWK);
 		if(config == null)
 		{
 			isHidden = true;

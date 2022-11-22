@@ -22,6 +22,7 @@ import cpw.mods.fml.common.gameevent.InputEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.relauncher.Side;
+import noppes.mpm.constants.EnumParts;
 
 public class ClientEventHandler {
 
@@ -171,7 +172,7 @@ public class ClientEventHandler {
         if(data.animation != EnumAnimation.NONE)
         	ServerTickHandler.checkAnimation(player, data);
         
-        ModelPartData particles = data.getPartData("particles");
+        ModelPartData particles = data.getPartData(EnumParts.PARTICLES);
         if(particles != null)
         	spawnParticles(player, data, particles);
 	}

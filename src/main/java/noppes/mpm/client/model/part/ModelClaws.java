@@ -6,6 +6,7 @@ import noppes.mpm.ModelPartData;
 import noppes.mpm.client.model.Model2DRenderer;
 import noppes.mpm.client.model.ModelMPM;
 import noppes.mpm.client.model.ModelPartInterface;
+import noppes.mpm.constants.EnumParts;
 
 public class ModelClaws extends ModelPartInterface {
 
@@ -27,7 +28,7 @@ public class ModelClaws extends ModelPartInterface {
 
 	@Override
 	public void initData(ModelData data) {
-		ModelPartData config = data.getPartData("claws");
+		ModelPartData config = data.getPartData(EnumParts.CLAWS);
 		if(config == null || isRight && config.type == 1 || !isRight && config.type == 2)
 		{
 			isHidden = true;

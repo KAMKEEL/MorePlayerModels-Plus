@@ -32,7 +32,8 @@ public class GuiCreationParts extends GuiCreationScreenInterface implements ITex
 			new GuiPartBeard(), 
 			new GuiPart(EnumParts.FIN).setTypes(new String[]{"gui.none", "fin.shark", "fin.reptile"}), 
 			new GuiPart(EnumParts.BREASTS).setTypes(new String[]{"gui.none", "1", "2", "3"}).noPlayerOptions(), 
-			new GuiPart(EnumParts.WINGS).setTypes(new String[]{"gui.none", "1", "2", "3", "4"}), 
+			new GuiPart(EnumParts.WINGS).setTypes(new String[]{"gui.no","gui.player","1","2","3","4","5","6","7","8","9",
+					"10","11","12","13","14","15"}),
 			new GuiPartClaws(), 
 			new GuiPart(EnumParts.SKIRT).setTypes(new String[]{"gui.none", "gui.normal"}).noPlayerOptions(), 
 			new GuiPartLegs(), 
@@ -252,13 +253,13 @@ public class GuiCreationParts extends GuiCreationScreenInterface implements ITex
 	class GuiPartLegs extends GuiPart{
 		public GuiPartLegs() {
 			super(EnumParts.LEGS);
-			types = new String[]{"gui.none", "gui.normal", "legs.naga", "legs.spider", 
-					"legs.horse", "legs.mermaid", "legs.digitigrade"};
+			types = new String[]{"gui.no","gui.player", "legs.spider",
+					"legs.horse","legs.naga", "legs.mermaid", "Mermaid 2", "legs.digitigrade"};
 			canBeDeleted = false;
 		}
 		@Override
 		public int initGui(){
-			hasPlayerOption = data.type == 1 || data.type == 5;
+			hasPlayerOption = data.type == 4 || data.type == 7;
 			return super.initGui();
 		}
 

@@ -20,6 +20,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
 import noppes.mpm.constants.EnumAnimation;
+import noppes.mpm.constants.EnumParts;
 
 
 public class ModelData extends ModelDataShared implements IExtendedEntityProperties{
@@ -153,8 +154,8 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 
 			toHash += legParts.toString() + headwear + breasts + soundType + url;
 			
-			for(String name : parts.keySet()){
-				toHash += name + ":" + parts.get(name).toString();
+			for(EnumParts e : parts.keySet()){
+				toHash += e.name + ":" + parts.get(e).toString();
 			}
 			byte[] hash = digest.digest(toHash.getBytes("UTF-8"));
 			StringBuilder sb = new StringBuilder(2*hash.length);

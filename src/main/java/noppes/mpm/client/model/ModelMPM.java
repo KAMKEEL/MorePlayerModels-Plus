@@ -18,6 +18,7 @@ import noppes.mpm.client.model.animation.AniHug;
 import noppes.mpm.client.model.part.*;
 import noppes.mpm.constants.EnumAnimation;
 
+import noppes.mpm.constants.EnumParts;
 import org.lwjgl.opengl.GL11;
 
 public class ModelMPM extends ModelBiped{
@@ -438,7 +439,7 @@ public class ModelMPM extends ModelBiped{
 			entityModel.setLivingAnimations(entity, par2, par3, par4);
 		}
 		else if(!isArmor){
-	    	ModelPartData partData = data.getPartData("tail");
+	    	ModelPartData partData = data.getPartData(EnumParts.TAIL);
 	    	if(partData != null)
 	    		tail.setLivingAnimations(partData, par1EntityLivingBase, par2, par3, par4);
 		}
