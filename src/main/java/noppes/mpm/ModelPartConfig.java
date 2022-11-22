@@ -5,7 +5,7 @@ import net.minecraft.nbt.NBTTagCompound;
 public class ModelPartConfig {
 	public float scaleX = 1, scaleY = 1, scaleZ = 1;
 	public float transX = 0, transY = 0, transZ = 0;
-	
+	public boolean notShared = true;
 
 	public NBTTagCompound writeToNBT(){
 		NBTTagCompound compound = new NBTTagCompound();
@@ -49,6 +49,21 @@ public class ModelPartConfig {
 		if(given > max)
 			return max;
 		return given;
+	}
+
+	public void setTranslate(float transX, float transY, float transZ) {
+		this.transX = transX;
+		this.transY = transY;
+		this.transZ = transZ;
+	}
+
+	public void copyValues(ModelPartConfig config) {
+		scaleX = config.scaleX;
+		scaleY = config.scaleY;
+		scaleZ = config.scaleZ;
+		transX = config.transX;
+		transY = config.transY;
+		transZ = config.transZ;
 	}
 
 }

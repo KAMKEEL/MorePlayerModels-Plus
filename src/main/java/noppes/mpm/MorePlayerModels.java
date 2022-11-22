@@ -65,6 +65,18 @@ public class MorePlayerModels {
 	@ConfigProp(info="Enables MorePlayerModels startup update message")
 	public static boolean EnableUpdateChecker = true;
 
+	@ConfigProp(info="Set to false if you dont want to see player particles")
+	public static boolean EnableParticles = true;
+
+	@ConfigProp(info="Set to true if you dont want to see hide player names")
+	public static boolean HidePlayerNames = false;
+
+	@ConfigProp(info="Set to true if you dont want to see hide selection boxes when pointing to blocks")
+	public static boolean HideSelectionBox = false;
+
+	@ConfigProp(info="Type 0 = Normal, Type 1 = Solid")
+	public static int HeadWearType = 1;
+
 	@ConfigProp(info="Used to register buttons to animations")
 	public static int button1 = EnumAnimation.SLEEPING_SOUTH.ordinal();
 	@ConfigProp(info="Used to register buttons to animations")

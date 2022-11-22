@@ -7,7 +7,7 @@ import net.minecraft.util.StatCollector;
 public class GuiNpcButton extends GuiButton{
 	public boolean shown = true;
 	
-	private String[] display;
+	protected String[] display;
 	private int displayValue = 0;
 	public int id;
 	public GuiNpcButton(int i, int j, int k,  String s) {

@@ -1,19 +1,13 @@
 package noppes.mpm.client;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufInputStream;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.List;
-import java.util.zip.GZIPInputStream;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import noppes.mpm.LogWriter;
 import noppes.mpm.ModelData;
@@ -21,7 +15,6 @@ import noppes.mpm.MorePlayerModels;
 import noppes.mpm.PacketHandlerServer;
 import noppes.mpm.PlayerDataController;
 import noppes.mpm.Server;
-import noppes.mpm.client.gui.GuiCreationScreen;
 import noppes.mpm.constants.EnumPackets;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.network.FMLNetworkEvent.ClientCustomPacketEvent;
@@ -45,15 +38,12 @@ public class PacketHandlerClient extends PacketHandlerServer{
 			int version = buffer.readInt();
 			if(version == MorePlayerModels.Revision){
 				MorePlayerModels.HasServerSide = true;
-				GuiCreationScreen.Message = "";
 			}
 			else if(version < MorePlayerModels.Revision){
 				MorePlayerModels.HasServerSide = false;
-				GuiCreationScreen.Message = "message.lowerversion";
 			}
 			else if(version > MorePlayerModels.Revision){
 				MorePlayerModels.HasServerSide = false;
-				GuiCreationScreen.Message = "message.higherversion";
 			}
 		}
 		else if(type == EnumPackets.RELOAD_SKINS) {

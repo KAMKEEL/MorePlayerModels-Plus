@@ -11,10 +11,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiSlot;
 import net.minecraft.client.renderer.Tessellator;
-
-// Referenced classes of package net.minecraft.src:
-//            GuiSlot, GuiSelectWorld, GuiButton, SaveFormatComparator, 
-//            MathHelper, StatCollector, Tessellator
+import net.minecraft.client.renderer.WorldRenderer;
 
 public class GuiNPCStringSlot extends GuiSlot
 {
@@ -42,6 +39,7 @@ public class GuiNPCStringSlot extends GuiSlot
         return list.size();
     }
     private long prevTime = 0;
+    @Override
     protected void elementClicked(int i, boolean flag, int var3, int var4)
     {
 //        GuiSelectWorld.onElementSelected(parentWorldGui, i);
@@ -83,23 +81,24 @@ public class GuiNPCStringSlot extends GuiSlot
         return list.size() * size;
     }
 
-    protected void drawBackground()
-    {
+    @Override
+    protected void drawBackground(){
         parent.drawDefaultBackground();
     }
 
-    protected void drawSlot(int i, int j, int k, int l, Tessellator tessellator, int var6, int var7)
-    {
-    	if(i >= list.size())
-    		return;
-    	String s = list.get(i);
-    	parent.drawString(Minecraft.getMinecraft().fontRenderer, s, j + 50, k + 3, 0xFFFFFF);
+    @Override
+    protected void drawSlot(int p_148126_1_, int p_148126_2_, int p_148126_3_, int p_148126_4_, Tessellator p_148126_5_, int p_148126_6_, int p_148126_7_) {
+        if(p_148126_1_ >= list.size())
+            return;
+        String s = list.get(p_148126_1_);
+        parent.drawString(Minecraft.getMinecraft().fontRenderer, s, p_148126_2_ + 50, p_148126_3_ + 3, 0xFFFFFF);
     }
 
-	public void clear() {
+    public void clear() {
 		list.clear();
 	}
 	public void setList(Vector<String> list) {
 		this.list = list;
 	}
+
 }

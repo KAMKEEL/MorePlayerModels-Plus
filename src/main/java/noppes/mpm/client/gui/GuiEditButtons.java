@@ -7,17 +7,18 @@ import net.minecraft.client.settings.KeyBinding;
 import noppes.mpm.MorePlayerModels;
 import noppes.mpm.client.gui.util.GuiNpcButton;
 import noppes.mpm.client.gui.util.GuiNpcLabel;
-import noppes.mpm.client.gui.util.GuiModelInterface;
+import noppes.mpm.client.gui.util.SubGuiInterface;
 
 import org.lwjgl.input.Keyboard;
 
-public class GuiEditButtons extends GuiModelInterface{
+public class GuiEditButtons extends SubGuiInterface{
 
 	private GuiScreen parent;
-	private final String[] animations = new String[]{"gui.none", "animation.sleep", "animation.crawl", "animation.hug", "animation.sit", "animation.dance", "animation.wave", "animation.wag", "animation.bow", "animation.cry"};
+	private final String[] animations = new String[]{"None","Sleep","Crawl","Hug","Sit","Dance","Wave","Wag","Bow","Cry"};
 	
 	public GuiEditButtons(GuiScreen parent){
 		this.parent = parent;
+		this.closeOnEsc = true;
 	}
 
     @Override

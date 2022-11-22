@@ -2,16 +2,14 @@ package noppes.mpm.client.gui;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.inventory.GuiInventory;
 import noppes.mpm.ModelData;
 import noppes.mpm.client.Preset;
 import noppes.mpm.client.PresetController;
-import noppes.mpm.client.gui.util.GuiInterface;
 import noppes.mpm.client.gui.util.GuiNpcButton;
 import noppes.mpm.client.gui.util.GuiNpcTextField;
-import org.lwjgl.opengl.GL11;
+import noppes.mpm.client.gui.util.SubGuiInterface;
 
-public class GuiPresetSave extends GuiInterface{
+public class GuiPresetSave extends SubGuiInterface{
 	private ModelData data;
 	private GuiScreen parent;
 	
@@ -25,8 +23,8 @@ public class GuiPresetSave extends GuiInterface{
 	public void initGui(){
 		super.initGui();
 		this.addTextField(new GuiNpcTextField(0, this, guiLeft, guiTop + 70,200, 20, ""));
-		this.addButton(new GuiNpcButton(0,guiLeft, guiTop + 100,98, 20, "gui.save"));
-		this.addButton(new GuiNpcButton(1,guiLeft + 100, guiTop + 100, 98, 20, "gui.cancel"));
+		this.addButton(new GuiNpcButton(0,guiLeft, guiTop + 100,98, 20, "Save"));
+		this.addButton(new GuiNpcButton(1,guiLeft + 100, guiTop + 100, 98, 20, "Cancel"));
 	}
     @Override
     protected void actionPerformed(GuiButton btn) {
@@ -41,6 +39,6 @@ public class GuiPresetSave extends GuiInterface{
     		preset.data = data.copy();
     		PresetController.instance.addPreset(preset);
     	}
-    	mc.displayGuiScreen(parent);
+    	close();
     }
 }

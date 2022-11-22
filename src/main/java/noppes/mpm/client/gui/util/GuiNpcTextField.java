@@ -25,6 +25,10 @@ public class GuiNpcTextField extends GuiTextField{
 			listener = (ITextfieldListener) parent;
 	}
 	
+	public static boolean isActive(){
+		return activeTextfield != null;
+	}
+	
 	private boolean charAllowed(char c, int i){
 		if(!numbersOnly || Character.isDigit(c))
 			return true;

@@ -14,7 +14,7 @@ import net.minecraft.world.World;
 import noppes.mpm.*;
 import noppes.mpm.client.fx.EntityEnderFX;
 import noppes.mpm.client.fx.EntityRainbowFX;
-import noppes.mpm.client.gui.GuiCreationScreen;
+import noppes.mpm.client.gui.GuiCreationScreenInterface;
 import noppes.mpm.constants.EnumAnimation;
 import noppes.mpm.constants.EnumPackets;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -40,8 +40,8 @@ public class ClientEventHandler {
 			ModelData data = PlayerDataController.instance.getPlayerData(mc.thePlayer);
 			data.animation = EnumAnimation.NONE;
 			if(mc.currentScreen == null)
-				mc.displayGuiScreen(new GuiCreationScreen());
-			else if(mc.currentScreen instanceof GuiCreationScreen)
+				mc.displayGuiScreen(new GuiCreationScreenInterface());
+			else if(mc.currentScreen instanceof GuiCreationScreenInterface)
 				mc.setIngameFocus();
 		}
 		if(!mc.inGameHasFocus)
@@ -116,7 +116,6 @@ public class ClientEventHandler {
     	World world = mc.theWorld;
     	if(world != null && prevWorld != world){
 			MorePlayerModels.HasServerSide = false;
-			GuiCreationScreen.Message = "message.noserver";
 			ModelData data = PlayerDataController.instance.getPlayerData(mc.thePlayer);
 			Client.sendData(EnumPackets.PING, MorePlayerModels.Revision, data.writeToNBT());
 			prevWorld = world;

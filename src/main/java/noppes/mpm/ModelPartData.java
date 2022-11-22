@@ -7,6 +7,7 @@ public class ModelPartData {
 	public int color = 0xFFFFFF;
 	public String texture;
 	public byte type = 0;
+	public byte pattern = 0;
 	public boolean playerTexture;
 	
 	private ResourceLocation location;
@@ -27,6 +28,7 @@ public class ModelPartData {
 		if(texture != null && !texture.isEmpty())
 			compound.setString("Texture", texture);
 		compound.setBoolean("PlayerTexture", playerTexture);
+		compound.setByte("Pattern", pattern);
 		return compound;
 	}
 	
@@ -35,6 +37,7 @@ public class ModelPartData {
 		color = compound.getInteger("Color");
 		texture = compound.getString("Texture");
 		playerTexture = compound.getBoolean("PlayerTexture");
+		pattern = compound.getByte("Pattern");
 		location = null;
 	}
 	
@@ -69,5 +72,10 @@ public class ModelPartData {
     		str = "0" + str;
     	
     	return str;
+	}
+
+	public void setType(int type){
+		this.type = (byte) type;
+		location = null;
 	}
 }

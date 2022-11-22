@@ -9,6 +9,7 @@ import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+import noppes.mpm.constants.EnumParts;
 
 
 public class ModelDataShared{
@@ -158,8 +159,18 @@ public class ModelDataShared{
 		return parts.get(type);
 	}
 
+	public ModelPartData getPartData(EnumParts type){
+		if(type == EnumParts.LEGS)
+			return legParts;
+		return parts.get(type.name);
+	}
+
 	public void removePart(String type) {
 		parts.remove(type);
+	}
+
+	public void removePart(EnumParts type) {
+		parts.remove(type.name);
 	}
 
 	public ModelPartData getOrCreatePart(String type) {
@@ -168,7 +179,17 @@ public class ModelDataShared{
 			parts.put(type, part = new ModelPartData());
 		return part;
 	}
-	
+
+	public ModelPartData getOrCreatePart(EnumParts type) {
+		if(type == null)
+			return null;
+		ModelPartData part = getPartData(type);
+		if(part == null)
+			parts.put(type.name, part = new ModelPartData(type.name));
+		return part;
+	}
+
+
 	public float getBodyY(){
 		if(legParts.type == 3)
 			return (0.9f - body.scaleY) * 0.75f + getLegsY();
@@ -181,5 +202,16 @@ public class ModelDataShared{
 		if(legParts.type == 3)
 			return (0.87f - legs.scaleY) * 1f;
 		return (1 - legs.scaleY) * 0.75f;
+	}
+
+	public ModelPartConfig getPartConfig(EnumParts type){
+		if(type == EnumParts.BODY)
+			return body;
+		if(type == EnumParts.ARMS)
+			return arms;
+		if(type == EnumParts.LEGS)
+			return legs;
+
+		return head;
 	}
 }
