@@ -47,8 +47,8 @@ public class ModelHorns extends ModelPartInterface {
 		
 		bull.isHidden = config.type != 0;
 		antlers.isHidden = config.type != 1;
-		antennasBack.isHidden = config.type != 2;
-		antennasFront.isHidden = config.type != 3;
+		antennasBack.isHidden = (config.type != 2 || config.pattern != 0);
+		antennasFront.isHidden = (config.type != 2 || config.pattern != 1);
 		
 		if(!config.playerTexture){
 			location = (ResourceLocation) config.getResource();

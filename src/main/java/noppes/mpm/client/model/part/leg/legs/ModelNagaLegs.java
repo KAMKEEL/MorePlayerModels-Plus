@@ -21,84 +21,110 @@ public class ModelNagaLegs extends ModelRenderer{
     public boolean isSleeping = false;
     public boolean isCrawling = false;
     
-	public ModelNagaLegs(ModelBase base) {
+	public ModelNagaLegs(ModelBase base, int textWidth, int textHeight) {
 		super(base);
 
 		nagaPart1 = new ModelRenderer(base,0,0);
+		nagaPart1.setTextureSize(textWidth, textHeight);
 
 		ModelRenderer legPart = new ModelRenderer(base,0,16);
+		legPart.setTextureSize(textWidth, textHeight);
 		legPart.addBox(0, -2, -2, 4, 4, 4);
 		legPart.setRotationPoint(-4, 0, 0);
 		nagaPart1.addChild(legPart);
+
 		legPart = new ModelRenderer(base,0,16);
+		legPart.setTextureSize(textWidth, textHeight);
 		legPart.mirror = true;
 		legPart.addBox(0, -2, -2, 4, 4, 4);
 		nagaPart1.addChild(legPart);
 
 		nagaPart2 = new ModelRenderer(base,0,0);
+		nagaPart2.setTextureSize(textWidth, textHeight);
 		nagaPart2.childModels = nagaPart1.childModels;
 
 		nagaPart3 = new ModelRenderer(base,0,0);
+		nagaPart3.setTextureSize(textWidth, textHeight);
 
 		ModelPlaneRenderer plane = new ModelPlaneRenderer(base, 4, 24);
+		plane.setTextureSize(textWidth, textHeight);
 		plane.addBackPlane(0,-2, 0, 4, 4);
 		plane.setRotationPoint(-4, 0, 0);
 		nagaPart3.addChild(plane);
+
 		plane = new ModelPlaneRenderer(base, 4, 24);
+		plane.setTextureSize(textWidth, textHeight);
 		plane.mirror = true;
 		plane.addBackPlane(0,-2, 0, 4, 4);
 		nagaPart3.addChild(plane);
 
 		plane = new ModelPlaneRenderer(base, 8, 24);
+		plane.setTextureSize(textWidth, textHeight);
 		plane.addBackPlane(0,-2, 6, 4, 4);
 		plane.setRotationPoint(-4, 0, 0);
 		nagaPart3.addChild(plane);
+
 		plane = new ModelPlaneRenderer(base, 8, 24);
+		plane.setTextureSize(textWidth, textHeight);
 		plane.mirror = true;
 		plane.addBackPlane(0,-2, 6, 4, 4);
 		nagaPart3.addChild(plane);
 
 		plane = new ModelPlaneRenderer(base, 4, 26);
+		plane.setTextureSize(textWidth, textHeight);
 		plane.addTopPlane(0,-2, -6, 4, 6);
 		plane.setRotationPoint(-4, 0, 0);
 		plane.rotateAngleX = (float) (Math.PI);
 		nagaPart3.addChild(plane);
+
 		plane = new ModelPlaneRenderer(base, 4, 26);
+		plane.setTextureSize(textWidth, textHeight);
 		plane.mirror = true;
 		plane.addTopPlane(0,-2, -6, 4, 6);
 		plane.rotateAngleX = (float) (Math.PI);
 		nagaPart3.addChild(plane);
 
 		plane = new ModelPlaneRenderer(base, 8, 26);
+		plane.setTextureSize(textWidth, textHeight);
 		plane.addTopPlane(0,-2, 0, 4, 6);
 		plane.setRotationPoint(-4, 0, 0);
 		nagaPart3.addChild(plane);
+
 		plane = new ModelPlaneRenderer(base, 8, 26);
+		plane.setTextureSize(textWidth, textHeight);
 		plane.mirror = true;
 		plane.addTopPlane(0,-2, 0, 4, 6);
 		nagaPart3.addChild(plane);;
 
 		plane = new ModelPlaneRenderer(base, 0, 26);
+		plane.setTextureSize(textWidth, textHeight);
 		plane.rotateAngleX = (float) (Math.PI / 2);
 		plane.addSidePlane(0,0, -2, 6, 4);
 		plane.setRotationPoint(-4, 0, 0);
 		nagaPart3.addChild(plane);
+
 		plane = new ModelPlaneRenderer(base, 0, 26);
+		plane.setTextureSize(textWidth, textHeight);
 		plane.rotateAngleX = (float) (Math.PI / 2);
 		plane.addSidePlane(4,0, -2, 6, 4);
 		nagaPart3.addChild(plane);
 
 		nagaPart4 = new ModelRenderer(base,0,0);
+		nagaPart4.setTextureSize(textWidth, textHeight);
 		nagaPart4.childModels = nagaPart3.childModels;
 
 		nagaPart5 = new ModelRenderer(base,0,0);
+		nagaPart5.setTextureSize(textWidth, textHeight);
 
 		legPart = new ModelRenderer(base,56,20);
+		legPart.setTextureSize(textWidth, textHeight);
 		legPart.addBox(0, 0, -2, 2, 5, 2);
 		legPart.setRotationPoint(-2, 0, 0);
 		legPart.rotateAngleX = (float) (Math.PI/2);
 		nagaPart5.addChild(legPart);
+
 		legPart = new ModelRenderer(base,56,20);
+		legPart.setTextureSize(textWidth, textHeight);
 		legPart.mirror = true;
 		legPart.addBox(0, 0, -2, 2, 5, 2);
 		legPart.rotateAngleX = (float) (Math.PI/2);

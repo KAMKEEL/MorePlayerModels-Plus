@@ -89,8 +89,7 @@ beard.short=Short
 
 horns.bull=Bull
 horns.antlers=Antlers
-horns.antennaf=AntennaF
-horns.antennab=AntennaB
+horns.antenna=Antenna
 
 horns.player_bull=Bull (P)
 horns.player_antlers=Antlers (P)

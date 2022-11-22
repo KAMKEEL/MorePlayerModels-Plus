@@ -22,7 +22,7 @@ public class ModelDigitigradeLegs extends ModelRenderer {
 
 	private ModelMPM base;
 
-	public ModelDigitigradeLegs(ModelMPM base, boolean mirror, int textWidth, int textHeight) {
+	public ModelDigitigradeLegs(ModelMPM base, int textWidth, int textHeight) {
 		super(base);
 		this.base = base;
 

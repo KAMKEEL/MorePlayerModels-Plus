@@ -183,7 +183,7 @@ public class ClientEventHandler {
 		Minecraft minecraft =  Minecraft.getMinecraft();
 		double height = player.getYOffset() + data.getBodyY();
 		Random rand = player.getRNG();
-		if(particles.type == 1){
+		if(particles.type == 2){
 			for(int i = 0; i < 2; i++){
 				double x = player.posX + (rand.nextDouble() - 0.5D) * 0.9;
 				double y = (player.posY + rand.nextDouble() * 1.9) - 0.25D - height;

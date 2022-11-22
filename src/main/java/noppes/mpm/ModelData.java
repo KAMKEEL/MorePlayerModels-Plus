@@ -152,7 +152,7 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 			if(entityClass != null)
 				toHash += entityClass.getCanonicalName();
 
-			toHash += legParts.toString() + headwear + breasts + soundType + url;
+			toHash += legParts.toString() + headwear + soundType + url;
 			
 			for(EnumParts e : parts.keySet()){
 				toHash += e.name + ":" + parts.get(e).toString();

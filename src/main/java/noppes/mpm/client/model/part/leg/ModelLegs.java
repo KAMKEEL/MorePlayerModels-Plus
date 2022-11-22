@@ -28,33 +28,6 @@ public class ModelLegs extends ModelScaleRenderer{
 	private ModelMermaidLegs mermaid;
 	private ModelMermaidLegs2 mermaid2;
 
-	private ModelRenderer spiderLeg1;
-    private ModelRenderer spiderLeg2;
-    private ModelRenderer spiderLeg3;
-    private ModelRenderer spiderLeg4;
-    private ModelRenderer spiderLeg5;
-    private ModelRenderer spiderLeg6;
-    private ModelRenderer spiderLeg7;
-    private ModelRenderer spiderLeg8;
-    private ModelRenderer spiderBody;
-    private ModelRenderer spiderNeck;
-  
-    private ModelRenderer backLeftLeg;
-    private ModelRenderer backLeftShin;
-    private ModelRenderer backLeftHoof;
-    
-    private ModelRenderer backRightLeg;
-    private ModelRenderer backRightShin;
-    private ModelRenderer backRightHoof;
-    
-    private ModelRenderer frontLeftLeg;
-    private ModelRenderer frontLeftShin;
-    private ModelRenderer frontLeftHoof;
-    
-    private ModelRenderer frontRightLeg;
-    private ModelRenderer frontRightShin;
-    private ModelRenderer frontRightHoof;
-
     private ModelMPM base;
 
 	public ModelLegs(ModelMPM base, ModelScaleRenderer leg1, ModelScaleRenderer leg2, int textWidth, int textHeight) {
@@ -73,7 +46,7 @@ public class ModelLegs extends ModelScaleRenderer{
 		horseLegs = new ModelHorseLegs(base);
 		this.addChild(horseLegs);
 
-		this.naga = new ModelNagaLegs(base);
+		this.naga = new ModelNagaLegs(base, textWidth, textHeight);
 		this.addChild(naga);
 
 		mermaid = new ModelMermaidLegs(base);
@@ -82,12 +55,7 @@ public class ModelLegs extends ModelScaleRenderer{
 		mermaid2 = new ModelMermaidLegs2(base);
 		this.addChild(mermaid2);
 
-		boolean mirror = false;
-		if(textHeight != textWidth){
-			mirror = true;
-		}
-
-		digitigrade = new ModelDigitigradeLegs(base, mirror, textWidth, textHeight);
+		digitigrade = new ModelDigitigradeLegs(base, textWidth, textHeight);
 		this.addChild(digitigrade);
 	}
 	public void setRotation(ModelRenderer model, float x, float y, float z) {
@@ -201,7 +169,6 @@ public class ModelLegs extends ModelScaleRenderer{
 			GL11.glColor4f(1, 1, 1, 1);
 		}
 		GL11.glPopMatrix();
-		
     }
 	public void setData(ModelData data, EntityLivingBase entity) {
 		this.data = data;

@@ -24,8 +24,8 @@ public class GuiCreationParts extends GuiCreationScreenInterface implements ITex
 	private GuiCustomScroll scroll;
 	
 	private GuiPart[] parts = {
-			new GuiPart(EnumParts.BREASTS).setTypes(new String[]{"gui.none", "1", "2", "3"}).noPlayerOptions(),
-			new GuiPart(EnumParts.WINGS).setTypes(new String[]{"gui.no","1","2","3","4","5","6","7","8","9",
+			new GuiPartBreasts(),
+			new GuiPart(EnumParts.WINGS).setTypes(new String[]{"gui.none","1","2","3","4","5","6","7","8","9",
 					"10","11","12","13","14","15"}),
 			new GuiPart(EnumParts.FIN).setTypes(new String[]{"gui.none", "1","2","3","4","5","6"}),
 			new GuiPartParticles(),
@@ -198,6 +198,35 @@ public class GuiCreationParts extends GuiCreationScreenInterface implements ITex
 				GuiCreationParts.this.addButton(new GuiButtonBiDirectional(22, guiLeft + 145, y, 100, 20, new String[]{"1","2"}, data.pattern));
 			}
 			return y;
+		}
+	}
+
+	class GuiPartBreasts extends GuiPart{
+		public GuiPartBreasts() {
+			super(EnumParts.BREASTS);
+			hasPlayerOption = false;
+			types = new String[]{"gui.none", "1", "2", "3"};
+		}
+
+		@Override
+		public int initGui(){
+			data = playerdata.getPartData(part);
+			int y = guiTop + 50;
+			if(data == null || !data.playerTexture || !noPlayerTypes){
+				GuiCreationParts.this.addLabel(new GuiNpcLabel(20, "gui.type", guiLeft + 102, y + 5, 0xFFFFFF));
+				GuiCreationParts.this.addButton(new GuiButtonBiDirectional(20, guiLeft + 145, y, 100, 20, types, data == null?0:data.type + 1));
+				y += 25;
+			}
+			return y;
+		}
+
+		@Override
+		protected void actionPerformed(GuiButton btn) {
+			if(btn.id == 20){
+				int i = ((GuiNpcButton)btn).getValue();
+				playerdata.breasts = (byte)i;
+			}
+			super.actionPerformed(btn);
 		}
 	}
 

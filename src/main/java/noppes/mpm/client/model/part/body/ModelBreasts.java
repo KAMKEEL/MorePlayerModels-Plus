@@ -1,14 +1,17 @@
 package noppes.mpm.client.model.part.body;
 
+import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import noppes.mpm.ModelData;
 import noppes.mpm.ModelPartData;
+import noppes.mpm.client.ClientProxy;
 import noppes.mpm.client.model.Model2DRenderer;
 import noppes.mpm.client.model.ModelMPM;
 import noppes.mpm.client.model.ModelPartInterface;
 import noppes.mpm.constants.EnumParts;
+import org.lwjgl.opengl.GL11;
 
 public class ModelBreasts extends ModelPartInterface {
 	private Model2DRenderer breasts;
@@ -106,19 +109,12 @@ public class ModelBreasts extends ModelPartInterface {
 
 	@Override
 	public void setRotationAngles(float par1, float par2, float par3,
-			float par4, float par5, float par6, Entity entity) {
+								  float par4, float par5, float par6, Entity entity) {
 
 	}
 
 	@Override
 	public void initData(ModelData data) {
-		ModelPartData config = data.getPartData(EnumParts.BREASTS);
-		if(config == null)
-		{
-			return;
-		}
-		config.playerTexture = true;
-		color = config.color;
 		this.isHidden = data.breasts == 0;
 		breasts.isHidden = data.breasts != 1;
 		breasts2.isHidden = data.breasts != 2;
