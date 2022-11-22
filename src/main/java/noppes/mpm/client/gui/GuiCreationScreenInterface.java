@@ -37,7 +37,7 @@ public class GuiCreationScreenInterface extends GuiNPCInterface implements ISubG
 	public ModelData playerdata;
 
 	private GuiNpcButton zoom, unzoom;
-	private static float zoomed = 80;
+	private static float zoomed = 90;
 
 	public static GuiCreationScreenInterface Gui = new GuiCreationParts();
 	
