@@ -1,5 +1,6 @@
 package noppes.mpm.client.model.part.body;
 
+import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
@@ -14,6 +15,7 @@ public class ModelWings extends ModelPartInterface {
 
 	private Model2DRenderer lWing;
 	private Model2DRenderer rWing;
+	private final ModelRenderer monarchWings;
 
 	public ModelWings(ModelMPM base) {
 		super(base);
@@ -30,6 +32,9 @@ public class ModelWings extends ModelPartInterface {
 		rWing.setRotationOffset(-16, -12);
 		setRotation(rWing, 0.7141593F, 0.5235988F, 0.5090659F);
 		this.addChild(rWing);
+
+//		monarchWings = new ModelMonarchWings(base);
+//		this.addChild(monarchWings);
 	}
 
 	@Override
@@ -70,6 +75,8 @@ public class ModelWings extends ModelPartInterface {
 		}
 		color = config.color;
 		isHidden = false;
+//		lWing.isHidden = rWing.isHidden = config.type == 15;
+//		monarchWings.isHidden = config.type != 15;
 		if(!config.playerTexture){
 			location = (ResourceLocation) config.getResource();
 		}

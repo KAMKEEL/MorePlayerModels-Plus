@@ -320,10 +320,7 @@ public class GuiCreationParts extends GuiCreationScreenInterface implements ITex
 	    protected void actionPerformed(GuiButton btn) {
 	    	if(btn.id == 20){
 	    		int i = ((GuiNpcButton)btn).getValue();
-	    		if(i <= 1)
-	    			data.playerTexture = true;
-	    		else
-	    			data.playerTexture = false;
+				data.playerTexture = i <= 1;
 	    	}
 	    	super.actionPerformed(btn);
 	    }
