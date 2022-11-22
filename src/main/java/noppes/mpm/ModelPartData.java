@@ -40,7 +40,9 @@ public class ModelPartData {
 		if(location != null)
 			return location;
 		String texture = name + "/" + type;
-
+		if(pattern > 0){
+			texture += "-" + pattern;
+		}
 		if((location = resources.get(texture)) != null)
 			return location;
 

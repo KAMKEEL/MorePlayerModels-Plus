@@ -155,7 +155,11 @@ public class GuiCreationParts extends GuiCreationScreenInterface implements ITex
 	    		GuiCreationParts.this.initGui();
 	    	}
 	    	if(btn.id == 22){
-    			data.pattern = (byte) ((GuiNpcButton)btn).getValue();
+				data = playerdata.getOrCreatePart(part);
+				if(data != null){
+					data.pattern = (byte) ((GuiNpcButton)btn).getValue();
+				}
+				GuiCreationParts.this.initGui();
 	    	}
 	    	if(btn.id == 21){
 	    		data.playerTexture = ((GuiNpcButtonYesNo)btn).getBoolean();
@@ -184,7 +188,7 @@ public class GuiCreationParts extends GuiCreationScreenInterface implements ITex
 	class GuiPartTail extends GuiPart{
 		public GuiPartTail() {
 			super(EnumParts.TAIL);
-			types = new String[]{"gui.none", "tail.cat", "tail.dragon",
+			types = new String[]{"gui.none", "part.tail", "tail.dragon",
 					"tail.horse", "tail.squirrel", "tail.fin", "tail.rodent", "tail.feather", "tail.fox"};
 		}
 
@@ -195,7 +199,7 @@ public class GuiCreationParts extends GuiCreationScreenInterface implements ITex
 			int y = super.initGui();
 			if(data != null && data.type == 0){
 				GuiCreationParts.this.addLabel(new GuiNpcLabel(22, "gui.pattern", guiLeft + 102, y + 5, 0xFFFFFF));
-				GuiCreationParts.this.addButton(new GuiButtonBiDirectional(22, guiLeft + 145, y, 100, 20, new String[]{"1","2"}, data.pattern));
+				GuiCreationParts.this.addButton(new GuiButtonBiDirectional(22, guiLeft + 145, y, 100, 20, new String[]{"tail.wolf", "tail.cat"}, data.pattern));
 			}
 			return y;
 		}

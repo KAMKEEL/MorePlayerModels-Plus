@@ -10,33 +10,33 @@ import noppes.mpm.constants.EnumParts;
 
 public class ModelClaws extends ModelPartInterface {
 
-	private Model2DRenderer model;
-	private boolean isRight = false;
-	
-	public ModelClaws(ModelMPM base, boolean isRight) {
+	private final Model2DRenderer claw;
+	private final boolean rightArm;
+
+	public ModelClaws(ModelMPM base, boolean rightArm) {
 		super(base);
-		this.isRight = isRight;
-		model = new Model2DRenderer(base, 0, 16, 4, 4, 64, 32);
-		if(isRight)
-			model.setRotationPoint(-2F, 14f, -2);
+		this.rightArm = rightArm;
+		claw = new Model2DRenderer(base, 0, 16, 4, 4, 64, 32);
+		if(rightArm)
+			claw.setRotationPoint(-2F, 14f, -2);
 		else
-			model.setRotationPoint(3F, 14f, -2);
-		model.rotateAngleY = (float) (Math.PI / -2);
-		model.setScale(0.25f);
-		this.addChild(model);
+			claw.setRotationPoint(3F, 14f, -2);
+		claw.rotateAngleY = (float) (Math.PI / -2);
+		claw.setScale(0.25f);
+		this.addChild(claw);
 	}
 
 	@Override
 	public void initData(ModelData data) {
 		ModelPartData config = data.getPartData(EnumParts.CLAWS);
-		if(config == null || isRight && config.type == 1 || !isRight && config.type == 2)
+		if(config == null)
 		{
 			isHidden = true;
 			return;
 		}
 		color = config.color;
 		isHidden = false;
-		
+		claw.isHidden = (this.rightArm && config.pattern == 1) || (!this.rightArm && config.pattern == 2);
 		if(!config.playerTexture){
 			location = (ResourceLocation) config.getResource();
 		}

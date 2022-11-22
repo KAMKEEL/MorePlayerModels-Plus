@@ -1,5 +1,7 @@
 package noppes.mpm.client.model;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBox;
 import net.minecraft.client.model.ModelRenderer;
@@ -7,6 +9,8 @@ import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.Tessellator;
 import noppes.mpm.ModelPartConfig;
 
+import noppes.mpm.ModelPartData;
+import noppes.mpm.client.ClientProxy;
 import org.lwjgl.opengl.GL11;
 
 public class ModelScaleRenderer extends ModelRenderer {
