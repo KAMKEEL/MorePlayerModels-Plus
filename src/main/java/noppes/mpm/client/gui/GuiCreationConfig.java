@@ -119,6 +119,9 @@ public class GuiCreationConfig extends GuiCreationScreenInterface implements ITe
 	public void unFocused(GuiNpcTextField guiNpcTextField) {
 		if(guiNpcTextField.id == 52){
 			playerdata.url = guiNpcTextField.getText();
+			if(playerdata.url == ""){
+				playerdata.playerLoaded = false;
+			}
 			playerdata.loaded = false;
 		}
 	}
