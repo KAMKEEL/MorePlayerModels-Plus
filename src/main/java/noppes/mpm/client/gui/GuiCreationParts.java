@@ -346,8 +346,8 @@ public class GuiCreationParts extends GuiCreationScreenInterface implements ITex
 
 		@Override
 		protected void actionPerformed(GuiButton btn) {
-			int i = ((GuiNpcButton)btn).getValue();
 			if(btn.id == 20){
+				int i = ((GuiNpcButton)btn).getValue();
 				playerdata.cloakUrl = "";
 				playerdata.cloakLoaded = false;
 				playerdata.cloak = (byte)i;
