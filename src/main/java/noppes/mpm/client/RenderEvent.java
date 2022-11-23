@@ -39,11 +39,12 @@ public class RenderEvent {
 
 	@SubscribeEvent(priority=EventPriority.LOWEST)
 	public void pre(RenderPlayerEvent.Pre event){
+		if(!(event.entity instanceof AbstractClientPlayer))
+			return;
+
 		if(MorePlayerModels.HidePlayerNames && event.entity.riddenByEntity == null){
 			event.entity.riddenByEntity = hideNameSheep;
 		}
-		if(!(event.entity instanceof AbstractClientPlayer))
-			return;
 
 		EntityPlayer player = event.entityPlayer;
 		this.data = PlayerDataController.instance.getPlayerData(player);
@@ -73,6 +74,9 @@ public class RenderEvent {
 
 	@SubscribeEvent(priority=EventPriority.LOWEST)
 	public void post(RenderLivingEvent.Post event){
+		if(!(event.entity instanceof AbstractClientPlayer))
+			return;
+
 		if(event.entity.riddenByEntity == hideNameSheep){
 			event.entity.riddenByEntity = null;
 		}
