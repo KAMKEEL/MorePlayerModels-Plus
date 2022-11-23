@@ -118,6 +118,7 @@ public class GuiCreationParts extends GuiCreationScreenInterface implements ITex
 		protected ModelPartData data;
 		protected boolean hasPlayerOption = true;
 		protected boolean noPlayerTypes = false;
+		protected boolean noPlayerTextures = false;
 		protected boolean canBeDeleted = true;
 
 		public GuiPart(EnumParts part){
@@ -138,7 +139,7 @@ public class GuiCreationParts extends GuiCreationScreenInterface implements ITex
 				GuiCreationParts.this.addButton(new GuiNpcButtonYesNo(21, guiLeft + 170, y, data.playerTexture));
 				y += 25;
 			}
-			if(data != null && !data.playerTexture){
+			if(data != null && !data.playerTexture && !noPlayerTextures){
 				GuiCreationParts.this.addLabel(new GuiNpcLabel(23, "gui.color", guiLeft + 102, y + 5, 0xFFFFFF));
 				GuiCreationParts.this.addButton(new GuiColorButton(23, guiLeft + 170, y, data.color));
 				y += 25;
@@ -329,20 +330,16 @@ public class GuiCreationParts extends GuiCreationScreenInterface implements ITex
 			super(EnumParts.CAPE);
 			types = new String[]{"gui.none", "gui.show"};
 			hasPlayerOption = false;
+			noPlayerTextures = true;
 		}
 
 		@Override
 		public int initGui(){
-			int y = guiTop + 50;
-			if(data == null || !data.playerTexture || !noPlayerTypes){
-				GuiCreationParts.this.addLabel(new GuiNpcLabel(20, "gui.type", guiLeft + 102, y + 5, 0xFFFFFF));
-				GuiCreationParts.this.addButton(new GuiButtonBiDirectional(20, guiLeft + 145, y, 100, 20, types, data == null?0:data.type + 1));
-				y += 25;
-			}
-			if(data != null && data.type == 1){
-				GuiCreationParts.this.addLabel(new GuiNpcLabel(300, "config.capeurl", guiLeft + 102, y + 5, 0xFFFFFF));
-				GuiCreationParts.this.addTextField(new GuiNpcTextField(300, GuiCreationParts.this, guiLeft + 155, y, 160, 20, playerdata.cloakUrl));
-			}
+			int y = super.initGui();
+			if(data == null)
+				return y;
+			GuiCreationParts.this.addLabel(new GuiNpcLabel(300, "config.capeurl", guiLeft + 102, y + 5, 0xFFFFFF));
+			GuiCreationParts.this.addTextField(new GuiNpcTextField(300, GuiCreationParts.this, guiLeft + 155, y, 160, 20, playerdata.cloakUrl));
 			return y;
 		}
 
