@@ -35,7 +35,7 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.FMLEventChannel;
 import cpw.mods.fml.common.network.NetworkRegistry;
 
-@Mod(modid = "moreplayermodels", name = "MorePlayerModels", version = "1.2")
+@Mod(modid = "moreplayermodels", name = "MorePlayerModels", version = "2.0")
 public class MorePlayerModels {
 	@ConfigProp
 	public static int Tooltips = 2;
@@ -46,7 +46,7 @@ public class MorePlayerModels {
 	public static FMLEventChannel Channel;
 
 	public static MorePlayerModels instance;
-	
+
 	public static int Revision = 5;
 	
 	public static File dir;

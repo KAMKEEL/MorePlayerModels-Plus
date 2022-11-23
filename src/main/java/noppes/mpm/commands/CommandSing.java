@@ -14,7 +14,7 @@ public class CommandSing extends MpmCommandInterface {
 
 	@Override
 	public void processCommand(ICommandSender icommandsender, String[] var2) {
-		if(icommandsender instanceof EntityPlayerMP == false)
+		if(!(icommandsender instanceof EntityPlayerMP))
 			return;
 		EntityPlayerMP player = (EntityPlayerMP) icommandsender;
 		
