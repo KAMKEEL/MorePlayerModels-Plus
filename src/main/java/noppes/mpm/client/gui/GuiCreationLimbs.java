@@ -98,8 +98,8 @@ public class GuiCreationLimbs extends GuiCreationScreenInterface implements ISli
     @Override
     protected void actionPerformed(GuiButton btn) {
     	super.actionPerformed(btn);
-		GuiNpcButton button = (GuiNpcButton) btn;
-		if(button.id >= 140 && button.id <= 150){
+		if(btn.id >= 140 && btn.id <= 149){
+			GuiNpcButton button = (GuiNpcButton) btn;
 			if(button.id == 140){
 				playerdata.hideHead = (byte) button.getValue();
 			}
