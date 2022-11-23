@@ -43,6 +43,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StringUtils;
 import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.client.event.RenderPlayerEvent;
 import noppes.mpm.ModelData;
 import noppes.mpm.ModelPartData;
 import noppes.mpm.PlayerDataController;
@@ -138,6 +139,8 @@ public class RenderMPM extends RenderPlayer{
 		modelArmorChestplate.isSneak = modelArmor.isSneak = modelBipedMain.isSneak = false;
 		modelArmorChestplate.heldItemRight = modelArmor.heldItemRight = modelBipedMain.heldItemRight = 0;
 		modelArmorChestplate.heldItemLeft = modelArmor.heldItemLeft = modelBipedMain.heldItemLeft = 0;
+
+		net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new RenderPlayerEvent.Post(player, this, p_76986_9_));
 	}
 
 	private void loadTexture(File file, ResourceLocation resource, String par1Str, boolean version, int modelType){
