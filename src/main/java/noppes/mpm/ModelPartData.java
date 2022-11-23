@@ -1,5 +1,6 @@
 package noppes.mpm;
 
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 
@@ -14,6 +15,7 @@ public class ModelPartData {
 	public boolean playerTexture;
 	public String name;
 	private ResourceLocation location;
+	private String custom;
 
 	public ModelPartData(String name) {
 		this.name = name;
@@ -25,6 +27,9 @@ public class ModelPartData {
 		compound.setInteger("Color", color);
 		compound.setBoolean("PlayerTexture", playerTexture);
 		compound.setByte("Pattern", pattern);
+		if(!custom.equals(""))
+			compound.setString("CustomTexture", custom);
+
 		return compound;
 	}
 	
@@ -33,15 +38,18 @@ public class ModelPartData {
 		color = compound.getInteger("Color");
 		playerTexture = compound.getBoolean("PlayerTexture");
 		pattern = compound.getByte("Pattern");
+		custom = compound.getString("CustomTexture");
 		location = null;
 	}
 
 	public ResourceLocation getResource(){
 		if(location != null)
 			return location;
-		String texture = name + "/" + type;
-		if(pattern > 0){
-			texture += "-" + pattern;
+		String texture = name + "/";
+		if(!custom.equals("")){
+			texture += custom;
+		} else {
+			texture += type;
 		}
 		if((location = resources.get(texture)) != null)
 			return location;
@@ -49,6 +57,22 @@ public class ModelPartData {
 		location = new ResourceLocation("moreplayermodels:textures/" + texture + ".png");
 		resources.put(texture, location);
 		return location;
+	}
+
+	public void updateTextureLocation(){
+		String texture = name + "/";
+		if(!custom.equals("")){
+			texture += custom;
+		} else {
+			texture += type;
+		}
+
+		location = new ResourceLocation("moreplayermodels:textures/" + texture + ".png");
+		resources.put(texture, location);
+	}
+
+	public void setCustomResource(String texture){
+		custom = texture;
 	}
 
 	public String toString(){

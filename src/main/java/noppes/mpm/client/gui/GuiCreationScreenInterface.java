@@ -24,6 +24,8 @@ import noppes.mpm.constants.EnumPackets;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
+import static noppes.mpm.client.gui.GuiCreationParts.fixPlayerSkinLegs;
+
 public class GuiCreationScreenInterface extends GuiNPCInterface implements ISubGuiListener, ISliderListener{
 	public static String Message = "";
 	public EntityLivingBase entity;
@@ -136,6 +138,7 @@ public class GuiCreationScreenInterface extends GuiNPCInterface implements ISubG
 				playerdata.modelType = 0;
 				playerdata.urlType = 0;
 			}
+			fixPlayerSkinLegs(playerdata);
 			playerdata.loaded = false;
 			playerdata.playerLoaded = false;
 			this.initGui();
