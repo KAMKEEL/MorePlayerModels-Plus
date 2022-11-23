@@ -15,7 +15,7 @@ public class ModelWings extends ModelPartInterface {
 
 	private Model2DRenderer lWing;
 	private Model2DRenderer rWing;
-	private final ModelRenderer monarchWings;
+	// private final ModelRenderer monarchWings;
 
 	public ModelWings(ModelMPM base) {
 		super(base);
