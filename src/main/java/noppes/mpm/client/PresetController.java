@@ -9,6 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import noppes.mpm.LogWriter;
 import noppes.mpm.ModelData;
 import noppes.mpm.PlayerDataController;
 
@@ -67,23 +68,23 @@ public class PresetController {
 	private NBTTagCompound loadPreset(){
 		String filename = "presets.dat";
 		try {
-	        File file = new File(dir, filename);
-	        if(!file.exists()){
+			File file = new File(dir, filename);
+			if(!file.exists()){
 				return null;
-	        }
-	        return CompressedStreamTools.readCompressed(new FileInputStream(file));
+			}
+			return CompressedStreamTools.readCompressed(new FileInputStream(file));
 		} catch (Exception e) {
-			System.err.println(e.getMessage());
+			LogWriter.except(e);
 		}
 		try {
-	        File file = new File(dir, filename+"_old");
-	        if(!file.exists()){
+			File file = new File(dir, filename+"_old");
+			if(!file.exists()){
 				return null;
-	        }
-	        return CompressedStreamTools.readCompressed(new FileInputStream(file));
-	        
+			}
+			return CompressedStreamTools.readCompressed(new FileInputStream(file));
+
 		} catch (Exception e) {
-			System.err.println(e.getMessage());
+			LogWriter.except(e);
 		}
 		return null;
 	}
@@ -102,26 +103,27 @@ public class PresetController {
 	private void savePreset(NBTTagCompound compound){
 		String filename = "presets.dat";
 		try {
-            File file = new File(dir, filename+"_new");
-            File file1 = new File(dir, filename+"_old");
-            File file2 = new File(dir, filename);
-            CompressedStreamTools.writeCompressed(compound, new FileOutputStream(file));
-            if(file1.exists())
-            {
-                file1.delete();
-            }
-            file2.renameTo(file1);
-            if(file2.exists())
-            {
-                file2.delete();
-            }
-            file.renameTo(file2);
-            if(file.exists())
-            {
-                file.delete();
-            }
+			File file = new File(dir, filename+"_new");
+			File file1 = new File(dir, filename+"_old");
+			File file2 = new File(dir, filename);
+			CompressedStreamTools.writeCompressed(compound, new FileOutputStream(file));
+			if(file1.exists())
+			{
+				file1.delete();
+			}
+			file2.renameTo(file1);
+			if(file2.exists())
+			{
+				file2.delete();
+			}
+			file.renameTo(file2);
+			if(file.exists())
+			{
+				file.delete();
+			}
 		} catch (Exception e) {
-			System.err.println(e.getMessage());
+			LogWriter.except(e);
+			e.printStackTrace();
 		}
 	}
 
