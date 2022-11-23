@@ -11,15 +11,14 @@ import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.entity.MPMRendererHelper;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderPlayer;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.client.event.ClientChatReceivedEvent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.*;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
-import net.minecraftforge.client.event.RenderLivingEvent;
-import net.minecraftforge.client.event.RenderPlayerEvent;
 import noppes.mpm.*;
 import noppes.mpm.constants.EnumAnimation;
 import org.lwjgl.opengl.GL11;
@@ -32,12 +31,20 @@ public class RenderEvent {
 	public final static long MaxSkinTick = 6;
 	private ModelData data;
 
+	private static final Entity hideNameSheep = new EntitySheep(null);
+
 	public RenderEvent(){
 		Instance = this;
 	}
 
 	@SubscribeEvent(priority=EventPriority.LOWEST)
 	public void pre(RenderPlayerEvent.Pre event){
+		if(MorePlayerModels.HidePlayerNames && event.entity.riddenByEntity == null){
+			event.entity.riddenByEntity = hideNameSheep;
+		}
+		if(!(event.entity instanceof AbstractClientPlayer))
+			return;
+
 		EntityPlayer player = event.entityPlayer;
 		this.data = PlayerDataController.instance.getPlayerData(player);
 		renderer.setModelData(data, player);
@@ -66,6 +73,9 @@ public class RenderEvent {
 
 	@SubscribeEvent(priority=EventPriority.LOWEST)
 	public void post(RenderLivingEvent.Post event){
+		if(event.entity.riddenByEntity == hideNameSheep){
+			event.entity.riddenByEntity = null;
+		}
 	}
 
 	private void setModels(RenderPlayer render){
@@ -153,5 +163,11 @@ public class RenderEvent {
 
 			mc.fontRenderer.drawStringWithShadow(dam, posX, posY + 12, 0xffffff);
 		}
+	}
+
+	@SubscribeEvent
+	public void selectionBox(DrawBlockHighlightEvent event){
+		if(MorePlayerModels.HideSelectionBox)
+			event.setCanceled(true);
 	}
 }
