@@ -27,6 +27,7 @@ public class ModelDataShared{
 
 	protected HashMap<EnumParts, ModelPartData> parts = new HashMap<EnumParts, ModelPartData>();
 	public byte breasts = 0;
+	public byte cloak = 0;
 
 	// 3D Layers
 	public byte headwear = 2;
@@ -70,6 +71,7 @@ public class ModelDataShared{
 		compound.setByte("hideArms", hideArms);
 		compound.setByte("hideLegs", hideLegs);
 
+		compound.setByte("Cloak", cloak);
 		compound.setByte("Breasts", breasts);
 		compound.setTag("ExtraData", extra);
 
@@ -108,6 +110,7 @@ public class ModelDataShared{
 		hideLegs = compound.getByte("hideLegs");
 
 		breasts = compound.getByte("Breasts");
+		cloak = compound.getByte("Cloak");
 		extra = compound.getCompoundTag("ExtraData");
 
 		HashMap<EnumParts,ModelPartData> parts = new HashMap<EnumParts,ModelPartData>();

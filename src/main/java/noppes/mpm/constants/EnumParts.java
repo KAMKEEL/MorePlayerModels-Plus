@@ -17,7 +17,8 @@ public enum EnumParts {
 	BODY("body"),
 	BREASTS("breasts"),
 	PARTICLES("particles"),
-	ARMS("arms");
+	ARMS("arms"),
+	CAPE("cape");
 
 	public String name;
 

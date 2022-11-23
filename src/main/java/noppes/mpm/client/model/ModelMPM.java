@@ -2,6 +2,7 @@ package noppes.mpm.client.model;
 
 import java.util.Random;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBiped;
@@ -10,7 +11,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
-import net.minecraft.util.ResourceLocation;
 import noppes.mpm.ModelData;
 import noppes.mpm.ModelPartConfig;
 import noppes.mpm.ModelPartData;
@@ -19,10 +19,7 @@ import noppes.mpm.client.model.animation.AniCrawling;
 import noppes.mpm.client.model.animation.AniHug;
 import noppes.mpm.client.model.part.ModelLimbWear;
 import noppes.mpm.client.model.part.arm.ModelClaws;
-import noppes.mpm.client.model.part.body.ModelBodywear;
-import noppes.mpm.client.model.part.body.ModelBreasts;
-import noppes.mpm.client.model.part.body.ModelFin;
-import noppes.mpm.client.model.part.body.ModelWings;
+import noppes.mpm.client.model.part.body.*;
 import noppes.mpm.client.model.part.head.*;
 import noppes.mpm.client.model.part.head.snout.ModelSnout;
 import noppes.mpm.client.model.part.leg.ModelLegs;
@@ -46,16 +43,15 @@ public class ModelMPM extends ModelBiped{
 	private ModelPartInterface fin;
 	private ModelPartInterface skirt;
 	private ModelPartInterface horns;
-
 	private ModelPartInterface clawsR;
 	private ModelPartInterface clawsL;
+	private ModelCape cape;
 	
 	private ModelLegs legs;
 	private ModelTail tail;
 	public ModelBase entityModel;
 	public EntityLivingBase entity;
 
-	// New
 	public ModelRenderer bipedBodywear;
 	public ModelRenderer bipedRightArmWear;
 	public ModelRenderer bipedLeftArmwear;
@@ -98,6 +94,8 @@ public class ModelMPM extends ModelBiped{
 		this.bipedCloak = new ModelRenderer(this, 0, 0);
 		this.bipedCloak.setTextureSize(64,32);
 		this.bipedCloak.addBox(-5.0F, 0.0F, -1.0F, 10, 16, 1, par1);
+
+		this.cape = new ModelCape(this);
 
 		this.bipedEars = new ModelRenderer(this, 24, 0);
 		this.bipedEars.setTextureSize(64, 32);
@@ -227,6 +225,8 @@ public class ModelMPM extends ModelBiped{
 		this.bipedCloak = new ModelRenderer(this, 0, 0);
 		this.bipedCloak.setTextureSize(64,32);
 		this.bipedCloak.addBox(-5.0F, 0.0F, -1.0F, 10, 16, 1, par1);
+
+		this.cape = new ModelCape(this);
 
 		this.bipedEars = new ModelRenderer(this, 24, 0);
 		this.bipedEars.addBox(-3.0F, -6.0F, -1.0F, 6, 6, 1, par1);
@@ -386,9 +386,7 @@ public class ModelMPM extends ModelBiped{
     		GL11.glPopMatrix();
     	}
         renderLegs(par1Entity, par7);
-		if(par1Entity instanceof EntityPlayer){
-			renderCloak((EntityPlayer) par1Entity, par7);
-		}
+		renderCloak(par1Entity, par7);
     }
     @Override
     public void setRotationAngles(float par1, float par2, float par3, float par4, float par5, float par6, Entity entity)
@@ -689,79 +687,44 @@ public class ModelMPM extends ModelBiped{
 		GL11.glPopMatrix();
 	}
 
-	public double field_20066_r;
-	public double field_20065_s;
-	public double field_20064_t;
-	public double field_20063_u;
-	public double field_20062_v;
-	public double field_20061_w;
-
-	public void cloakUpdate(AbstractClientPlayer player) {
-		field_20066_r = field_20063_u;
-		field_20065_s = field_20062_v;
-		field_20064_t = field_20061_w;
-		double d = player.posX - field_20063_u;
-		double d1 = player.posY - field_20062_v;
-		double d2 = player.posZ - field_20061_w;
-		double d3 = 10D;
-		if (d > d3) {
-			field_20066_r = field_20063_u = player.posX;
-		}
-		if (d2 > d3) {
-			field_20064_t = field_20061_w = player.posZ;
-		}
-		if (d1 > d3) {
-			field_20065_s = field_20062_v = player.posY;
-		}
-		if (d < -d3) {
-			field_20066_r = field_20063_u = player.posX;
-		}
-		if (d2 < -d3) {
-			field_20064_t = field_20061_w = player.posZ;
-		}
-		if (d1 < -d3) {
-			field_20065_s = field_20062_v = player.posY;
-		}
-		field_20063_u += d * 0.25D;
-		field_20061_w += d2 * 0.25D;
-		field_20062_v += d1 * 0.25D;
-	}
-
-	public void renderCloak(EntityPlayer npc, float f){
-		if (!data.cloakUrl.isEmpty() && !isArmor)
-		{
-			if(data.cloakLocation == null){
-				data.cloakLocation = new ResourceLocation("moreplayermodels:textures/skins/steve.png");
-				// data.cloakLocation = new ResourceLocation(data.cloakUrl);
+	public void renderCloak(Entity npc, float f){
+		AbstractClientPlayer player = (AbstractClientPlayer) npc;
+		if(!player.isInvisible() && !data.cloakUrl.isEmpty() && !isArmor && data.entityClass == null && data.cloak == 1) {
+			if(data.cloakTexture != null){
+				Minecraft.getMinecraft().getTextureManager().bindTexture(data.cloakTexture);
+				GL11.glPushMatrix();
+				GL11.glTranslatef(0.0f, 0.0f, 0.125f);
+				final double d3 = player.field_71091_bM + (player.field_71094_bP - player.field_71091_bM) * 0.0625 - (player.prevPosX + (player.posX - player.prevPosX) * 0.0625);
+				final double d4 = player.field_71096_bN + (player.field_71095_bQ - player.field_71096_bN) * 0.0625 - (player.prevPosY + (player.posY - player.prevPosY) * 0.0625);
+				final double d5 = player.field_71097_bO + (player.field_71085_bR - player.field_71097_bO) * 0.0625 - (player.prevPosZ + (player.posZ - player.prevPosZ) * 0.0625);
+				final float f4 = player.prevRenderYawOffset + (player.renderYawOffset - player.prevRenderYawOffset) * 0.0625f;
+				final double d6 = MathHelper.sin(f4 * 3.1415927f / 180.0f);
+				final double d7 = -MathHelper.cos(f4 * 3.1415927f / 180.0f);
+				float f5 = (float) d4 * 10.0f;
+				if (f5 < -6.0f) {
+					f5 = -6.0f;
+				}
+				if (f5 > 32.0f) {
+					f5 = 32.0f;
+				}
+				float f6 = (float) (d3 * d6 + d5 * d7) * 100.0f;
+				final float f7 = (float) (d3 * d7 - d5 * d6) * 100.0f;
+				if (f6 < 0.0f) {
+					f6 = 0.0f;
+				}
+				final float f8 = player.prevCameraYaw + (player.cameraYaw - player.prevCameraYaw) * 0.0625f;
+				f5 += MathHelper.sin((player.prevDistanceWalkedModified + (player.distanceWalkedModified - player.prevDistanceWalkedModified) * 0.0625f) * 6.0f) * 32.0f * f8;
+				if (player.isSneaking()) {
+					f5 += 25.0f;
+				}
+				GL11.glRotatef(6.0f + f6 / 2.0f + f5, 1.0f, 0.0f, 0.0f);
+				GL11.glRotatef(f7 / 2.0f, 0.0f, 0.0f, 1.0f);
+				GL11.glRotatef(-f7 / 2.0f, 0.0f, 1.0f, 0.0f);
+				GL11.glTranslatef(0.0f, 0.0f, 0.125f);
+				GL11.glRotatef(180.0f, 0.0f, 1.0f, 0.0f);
+				cape.cape.render(0.0625F);
+				GL11.glPopMatrix();
 			}
-			ClientProxy.bindTexture((ResourceLocation) data.cloakLocation);
-			GL11.glPushMatrix();
-			GL11.glTranslatef(0.0F, 0.0F, 0.125F);
-			double d = (field_20066_r + (field_20063_u - field_20066_r) * (double)f) - (npc.prevPosX + (npc.posX - npc.prevPosX) * (double)f);
-			double d1 = (field_20065_s + (field_20062_v - field_20065_s) * (double)f) - (npc.prevPosY + (npc.posY - npc.prevPosY) * (double)f);
-			double d2 = (field_20064_t + (field_20061_w - field_20064_t) * (double)f) - (npc.prevPosZ + (npc.posZ - npc.prevPosZ) * (double)f);
-			float f11 = npc.prevRenderYawOffset + (npc.renderYawOffset - npc.prevRenderYawOffset) * f;
-			double d3 = MathHelper.sin((f11 * 3.141593F) / 180F);
-			double d4 = -MathHelper.cos((f11 * 3.141593F) / 180F);
-			float f14 = (float)(d * d3 + d2 * d4) * 100F;
-			float f15 = (float)(d * d4 - d2 * d3) * 100F;
-			if (f14 < 0.0F)
-			{
-				f14 = 0.0F;
-			}
-			float f16 = npc.prevRotationYaw + (npc.rotationYaw - npc.prevRotationYaw) * f;
-			float f13 = 5f;
-			if (npc.isSneaking())
-			{
-				f13 += 25F;
-			}
-
-			GL11.glRotatef(6F + f14 / 2.0F + f13, 1.0F, 0.0F, 0.0F);
-			GL11.glRotatef(f15 / 2.0F, 0.0F, 0.0F, 1.0F);
-			GL11.glRotatef(-f15 / 2.0F, 0.0F, 1.0F, 0.0F);
-			GL11.glRotatef(180F, 0.0F, 1.0F, 0.0F);
-			super.renderCloak(0.0625F);
-			GL11.glPopMatrix();
 		}
 	}
 

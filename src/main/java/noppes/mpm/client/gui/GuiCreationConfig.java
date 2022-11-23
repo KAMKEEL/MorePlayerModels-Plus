@@ -7,7 +7,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import noppes.mpm.ModelData;
 import noppes.mpm.MorePlayerModels;
 import noppes.mpm.PlayerDataController;
-import noppes.mpm.client.ClientProxy;
 import noppes.mpm.client.gui.util.GuiNpcButton;
 import noppes.mpm.client.gui.util.GuiNpcLabel;
 import noppes.mpm.client.gui.util.GuiNpcTextField;
@@ -74,6 +73,7 @@ public class GuiCreationConfig extends GuiCreationScreenInterface implements ITe
     		for(EntityPlayer player : players){
     			ModelData data = PlayerDataController.instance.getPlayerData(player);
     			data.playerLoaded = false;
+				data.cloakLoaded = false;
     			data.loaded = false;
     		}
     	}
@@ -117,7 +117,9 @@ public class GuiCreationConfig extends GuiCreationScreenInterface implements ITe
 
 	@Override
 	public void unFocused(GuiNpcTextField guiNpcTextField) {
-		playerdata.url = guiNpcTextField.getText();
-		playerdata.loaded = false;
+		if(guiNpcTextField.id == 52){
+			playerdata.url = guiNpcTextField.getText();
+			playerdata.loaded = false;
+		}
 	}
 }

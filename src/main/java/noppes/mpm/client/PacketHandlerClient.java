@@ -53,6 +53,7 @@ public class PacketHandlerClient extends PacketHandlerServer{
 				ModelData data = PlayerDataController.instance.getPlayerData(p);
 				data.playerLoaded = false;
 				data.loaded = false;
+				data.cloakLoaded = false;
 			}
 		}
 		else if(type == EnumPackets.SEND_PLAYER_DATA){

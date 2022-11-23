@@ -134,6 +134,7 @@ public class ClientEventHandler {
     		playerlist = list;
     	}
     	RenderEvent.lastSkinTick++;
+		RenderEvent.lastCapeTick++;
 	}
 
 	@SubscribeEvent

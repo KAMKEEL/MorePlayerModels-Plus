@@ -25,6 +25,7 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 	public static ExecutorService saveExecutor = Executors.newSingleThreadExecutor();
 	public boolean loaded = false;
 	public boolean playerLoaded = false;
+	public boolean cloakLoaded = false;
 	public EntityPlayer player = null;
 	
 	public int rev = MorePlayerModels.Revision;
@@ -38,6 +39,7 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 	public int animationStart = 0;
 	
 	public short soundType = 0;
+	public ResourceLocation cloakTexture;
 
 	public byte urlType = 0;	//	0:url, 1:url64
 	public String url= "";
@@ -45,10 +47,7 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 	public String displayName = "";
 	public int modelType = 0; 	// 	0: Steve, 1: Steve64, 2: Alex
 
-	public ResourceLocation cloakLocation;
-
 	public ModelData(){
-
 	}
 	public NBTTagCompound writeToNBT(){
 		NBTTagCompound compound = super.writeToNBT();
@@ -77,6 +76,7 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 			player.refreshDisplayName();
 		
 		String prevUrl = url;
+		String prevCloakUrl = cloakUrl;
 		byte prevUrlType = urlType;
 		int prevModelType = modelType;
 		url = compound.getString("CustomSkinUrl");
@@ -89,6 +89,9 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 		if(!prevUrl.equals(url) || prevUrlType != urlType || prevModelType != modelType){
 			loaded = false;
 			playerLoaded = false;
+		}
+		if(!prevCloakUrl.equals(cloakUrl)){
+			cloakLoaded = false;
 		}
 	}
 
@@ -176,6 +179,7 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 		data.readFromNBT(this.writeToNBT());
 		data.playerLoaded = playerLoaded;
 		data.player = player;
+		data.cloakLoaded = cloakLoaded;
 		return data;
 	}
 

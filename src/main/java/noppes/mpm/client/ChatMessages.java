@@ -216,13 +216,13 @@ public class ChatMessages {
 					return;
 				}
 				if((username +": " + message).equals(result)){
-					System.out.println("succes: " + toParse);
+					System.out.println("success: " + toParse);
 					return;
 				}
 			}
 		}
 		if(result.isEmpty())
-			System.out.println("succes: " + toParse);
+			System.out.println("success: " + toParse);
 		else
 			System.err.println("failed: " + toParse);
 	}

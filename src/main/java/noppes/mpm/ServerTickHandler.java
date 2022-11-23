@@ -76,6 +76,7 @@ public class ServerTickHandler {
 			ModelData data = PlayerDataController.instance.getPlayerData(p);
 			data.loaded = false;
 			data.playerLoaded = false;
+			data.cloakLoaded = false;
 		}
 	}
 

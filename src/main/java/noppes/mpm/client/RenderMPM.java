@@ -38,11 +38,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.scoreboard.Scoreboard;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StringUtils;
 import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.MinecraftForgeClient;
 import noppes.mpm.ModelData;
+import noppes.mpm.ModelPartData;
 import noppes.mpm.PlayerDataController;
 import noppes.mpm.client.model.ModelMPM;
 import noppes.mpm.client.model.ModelRenderPassHelper;
@@ -219,6 +221,31 @@ public class RenderMPM extends RenderPlayer{
 		this.modelBipedMain.onGround = 0.0F;
 		this.modelBipedMain.setRotationAngles(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F, player);
 		this.modelBipedMain.renderArms(player, 0.0625F, true);
+	}
+
+	public ResourceLocation loadCapeResource(AbstractClientPlayer player) {
+		String url = data.cloakUrl;
+		ResourceLocation location;
+		if (url != null && !url.isEmpty()) {
+			if (!url.startsWith("http://") && !url.startsWith("https://")) {
+				location = new ResourceLocation(url);
+				try {
+					Minecraft.getMinecraft().getTextureManager().bindTexture(location);
+				} catch (Exception e) {
+					// No Texture Found
+					location = ModelPartData.defaultCape;
+				}
+				// player.func_152121_a(Type.CAPE, location);
+			} else {
+				location = new ResourceLocation("cape/" + url.hashCode());
+				// player.func_152121_a(MinecraftProfileTexture.Type.CAPE, location);
+				TextureManager texturemanager = Minecraft.getMinecraft().getTextureManager();
+				ITextureObject object = new ImageDownloadAlt(null, url, ModelPartData.defaultCape, new ImageBufferDownloadAlt(false));
+				texturemanager.loadTexture(location, object);
+			}
+			return location;
+		}
+		return null;
 	}
 
 	public void renderItem(EntityPlayer par1AbstractClientPlayer) {

@@ -20,9 +20,7 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
-import noppes.mpm.ModelData;
-import noppes.mpm.MorePlayerModels;
-import noppes.mpm.PlayerDataController;
+import noppes.mpm.*;
 import noppes.mpm.constants.EnumAnimation;
 import org.lwjgl.opengl.GL11;
 
@@ -30,6 +28,7 @@ public class RenderEvent {
 	public static RenderEvent Instance;
 	public static RenderMPM renderer = new RenderMPM();
 	public static long lastSkinTick = 0;
+	public static long lastCapeTick = 0;
 	public final static long MaxSkinTick = 6;
 	private ModelData data;
 
@@ -89,13 +88,21 @@ public class RenderEvent {
 			GL11.glRotatef(60 * ticks, 1, 0, 0);
 			GL11.glTranslatef(0, -12 * scale * 0.065f, 0);
 		}
+		if(event.renderCape){
+			if(!data.cloakLoaded && RenderEvent.lastCapeTick > RenderEvent.MaxSkinTick){
+				data.cloakTexture = renderer.loadCapeResource((AbstractClientPlayer) event.entityPlayer);
+				RenderEvent.lastCapeTick = 0;
+				data.cloakLoaded = true;
+			}
+		}
 		event.renderItem = false;
 		event.renderHelmet = false;
 		renderer.renderItem(event.entityPlayer);
 		renderer.renderHelmet(event.entityPlayer);
 		if(MorePlayerModels.EnableBackItem)
 			renderer.renderBackitem(event.entityPlayer);
-		GL11.glTranslatef(0, data.getBodyY(), 0); //cape fix
+
+		GL11.glTranslatef(0, data.getBodyY(), 0); // Cape Fix
 	}
 
 	@SubscribeEvent

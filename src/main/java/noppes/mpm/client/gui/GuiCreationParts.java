@@ -27,6 +27,7 @@ public class GuiCreationParts extends GuiCreationScreenInterface implements ITex
 			new GuiPartBreasts(),
 			new GuiPart(EnumParts.WINGS).setTypes(new String[]{"gui.none","1","2","3","4","5","6","7","8","9",
 					"10","11","12","13","14","15"}),
+			new GuiPartCape(),
 			new GuiPart(EnumParts.FIN).setTypes(new String[]{"gui.none", "1","2","3","4","5","6"}),
 			new GuiPartParticles(),
 			new GuiPartLegs(),
@@ -98,6 +99,9 @@ public class GuiCreationParts extends GuiCreationScreenInterface implements ITex
 	public void unFocused(GuiNpcTextField textfield) {
 		if(textfield.id == 23){
 
+		}
+		if(parts[selected] != null){
+			parts[selected].unFocused(textfield);
 		}
 	}
 
@@ -184,6 +188,10 @@ public class GuiCreationParts extends GuiCreationScreenInterface implements ITex
 		public GuiPart setTypes(String[] types){
 			this.types = types;
 			return this;
+		}
+
+		protected void unFocused(GuiNpcTextField textfield) {
+
 		}
 	}
 	class GuiPartTail extends GuiPart{
@@ -314,6 +322,47 @@ public class GuiCreationParts extends GuiCreationScreenInterface implements ITex
 			GuiCreationParts.this.addLabel(new GuiNpcLabel(22, "gui.pattern", guiLeft + 102, y + 5, 0xFFFFFF));
 			GuiCreationParts.this.addButton(new GuiButtonBiDirectional(22, guiLeft + 145, y, 100, 20, new String[]{"gui.both","gui.left","gui.right"}, data.pattern));
 			return y;
+		}
+	}
+	class GuiPartCape extends GuiPart{
+		public GuiPartCape() {
+			super(EnumParts.CAPE);
+			types = new String[]{"gui.none", "gui.show"};
+			hasPlayerOption = false;
+		}
+
+		@Override
+		public int initGui(){
+			int y = guiTop + 50;
+			if(data == null || !data.playerTexture || !noPlayerTypes){
+				GuiCreationParts.this.addLabel(new GuiNpcLabel(20, "gui.type", guiLeft + 102, y + 5, 0xFFFFFF));
+				GuiCreationParts.this.addButton(new GuiButtonBiDirectional(20, guiLeft + 145, y, 100, 20, types, data == null?0:data.type + 1));
+				y += 25;
+			}
+			if(data != null && data.type == 1){
+				GuiCreationParts.this.addLabel(new GuiNpcLabel(300, "config.capeurl", guiLeft + 102, y + 5, 0xFFFFFF));
+				GuiCreationParts.this.addTextField(new GuiNpcTextField(300, GuiCreationParts.this, guiLeft + 155, y, 160, 20, playerdata.cloakUrl));
+			}
+			return y;
+		}
+
+		@Override
+		protected void actionPerformed(GuiButton btn) {
+			int i = ((GuiNpcButton)btn).getValue();
+			if(btn.id == 20){
+				playerdata.cloakUrl = "";
+				playerdata.cloakLoaded = false;
+				playerdata.cloak = (byte)i;
+			}
+			super.actionPerformed(btn);
+		}
+
+		@Override
+		public void unFocused(GuiNpcTextField guiNpcTextField) {
+			if(guiNpcTextField.id == 300){
+				playerdata.cloakUrl = guiNpcTextField.getText();
+				playerdata.cloakLoaded = false;
+			}
 		}
 	}
 	class GuiPartLegs extends GuiPart{
