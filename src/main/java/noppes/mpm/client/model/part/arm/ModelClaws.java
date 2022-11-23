@@ -16,7 +16,7 @@ public class ModelClaws extends ModelPartInterface {
 	public ModelClaws(ModelMPM base, boolean rightArm) {
 		super(base);
 		this.rightArm = rightArm;
-		claw = new Model2DRenderer(base, 0, 16, 4, 4, 64, 32);
+		claw = new Model2DRenderer(base, 0, 16, 4, 4);
 		if(rightArm)
 			claw.setRotationPoint(-2F, 14f, -2);
 		else
@@ -29,14 +29,14 @@ public class ModelClaws extends ModelPartInterface {
 	@Override
 	public void initData(ModelData data) {
 		ModelPartData config = data.getPartData(EnumParts.CLAWS);
-		if(config == null)
+		if(config == null || rightArm && config.pattern == 1 || !rightArm && config.pattern == 2)
 		{
 			isHidden = true;
 			return;
 		}
 		color = config.color;
 		isHidden = false;
-		claw.isHidden = (this.rightArm && config.pattern == 1) || (!this.rightArm && config.pattern == 2);
+
 		if(!config.playerTexture){
 			location = (ResourceLocation) config.getResource();
 		}
