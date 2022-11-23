@@ -9,6 +9,8 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.ResourceLocation;
 import noppes.mpm.ModelData;
 import noppes.mpm.ModelPartConfig;
 import noppes.mpm.ModelPartData;
@@ -384,7 +386,9 @@ public class ModelMPM extends ModelBiped{
     		GL11.glPopMatrix();
     	}
         renderLegs(par1Entity, par7);
-        
+		if(par1Entity instanceof EntityPlayer){
+			renderCloak((EntityPlayer) par1Entity, par7);
+		}
     }
     @Override
     public void setRotationAngles(float par1, float par2, float par3, float par4, float par5, float par6, Entity entity)
@@ -684,6 +688,83 @@ public class ModelMPM extends ModelBiped{
 		}
 		GL11.glPopMatrix();
 	}
+
+	public double field_20066_r;
+	public double field_20065_s;
+	public double field_20064_t;
+	public double field_20063_u;
+	public double field_20062_v;
+	public double field_20061_w;
+
+	public void cloakUpdate(AbstractClientPlayer player) {
+		field_20066_r = field_20063_u;
+		field_20065_s = field_20062_v;
+		field_20064_t = field_20061_w;
+		double d = player.posX - field_20063_u;
+		double d1 = player.posY - field_20062_v;
+		double d2 = player.posZ - field_20061_w;
+		double d3 = 10D;
+		if (d > d3) {
+			field_20066_r = field_20063_u = player.posX;
+		}
+		if (d2 > d3) {
+			field_20064_t = field_20061_w = player.posZ;
+		}
+		if (d1 > d3) {
+			field_20065_s = field_20062_v = player.posY;
+		}
+		if (d < -d3) {
+			field_20066_r = field_20063_u = player.posX;
+		}
+		if (d2 < -d3) {
+			field_20064_t = field_20061_w = player.posZ;
+		}
+		if (d1 < -d3) {
+			field_20065_s = field_20062_v = player.posY;
+		}
+		field_20063_u += d * 0.25D;
+		field_20061_w += d2 * 0.25D;
+		field_20062_v += d1 * 0.25D;
+	}
+
+	public void renderCloak(EntityPlayer npc, float f){
+		if (!data.cloakUrl.isEmpty() && !isArmor)
+		{
+			if(data.cloakLocation == null){
+				data.cloakLocation = new ResourceLocation("moreplayermodels:textures/skins/steve.png");
+				// data.cloakLocation = new ResourceLocation(data.cloakUrl);
+			}
+			ClientProxy.bindTexture((ResourceLocation) data.cloakLocation);
+			GL11.glPushMatrix();
+			GL11.glTranslatef(0.0F, 0.0F, 0.125F);
+			double d = (field_20066_r + (field_20063_u - field_20066_r) * (double)f) - (npc.prevPosX + (npc.posX - npc.prevPosX) * (double)f);
+			double d1 = (field_20065_s + (field_20062_v - field_20065_s) * (double)f) - (npc.prevPosY + (npc.posY - npc.prevPosY) * (double)f);
+			double d2 = (field_20064_t + (field_20061_w - field_20064_t) * (double)f) - (npc.prevPosZ + (npc.posZ - npc.prevPosZ) * (double)f);
+			float f11 = npc.prevRenderYawOffset + (npc.renderYawOffset - npc.prevRenderYawOffset) * f;
+			double d3 = MathHelper.sin((f11 * 3.141593F) / 180F);
+			double d4 = -MathHelper.cos((f11 * 3.141593F) / 180F);
+			float f14 = (float)(d * d3 + d2 * d4) * 100F;
+			float f15 = (float)(d * d4 - d2 * d3) * 100F;
+			if (f14 < 0.0F)
+			{
+				f14 = 0.0F;
+			}
+			float f16 = npc.prevRotationYaw + (npc.rotationYaw - npc.prevRotationYaw) * f;
+			float f13 = 5f;
+			if (npc.isSneaking())
+			{
+				f13 += 25F;
+			}
+
+			GL11.glRotatef(6F + f14 / 2.0F + f13, 1.0F, 0.0F, 0.0F);
+			GL11.glRotatef(f15 / 2.0F, 0.0F, 0.0F, 1.0F);
+			GL11.glRotatef(-f15 / 2.0F, 0.0F, 1.0F, 0.0F);
+			GL11.glRotatef(180F, 0.0F, 1.0F, 0.0F);
+			super.renderCloak(0.0625F);
+			GL11.glPopMatrix();
+		}
+	}
+
 	@Override
     public ModelRenderer getRandomModelBox(Random par1Random)
     {

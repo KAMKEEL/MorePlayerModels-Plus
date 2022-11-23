@@ -1,11 +1,9 @@
 package noppes.mpm;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.lang.reflect.Method;
 import java.security.MessageDigest;
-import java.util.UUID;
 import java.util.concurrent.*;
 
 import net.minecraft.entity.Entity;
@@ -16,7 +14,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
 import noppes.mpm.constants.EnumAnimation;
@@ -43,8 +41,11 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 
 	public byte urlType = 0;	//	0:url, 1:url64
 	public String url= "";
+	public String cloakUrl = "";
 	public String displayName = "";
 	public int modelType = 0; 	// 	0: Steve, 1: Steve64, 2: Alex
+
+	public ResourceLocation cloakLocation;
 
 	public ModelData(){
 
@@ -61,7 +62,7 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 
 		compound.setString("CustomSkinUrl", url);
 		compound.setByte("UrlType", urlType);
-
+		compound.setString("CloakUrl", cloakUrl);
 
 		return compound;
 	}
@@ -81,6 +82,7 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 		url = compound.getString("CustomSkinUrl");
 		urlType = compound.getByte("UrlType");
 		modelType = compound.getInteger("ModelType");
+		cloakUrl = compound.getString("CloakUrl");
 
 		setAnimation(compound.getInteger("Animation"));
 		
