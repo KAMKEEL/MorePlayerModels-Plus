@@ -42,28 +42,12 @@ public class ModelPartConfig {
 		scaleZ = scaleX = x;
 		scaleY = y;
 	}
-	
 	public float checkValue(float given, float min, float max){
 		if(given < min)
 			return min;
 		if(given > max)
 			return max;
 		return given;
-	}
-
-	public void setTranslate(float transX, float transY, float transZ) {
-		this.transX = transX;
-		this.transY = transY;
-		this.transZ = transZ;
-	}
-
-	public void copyValues(ModelPartConfig config) {
-		scaleX = config.scaleX;
-		scaleY = config.scaleY;
-		scaleZ = config.scaleZ;
-		transX = config.transX;
-		transY = config.transY;
-		transZ = config.transZ;
 	}
 
 }

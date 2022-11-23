@@ -122,7 +122,6 @@ public class ModelDataShared{
 				parts.put(e, part);
 		}
 		this.parts = parts;
-		updateTransate();
 	}
 
 	private void setEntityClass(String string) {
@@ -137,30 +136,6 @@ public class ModelDataShared{
 			
 		}
 	}
-
-	private void updateTransate(){
-		for(EnumParts part : EnumParts.values()){
-			ModelPartConfig config = getPartConfig(part);
-			if(config == null)
-				continue;
-			if(part == EnumParts.HEAD){
-				config.setTranslate(0, getBodyY(), 0);
-			}
-			else if(part == EnumParts.ARMS){
-				ModelPartConfig body = getPartConfig(EnumParts.BODY);
-				float x = (1 - body.scaleX) * 0.25f + (1 - config.scaleX) * 0.075f;
-				float y = getBodyY() + (1 - config.scaleY) * -0.1f;
-				config.setTranslate(-x, y, 0);
-			}
-			else if(part == EnumParts.LEGS){
-				config.setTranslate((config.scaleX) * 0.125f - 0.113f, getLegsY(), 0);
-			}
-			else if(part == EnumParts.BODY){
-				config.setTranslate(0, getBodyY(), 0);
-			}
-		}
-	}
-
 
 
 	public void setEntityClass(Class<? extends EntityLivingBase> entityClass){
@@ -203,10 +178,10 @@ public class ModelDataShared{
 	}
 
 	public float getBodyY(){
-//		if(legParts.type == 3)
-//			return (0.9f - body.scaleY) * 0.75f + getLegsY();
-//		if(legParts.type == 3)
-//			return (0.5f - body.scaleY) * 0.75f + getLegsY();
+		if(legParts.type == 3)
+			return (0.9f - body.scaleY) * 0.75f + getLegsY();
+		if(legParts.type == 3)
+			return (0.5f - body.scaleY) * 0.75f + getLegsY();
 		return (1 - body.scaleY) * 0.75f + getLegsY();
 	}
 

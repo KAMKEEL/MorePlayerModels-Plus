@@ -78,40 +78,13 @@ public class GuiCreationScale extends GuiCreationScreenInterface implements ISli
 			int percent = (int) (50 + slider.sliderValue * 100);
 			slider.setString(percent + "%");
 			ModelPartConfig config = playerdata.getPartConfig(selected);
-			
-			if(slider.id == 10){
+
+			if(slider.id == 10)
 				config.scaleX = slider.sliderValue + 0.5f;
-			}
-			if(slider.id == 11){
+			if(slider.id == 11)
 				config.scaleY = slider.sliderValue + 0.5f;
-			}
-			if(slider.id == 12){
+			if(slider.id == 12)
 				config.scaleZ = slider.sliderValue + 0.5f;
-			}
-			updateTransate();
-		}
-	}
-	
-	private void updateTransate(){
-		for(EnumParts part : EnumParts.values()){
-			ModelPartConfig config = playerdata.getPartConfig(part);
-			if(config == null)
-				continue;
-			if(part == EnumParts.HEAD){
-				config.setTranslate(0, playerdata.getBodyY(), 0);
-			}
-			else if(part == EnumParts.ARMS){
-				ModelPartConfig body = playerdata.getPartConfig(EnumParts.BODY);
-				float x = (1 - body.scaleX) * 0.25f + (1 - config.scaleX) * 0.075f;
-				float y = playerdata.getBodyY() + (1 - config.scaleY) * -0.1f;
-				config.setTranslate(-x, y, 0);
-			}
-			else if(part == EnumParts.LEGS){
-				config.setTranslate((config.scaleX) * 0.125f - 0.113f, playerdata.getLegsY(), 0);
-			}
-			else if(part == EnumParts.BODY){
-				config.setTranslate(0, playerdata.getBodyY(), 0);
-			}
 		}
 	}
 
