@@ -338,8 +338,9 @@ public class GuiCreationParts extends GuiCreationScreenInterface implements ITex
 			int y = super.initGui();
 			if(data == null)
 				return y;
+			y += 5;
 			GuiCreationParts.this.addLabel(new GuiNpcLabel(300, "config.capeurl", guiLeft + 102, y + 5, 0xFFFFFF));
-			GuiCreationParts.this.addTextField(new GuiNpcTextField(300, GuiCreationParts.this, guiLeft + 155, y, 160, 20, playerdata.cloakUrl));
+			GuiCreationParts.this.addTextField(new GuiNpcTextField(300, GuiCreationParts.this, guiLeft + 155, y, 120, 20, playerdata.cloakUrl));
 			return y;
 		}
 
