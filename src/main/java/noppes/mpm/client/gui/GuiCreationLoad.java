@@ -50,7 +50,7 @@ public class GuiCreationLoad extends GuiCreationScreenInterface implements ICust
     	addScroll(scroll);
     	
     	addButton(new GuiNpcButton(10, guiLeft, guiTop + ySize - 46, 120, 20, "gui.remove"));
-		addButton(new GuiNpcButton(310, guiLeft + 124, guiTop + ySize - 24, 60, 20, "gui.restore"));
+		addButton(new GuiNpcButton(310, guiLeft + 124, guiTop + ySize - 24, 60, 20, "gui.defaults"));
     }
 
     @Override
