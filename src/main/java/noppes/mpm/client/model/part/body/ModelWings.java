@@ -77,6 +77,7 @@ public class ModelWings extends ModelPartInterface {
 		isHidden = false;
 //		lWing.isHidden = rWing.isHidden = config.type == 15;
 //		monarchWings.isHidden = config.type != 15;
+
 		if(!config.playerTexture){
 			location = (ResourceLocation) config.getResource();
 		}
