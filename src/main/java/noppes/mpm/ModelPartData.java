@@ -15,7 +15,7 @@ public class ModelPartData {
 	public boolean playerTexture;
 	public String name;
 	private ResourceLocation location;
-	private String custom;
+	private String custom = "";
 
 	public static final ResourceLocation defaultCape = new ResourceLocation("moreplayermodels:textures/cloak/cloak.png");
 

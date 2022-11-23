@@ -146,12 +146,6 @@ public class GuiCreationScreenInterface extends GuiNPCInterface implements ISubG
 		if(btn.id == 251){
 			openGui(new GuiCreationLimbs());
 		}
-//		if(btn.id == 251){
-//			GuiNpcButton button = (GuiNpcButton) btn;
-//			playerdata.urlType = (byte) button.getValue();
-//			playerdata.loaded = false;
-//			playerdata.playerLoaded = false;
-//		}
     	if(btn.id == 66){
     		close();
     	}
