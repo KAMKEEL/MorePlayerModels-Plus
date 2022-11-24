@@ -15,7 +15,7 @@ public class ModelWings extends ModelPartInterface {
 
 	private Model2DRenderer lWing;
 	private Model2DRenderer rWing;
-	// private final ModelRenderer monarchWings;
+//	private final ModelMonarchWings monarchWings;
 
 	public ModelWings(ModelMPM base) {
 		super(base);
@@ -46,6 +46,12 @@ public class ModelWings extends ModelPartInterface {
 		lWing.rotateAngleX = 0.7141593F;
 		lWing.rotateAngleZ = -0.5090659F;
 
+//		monarchWings.right_monarch.rotateAngleX = 0.7141593F;
+//		monarchWings.right_monarch.rotateAngleZ = 0.5090659F;
+//
+//		monarchWings.left_monarch.rotateAngleX = 0.7141593F;
+//		monarchWings.left_monarch.rotateAngleZ = -0.5090659F;
+
 		float motion = Math.abs(MathHelper.sin(par1 * 0.033F + (float)Math.PI) * 0.4F) * par2;
 		if ((!entity.worldObj.isRemote && !entity.onGround) || motion > 0.05D) {
 			float speed = (float) (0.55f + 0.5f * motion);
@@ -56,11 +62,24 @@ public class ModelWings extends ModelPartInterface {
 
 			lWing.rotateAngleZ -= y * 0.5f * speed;
 			lWing.rotateAngleX += y * 0.5f * speed;
+
+//			monarchWings.right_monarch.rotateAngleX += y * 0.5f * speed;
+//			monarchWings.right_monarch.rotateAngleZ += y * 0.5f * speed;
+//
+//			monarchWings.left_monarch.rotateAngleX += y * 0.5f * speed;
+//			monarchWings.left_monarch.rotateAngleZ -= y * 0.5f * speed;
+
 		} else {
 			lWing.rotateAngleZ += MathHelper.cos(par3 * 0.09F) * 0.05F + 0.05F;
 			rWing.rotateAngleZ -= MathHelper.cos(par3 * 0.09F) * 0.05F + 0.05F;
 			lWing.rotateAngleX += MathHelper.sin(par3 * 0.067F) * 0.05F;
 			rWing.rotateAngleX += MathHelper.sin(par3 * 0.067F) * 0.05F;
+
+//			monarchWings.right_monarch.rotateAngleX += MathHelper.sin(par3 * 0.067F) * 0.05F;
+//			monarchWings.right_monarch.rotateAngleZ -= MathHelper.cos(par3 * 0.09F) * 0.05F + 0.05F;
+//
+//			monarchWings.left_monarch.rotateAngleX += MathHelper.sin(par3 * 0.067F) * 0.05F;
+//			monarchWings.left_monarch.rotateAngleZ += MathHelper.cos(par3 * 0.09F) * 0.05F + 0.05F;
 		}
 	}
 
