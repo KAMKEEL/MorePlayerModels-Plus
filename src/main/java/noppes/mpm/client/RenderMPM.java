@@ -115,8 +115,6 @@ public class RenderMPM extends RenderPlayer{
 
 	@Override
 	public void doRender(AbstractClientPlayer player, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_){
-		if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.RenderPlayerEvent.Pre(player, this, p_76986_9_))) return;
-
 		ItemStack itemstack = player.getHeldItem();
 		this.modelArmorChestplate.heldItemRight = this.modelArmor.heldItemRight = this.modelBipedMain.heldItemRight = itemstack != null ? 1 : 0;
 		if (itemstack != null && player.getItemInUseCount() > 0)
@@ -139,8 +137,6 @@ public class RenderMPM extends RenderPlayer{
 		modelArmorChestplate.isSneak = modelArmor.isSneak = modelBipedMain.isSneak = false;
 		modelArmorChestplate.heldItemRight = modelArmor.heldItemRight = modelBipedMain.heldItemRight = 0;
 		modelArmorChestplate.heldItemLeft = modelArmor.heldItemLeft = modelBipedMain.heldItemLeft = 0;
-
-		net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new RenderPlayerEvent.Post(player, this, p_76986_9_));
 	}
 
 	private void loadTexture(File file, ResourceLocation resource, String par1Str, boolean version, int modelType){
