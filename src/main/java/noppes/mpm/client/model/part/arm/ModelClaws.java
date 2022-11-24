@@ -37,11 +37,11 @@ public class ModelClaws extends ModelPartInterface {
 		color = config.color;
 		isHidden = false;
 
-		if(!config.playerTexture){
+		/*if(!config.playerTexture){
 			location = (ResourceLocation) config.getResource();
 		}
 		else
-			location = null;
+			location = null;*/
 	}
 
 }
