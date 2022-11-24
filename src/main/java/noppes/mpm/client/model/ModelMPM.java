@@ -382,11 +382,11 @@ public class ModelMPM extends ModelBiped{
         renderHead(par1Entity, par7);
         renderArms(par1Entity, par7,false);
         renderBody(par1Entity, par7);
+		renderCloak(par1Entity, par7);
     	if(data.animation == EnumAnimation.BOW){
     		GL11.glPopMatrix();
     	}
         renderLegs(par1Entity, par7);
-		renderCloak(par1Entity, par7);
     }
     @Override
     public void setRotationAngles(float par1, float par2, float par3, float par4, float par5, float par6, Entity entity)
