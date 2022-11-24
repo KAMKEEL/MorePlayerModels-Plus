@@ -3,6 +3,7 @@ package noppes.mpm.client.model.part.arm;
 import net.minecraft.util.ResourceLocation;
 import noppes.mpm.ModelData;
 import noppes.mpm.ModelPartData;
+import noppes.mpm.client.ClientProxy;
 import noppes.mpm.client.model.Model2DRenderer;
 import noppes.mpm.client.model.ModelMPM;
 import noppes.mpm.client.model.ModelPartInterface;
@@ -47,4 +48,9 @@ public class ModelClaws extends ModelPartInterface {
 			location = null;
 	}
 
+	@Override
+	public void renderParts(float par1) {
+		super.renderParts(par1);
+		ClientProxy.bindTexture(entity.getLocationSkin());
+	}
 }

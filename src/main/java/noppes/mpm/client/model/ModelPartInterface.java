@@ -14,7 +14,7 @@ import org.lwjgl.opengl.GL11;
 public abstract class ModelPartInterface extends ModelRenderer {
 
 	public ModelData data;
-	private AbstractClientPlayer entity;
+	public AbstractClientPlayer entity;
 	public float scale = 1;
 	protected ResourceLocation location;
 	public int color = 0xFFFFFF;
@@ -73,7 +73,6 @@ public abstract class ModelPartInterface extends ModelRenderer {
     	if(bo){
 	    	GL11.glColor4f(1, 1, 1, 1);
     	}
-		ClientProxy.bindTexture(entity.getLocationSkin());
     }
 	public void renderParts(float par1) {
 	}
