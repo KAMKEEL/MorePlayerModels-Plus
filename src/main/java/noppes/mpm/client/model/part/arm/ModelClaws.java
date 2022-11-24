@@ -16,7 +16,7 @@ public class ModelClaws extends ModelPartInterface {
 	public ModelClaws(ModelMPM base, boolean rightArm) {
 		super(base);
 		this.rightArm = rightArm;
-		claw = new Model2DRenderer(base, 40, 30, 2, 2, 64, 32);
+		claw = new Model2DRenderer(base, 0, 16, 4, 4);
 		if(rightArm)
 			claw.setRotationPoint(-2F, 14f, -2);
 		else
@@ -40,8 +40,8 @@ public class ModelClaws extends ModelPartInterface {
 		/*if(!config.playerTexture){
 			location = (ResourceLocation) config.getResource();
 		}
-		else*/
-			location = null;
+		else
+			location = null;*/
 	}
 
 }
