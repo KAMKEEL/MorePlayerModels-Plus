@@ -102,6 +102,12 @@ public class RenderEvent {
 			GL11.glRotatef(60 * ticks, 1, 0, 0);
 			GL11.glTranslatef(0, -12 * scale * 0.065f, 0);
 		}
+		event.renderItem = false;
+		event.renderHelmet = false;
+		renderer.renderItem(event.entityPlayer);
+		renderer.renderHelmet(event.entityPlayer);
+		if(MorePlayerModels.EnableBackItem)
+			renderer.renderBackitem(event.entityPlayer);
 		if(event.renderCape){
 			if(!data.cloakLoaded && RenderEvent.lastCapeTick > RenderEvent.MaxSkinTick){
 				data.cloakTexture = renderer.loadCapeResource((AbstractClientPlayer) event.entityPlayer);
@@ -109,13 +115,6 @@ public class RenderEvent {
 				data.cloakLoaded = true;
 			}
 		}
-		event.renderItem = false;
-		event.renderHelmet = false;
-		renderer.renderItem(event.entityPlayer);
-		renderer.renderHelmet(event.entityPlayer);
-		if(MorePlayerModels.EnableBackItem)
-			renderer.renderBackitem(event.entityPlayer);
-
 		GL11.glTranslatef(0, data.getBodyY(), 0); // Cape Fix
 	}
 

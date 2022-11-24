@@ -691,6 +691,7 @@ public class ModelMPM extends ModelBiped{
 		AbstractClientPlayer player = (AbstractClientPlayer) npc;
 		if(!player.isInvisible() && !data.cloakUrl.isEmpty() && !isArmor && data.entityClass == null && data.cloak == 1) {
 			if(data.cloakTexture != null){
+				currentlyPlayerTexture = false;
 				Minecraft.getMinecraft().getTextureManager().bindTexture(data.cloakTexture);
 				GL11.glPushMatrix();
 				GL11.glTranslatef(0.0f, 0.0f, 0.125f);
@@ -714,7 +715,7 @@ public class ModelMPM extends ModelBiped{
 				}
 				final float f8 = player.prevCameraYaw + (player.cameraYaw - player.prevCameraYaw) * 0.0625f;
 				f5 += MathHelper.sin((player.prevDistanceWalkedModified + (player.distanceWalkedModified - player.prevDistanceWalkedModified) * 0.0625f) * 6.0f) * 32.0f * f8;
-				if (player.isSneaking()) {
+				if (player.isSneaking() && data.animation != EnumAnimation.CRAWLING) {
 					f5 += 25.0f;
 				}
 				GL11.glRotatef(6.0f + f6 / 2.0f + f5, 1.0f, 0.0f, 0.0f);
