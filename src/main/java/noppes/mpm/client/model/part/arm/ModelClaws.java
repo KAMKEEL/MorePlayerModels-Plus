@@ -15,6 +15,9 @@ public class ModelClaws extends ModelPartInterface {
 
 	public ModelClaws(ModelMPM base, boolean rightArm) {
 		super(base);
+		textureHeight = base.textureHeight;
+		textureWidth = base.textureWidth;
+
 		this.rightArm = rightArm;
 		claw = new Model2DRenderer(base, 0, 16, 4, 4, 64, 32);
 		if(rightArm)

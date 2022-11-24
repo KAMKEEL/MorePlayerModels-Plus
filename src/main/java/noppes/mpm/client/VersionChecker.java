@@ -42,19 +42,20 @@ public class VersionChecker extends Thread{
         player.addChatMessage(message);
 	}
 	private boolean hasUpdate(){
-
-		try{
-			URL url = new URL("https://dl.dropboxusercontent.com/u/3096920/update/minecraft/1.7/MorePlayerModels.txt");
-	        URLConnection yc = url.openConnection();
-	        BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
-	        String inputLine = in.readLine();
-	        if(inputLine == null)
-	        	return false;
-	        int newVersion = Integer.parseInt(inputLine);
-	        return revision < newVersion;
-		}
-		catch(Exception e){
-		}
 		return false;
+		// REMOVE Update Checker
+//		try{
+//			URL url = new URL("https://dl.dropboxusercontent.com/u/3096920/update/minecraft/1.7/MorePlayerModels.txt");
+//	        URLConnection yc = url.openConnection();
+//	        BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
+//	        String inputLine = in.readLine();
+//	        if(inputLine == null)
+//	        	return false;
+//	        int newVersion = Integer.parseInt(inputLine);
+//	        return revision < newVersion;
+//		}
+//		catch(Exception e){
+//		}
+//		return false;
 	}
 }
