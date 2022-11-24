@@ -46,7 +46,7 @@ public class ServerTickHandler {
 	@SubscribeEvent
 	public void onPlayerTick(TickEvent.PlayerTickEvent event){
 		if(event.side == Side.CLIENT) {
-			if (event.player.ticksExisted == 10) {
+			if (event.player.ticksExisted == 20) {
 				reloadClientSkins();
 			}
 			return;
