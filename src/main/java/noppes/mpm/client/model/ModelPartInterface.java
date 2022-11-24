@@ -73,6 +73,7 @@ public abstract class ModelPartInterface extends ModelRenderer {
     	if(bo){
 	    	GL11.glColor4f(1, 1, 1, 1);
     	}
+		ClientProxy.bindTexture(entity.getLocationSkin());
     }
 	public void renderParts(float par1) {
 	}
