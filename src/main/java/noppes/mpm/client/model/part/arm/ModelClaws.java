@@ -1,5 +1,7 @@
 package noppes.mpm.client.model.part.arm;
 
+import net.minecraft.client.entity.AbstractClientPlayer;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
 import noppes.mpm.ModelData;
 import noppes.mpm.ModelPartData;
@@ -13,6 +15,7 @@ public class ModelClaws extends ModelPartInterface {
 
 	private final Model2DRenderer claw;
 	private final boolean rightArm;
+	private AbstractClientPlayer entity;
 
 	public ModelClaws(ModelMPM base, boolean rightArm) {
 		super(base);
@@ -49,8 +52,15 @@ public class ModelClaws extends ModelPartInterface {
 	}
 
 	@Override
+	public void setData(ModelData data, AbstractClientPlayer entity) {
+		super.setData(data, entity);
+		this.entity = entity;
+	}
+
+	@Override
 	public void renderParts(float par1) {
 		super.renderParts(par1);
 		ClientProxy.bindTexture(entity.getLocationSkin());
+		base.currentlyPlayerTexture = true;
 	}
 }

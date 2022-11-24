@@ -14,7 +14,7 @@ import org.lwjgl.opengl.GL11;
 public abstract class ModelPartInterface extends ModelRenderer {
 
 	public ModelData data;
-	public AbstractClientPlayer entity;
+	private AbstractClientPlayer entity;
 	public float scale = 1;
 	protected ResourceLocation location;
 	public int color = 0xFFFFFF;
