@@ -16,6 +16,7 @@ This mod is an ***update*** to MorePlayerModels and not an add-on. Do not instal
 - 64x64 Skin Textures work on all models
 - 1.8 Skins  (64x64)
 - Alex Model (64x64)
+- Capes Integration!
 - Fix Part Rendering
 - Backported GUI Features
 - Backported New Part Models
@@ -26,11 +27,14 @@ This mod is an ***update*** to MorePlayerModels and not an add-on. Do not instal
 
 ## 🔰 Images:
 
+#### New GUI:
+<img src="images/GUI.png" width="474" height="260"/>
+
 #### POV:
 <img src="images/POV.png" width="474" height="260"/>
 
 #### Steve64:
-<img src="images/Steve64.png" width="474" height="260"/>
+<img src="images/3DSkins.png" width="150" height="260"/>
 
 
 ## 🔗 Want to check out my other projects?
