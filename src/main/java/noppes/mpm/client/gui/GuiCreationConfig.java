@@ -1,6 +1,7 @@
 package noppes.mpm.client.gui;
 
 import java.util.List;
+import java.util.Objects;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
@@ -119,7 +120,7 @@ public class GuiCreationConfig extends GuiCreationScreenInterface implements ITe
 	public void unFocused(GuiNpcTextField guiNpcTextField) {
 		if(guiNpcTextField.id == 52){
 			playerdata.url = guiNpcTextField.getText();
-			if(playerdata.url == ""){
+			if(playerdata.url.trim().equals("")){
 				playerdata.playerLoaded = false;
 			}
 			playerdata.loaded = false;
