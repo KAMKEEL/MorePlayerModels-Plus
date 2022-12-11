@@ -2,6 +2,7 @@ package noppes.mpm;
 
 import java.io.File;
 
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.GameRules;
@@ -35,7 +36,7 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.FMLEventChannel;
 import cpw.mods.fml.common.network.NetworkRegistry;
 
-@Mod(modid = "moreplayermodels", name = "MorePlayerModels", version = "2.0")
+@Mod(modid = "moreplayermodels", name = "MorePlayerModels", version = "2.1")
 public class MorePlayerModels {
 	@ConfigProp
 	public static int Tooltips = 2;
@@ -115,7 +116,6 @@ public class MorePlayerModels {
 				
 		proxy.load();
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, proxy);
-
 		
 		MinecraftForge.EVENT_BUS.register(new ServerEventHandler());
 		FMLCommonHandler.instance().bus().register(new ServerTickHandler());
