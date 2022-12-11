@@ -195,7 +195,7 @@ public class RenderMPM extends RenderPlayer{
 			data.playerLoaded = true;
 			return;
 		}
-		player.func_152121_a(Type.SKIN, null);
+		// player.func_152121_a(Type.SKIN, null);
 	}
 
 	@Override
