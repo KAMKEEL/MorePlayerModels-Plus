@@ -127,28 +127,7 @@ public class RenderMPM extends RenderPlayer{
 
 	@Override
 	public void doRender(AbstractClientPlayer player, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_){
-		ItemStack itemstack = player.getHeldItem();
-		this.modelArmorChestplate.heldItemRight = this.modelArmor.heldItemRight = this.modelBipedMain.heldItemRight = itemstack != null ? 1 : 0;
-		if (itemstack != null && player.getItemInUseCount() > 0)
-		{
-			EnumAction enumaction = itemstack.getItemUseAction();
-
-			if (enumaction == EnumAction.block)
-			{
-				this.modelArmorChestplate.heldItemRight = this.modelArmor.heldItemRight = this.modelBipedMain.heldItemRight = 3;
-			}
-			else if (enumaction == EnumAction.bow)
-			{
-				this.modelArmorChestplate.aimedBow = this.modelArmor.aimedBow = this.modelBipedMain.aimedBow = true;
-			}
-		}
-		modelArmorChestplate.isSneak = modelArmor.isSneak = modelBipedMain.isSneak = player.isSneaking();
-		modelArmorChestplate.isRiding = modelArmor.isRiding = modelBipedMain.isRiding = player.isRiding();
 		super.doRender(player, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
-		modelArmorChestplate.aimedBow = modelArmor.aimedBow = modelBipedMain.aimedBow = false;
-		modelArmorChestplate.isSneak = modelArmor.isSneak = modelBipedMain.isSneak = false;
-		modelArmorChestplate.heldItemRight = modelArmor.heldItemRight = modelBipedMain.heldItemRight = 0;
-		modelArmorChestplate.heldItemLeft = modelArmor.heldItemLeft = modelBipedMain.heldItemLeft = 0;
 	}
 
 	private void loadTexture(File file, ResourceLocation resource, String par1Str, boolean version, int modelType){
