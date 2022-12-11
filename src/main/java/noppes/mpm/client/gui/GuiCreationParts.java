@@ -199,7 +199,7 @@ public class GuiCreationParts extends GuiCreationScreenInterface implements ITex
 		public GuiPartTail() {
 			super(EnumParts.TAIL);
 			types = new String[]{"gui.none", "part.tail", "tail.dragon",
-					"tail.horse", "tail.squirrel", "tail.fin", "tail.rodent", "tail.feather", "tail.fox"};
+					"tail.horse", "tail.squirrel", "tail.fin", "tail.rodent", "tail.feather", "tail.fox", "tail.monkey"};
 		}
 
 		@Override
@@ -211,6 +211,10 @@ public class GuiCreationParts extends GuiCreationScreenInterface implements ITex
 				GuiCreationParts.this.addLabel(new GuiNpcLabel(22, "gui.pattern", guiLeft + 102, y + 5, 0xFFFFFF));
 				GuiCreationParts.this.addButton(new GuiButtonBiDirectional(22, guiLeft + 145, y, 100, 20, new String[]{"tail.wolf", "tail.cat"}, data.pattern));
 			}
+			if(data != null && (data.type == 8 || data.type == 9)){
+				GuiCreationParts.this.addLabel(new GuiNpcLabel(22, "gui.pattern", guiLeft + 102, y + 5, 0xFFFFFF));
+				GuiCreationParts.this.addButton(new GuiButtonBiDirectional(22, guiLeft + 145, y, 100, 20, new String[]{"tail.normal", "tail.wrapped", "tail.large"}, data.pattern));
+			}
 			return y;
 		}
 
@@ -218,12 +222,16 @@ public class GuiCreationParts extends GuiCreationScreenInterface implements ITex
 		protected void actionPerformed(GuiButton btn) {
 			super.actionPerformed(btn);
 			if(btn.id == 22){
-				if(data.pattern == 1){
-					data.setCustomResource("0-1");
-				} else {
-					data.setCustomResource("");
+				if(data != null){
+					if(data.type == 0){
+						if(data.pattern == 1){
+							data.setCustomResource("0-1");
+						} else {
+							data.setCustomResource("");
+						}
+						data.updateTextureLocation();
+					}
 				}
-				data.updateTextureLocation();
 			}
 		}
 	}

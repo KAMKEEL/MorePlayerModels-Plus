@@ -31,7 +31,8 @@ public class ModelTail extends ModelScaleRenderer {
 	private ModelRenderer fin;
 	private ModelRenderer rodent;
 	private ModelRenderer feather;
-	
+	private ModelMonkeyTail monkey;
+
 	private int color = 0xFFFFFF;
 	
 	private ResourceLocation location = null;
@@ -76,6 +77,7 @@ public class ModelTail extends ModelScaleRenderer {
 		this.addChild(rodent = new ModelRodentTail(base));
 		this.addChild(feather = new ModelFeatherTail(base));
 		this.addChild(fox = new ModelCanineTail(base));
+		this.addChild(monkey = new ModelMonkeyTail(base));
 	}
 
 	public void setData(ModelData data, EntityLivingBase entity) {
@@ -123,6 +125,9 @@ public class ModelTail extends ModelScaleRenderer {
 			if(partTail.type == 7){
 				fox.setRotationAngles(par1, par2, par3, par4, par5, par6, entity);
 			}
+			if(partTail.type == 8){
+				monkey.setRotationAngles(par1, par2, par3, par4, par5, par6, entity);
+			}
 		}
 
 		rotationPointZ += base.bipedRightLeg.rotationPointZ + 0.5f;
@@ -150,7 +155,12 @@ public class ModelTail extends ModelScaleRenderer {
 		rodent.isHidden = config.type != 5;
 		feather.isHidden = config.type != 6;
 		fox.isHidden = config.type != 7;
-		
+
+		monkey.isHidden = config.type != 8;
+		monkey.monkey.isHidden = config.pattern != 0;
+		monkey.monkey_wrapped.isHidden = config.pattern != 1;
+		monkey.monkey_large.isHidden = config.pattern != 2;
+
 		if(!config.playerTexture){
 			location = (ResourceLocation) config.getResource();
 		}
