@@ -39,15 +39,15 @@ public class RenderEvent {
 
 	@SubscribeEvent(priority=EventPriority.LOWEST)
 	public void pre(RenderPlayerEvent.Pre event){
-		if(!(event.entity instanceof AbstractClientPlayer))
-			return;
-
 		if(MorePlayerModels.HidePlayerNames && event.entity.riddenByEntity == null){
 			event.entity.riddenByEntity = hideNameSheep;
 		}
+		if(!(event.entity instanceof AbstractClientPlayer))
+			return;
 
 		EntityPlayer player = event.entityPlayer;
-		this.data = PlayerDataController.instance.getPlayerData(player);
+		data = PlayerDataController.instance.getPlayerData(player);
+		renderer.setModelType(data);
 		renderer.setModelData(data, player);
 		setModels(event.renderer);
 		if(!data.loaded && lastSkinTick > MaxSkinTick){
