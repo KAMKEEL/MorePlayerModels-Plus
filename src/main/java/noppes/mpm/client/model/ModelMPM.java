@@ -71,18 +71,6 @@ public class ModelMPM extends ModelBiped{
 	public boolean isAlexArmor;
 	public boolean x64 = false;
 
-	// ModelMPM Presets
-	// Steve
-	public final static ModelMPM steve32 = new ModelMPM(0, 0);
-	public final static ModelMPM steve64 = new ModelMPM(0, false);
-	public final static ModelMPM steveArmorChest = new ModelMPM(1,0);
-	public final static ModelMPM steveArmor = new ModelMPM(0.5F,0);
-
-	// Alex
-	public final static ModelMPM alex = new ModelMPM(0, true);
-	public final static ModelMPM alex32armorChest = new ModelMPM(1,1);
-	public final static ModelMPM alex32armor = new ModelMPM(0.5F,1);
-
 	// Steve 64x64 and Alex 64x64
 	public ModelMPM(float par1, boolean alex) {
 

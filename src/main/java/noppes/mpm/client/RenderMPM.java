@@ -65,6 +65,18 @@ public class RenderMPM extends RenderPlayer{
 	public ModelMPM modelArmor;
 	private ModelData data;
 
+	// ModelMPM Presets
+	// Steve
+	public ModelMPM steve32 = new ModelMPM(0, 0);
+	public ModelMPM steve64 = new ModelMPM(0, false);
+	public ModelMPM steveArmorChest = new ModelMPM(1,0);
+	public ModelMPM steveArmor = new ModelMPM(0.5F,0);
+
+	// Alex
+	public ModelMPM alex = new ModelMPM(0, true);
+	public ModelMPM alex32armorChest = new ModelMPM(1,1);
+	public ModelMPM alex32armor = new ModelMPM(0.5F,1);
+
 	private RendererLivingEntity renderEntity;
 	private EntityLivingBase entity;
 	private ModelRenderPassHelper renderpass = new ModelRenderPassHelper();
@@ -75,17 +87,17 @@ public class RenderMPM extends RenderPlayer{
 	public RenderMPM() {
 		super();
 		this.setRenderManager(RenderManager.instance);
-		this.modelBipedMain = ModelMPM.steve32;
-		this.modelArmor = ModelMPM.steveArmor;
-		this.modelArmorChestplate = ModelMPM.steveArmorChest;
+		this.modelBipedMain = new ModelMPM(0, 0);
+		this.modelArmor = new ModelMPM(0.5f, 0);
+		this.modelArmorChestplate = new ModelMPM(1.0f, 0);
 	}
 
 	public void setModelData(ModelData data, EntityLivingBase entity){
 		this.data = data;
 		this.setModelType(data);
-		if (this.mainModel instanceof ModelMPM) {
-			((ModelMPM) this.mainModel).setPlayerData(this.data, entity);
-		}
+//		if (this.mainModel instanceof ModelMPM) {
+//			((ModelMPM) this.mainModel).setPlayerData(this.data, entity);
+//		}
 		modelBipedMain.setPlayerData(data, entity);
 		modelArmorChestplate.setPlayerData(data, entity);
 		modelArmor.setPlayerData(data, entity);
@@ -181,6 +193,7 @@ public class RenderMPM extends RenderPlayer{
 				map = mc.func_152347_ac().getTextures(mc.func_152347_ac().fillProfileProperties(player.getGameProfile(), false), false);
 			}
 			if (!map.containsKey(Type.SKIN)){
+				player.func_152121_a(Type.SKIN, null);
 				return;
 			}
 
@@ -201,7 +214,9 @@ public class RenderMPM extends RenderPlayer{
 				loadTexture(file, location, profile.getUrl(), false, data.modelType);
 			}
 			data.playerLoaded = true;
+			return;
 		}
+		player.func_152121_a(Type.SKIN, null);
 	}
 
 	@Override
@@ -574,26 +589,26 @@ public class RenderMPM extends RenderPlayer{
 	public void setModelType(ModelData data){
 		int modelVal = data.modelType;
 		if(modelVal ==  1){
-			this.mainModel = ModelMPM.steve64;
-			this.modelBipedMain = ModelMPM.steve64;
-			this.modelArmorChestplate = ModelMPM.steveArmorChest;
-			this.modelArmor = ModelMPM.steveArmor;
+//			this.mainModel = steve64;
+			this.modelBipedMain = steve64;
+			this.modelArmorChestplate = steveArmorChest;
+			this.modelArmor = steveArmor;
 		}
 		else if(modelVal ==  2){
-			this.mainModel = ModelMPM.alex;
-			this.modelBipedMain = ModelMPM.alex;
-			this.modelArmorChestplate = ModelMPM.alex32armorChest;
-			this.modelArmor = ModelMPM.alex32armor;
+//			this.mainModel = alex;
+			this.modelBipedMain = alex;
+			this.modelArmorChestplate = alex32armorChest;
+			this.modelArmor = alex32armor;
 		}
 		else{
-			this.mainModel = ModelMPM.steve32;
-			this.modelBipedMain = ModelMPM.steve32;
-			this.modelArmorChestplate = ModelMPM.steveArmorChest;
-			this.modelArmor = ModelMPM.steveArmor;
+//			this.mainModel = steve32;
+			this.modelBipedMain = steve32;
+			this.modelArmorChestplate = steveArmorChest;
+			this.modelArmor = steveArmor;
 		}
 	}
 
-	public ResourceLocation getDefaultSkin(int modelType){
+	public static ResourceLocation getDefaultSkin(int modelType){
 		ResourceLocation location;
 		if(modelType == 2){
 			location = alexSkin;
