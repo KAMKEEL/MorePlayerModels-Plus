@@ -95,9 +95,6 @@ public class RenderMPM extends RenderPlayer{
 	public void setModelData(ModelData data, EntityLivingBase entity){
 		this.data = data;
 		this.setModelType(data);
-//		if (this.mainModel instanceof ModelMPM) {
-//			((ModelMPM) this.mainModel).setPlayerData(this.data, entity);
-//		}
 		modelBipedMain.setPlayerData(data, entity);
 		modelArmorChestplate.setPlayerData(data, entity);
 		modelArmor.setPlayerData(data, entity);

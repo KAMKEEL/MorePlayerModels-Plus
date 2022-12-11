@@ -47,7 +47,6 @@ public class RenderEvent {
 
 		EntityPlayer player = event.entityPlayer;
 		data = PlayerDataController.instance.getPlayerData(player);
-		renderer.setModelType(data);
 		renderer.setModelData(data, player);
 		setModels(event.renderer);
 		if(!data.loaded && lastSkinTick > MaxSkinTick){
