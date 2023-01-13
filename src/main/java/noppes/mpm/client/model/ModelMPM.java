@@ -551,6 +551,10 @@ public class ModelMPM extends ModelBiped{
 
 		GL11.glPushMatrix();
 
+		if (isAlexArmor) {
+			GL11.glScalef(0.75F,1.0F,1.0F);
+		}
+
     	if(data.animation == EnumAnimation.DANCING){
 			float dancing = entity.ticksExisted / 4f;
 	        GL11.glTranslatef((float)Math.sin(dancing) * 0.025F, (float)Math.abs(Math.cos(dancing)) * 0.125F - 0.02F, 0.0F);
