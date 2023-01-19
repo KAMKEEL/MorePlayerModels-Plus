@@ -69,11 +69,11 @@ public class RenderMPM extends RenderPlayer{
 	// Steve
 	public ModelMPM steve32 = new ModelMPM(0, 0);
 	public ModelMPM steve64 = new ModelMPM(0, false);
+	public ModelMPM alex = new ModelMPM(0, true);
+
 	public ModelMPM steveArmorChest = new ModelMPM(1,0);
 	public ModelMPM steveArmor = new ModelMPM(0.5F,0);
 
-	// Alex
-	public ModelMPM alex = new ModelMPM(0, true);
 	public ModelMPM alex32armorChest = new ModelMPM(1,1);
 	public ModelMPM alex32armor = new ModelMPM(0.5F,1);
 

@@ -54,11 +54,10 @@ public class GuiCreationLimbs extends GuiCreationScreenInterface implements ISli
 		if(selected == EnumParts.HEAD){
 			addLabel(new GuiNpcLabel(140, "gui.hide", guiLeft + 102, y + 5, 0xFFFFFF));
 			addButton(new GuiNpcButton(140, guiLeft + 156, y, 70, 20, arrHide, playerdata.hideHead));
-			if(x64){
-				y += 22;
-				addLabel(new GuiNpcLabel(141, "gui.headwear", guiLeft + 102, y + 5, 0xFFFFFF));
-				addButton(new GuiNpcButton(141, guiLeft + 156, y, 70, 20, arrSolid, playerdata.headwear));
-			}
+
+			y += 22;
+			addLabel(new GuiNpcLabel(141, "gui.headwear", guiLeft + 102, y + 5, 0xFFFFFF));
+			addButton(new GuiNpcButton(141, guiLeft + 156, y, 70, 20, arrSolid, playerdata.headwear));
 		}
 		else if(selected == EnumParts.BODY){
 			addLabel(new GuiNpcLabel(142, "gui.hide", guiLeft + 102, y + 5, 0xFFFFFF));

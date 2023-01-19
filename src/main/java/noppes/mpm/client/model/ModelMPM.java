@@ -107,6 +107,9 @@ public class ModelMPM extends ModelBiped{
 		this.bipedBody.addChild(this.bipedBodywear);
 		// this.bipedBodywear.setRotationPoint(0.0F, 0.0F + par2, 0.0F);
 
+		bodywear = new ModelBodywear(this, 64, 64);
+		this.bipedBody.addChild(bodywear);
+
 		// Steve 64x64 Model or Alex 64x64 Model
 		if (alex){
 			// Alex Version
@@ -176,7 +179,6 @@ public class ModelMPM extends ModelBiped{
 
 		headwear = new ModelHeadwear(this);
 		legs = new ModelLegs(this, (ModelScaleRenderer)bipedRightLeg, (ModelScaleRenderer)bipedLeftLeg, 64, 64);
-		bodywear = new ModelBodywear(this);
 
 		this.bipedBody.addChild(breasts = new ModelBreasts(this, 64, 64));
 		if(!isArmor){
@@ -268,6 +270,9 @@ public class ModelMPM extends ModelBiped{
 		// Body
 		this.bipedBodywear = (new ModelScaleRenderer(this, 0, 0));
 		this.bipedBody.addChild(this.bipedBodywear);
+
+		bodywear = new ModelBodywear(this, 0, 0);
+		this.bipedBody.addChild(bodywear);
 
 		// Arms
 		this.bipedRightArmWear = (new ModelScaleRenderer(this, 0, 0));
@@ -507,25 +512,29 @@ public class ModelMPM extends ModelBiped{
 		// Hide Body
 		((ModelScaleRenderer)this.bipedBody).isHidden = data.hideBody == 1;
 
-		// Hide Bodywear
-		((ModelScaleRenderer)this.bipedBodywear).isHidden = data.bodywear == 0;
 
-		if(bipedBodywear.showModel && !bipedBodywear.isHidden){
-			if(data.bodywear == 1 || isArmor){
-				((ModelScaleRenderer)this.bipedBodywear).setConfig(data.body,x,y,z);
-				((ModelScaleRenderer)this.bipedBodywear).render(f);
-			}
-			else if(data.bodywear == 2){
-				this.bodywear.rotateAngleX = bipedBodywear.rotateAngleX;
-				this.bodywear.rotateAngleY = bipedBodywear.rotateAngleY;
-				this.bodywear.rotateAngleZ = bipedBodywear.rotateAngleZ;
-				this.bodywear.rotationPointX = bipedBodywear.rotationPointX;
-				this.bodywear.rotationPointY = bipedBodywear.rotationPointY;
-				this.bodywear.rotationPointZ = bipedBodywear.rotationPointZ;
-				this.bodywear.setConfig(data.body,x,y,z);
-				this.bodywear.render(f);
-			}
-		}
+		// Hide Bodywear
+		this.bipedBodywear.isHidden = data.bodywear != 1;
+
+		// Hide Solid Bodywear
+		this.bodywear.isHidden = data.bodywear != 2;
+
+//		if(bipedBodywear.showModel && !bipedBodywear.isHidden){
+//			if(data.bodywear == 1 || isArmor){
+//				((ModelScaleRenderer)this.bipedBodywear).setConfig(data.body,x,y,z);
+//				((ModelScaleRenderer)this.bipedBodywear).render(f);
+//			}
+//			else if(data.bodywear == 2){
+//				this.bodywear.rotateAngleX = bipedBodywear.rotateAngleX;
+//				this.bodywear.rotateAngleY = bipedBodywear.rotateAngleY;
+//				this.bodywear.rotateAngleZ = bipedBodywear.rotateAngleZ;
+//				this.bodywear.rotationPointX = bipedBodywear.rotationPointX;
+//				this.bodywear.rotationPointY = bipedBodywear.rotationPointY;
+//				this.bodywear.rotationPointZ = bipedBodywear.rotationPointZ;
+//				this.bodywear.setConfig(data.body,x,y,z);
+//				this.bodywear.render(f);
+//			}
+//		}
     	
 		((ModelScaleRenderer)this.bipedBody).setConfig(body,x,y,z);
 		((ModelScaleRenderer)this.bipedBody).render(f);
@@ -541,6 +550,10 @@ public class ModelMPM extends ModelBiped{
 		float z = 0;
 
 		GL11.glPushMatrix();
+
+		if (isAlexArmor) {
+			GL11.glScalef(0.75F,1.0F,1.0F);
+		}
 
     	if(data.animation == EnumAnimation.DANCING){
 			float dancing = entity.ticksExisted / 4f;
