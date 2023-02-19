@@ -518,23 +518,6 @@ public class ModelMPM extends ModelBiped{
 
 		// Hide Solid Bodywear
 		this.bodywear.isHidden = data.bodywear != 2;
-
-//		if(bipedBodywear.showModel && !bipedBodywear.isHidden){
-//			if(data.bodywear == 1 || isArmor){
-//				((ModelScaleRenderer)this.bipedBodywear).setConfig(data.body,x,y,z);
-//				((ModelScaleRenderer)this.bipedBodywear).render(f);
-//			}
-//			else if(data.bodywear == 2){
-//				this.bodywear.rotateAngleX = bipedBodywear.rotateAngleX;
-//				this.bodywear.rotateAngleY = bipedBodywear.rotateAngleY;
-//				this.bodywear.rotateAngleZ = bipedBodywear.rotateAngleZ;
-//				this.bodywear.rotationPointX = bipedBodywear.rotationPointX;
-//				this.bodywear.rotationPointY = bipedBodywear.rotationPointY;
-//				this.bodywear.rotationPointZ = bipedBodywear.rotationPointZ;
-//				this.bodywear.setConfig(data.body,x,y,z);
-//				this.bodywear.render(f);
-//			}
-//		}
     	
 		((ModelScaleRenderer)this.bipedBody).setConfig(body,x,y,z);
 		((ModelScaleRenderer)this.bipedBody).render(f);
