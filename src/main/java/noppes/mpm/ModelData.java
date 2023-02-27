@@ -26,6 +26,7 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 	public boolean loaded = false;
 	public boolean playerLoaded = false;
 	public boolean cloakLoaded = false;
+	public boolean fixSit = false;
 	public EntityPlayer player = null;
 	
 	public int rev = MorePlayerModels.Revision;
