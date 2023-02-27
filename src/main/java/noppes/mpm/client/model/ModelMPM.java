@@ -342,9 +342,6 @@ public class ModelMPM extends ModelBiped{
     @Override
     public void render(Entity par1Entity, float par2, float par3, float par4, float par5, float par6, float par7)
     {
-		boolean prevRiding = isRiding;
-		isRiding = isRiding || data.animation == EnumAnimation.SITTING;
-
 		if(entityModel != null){
 			if(!isArmor){
 				entityModel.isChild = entity.isChild();
@@ -383,12 +380,12 @@ public class ModelMPM extends ModelBiped{
     		GL11.glPopMatrix();
     	}
         renderLegs(par1Entity, par7);
-
-		isRiding = prevRiding;
-	}
+    }
     @Override
     public void setRotationAngles(float par1, float par2, float par3, float par4, float par5, float par6, Entity entity)
     {
+		isRiding = data.animation == EnumAnimation.SITTING;
+    	
     	if(isSneak && (data.animation == EnumAnimation.CRAWLING || data.isSleeping()))
     		isSneak = false;
     	this.bipedBody.rotationPointZ = 0;
