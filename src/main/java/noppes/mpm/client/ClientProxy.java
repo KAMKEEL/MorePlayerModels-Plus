@@ -1,9 +1,5 @@
 package noppes.mpm.client;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.settings.KeyBinding;
@@ -15,12 +11,12 @@ import net.minecraftforge.common.MinecraftForge;
 import noppes.mpm.CommonProxy;
 import noppes.mpm.MorePlayerModels;
 
+import noppes.mpm.config.ConfigMain;
 import org.lwjgl.input.Keyboard;
 
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
 
 public class ClientProxy extends CommonProxy{
 
@@ -57,7 +53,7 @@ public class ClientProxy extends CommonProxy{
 		FMLCommonHandler.instance().bus().register(new ClientEventHandler());
 		MinecraftForge.EVENT_BUS.register(new RenderEvent());
 		
-		if(MorePlayerModels.EnableUpdateChecker){
+		if(ConfigMain.EnableUpdateChecker){
 			VersionChecker checker = new VersionChecker();
 			checker.start();
 		}

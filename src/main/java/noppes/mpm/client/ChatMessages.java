@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.IChatComponent;
 import noppes.mpm.MorePlayerModels;
 
+import noppes.mpm.config.ConfigClient;
 import org.lwjgl.opengl.GL11;
 
 public class ChatMessages {
@@ -29,7 +30,7 @@ public class ChatMessages {
 	private long lastMessageTime = 0;
 	
 	public void addMessage(String message){
-		if(!MorePlayerModels.EnableChatBubbles)
+		if(!ConfigClient.EnableChatBubbles)
 			return;
 		long time = System.currentTimeMillis();
 		if(message.equals(lastMessage) && lastMessageTime + 1000 > time){

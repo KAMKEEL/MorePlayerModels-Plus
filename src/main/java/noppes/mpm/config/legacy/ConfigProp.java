@@ -1,4 +1,4 @@
-package noppes.mpm.config;
+package noppes.mpm.config.legacy;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

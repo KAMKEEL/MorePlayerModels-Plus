@@ -20,6 +20,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.*;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import noppes.mpm.*;
+import noppes.mpm.config.ConfigClient;
 import noppes.mpm.constants.EnumAnimation;
 import org.lwjgl.opengl.GL11;
 
@@ -39,7 +40,7 @@ public class RenderEvent {
 
 	@SubscribeEvent(priority=EventPriority.LOWEST)
 	public void pre(RenderPlayerEvent.Pre event){
-		if(MorePlayerModels.HidePlayerNames && event.entity.riddenByEntity == null){
+		if(ConfigClient.HidePlayerNames && event.entity.riddenByEntity == null){
 			event.entity.riddenByEntity = hideNameSheep;
 		}
 		if(!(event.entity instanceof AbstractClientPlayer))
@@ -105,7 +106,7 @@ public class RenderEvent {
 		event.renderHelmet = false;
 		renderer.renderItem(event.entityPlayer);
 		renderer.renderHelmet(event.entityPlayer);
-		if(MorePlayerModels.EnableBackItem)
+		if(ConfigClient.EnableBackItem)
 			renderer.renderBackitem(event.entityPlayer);
 		if(event.renderCape){
 			if(!data.cloakLoaded && RenderEvent.lastCapeTick > RenderEvent.MaxSkinTick){
@@ -135,7 +136,7 @@ public class RenderEvent {
 			return;
 
 		Minecraft mc = Minecraft.getMinecraft();
-		if(mc.currentScreen != null || MorePlayerModels.Tooltips == 0)
+		if(mc.currentScreen != null || ConfigClient.Tooltips == 0)
 			return;
 		ItemStack item = mc.thePlayer.getCurrentEquippedItem();
 		if(item == null)
@@ -146,10 +147,10 @@ public class RenderEvent {
 
 		int posX = 4;
 		int posY = 4;
-		if(MorePlayerModels.Tooltips % 2 == 0)
+		if(ConfigClient.Tooltips % 2 == 0)
 			posX = x - 4;
 
-		if(MorePlayerModels.Tooltips > 2)
+		if(ConfigClient.Tooltips > 2)
 			posY = event.resolution.getScaledHeight() - 24;
 
 		mc.fontRenderer.drawStringWithShadow(name, posX, posY, 0xffffff);
@@ -160,7 +161,7 @@ public class RenderEvent {
 
 			x = event.resolution.getScaledWidth() - mc.fontRenderer.getStringWidth(dam);
 
-			if(MorePlayerModels.Tooltips == 2 || MorePlayerModels.Tooltips == 4)
+			if(ConfigClient.Tooltips == 2 || ConfigClient.Tooltips == 4)
 				posX = x - 4;
 
 			mc.fontRenderer.drawStringWithShadow(dam, posX, posY + 12, 0xffffff);
@@ -169,7 +170,7 @@ public class RenderEvent {
 
 	@SubscribeEvent
 	public void selectionBox(DrawBlockHighlightEvent event){
-		if(MorePlayerModels.HideSelectionBox)
+		if(ConfigClient.HideSelectionBox)
 			event.setCanceled(true);
 	}
 }
