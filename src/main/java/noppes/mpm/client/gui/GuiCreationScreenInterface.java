@@ -2,6 +2,7 @@ package noppes.mpm.client.gui;
 
 import java.io.IOException;
 
+import kamkeel.MorePlayerModelsPermissions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -34,7 +35,7 @@ public class GuiCreationScreenInterface extends GuiNPCInterface implements ISubG
 	protected boolean hasSaving = true;
 	public int active = 0;
 
-	private EntityPlayer player;
+	public EntityPlayer player;
 	public int xOffset = 0;
 	public ModelData playerdata;
 
@@ -65,10 +66,14 @@ public class GuiCreationScreenInterface extends GuiNPCInterface implements ISubG
     	Keyboard.enableRepeatEvents(true);
 		guiTop += 2;
     	addButton(new GuiNpcButton(0, guiLeft, guiTop, 60, 20, "gui.config"));
-    	addButton(new GuiNpcButton(1, guiLeft + 62, guiTop, 60, 20, "gui.entity"));
+		if(MorePlayerModelsPermissions.hasPermission(player, MorePlayerModelsPermissions.CONFIG_ENTITY)) {
+			addButton(new GuiNpcButton(1, guiLeft + 62, guiTop, 60, 20, "gui.entity"));
+		}
 
 		if(entity == null){
-			addButton(new GuiNpcButton(2, guiLeft, guiTop + 23, 60, 20, "gui.parts"));
+			if(MorePlayerModelsPermissions.hasPermission(player, MorePlayerModelsPermissions.PARTS)){
+				addButton(new GuiNpcButton(2, guiLeft, guiTop + 23, 60, 20, "gui.parts"));
+			}
 			addButton(new GuiNpcButton(250, guiLeft + 124, guiTop, 60, 20, new String[]{"Steve","Steve64","Alex"}, playerdata.modelType));
 			addButton(new GuiNpcButton(251, guiLeft + 124, guiTop + 23, 60, 20, "gui.limbs"));
 		}
@@ -82,11 +87,19 @@ public class GuiCreationScreenInterface extends GuiNPCInterface implements ISubG
     			return;
     		}
     	}
-    	if(entity == null)
-    		addButton(new GuiNpcButton(3, guiLeft + 62, guiTop + 23, 60, 20, "gui.scale"));
+    	if(entity == null){
+			if(MorePlayerModelsPermissions.hasPermission(player, MorePlayerModelsPermissions.CONFIG_SCALE)) {
+				addButton(new GuiNpcButton(3, guiLeft + 62, guiTop + 23, 60, 20, "gui.scale"));
+			}
+		}
+
     	if(hasSaving){
-    		addButton(new GuiNpcButton(4, guiLeft, guiTop + ySize - 24, 60, 20, "gui.save"));
-    		addButton(new GuiNpcButton(5, guiLeft + 62, guiTop + ySize - 24, 60, 20, "gui.load"));
+			if(MorePlayerModelsPermissions.hasPermission(player, MorePlayerModelsPermissions.CONFIG_SAVE)) {
+				addButton(new GuiNpcButton(4, guiLeft, guiTop + ySize - 24, 60, 20, "gui.save"));
+			}
+			if(MorePlayerModelsPermissions.hasPermission(player, MorePlayerModelsPermissions.CONFIG_LOAD)) {
+				addButton(new GuiNpcButton(5, guiLeft + 62, guiTop + ySize - 24, 60, 20, "gui.load"));
+			}
     	}
     	getButton(active).enabled = false;
 		addButton(unzoom = new GuiNpcButton(666, guiLeft + xSize - 79, guiTop, 20, 20, "-"));

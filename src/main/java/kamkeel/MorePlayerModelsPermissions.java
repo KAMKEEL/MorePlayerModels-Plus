@@ -2,6 +2,7 @@ package kamkeel;
 
 import net.minecraft.entity.player.EntityPlayer;
 import noppes.mpm.MorePlayerModels;
+import noppes.mpm.config.ConfigMain;
 import org.apache.logging.log4j.LogManager;
 
 import java.lang.reflect.InvocationTargetException;
@@ -20,6 +21,7 @@ public class MorePlayerModelsPermissions {
 	public static final Permission CONFIG_SAVE = new Permission("mpm.config.save");
 	public static final Permission CONFIG_LOAD = new Permission("mpm.config.load");
 
+	public static final Permission PARTS = new Permission("mpm.parts");
 	public static final Permission PARTS_BEARD = new Permission("mpm.parts.beard");
 	public static final Permission PARTS_BREAST = new Permission("mpm.parts.breast");
 	public static final Permission PARTS_CAPE = new Permission("mpm.parts.cape");
@@ -63,6 +65,9 @@ public class MorePlayerModelsPermissions {
 	}
 	
 	public static boolean hasPermission(EntityPlayer player, Permission permission){
+		if(!ConfigMain.EnablePermissions){
+			return true;
+		}
 		if(player != null){
 			if(permission != null){
 				if(Instance.bukkit != null){
@@ -74,8 +79,13 @@ public class MorePlayerModelsPermissions {
 	}
 
 	public static boolean hasCustomPermission(EntityPlayer player, String permission){
-		if(Instance.bukkit != null){
-			return Instance.bukkitPermission(player.getCommandSenderName(), permission);
+		if(!ConfigMain.EnablePermissions){
+			return true;
+		}
+		if(player != null){
+			if(Instance.bukkit != null){
+				return Instance.bukkitPermission(player.getCommandSenderName(), permission);
+			}
 		}
 		return false;
 	}

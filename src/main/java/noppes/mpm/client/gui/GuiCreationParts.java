@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
+import kamkeel.MorePlayerModelsPermissions;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.util.StatCollector;
 import noppes.mpm.ModelData;
@@ -22,33 +23,60 @@ import noppes.mpm.constants.EnumParts;
 
 public class GuiCreationParts extends GuiCreationScreenInterface implements ITextfieldListener, ICustomScrollListener{
 	private GuiCustomScroll scroll;
-
-	private GuiPart[] parts = {
-			new GuiPartBreasts(),
-			new GuiPart(EnumParts.WINGS).setTypes(new String[]{"gui.none","1","2","3","4","5","6","7","8","9",
-					"10","11","12","13","14","15"}),
-			new GuiPartCape(),
-			new GuiPart(EnumParts.FIN).setTypes(new String[]{"gui.none", "1","2","3","4","5","6"}),
-			new GuiPartParticles(),
-			new GuiPartLegs(),
-			new GuiPartTail(),
-			new GuiPartSnout(),
-			new GuiPart(EnumParts.EARS).setTypes(new String[]{"gui.none", "gui.normal", "ears.bunny"}),
-			new GuiPartHorns(),
-			new GuiPartHair(),
-			new GuiPart(EnumParts.MOHAWK).setTypes(new String[]{"gui.none", "1", "2"}).noPlayerOptions(),
-			new GuiPartBeard(),
-			new GuiPart(EnumParts.SKIRT).setTypes(new String[]{"gui.none", "gui.normal"}).noPlayerOptions(),
-			new GuiPartClaws(),
-
-	};
+	private ArrayList<GuiPart> partList = new ArrayList<GuiPart>();
 
 	private static int selected = 0;
 
 	public GuiCreationParts(){
-		active = 2;
-		Arrays.sort(parts, new Comparator<GuiPart>(){
+		if(MorePlayerModelsPermissions.hasPermission(player, MorePlayerModelsPermissions.PARTS_BREAST)){
+			partList.add(new GuiPartBreasts());
+		}
+		if(MorePlayerModelsPermissions.hasPermission(player, MorePlayerModelsPermissions.PARTS_WINGS)){
+			partList.add(new GuiPart(EnumParts.WINGS).setTypes(new String[]{"gui.none","1","2","3","4","5","6","7","8","9",
+					"10","11","12","13","14","15"}));
+		}
+		if(MorePlayerModelsPermissions.hasPermission(player, MorePlayerModelsPermissions.PARTS_CAPE)){
+			partList.add(new GuiPartCape());
+		}
+		if(MorePlayerModelsPermissions.hasPermission(player, MorePlayerModelsPermissions.PARTS_FIN)){
+			partList.add(new GuiPart(EnumParts.FIN).setTypes(new String[]{"gui.none", "1","2","3","4","5","6"}));
+		}
+		if(MorePlayerModelsPermissions.hasPermission(player, MorePlayerModelsPermissions.PARTS_PARTICLES)){
+			partList.add(new GuiPartParticles());
+		}
+		if(MorePlayerModelsPermissions.hasPermission(player, MorePlayerModelsPermissions.PARTS_LEGS)){
+			partList.add(new GuiPartLegs());
+		}
+		if(MorePlayerModelsPermissions.hasPermission(player, MorePlayerModelsPermissions.PARTS_TAIL)){
+			partList.add(new GuiPartTail());
+		}
+		if(MorePlayerModelsPermissions.hasPermission(player, MorePlayerModelsPermissions.PARTS_SNOUT)){
+			partList.add(new GuiPartSnout());
+		}
+		if(MorePlayerModelsPermissions.hasPermission(player, MorePlayerModelsPermissions.PARTS_EARS)){
+			partList.add(new GuiPart(EnumParts.EARS).setTypes(new String[]{"gui.none", "gui.normal", "ears.bunny"}));
+		}
+		if(MorePlayerModelsPermissions.hasPermission(player, MorePlayerModelsPermissions.PARTS_HORNS)){
+			partList.add(new GuiPartHorns());
+		}
+		if(MorePlayerModelsPermissions.hasPermission(player, MorePlayerModelsPermissions.PARTS_HAIR)){
+			partList.add(new GuiPartHair());
+		}
+		if(MorePlayerModelsPermissions.hasPermission(player, MorePlayerModelsPermissions.PARTS_MOHAWK)){
+			partList.add(new GuiPart(EnumParts.MOHAWK).setTypes(new String[]{"gui.none", "1", "2"}).noPlayerOptions());
+		}
+		if(MorePlayerModelsPermissions.hasPermission(player, MorePlayerModelsPermissions.PARTS_BEARD)){
+			partList.add(new GuiPartBeard());
+		}
+		if(MorePlayerModelsPermissions.hasPermission(player, MorePlayerModelsPermissions.PARTS_SKIRT)){
+			partList.add(new GuiPart(EnumParts.SKIRT).setTypes(new String[]{"gui.none", "gui.normal"}).noPlayerOptions());
+		}
+		if(MorePlayerModelsPermissions.hasPermission(player, MorePlayerModelsPermissions.PARTS_CLAWS)){
+			partList.add(new GuiPartClaws());
+		}
 
+		active = 2;
+		partList.sort(new Comparator<GuiPart>(){
 			@Override
 			public int compare(GuiPart o1, GuiPart o2) {
 				String s1 = StatCollector.translateToLocal("part." + o1.part.name);
@@ -69,7 +97,7 @@ public class GuiCreationParts extends GuiCreationScreenInterface implements ITex
 
 		if(scroll == null){
 			List<String> list = new ArrayList<String>();
-			for(GuiPart part : parts)
+			for(GuiPart part : partList)
 				list.add(StatCollector.translateToLocal("part." + part.part.name));
 			scroll = new GuiCustomScroll(this, 0);
 			scroll.setUnsortedList(list);
@@ -81,17 +109,17 @@ public class GuiCreationParts extends GuiCreationScreenInterface implements ITex
 		addScroll(scroll);
 
 
-		if(parts[selected] != null){
-			scroll.setSelected(StatCollector.translateToLocal("part." + parts[selected].part.name));
-			parts[selected].initGui();
+		if(partList.get(selected) != null){
+			scroll.setSelected(StatCollector.translateToLocal("part." + partList.get(selected).part.name));
+			partList.get(selected).initGui();
 		}
 	}
 
 	@Override
 	protected void actionPerformed(GuiButton btn) {
 		super.actionPerformed(btn);
-		if(parts[selected] != null){
-			parts[selected].actionPerformed(btn);
+		if(partList.get(selected) != null){
+			partList.get(selected).actionPerformed(btn);
 		}
 	}
 
@@ -100,8 +128,8 @@ public class GuiCreationParts extends GuiCreationScreenInterface implements ITex
 		if(textfield.id == 23){
 
 		}
-		if(parts[selected] != null){
-			parts[selected].unFocused(textfield);
+		if(partList.get(selected) != null){
+			partList.get(selected).unFocused(textfield);
 		}
 	}
 

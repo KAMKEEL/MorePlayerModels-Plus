@@ -2,6 +2,8 @@ package noppes.mpm.client.gui;
 
 import java.util.List;
 
+import kamkeel.MorePlayerModelsPermissions;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 import noppes.mpm.ModelData;
@@ -26,17 +28,23 @@ public class GuiCreationConfig extends GuiCreationScreenInterface implements ITe
 
 		int y = guiTop + 50;
 
-	    addButton(new GuiNpcButton(9, guiLeft + 79, y, 80, 20, new String[]{"gui.default", "config.humanfemale", "config.humanmale", "config.goblinmale"}, playerdata.soundType));
-		addLabel(new GuiNpcLabel(5, "config.sounds", guiLeft, y + 5, 0xFFFFFF));
+		if(MorePlayerModelsPermissions.hasPermission(player, MorePlayerModelsPermissions.CONFIG_SOUND)) {
+			addButton(new GuiNpcButton(9, guiLeft + 79, y, 80, 20, new String[]{"gui.default", "config.humanfemale", "config.humanmale", "config.goblinmale"}, playerdata.soundType));
+			addLabel(new GuiNpcLabel(5, "config.sounds", guiLeft, y + 5, 0xFFFFFF));
+		}
 
-		addTextField(new GuiNpcTextField(52, this, guiLeft + 80, y += 22, 160, 20, playerdata.url));
-		addLabel(new GuiNpcLabel(52, "config.skinurl", guiLeft, y + 5, 0xFFFFFF));
+		if(MorePlayerModelsPermissions.hasPermission(player, MorePlayerModelsPermissions.CONFIG_SKIN)) {
+			addTextField(new GuiNpcTextField(52, this, guiLeft + 80, y += 22, 160, 20, playerdata.url));
+			addLabel(new GuiNpcLabel(52, "config.skinurl", guiLeft, y + 5, 0xFFFFFF));
+		}
 		
     	addButton(new GuiNpcButton(46, guiLeft, y += 32, 80, 20, "config.reloadskins"));
     	addButton(new GuiNpcButton(51, guiLeft + 90, y, 80, 20, "config.editbuttons"));
 
-		addButton(new GuiNpcButton(254, guiLeft + 90, y + 22, 50, 20, new String[]{"url.default", "url.full"}, playerdata.urlType));
-		addLabel(new GuiNpcLabel(254, "config.urltype", guiLeft, y + 27, 0xFFFFFF));
+		if(MorePlayerModelsPermissions.hasPermission(player, MorePlayerModelsPermissions.CONFIG_SKIN)) {
+			addButton(new GuiNpcButton(254, guiLeft + 90, y + 22, 50, 20, new String[]{"url.default", "url.full"}, playerdata.urlType));
+			addLabel(new GuiNpcLabel(254, "config.urltype", guiLeft, y + 27, 0xFFFFFF));
+		}
 
 		addButton(new GuiNpcButton(48, guiLeft + 90 + 144, y += 22, 50, 20, new String[]{"gui.no","gui.yes"}, ConfigClient.EnableChatBubbles?1:0));
 		addLabel(new GuiNpcLabel(48, "config.chatbubbles", guiLeft + 144, y + 5, 0xFFFFFF));

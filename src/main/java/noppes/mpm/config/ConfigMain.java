@@ -18,6 +18,9 @@ public class ConfigMain
     public static Property EnableUpdateCheckerProperty;
     public static boolean EnableUpdateChecker = true;
 
+    public static Property EnablePermissionsProperty;
+    public static boolean EnablePermissions = false;
+
     /**
      *  General Main Properties
      **/
@@ -33,6 +36,9 @@ public class ConfigMain
             // General
             EnableUpdateCheckerProperty = config.get(GENERAL, "Enables Update Checker", true);
             EnableUpdateChecker = EnableUpdateCheckerProperty.getBoolean(true);
+
+            EnablePermissionsProperty = config.get(GENERAL, "Enable Permissions", false);
+            EnablePermissions = EnablePermissionsProperty.getBoolean(false);
 
             // Convert to Legacy
             if(MorePlayerModels.legacyExist){
