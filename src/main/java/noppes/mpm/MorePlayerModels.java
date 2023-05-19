@@ -2,6 +2,7 @@ package noppes.mpm;
 
 import java.io.File;
 
+import kamkeel.MorePlayerModelsPermissions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.GameRules;
@@ -105,6 +106,8 @@ public class MorePlayerModels {
 		
 		MinecraftForge.EVENT_BUS.register(new ServerEventHandler());
 		FMLCommonHandler.instance().bus().register(new ServerTickHandler());
+
+		new MorePlayerModelsPermissions();
 	}
 	@EventHandler
 	public void serverstart(FMLServerStartingEvent event) {
