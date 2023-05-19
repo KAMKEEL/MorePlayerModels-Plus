@@ -78,18 +78,6 @@ public class MorePlayerModelsPermissions {
 		return true;
 	}
 
-	public static boolean hasCustomPermission(EntityPlayer player, String permission){
-		if(!ConfigMain.EnablePermissions){
-			return true;
-		}
-		if(player != null){
-			if(Instance.bukkit != null){
-				return Instance.bukkitPermission(player.getCommandSenderName(), permission);
-			}
-		}
-		return false;
-	}
-
 	private boolean bukkitPermission(String username, String permission) {
 		try {
 			Object player = getPlayer.invoke(null, username);
