@@ -38,7 +38,7 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.FMLEventChannel;
 import cpw.mods.fml.common.network.NetworkRegistry;
 
-@Mod(modid = "moreplayermodels", name = "MorePlayerModels", version = "2.2")
+@Mod(modid = "moreplayermodels", name = "MorePlayerModels", version = "3.0")
 public class MorePlayerModels {
 
 	@SidedProxy(clientSide = "noppes.mpm.client.ClientProxy", serverSide = "noppes.mpm.CommonProxy")
