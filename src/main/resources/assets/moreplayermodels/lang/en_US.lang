@@ -108,6 +108,10 @@ tail.fox=Fox
 tail.cat=Cat
 tail.wolf=Wolf
 tail.feather=Feather
+tail.monkey=Monkey
+tail.normal=Normal
+tail.wrapped=Wrapped
+tail.large=Large
 
 snout.bunny=Bunny
 snout.beak=Beak
