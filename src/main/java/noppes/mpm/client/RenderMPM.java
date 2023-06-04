@@ -3,7 +3,6 @@ package noppes.mpm.client;
 import static net.minecraftforge.client.IItemRenderer.ItemRenderType.EQUIPPED;
 import static net.minecraftforge.client.IItemRenderer.ItemRendererHelper.BLOCK_3D;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -13,10 +12,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.renderer.IImageBuffer;
-import net.minecraft.client.renderer.ImageBufferDownload;
 import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.ThreadDownloadImageData;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderPlayer;
@@ -38,12 +34,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.scoreboard.Scoreboard;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StringUtils;
 import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.client.event.RenderPlayerEvent;
 import noppes.mpm.ModelData;
 import noppes.mpm.ModelPartData;
 import noppes.mpm.PlayerDataController;
@@ -127,13 +121,6 @@ public class RenderMPM extends RenderPlayer{
 		super.doRender(player, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
 	}
 
-	private void loadTexture(File file, ResourceLocation resource, String par1Str, boolean version, int modelType){
-		TextureManager texturemanager = Minecraft.getMinecraft().getTextureManager();
-		ResourceLocation defaultLoc = getDefaultSkin(modelType);
-		ITextureObject object = new ImageDownloadAlt(file, par1Str, defaultLoc, new ImageBufferDownloadAlt(version));
-		texturemanager.loadTexture(resource, object);
-	}
-
 	public void loadResource(AbstractClientPlayer player) {
 		String url = data.url;
 		if(url != null && !url.isEmpty()){
@@ -153,11 +140,11 @@ public class RenderMPM extends RenderPlayer{
 				if (data.urlType == 1) {
 					location = new ResourceLocation("skins64/" + url.hashCode());
 					player.func_152121_a(Type.SKIN, location);
-					loadTexture(null, location, url, true, data.modelType);
+					ClientCacheHandler.getPlayerSkin(url, true, location, null);
 				} else {
 					location = new ResourceLocation("skins/" + url.hashCode());
 					player.func_152121_a(Type.SKIN, location);
-					loadTexture(null, location, url, false, data.modelType);
+					ClientCacheHandler.getPlayerSkin(url, false, location, null);
 				}
 			}
 			return;
@@ -183,11 +170,11 @@ public class RenderMPM extends RenderPlayer{
 			if (data.modelType > 0) {
 				location = new ResourceLocation("skins64/" + profile.getHash());
 				player.func_152121_a(Type.SKIN, location);
-				loadTexture(file, location, profile.getUrl(), true, data.modelType);
+				ClientCacheHandler.getPlayerSkin(profile.getUrl(), true, location, file);
 			} else {
 				location = new ResourceLocation("skins/" + profile.getHash());
 				player.func_152121_a(Type.SKIN, location);
-				loadTexture(file, location, profile.getUrl(), false, data.modelType);
+				ClientCacheHandler.getPlayerSkin(profile.getUrl(), false, location, file);
 			}
 			data.playerLoaded = true;
 			return;

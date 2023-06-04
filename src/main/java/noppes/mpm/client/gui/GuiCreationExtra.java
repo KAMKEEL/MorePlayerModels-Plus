@@ -74,7 +74,7 @@ public class GuiCreationExtra extends GuiCreationScreenInterface implements ICus
 				data.put("Child", new GuiTypeBoolean("Child", entity.isChild()));
 			}
 			else if(base.getId() == 1){
-				byte b = ((NBTTagByte)base).func_150290_f();
+				byte b = ((NBTBase.NBTPrimitive) base).func_150290_f();
 				if(b != 0 && b != 1)
 					continue;
 				if(playerdata.extra.hasKey(name))

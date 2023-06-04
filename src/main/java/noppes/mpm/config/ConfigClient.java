@@ -17,6 +17,9 @@ public class ConfigClient
 
     public final static String CLIENT = "Client";
 
+    public static Property CacheLifeProperty;
+    public static int CacheLife = 30;
+
     public static Property TooltipsProperty;
     public static int Tooltips = 2;
 
@@ -63,6 +66,9 @@ public class ConfigClient
             config.load();
 
             // Client
+            CacheLifeProperty = config.get(CLIENT, "Cache Life", 30, "How long should downloaded skin data be saved client side? (In minutes)");
+            CacheLife = CacheLifeProperty.getInt(30);
+
             TooltipsProperty = config.get(CLIENT, "Tooltips", 2, "Used to pick positioning of tooltip");
             Tooltips = TooltipsProperty.getInt(2);
 
