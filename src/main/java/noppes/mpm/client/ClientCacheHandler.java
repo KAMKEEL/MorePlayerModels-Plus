@@ -1,16 +1,21 @@
 package noppes.mpm.client;
 
+import kamkeel.MorePlayerModelsPermissions;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import noppes.mpm.ModelData;
 import noppes.mpm.config.ConfigClient;
+import noppes.mpm.config.ConfigMain;
+import noppes.mpm.controllers.data.PermissionData;
 import noppes.mpm.util.CacheHashMap;
 
 import java.io.File;
+import java.util.HashMap;
 
 public class ClientCacheHandler {
     private static final CacheHashMap<String, CacheHashMap.CachedObject<ImageData>> imageDataCache = new CacheHashMap<>((long) ConfigClient.CacheLife * 60 * 1000);
     private static final CacheHashMap<String, CacheHashMap.CachedObject<ModelData>> playerData = new CacheHashMap<>((long) ConfigClient.CacheLife * 60 * 1000);
-
+    public static HashMap<String, Boolean> clientPerms = new HashMap<String, Boolean>();
     public static ImageData getPlayerSkin(String directory, boolean x64, ResourceLocation resource, File file) {
         synchronized (imageDataCache) {
             if (!imageDataCache.containsKey(resource.getResourcePath())) {
@@ -38,5 +43,14 @@ public class ClientCacheHandler {
     public static void clearCache() {
         ClientCacheHandler.imageDataCache.clear();
         ClientCacheHandler.playerData.clear();
+        ClientCacheHandler.clientPerms.clear();
     }
+
+    public static boolean hasPermission(MorePlayerModelsPermissions.Permission permission){
+        if(clientPerms.containsKey(permission.name)){
+            return clientPerms.get(permission.name);
+        }
+        return true;
+    }
+
 }

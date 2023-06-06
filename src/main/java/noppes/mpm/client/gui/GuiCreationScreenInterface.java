@@ -13,6 +13,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import noppes.mpm.ModelData;
 import noppes.mpm.PlayerDataController;
 import noppes.mpm.client.Client;
+import noppes.mpm.client.ClientCacheHandler;
 import noppes.mpm.client.gui.util.GuiNPCInterface;
 import noppes.mpm.client.gui.util.GuiNpcButton;
 import noppes.mpm.client.gui.util.GuiNpcLabel;
@@ -27,7 +28,7 @@ import org.lwjgl.input.Mouse;
 
 import static noppes.mpm.client.gui.GuiCreationParts.fixPlayerSkinLegs;
 
-public class GuiCreationScreenInterface extends GuiNPCInterface implements ISubGuiListener, ISliderListener{
+public class GuiCreationScreenInterface extends GuiNPCInterface implements ISubGuiListener, ISliderListener {
 	public static String Message = "";
 	public EntityLivingBase entity;
 	
@@ -57,6 +58,7 @@ public class GuiCreationScreenInterface extends GuiNPCInterface implements ISubG
 
 		player = Minecraft.getMinecraft().thePlayer;
 		this.closeOnEsc = true;
+		Client.sendData(EnumPackets.GET_PERMISSION);
 	}
 
     @Override
@@ -66,12 +68,12 @@ public class GuiCreationScreenInterface extends GuiNPCInterface implements ISubG
     	Keyboard.enableRepeatEvents(true);
 		guiTop += 2;
     	addButton(new GuiNpcButton(0, guiLeft, guiTop, 60, 20, "gui.config"));
-		if(MorePlayerModelsPermissions.hasPermission(player, MorePlayerModelsPermissions.CONFIG_ENTITY)) {
+		if(ClientCacheHandler.hasPermission(MorePlayerModelsPermissions.CONFIG_ENTITY)) {
 			addButton(new GuiNpcButton(1, guiLeft + 62, guiTop, 60, 20, "gui.entity"));
 		}
 
 		if(entity == null){
-			if(MorePlayerModelsPermissions.hasPermission(player, MorePlayerModelsPermissions.PARTS)){
+			if(ClientCacheHandler.hasPermission(MorePlayerModelsPermissions.PARTS)){
 				addButton(new GuiNpcButton(2, guiLeft, guiTop + 23, 60, 20, "gui.parts"));
 			}
 			addButton(new GuiNpcButton(250, guiLeft + 124, guiTop, 60, 20, new String[]{"Steve","Steve64","Alex"}, playerdata.modelType));
@@ -88,16 +90,16 @@ public class GuiCreationScreenInterface extends GuiNPCInterface implements ISubG
     		}
     	}
     	if(entity == null){
-			if(MorePlayerModelsPermissions.hasPermission(player, MorePlayerModelsPermissions.CONFIG_SCALE)) {
+			if(ClientCacheHandler.hasPermission(MorePlayerModelsPermissions.CONFIG_SCALE)) {
 				addButton(new GuiNpcButton(3, guiLeft + 62, guiTop + 23, 60, 20, "gui.scale"));
 			}
 		}
 
     	if(hasSaving){
-			if(MorePlayerModelsPermissions.hasPermission(player, MorePlayerModelsPermissions.CONFIG_SAVE)) {
+			if(ClientCacheHandler.hasPermission(MorePlayerModelsPermissions.CONFIG_SAVE)) {
 				addButton(new GuiNpcButton(4, guiLeft, guiTop + ySize - 24, 60, 20, "gui.save"));
 			}
-			if(MorePlayerModelsPermissions.hasPermission(player, MorePlayerModelsPermissions.CONFIG_LOAD)) {
+			if(ClientCacheHandler.hasPermission(MorePlayerModelsPermissions.CONFIG_LOAD)) {
 				addButton(new GuiNpcButton(5, guiLeft + 62, guiTop + ySize - 24, 60, 20, "gui.load"));
 			}
     	}

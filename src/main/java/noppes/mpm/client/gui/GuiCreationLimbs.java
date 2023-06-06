@@ -4,6 +4,7 @@ import kamkeel.MorePlayerModelsPermissions;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.util.StatCollector;
 import noppes.mpm.ModelPartConfig;
+import noppes.mpm.client.ClientCacheHandler;
 import noppes.mpm.client.gui.util.*;
 import noppes.mpm.constants.EnumParts;
 
@@ -53,7 +54,7 @@ public class GuiCreationLimbs extends GuiCreationScreenInterface implements ISli
 			x64 = true;
 		}
 		if(selected == EnumParts.HEAD){
-			if(MorePlayerModelsPermissions.hasPermission(player, MorePlayerModelsPermissions.CONFIG_HIDE)) {
+			if(ClientCacheHandler.hasPermission(MorePlayerModelsPermissions.CONFIG_HIDE)) {
 				addLabel(new GuiNpcLabel(140, "gui.hide", guiLeft + 102, y + 5, 0xFFFFFF));
 				addButton(new GuiNpcButton(140, guiLeft + 156, y, 70, 20, arrHide, playerdata.hideHead));
 
@@ -63,7 +64,7 @@ public class GuiCreationLimbs extends GuiCreationScreenInterface implements ISli
 			addButton(new GuiNpcButton(141, guiLeft + 156, y, 70, 20, arrSolid, playerdata.headwear));
 		}
 		else if(selected == EnumParts.BODY){
-			if(MorePlayerModelsPermissions.hasPermission(player, MorePlayerModelsPermissions.CONFIG_HIDE)) {
+			if(ClientCacheHandler.hasPermission(MorePlayerModelsPermissions.CONFIG_HIDE)) {
 				addLabel(new GuiNpcLabel(142, "gui.hide", guiLeft + 102, y + 5, 0xFFFFFF));
 				addButton(new GuiNpcButton(142, guiLeft + 156, y, 70, 20, arrHide, playerdata.hideBody));
 			}
@@ -74,7 +75,7 @@ public class GuiCreationLimbs extends GuiCreationScreenInterface implements ISli
 			}
 		}
 		else if(selected == EnumParts.ARMS){
-			if(MorePlayerModelsPermissions.hasPermission(player, MorePlayerModelsPermissions.CONFIG_HIDE)) {
+			if(ClientCacheHandler.hasPermission(MorePlayerModelsPermissions.CONFIG_HIDE)) {
 				addLabel(new GuiNpcLabel(144, "gui.hide", guiLeft + 102, y + 5, 0xFFFFFF));
 				addButton(new GuiNpcButton(144, guiLeft + 156, y, 70, 20, arrMulti, playerdata.hideArms));
 			}
@@ -88,7 +89,7 @@ public class GuiCreationLimbs extends GuiCreationScreenInterface implements ISli
 			}
 		}
 		else if(selected == EnumParts.LEGS){
-			if(MorePlayerModelsPermissions.hasPermission(player, MorePlayerModelsPermissions.CONFIG_HIDE)) {
+			if(ClientCacheHandler.hasPermission(MorePlayerModelsPermissions.CONFIG_HIDE)) {
 				addLabel(new GuiNpcLabel(147, "gui.hide", guiLeft + 102, y + 5, 0xFFFFFF));
 				addButton(new GuiNpcButton(147, guiLeft + 156, y, 70, 20, arrMulti, playerdata.hideLegs));
 			}

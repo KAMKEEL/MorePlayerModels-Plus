@@ -49,19 +49,25 @@ public class PermissionController {
         return permissionMap;
     }
 
-    public NBTTagCompound writeNBT(String uuid){
-        NBTTagCompound nbt = new NBTTagCompound();
-        if(permissionData.containsKey(uuid)){
-            PermissionData permData = permissionData.get(uuid);
-            NBTTagList permList = new NBTTagList();
-            for(MorePlayerModelsPermissions.Permission perm : permData.permissionMap.keySet()){
-                NBTTagCompound permCompound = new NBTTagCompound();
-                permCompound.setString("Name", perm.name);
-                permCompound.setBoolean("Bool", permData.permissionMap.get(perm));
-                permList.appendTag(permCompound);
-            }
-            nbt.setTag("PermissionMap", permList);
+    public NBTTagCompound writeNBT(EntityPlayer player){
+        String uuid = player.getUniqueID().toString();
+        if(!permissionData.containsKey(uuid)){
+            PermissionData playerPerms = new PermissionData(player);
+            playerPerms.updatePermissions();
+            permissionData.put(uuid, playerPerms);
         }
+
+        NBTTagCompound nbt = new NBTTagCompound();
+        PermissionData permData = permissionData.get(uuid);
+        NBTTagList permList = new NBTTagList();
+        for(MorePlayerModelsPermissions.Permission perm : permData.permissionMap.keySet()){
+            NBTTagCompound permCompound = new NBTTagCompound();
+            permCompound.setString("Name", perm.name);
+            permCompound.setBoolean("Bool", permData.permissionMap.get(perm));
+            permList.appendTag(permCompound);
+        }
+        nbt.setTag("PermissionMap", permList);
+
         return nbt;
     }
 }

@@ -9,6 +9,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import noppes.mpm.ModelData;
 import noppes.mpm.MorePlayerModels;
 import noppes.mpm.PlayerDataController;
+import noppes.mpm.client.ClientCacheHandler;
 import noppes.mpm.client.gui.util.GuiNpcButton;
 import noppes.mpm.client.gui.util.GuiNpcLabel;
 import noppes.mpm.client.gui.util.GuiNpcTextField;
@@ -28,12 +29,12 @@ public class GuiCreationConfig extends GuiCreationScreenInterface implements ITe
 
 		int y = guiTop + 50;
 
-		if(MorePlayerModelsPermissions.hasPermission(player, MorePlayerModelsPermissions.CONFIG_SOUND)) {
+		if(ClientCacheHandler.hasPermission(MorePlayerModelsPermissions.CONFIG_SOUND)) {
 			addButton(new GuiNpcButton(9, guiLeft + 79, y, 80, 20, new String[]{"gui.default", "config.humanfemale", "config.humanmale", "config.goblinmale"}, playerdata.soundType));
 			addLabel(new GuiNpcLabel(5, "config.sounds", guiLeft, y + 5, 0xFFFFFF));
 		}
 
-		if(MorePlayerModelsPermissions.hasPermission(player, MorePlayerModelsPermissions.CONFIG_SKIN)) {
+		if(ClientCacheHandler.hasPermission(MorePlayerModelsPermissions.CONFIG_SKIN)) {
 			addTextField(new GuiNpcTextField(52, this, guiLeft + 80, y += 22, 160, 20, playerdata.url));
 			addLabel(new GuiNpcLabel(52, "config.skinurl", guiLeft, y + 5, 0xFFFFFF));
 		}
@@ -41,7 +42,7 @@ public class GuiCreationConfig extends GuiCreationScreenInterface implements ITe
     	addButton(new GuiNpcButton(46, guiLeft, y += 32, 80, 20, "config.reloadskins"));
     	addButton(new GuiNpcButton(51, guiLeft + 90, y, 80, 20, "config.editbuttons"));
 
-		if(MorePlayerModelsPermissions.hasPermission(player, MorePlayerModelsPermissions.CONFIG_SKIN)) {
+		if(ClientCacheHandler.hasPermission(MorePlayerModelsPermissions.CONFIG_SKIN)) {
 			addButton(new GuiNpcButton(254, guiLeft + 90, y + 22, 50, 20, new String[]{"url.default", "url.full"}, playerdata.urlType));
 			addLabel(new GuiNpcLabel(254, "config.urltype", guiLeft, y + 27, 0xFFFFFF));
 		}
