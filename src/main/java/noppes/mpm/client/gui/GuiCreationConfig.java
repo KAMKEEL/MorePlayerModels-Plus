@@ -84,6 +84,7 @@ public class GuiCreationConfig extends GuiCreationScreenInterface implements ITe
 				data.cloakLoaded = false;
     			data.loaded = false;
     		}
+			ClientCacheHandler.clearSkinData();
     	}
     	if(button.id == 47){
 			ConfigClient.EnablePOV = button.getValue() == 1;

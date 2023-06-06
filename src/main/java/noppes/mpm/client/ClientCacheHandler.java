@@ -52,6 +52,11 @@ public class ClientCacheHandler {
         ClientCacheHandler.clientPerms.clear();
     }
 
+    public static void clearSkinData() {
+        ClientCacheHandler.imageDataCache.clear();
+        ClientCacheHandler.playerData.clear();
+    }
+
     public static boolean hasPermission(MorePlayerModelsPermissions.Permission permission){
         if(clientPerms.containsKey(permission.name)){
             return clientPerms.get(permission.name);
