@@ -47,7 +47,7 @@ public class ClientCacheHandler {
         if(clientPerms.containsKey(permission.name)){
             return clientPerms.get(permission.name);
         }
-        return true;
+        return false;
     }
 
 }
