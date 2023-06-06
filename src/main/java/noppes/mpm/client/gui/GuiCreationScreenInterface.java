@@ -41,6 +41,7 @@ public class GuiCreationScreenInterface extends GuiNPCInterface implements ISubG
 	private static float rotation = 0.5f;
 	
 	public GuiCreationScreenInterface(){
+		Client.sendData(EnumPackets.GET_PERMISSION);
 		playerdata = PlayerDataController.instance.getPlayerData(Minecraft.getMinecraft().thePlayer);
 		original = playerdata.writeToNBT();
 		xSize = 400;
@@ -49,7 +50,6 @@ public class GuiCreationScreenInterface extends GuiNPCInterface implements ISubG
 
 		player = Minecraft.getMinecraft().thePlayer;
 		this.closeOnEsc = true;
-		Client.sendData(EnumPackets.GET_PERMISSION);
 	}
 
     @Override
