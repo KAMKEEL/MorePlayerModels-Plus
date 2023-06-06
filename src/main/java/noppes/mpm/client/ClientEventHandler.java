@@ -118,6 +118,7 @@ public class ClientEventHandler {
     	World world = mc.theWorld;
 		if ((this.prevWorld == null || world == null) && this.prevWorld != world) {
 			ClientCacheHandler.clearCache();
+			Client.sendData(EnumPackets.GET_PERMISSION);
 		}
     	if(world != null && prevWorld != world){
 			MorePlayerModels.HasServerSide = false;
