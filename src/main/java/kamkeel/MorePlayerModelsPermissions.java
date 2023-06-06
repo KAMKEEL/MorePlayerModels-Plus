@@ -9,6 +9,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -42,7 +43,6 @@ public class MorePlayerModelsPermissions {
 	private Class<?> bukkit;
 	private Method getPlayer;
 	private Method hasPermission;
-	
 	public MorePlayerModelsPermissions(){
 		Instance = this;
 		try {
@@ -78,6 +78,20 @@ public class MorePlayerModelsPermissions {
 		return true;
 	}
 
+	public static boolean hasPermission(EntityPlayer player, String permission){
+		if(!ConfigMain.EnablePermissions){
+			return true;
+		}
+		if(player != null){
+			if(permission != null){
+				if(Instance.bukkit != null){
+					return Instance.bukkitPermission(player.getCommandSenderName(), permission);
+				}
+			}
+		}
+		return true;
+	}
+
 	private boolean bukkitPermission(String username, String permission) {
 		try {
 			Object player = getPlayer.invoke(null, username);
@@ -93,12 +107,15 @@ public class MorePlayerModelsPermissions {
 	}
 
 	public static class Permission{
-		private static final List<String> permissions = new ArrayList<String>();
+		public static final List<Permission> permissionNode = new ArrayList<Permission>();
+		public static final List<String> permissions = new ArrayList<String>();
 		public String name;
 		public Permission(String name){
 			this.name = name;
-			if(!permissions.contains(name))
+			if(!permissions.contains(name)){
 				permissions.add(name);
+				permissionNode.add(this);
+			}
 		}
 	}
 
