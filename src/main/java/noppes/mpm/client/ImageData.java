@@ -32,6 +32,14 @@ public class ImageData {
         texturemanager.loadTexture(this.location, this.imageDownloadAlt);
     }
 
+    public ImageData(String directory, boolean x64, ResourceLocation resource, File file, ResourceLocation defLoc) {
+        this.location = resource;
+        this.isUrl = true;
+        TextureManager texturemanager = Minecraft.getMinecraft().getTextureManager();
+        this.imageDownloadAlt = new ImageDownloadAlt(file, directory, defLoc, new ImageBufferDownloadAlt(x64));
+        texturemanager.loadTexture(this.location, this.imageDownloadAlt);
+    }
+
     public boolean imageLoaded() {
         if (!this.gotWidthHeight) {
             try {

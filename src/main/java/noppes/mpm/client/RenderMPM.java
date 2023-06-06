@@ -208,10 +208,7 @@ public class RenderMPM extends RenderPlayer{
 				// player.func_152121_a(Type.CAPE, location);
 			} else {
 				location = new ResourceLocation("cape/" + url.hashCode());
-				// player.func_152121_a(MinecraftProfileTexture.Type.CAPE, location);
-				TextureManager texturemanager = Minecraft.getMinecraft().getTextureManager();
-				ITextureObject object = new ImageDownloadAlt(null, url, ModelPartData.defaultCape, new ImageBufferDownloadAlt(false));
-				texturemanager.loadTexture(location, object);
+				ClientCacheHandler.getCapeTexture(url, false, location, null, ModelPartData.defaultCape);
 			}
 			return location;
 		}

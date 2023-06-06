@@ -22,6 +22,15 @@ public class ClientCacheHandler {
         }
     }
 
+    public static ImageData getCapeTexture(String directory, boolean x64, ResourceLocation resource, File file, ResourceLocation defLoc) {
+        synchronized (imageDataCache) {
+            if (!imageDataCache.containsKey(resource.getResourcePath())) {
+                imageDataCache.put(resource.getResourcePath(), new CacheHashMap.CachedObject<>(new ImageData(directory, x64, resource, file, defLoc)));
+            }
+            return imageDataCache.get(resource.getResourcePath()).getObject();
+        }
+    }
+
     public static ModelData getPlayerData(String uuid) {
         synchronized (playerData) {
             if (!playerData.containsKey(uuid)) {
