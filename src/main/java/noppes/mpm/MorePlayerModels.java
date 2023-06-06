@@ -1,14 +1,9 @@
 package noppes.mpm;
 
 import java.io.File;
-import java.util.Set;
 
 import cpw.mods.fml.common.event.FMLServerAboutToStartEvent;
 import kamkeel.MorePlayerModelsPermissions;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockIce;
-import net.minecraft.block.BlockLeavesBase;
-import net.minecraft.block.BlockVine;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.GameRules;
@@ -32,9 +27,6 @@ import noppes.mpm.commands.CommandWave;
 import noppes.mpm.config.ConfigClient;
 import noppes.mpm.config.LoadConfiguration;
 import noppes.mpm.config.legacy.LegacyConfig;
-import noppes.mpm.config.legacy.LegacyLoader;
-import noppes.mpm.config.legacy.ConfigProp;
-import noppes.mpm.constants.EnumAnimation;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
@@ -120,7 +112,7 @@ public class MorePlayerModels {
 	@EventHandler
 	public void setAboutToStart(FMLServerAboutToStartEvent event) {
 		new PermissionController();
-		PermissionController.Instance.clearPermissionData();
+		PermissionController.Instance.reloadPermissionData();
 	}
 
 	@EventHandler

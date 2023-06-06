@@ -78,8 +78,17 @@ public class PacketHandlerServer{
 			Server.sendAssociatedData(player, EnumPackets.SEND_PLAYER_DATA, player.getCommandSenderName(), data.writeToNBT());
 		}
 		else if(type == EnumPackets.GET_PERMISSION){
-			NBTTagCompound nbtTagCompound =  PermissionController.Instance.writeNBT(player);
-			Server.sendData(player, EnumPackets.RECEIVE_PERMISSION, nbtTagCompound);
+			long lastRequest = System.currentTimeMillis();
+			String uuid = player.getUniqueID().toString();
+			if(PermissionController.Instance.lastRequest.containsKey(uuid)){
+				lastRequest = PermissionController.Instance.lastRequest.get(uuid);
+			}
+
+			if(System.currentTimeMillis() - lastRequest > 30 * 60 * 1000){
+				NBTTagCompound nbtTagCompound =  PermissionController.Instance.writeNBT(player);
+				PermissionController.Instance.lastRequest.put(uuid, System.currentTimeMillis());
+				Server.sendData(player, EnumPackets.RECEIVE_PERMISSION, nbtTagCompound);
+			}
 		}
 		else if(type == EnumPackets.ANIMATION){
 

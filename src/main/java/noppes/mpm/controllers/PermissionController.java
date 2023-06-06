@@ -1,37 +1,26 @@
 package noppes.mpm.controllers;
 
 import kamkeel.MorePlayerModelsPermissions;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.command.PlayerSelector;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ChatComponentText;
 import noppes.mpm.controllers.data.PermissionData;
-import noppes.mpm.util.CacheHashMap;
 
-import java.io.*;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.zip.GZIPInputStream;
 
 public class PermissionController {
 
     public static PermissionController Instance;
+    public HashMap<String, Long> lastRequest = new HashMap<>();
     private HashMap<String, PermissionData> permissionData = new HashMap<>();
 
     public PermissionController(){
         Instance = this;
     }
 
-    public void clearPermissionData(){
+    public void reloadPermissionData(){
         permissionData.clear();
+        lastRequest.clear();
     }
 
     public static HashMap<String, Boolean> readNBT(NBTTagCompound compound){
