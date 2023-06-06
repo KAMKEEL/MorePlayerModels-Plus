@@ -3,7 +3,6 @@ package noppes.mpm.client.gui;
 import kamkeel.MorePlayerModelsPermissions;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.util.StatCollector;
-import noppes.mpm.ModelPartConfig;
 import noppes.mpm.client.ClientCacheHandler;
 import noppes.mpm.client.gui.util.*;
 import noppes.mpm.constants.EnumParts;

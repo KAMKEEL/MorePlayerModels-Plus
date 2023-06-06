@@ -4,7 +4,6 @@ import cpw.mods.fml.common.FMLLog;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import noppes.mpm.MorePlayerModels;
-import noppes.mpm.config.legacy.ConfigProp;
 import noppes.mpm.config.legacy.LegacyConfig;
 import noppes.mpm.constants.EnumAnimation;
 import org.apache.logging.log4j.Level;

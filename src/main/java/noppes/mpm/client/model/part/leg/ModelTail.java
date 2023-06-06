@@ -14,7 +14,6 @@ import noppes.mpm.client.model.ModelMPM;
 import noppes.mpm.client.model.ModelScaleRenderer;
 import noppes.mpm.client.model.part.leg.tails.*;
 import noppes.mpm.constants.EnumAnimation;
-
 import noppes.mpm.constants.EnumParts;
 import org.lwjgl.opengl.GL11;
 

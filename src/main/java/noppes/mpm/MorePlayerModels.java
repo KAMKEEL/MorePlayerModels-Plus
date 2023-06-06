@@ -1,42 +1,27 @@
 package noppes.mpm;
 
-import java.io.File;
-
-import cpw.mods.fml.common.event.FMLServerAboutToStartEvent;
-import kamkeel.MorePlayerModelsPermissions;
-import net.minecraft.client.Minecraft;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.GameRules;
-import net.minecraftforge.common.MinecraftForge;
-import noppes.mpm.commands.CommandAngry;
-import noppes.mpm.commands.CommandBow;
-import noppes.mpm.commands.CommandCrawl;
-import noppes.mpm.commands.CommandCry;
-import noppes.mpm.commands.CommandDance;
-import noppes.mpm.commands.CommandHug;
-import noppes.mpm.commands.CommandLove;
-import noppes.mpm.commands.CommandScale;
-import noppes.mpm.commands.CommandSetModel;
-import noppes.mpm.commands.CommandSetName;
-import noppes.mpm.commands.CommandSetUrl;
-import noppes.mpm.commands.CommandSing;
-import noppes.mpm.commands.CommandSit;
-import noppes.mpm.commands.CommandSleep;
-import noppes.mpm.commands.CommandWag;
-import noppes.mpm.commands.CommandWave;
-import noppes.mpm.config.ConfigClient;
-import noppes.mpm.config.LoadConfiguration;
-import noppes.mpm.config.legacy.LegacyConfig;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerAboutToStartEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.FMLEventChannel;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import kamkeel.MorePlayerModelsPermissions;
+import net.minecraft.client.Minecraft;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.GameRules;
+import net.minecraftforge.common.MinecraftForge;
+import noppes.mpm.commands.*;
+import noppes.mpm.config.ConfigClient;
+import noppes.mpm.config.LoadConfiguration;
+import noppes.mpm.config.legacy.LegacyConfig;
 import noppes.mpm.controllers.PermissionController;
+
+import java.io.File;
 
 @Mod(modid = "moreplayermodels", name = "MorePlayerModels+", version = "3.0")
 public class MorePlayerModels {

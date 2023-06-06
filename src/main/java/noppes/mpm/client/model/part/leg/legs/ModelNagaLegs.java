@@ -1,12 +1,11 @@
 package noppes.mpm.client.model.part.leg.legs;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
 import noppes.mpm.client.model.ModelPlaneRenderer;
+import org.lwjgl.opengl.GL11;
 
 public class ModelNagaLegs extends ModelRenderer{
 

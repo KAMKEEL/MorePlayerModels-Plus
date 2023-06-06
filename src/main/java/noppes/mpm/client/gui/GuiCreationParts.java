@@ -1,26 +1,17 @@
 package noppes.mpm.client.gui;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-
 import kamkeel.MorePlayerModelsPermissions;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.util.StatCollector;
 import noppes.mpm.ModelData;
 import noppes.mpm.ModelPartData;
 import noppes.mpm.client.ClientCacheHandler;
-import noppes.mpm.client.gui.util.GuiButtonBiDirectional;
-import noppes.mpm.client.gui.util.GuiColorButton;
-import noppes.mpm.client.gui.util.GuiCustomScroll;
-import noppes.mpm.client.gui.util.GuiNpcButton;
-import noppes.mpm.client.gui.util.GuiNpcButtonYesNo;
-import noppes.mpm.client.gui.util.GuiNpcLabel;
-import noppes.mpm.client.gui.util.GuiNpcTextField;
-import noppes.mpm.client.gui.util.ICustomScrollListener;
-import noppes.mpm.client.gui.util.ITextfieldListener;
+import noppes.mpm.client.gui.util.*;
 import noppes.mpm.constants.EnumParts;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 public class GuiCreationParts extends GuiCreationScreenInterface implements ITextfieldListener, ICustomScrollListener{
 	private GuiCustomScroll scroll;

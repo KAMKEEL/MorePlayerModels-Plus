@@ -1,10 +1,10 @@
 package noppes.mpm.client;
 
-import java.awt.Graphics;
+import net.minecraft.client.renderer.ImageBufferDownload;
+
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
-
-import net.minecraft.client.renderer.ImageBufferDownload;
 
 public class ImageBufferDownloadAlt extends ImageBufferDownload
 {

@@ -1,15 +1,11 @@
 package noppes.mpm;
 
-import java.util.HashMap;
-
-import net.minecraft.entity.EntityAgeable;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.world.World;
 import noppes.mpm.constants.EnumParts;
+
+import java.util.HashMap;
 
 
 public class ModelDataShared{

@@ -1,7 +1,5 @@
 package noppes.mpm.client.gui;
 
-import java.io.IOException;
-
 import kamkeel.MorePlayerModelsPermissions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -14,15 +12,8 @@ import noppes.mpm.ModelData;
 import noppes.mpm.PlayerDataController;
 import noppes.mpm.client.Client;
 import noppes.mpm.client.ClientCacheHandler;
-import noppes.mpm.client.gui.util.GuiNPCInterface;
-import noppes.mpm.client.gui.util.GuiNpcButton;
-import noppes.mpm.client.gui.util.GuiNpcLabel;
-import noppes.mpm.client.gui.util.GuiNpcSlider;
-import noppes.mpm.client.gui.util.ISliderListener;
-import noppes.mpm.client.gui.util.ISubGuiListener;
-import noppes.mpm.client.gui.util.SubGuiInterface;
+import noppes.mpm.client.gui.util.*;
 import noppes.mpm.constants.EnumPackets;
-
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 

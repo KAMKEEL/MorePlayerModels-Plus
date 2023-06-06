@@ -1,13 +1,10 @@
 package noppes.mpm.client.model.part.body;
 
-import net.minecraft.client.model.*;
-import net.minecraft.entity.*;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.entity.Entity;
 import noppes.mpm.ModelData;
-import noppes.mpm.ModelPartData;
 import noppes.mpm.client.model.ModelMPM;
 import noppes.mpm.client.model.ModelPartInterface;
-import noppes.mpm.constants.EnumParts;
 
 public class ModelCape extends ModelPartInterface
 {

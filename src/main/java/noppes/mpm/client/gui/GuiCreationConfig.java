@@ -1,13 +1,9 @@
 package noppes.mpm.client.gui;
 
-import java.util.List;
-
 import kamkeel.MorePlayerModelsPermissions;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 import noppes.mpm.ModelData;
-import noppes.mpm.MorePlayerModels;
 import noppes.mpm.PlayerDataController;
 import noppes.mpm.client.ClientCacheHandler;
 import noppes.mpm.client.gui.util.GuiNpcButton;
@@ -15,6 +11,8 @@ import noppes.mpm.client.gui.util.GuiNpcLabel;
 import noppes.mpm.client.gui.util.GuiNpcTextField;
 import noppes.mpm.client.gui.util.ITextfieldListener;
 import noppes.mpm.config.ConfigClient;
+
+import java.util.List;
 
 public class GuiCreationConfig extends GuiCreationScreenInterface implements ITextfieldListener{
 	

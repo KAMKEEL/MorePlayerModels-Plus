@@ -1,14 +1,5 @@
 package noppes.mpm.client.gui;
 
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RendererLivingEntity;
@@ -20,6 +11,10 @@ import net.minecraft.world.World;
 import noppes.mpm.client.gui.util.GuiCustomScroll;
 import noppes.mpm.client.gui.util.GuiNpcButton;
 import noppes.mpm.client.gui.util.ICustomScrollListener;
+
+import java.lang.reflect.Modifier;
+import java.util.*;
+import java.util.Map.Entry;
 
 public class GuiCreationEntities extends GuiCreationScreenInterface implements ICustomScrollListener{
 

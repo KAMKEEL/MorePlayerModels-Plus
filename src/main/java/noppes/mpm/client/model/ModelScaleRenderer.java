@@ -3,7 +3,6 @@ package noppes.mpm.client.model;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import noppes.mpm.ModelPartConfig;
-
 import org.lwjgl.opengl.GL11;
 
 public class ModelScaleRenderer extends ModelRenderer {

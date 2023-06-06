@@ -1,25 +1,15 @@
 package noppes.mpm.client.gui;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagByte;
 import net.minecraft.nbt.NBTTagCompound;
 import noppes.mpm.client.EntityFakeLiving;
-import noppes.mpm.client.gui.util.GuiButtonBiDirectional;
-import noppes.mpm.client.gui.util.GuiCustomScroll;
-import noppes.mpm.client.gui.util.GuiNpcButton;
-import noppes.mpm.client.gui.util.GuiNpcButtonYesNo;
-import noppes.mpm.client.gui.util.ICustomScrollListener;
+import noppes.mpm.client.gui.util.*;
+
+import java.lang.reflect.Method;
+import java.util.*;
 
 public class GuiCreationExtra extends GuiCreationScreenInterface implements ICustomScrollListener{
 

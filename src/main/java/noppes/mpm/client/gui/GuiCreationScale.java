@@ -1,19 +1,13 @@
 package noppes.mpm.client.gui;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.util.StatCollector;
-import noppes.mpm.ModelData;
 import noppes.mpm.ModelPartConfig;
-import noppes.mpm.client.gui.util.GuiCustomScroll;
-import noppes.mpm.client.gui.util.GuiNpcButton;
-import noppes.mpm.client.gui.util.GuiNpcLabel;
-import noppes.mpm.client.gui.util.GuiNpcSlider;
-import noppes.mpm.client.gui.util.ICustomScrollListener;
-import noppes.mpm.client.gui.util.ISliderListener;
+import noppes.mpm.client.gui.util.*;
 import noppes.mpm.constants.EnumParts;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GuiCreationScale extends GuiCreationScreenInterface implements ISliderListener, ICustomScrollListener{
 	private GuiCustomScroll scroll;

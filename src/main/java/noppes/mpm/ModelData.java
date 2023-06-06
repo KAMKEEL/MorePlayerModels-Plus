@@ -1,11 +1,5 @@
 package noppes.mpm;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.lang.reflect.Method;
-import java.security.MessageDigest;
-import java.util.concurrent.*;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
@@ -19,6 +13,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
 import noppes.mpm.constants.EnumAnimation;
 import noppes.mpm.constants.EnumParts;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.lang.reflect.Method;
+import java.security.MessageDigest;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 public class ModelData extends ModelDataShared implements IExtendedEntityProperties{

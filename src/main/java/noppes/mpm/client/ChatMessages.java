@@ -1,11 +1,5 @@
 package noppes.mpm.client;
 
-import java.util.Hashtable;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -13,10 +7,14 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.IChatComponent;
-import noppes.mpm.MorePlayerModels;
-
 import noppes.mpm.config.ConfigClient;
 import org.lwjgl.opengl.GL11;
+
+import java.util.Hashtable;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ChatMessages {
 	private static Map<String,ChatMessages> users = new Hashtable<String,ChatMessages>();

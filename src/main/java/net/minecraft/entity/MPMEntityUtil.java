@@ -1,8 +1,6 @@
 package net.minecraft.entity;
 
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
-import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.player.EntityPlayer;
 
 public class MPMEntityUtil {

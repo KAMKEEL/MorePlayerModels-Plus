@@ -1,7 +1,6 @@
 package noppes.mpm.client.model.part.arm;
 
 import net.minecraft.client.entity.AbstractClientPlayer;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
 import noppes.mpm.ModelData;
 import noppes.mpm.ModelPartData;

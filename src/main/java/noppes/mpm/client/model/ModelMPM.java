@@ -1,7 +1,5 @@
 package noppes.mpm.client.model;
 
-import java.util.Random;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.model.ModelBase;
@@ -26,9 +24,10 @@ import noppes.mpm.client.model.part.leg.ModelLegs;
 import noppes.mpm.client.model.part.leg.ModelSkirt;
 import noppes.mpm.client.model.part.leg.ModelTail;
 import noppes.mpm.constants.EnumAnimation;
-
 import noppes.mpm.constants.EnumParts;
 import org.lwjgl.opengl.GL11;
+
+import java.util.Random;
 
 public class ModelMPM extends ModelBiped{
 	public ModelData data;
