@@ -116,6 +116,9 @@ public class ClientEventHandler {
 			return;
     	Minecraft mc = Minecraft.getMinecraft();
     	World world = mc.theWorld;
+		if ((this.prevWorld == null || world == null) && this.prevWorld != world) {
+			ClientCacheHandler.clearCache();
+		}
     	if(world != null && prevWorld != world){
 			MorePlayerModels.HasServerSide = false;
 			ModelData data = PlayerDataController.instance.getPlayerData(mc.thePlayer);
