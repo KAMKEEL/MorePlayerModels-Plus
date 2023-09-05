@@ -15,7 +15,7 @@ import java.util.List;
 public class MorePlayerModelsPermissions {
 	public static final Permission CONFIG_SKIN = new Permission("mpm.config.skin");
 	public static final Permission CONFIG_SOUND = new Permission("mpm.config.sound");
-	public static final Permission CONFIG_ENTITY = new Permission("mpm.config.sound");
+	public static final Permission CONFIG_ENTITY = new Permission("mpm.config.entity");
 	public static final Permission CONFIG_SCALE = new Permission("mpm.config.scale");
 	public static final Permission CONFIG_HIDE = new Permission("mpm.config.hide");
 	public static final Permission CONFIG_SAVE = new Permission("mpm.config.save");
