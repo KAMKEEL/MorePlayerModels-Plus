@@ -9,6 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.client.renderer.ThreadDownloadImageData;
 import net.minecraft.client.renderer.entity.*;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.TextureManager;
@@ -123,10 +124,7 @@ public class RenderMPM extends RenderPlayer{
 				try {
 					Minecraft.getMinecraft().getTextureManager().bindTexture(location);
 				}
-				catch(Exception e){
-					// No Texture Found
-					location = getDefaultSkin(data.modelType);
-				}
+				catch(Exception ignored){}
 				player.func_152121_a(Type.SKIN, location);
 			}
 			else{
@@ -141,38 +139,38 @@ public class RenderMPM extends RenderPlayer{
 				}
 			}
 			return;
-		} else if(!data.playerLoaded){
-			Minecraft mc = Minecraft.getMinecraft();
-			SkinManager skinmanager = mc.func_152342_ad();
-			Map map = skinmanager.func_152788_a(player.getGameProfile());
-			if(map.isEmpty()){
-				map = mc.func_152347_ac().getTextures(mc.func_152347_ac().fillProfileProperties(player.getGameProfile(), false), false);
-			}
-			if (!map.containsKey(Type.SKIN)){
-				player.func_152121_a(Type.SKIN, null);
-				return;
-			}
+		}
 
-			MinecraftProfileTexture profile = (MinecraftProfileTexture) map.get(Type.SKIN);
-			File dir = new File((File)ObfuscationReflectionHelper.getPrivateValue(SkinManager.class, skinmanager, 3), profile.getHash().substring(0, 2));
-			File file = new File(dir, profile.getHash());
-			if(file.exists())
-				file.delete();
+		Minecraft mc = Minecraft.getMinecraft();
+		SkinManager skinmanager = mc.func_152342_ad();
 
-			ResourceLocation location;
-			if (data.modelType > 0) {
-				location = new ResourceLocation("skins64/" + profile.getHash());
-				player.func_152121_a(Type.SKIN, location);
-				ClientCacheHandler.getPlayerSkin(profile.getUrl(), true, location, file);
-			} else {
-				location = new ResourceLocation("skins/" + profile.getHash());
-				player.func_152121_a(Type.SKIN, location);
-				ClientCacheHandler.getPlayerSkin(profile.getUrl(), false, location, file);
-			}
-			data.playerLoaded = true;
+		Map map = skinmanager.func_152788_a(player.getGameProfile());
+		if(map.isEmpty()){
+			map = mc.func_152347_ac().getTextures(mc.func_152347_ac().fillProfileProperties(player.getGameProfile(), false), false);
+		}
+		if(!map.containsKey(Type.SKIN)){
 			return;
 		}
-		// player.func_152121_a(Type.SKIN, null);
+
+		MinecraftProfileTexture profile = (MinecraftProfileTexture) map.get(Type.SKIN);
+		url = profile.getUrl();
+		File dir = new File((File)ObfuscationReflectionHelper.getPrivateValue(SkinManager.class, skinmanager, 3), profile.getHash().substring(0, 2));
+		File file = new File(dir, profile.getHash());
+
+		ResourceLocation location;
+		if (data.modelType > 0) {
+			location = new ResourceLocation("skins64/" + profile.getHash());
+			player.func_152121_a(Type.SKIN, location);
+			ClientCacheHandler.getPlayerSkin(profile.getUrl(), true, location, file);
+		} else {
+			location = new ResourceLocation("skins/" + profile.getHash());
+			player.func_152121_a(Type.SKIN, location);
+			ClientCacheHandler.getPlayerSkin(profile.getUrl(), false, location, file);
+		}
+		if(file.exists())
+			file.delete();
+
+		player.func_152121_a(Type.SKIN, location);
 	}
 
 	@Override
