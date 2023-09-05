@@ -140,7 +140,7 @@ public class RenderMPM extends RenderPlayer{
 			}
 			return;
 		}
-		else if(!data.playerLoaded) {
+		else if (!data.playerLoaded){
 			Minecraft mc = Minecraft.getMinecraft();
 			SkinManager skinmanager = mc.func_152342_ad();
 
@@ -173,8 +173,8 @@ public class RenderMPM extends RenderPlayer{
 				if (file.exists())
 					file.delete();
 
-				player.func_152121_a(Type.SKIN, location);
 				data.playerLoaded = true;
+				player.func_152121_a(Type.SKIN, location);
 			}
 		}
 	}

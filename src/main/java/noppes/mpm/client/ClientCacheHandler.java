@@ -18,7 +18,10 @@ public class ClientCacheHandler {
             if (!imageDataCache.containsKey(resource.getResourcePath())) {
                 imageDataCache.put(resource.getResourcePath(), new CacheHashMap.CachedObject<>(new ImageData(directory, x64, resource, file)));
             }
-            return imageDataCache.get(resource.getResourcePath()).getObject();
+
+            ImageData data = imageDataCache.get(resource.getResourcePath()).getObject();
+            data.refreshLoad();
+            return data;
         }
     }
 
@@ -27,7 +30,10 @@ public class ClientCacheHandler {
             if (!imageDataCache.containsKey(resource.getResourcePath())) {
                 imageDataCache.put(resource.getResourcePath(), new CacheHashMap.CachedObject<>(new ImageData(directory, x64, resource, file, defLoc)));
             }
-            return imageDataCache.get(resource.getResourcePath()).getObject();
+
+            ImageData data = imageDataCache.get(resource.getResourcePath()).getObject();
+            data.refreshLoad();
+            return data;
         }
     }
 
