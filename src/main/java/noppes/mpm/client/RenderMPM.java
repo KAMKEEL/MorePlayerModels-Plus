@@ -140,37 +140,43 @@ public class RenderMPM extends RenderPlayer{
 			}
 			return;
 		}
+		else if(!data.playerLoaded) {
+			Minecraft mc = Minecraft.getMinecraft();
+			SkinManager skinmanager = mc.func_152342_ad();
 
-		Minecraft mc = Minecraft.getMinecraft();
-		SkinManager skinmanager = mc.func_152342_ad();
+			Map map = skinmanager.func_152788_a(player.getGameProfile());
+			if (map.isEmpty()) {
+				map = mc.func_152347_ac().getTextures(mc.func_152347_ac().fillProfileProperties(player.getGameProfile(), false), false);
+			}
+			if (!map.containsKey(Type.SKIN)) {
+				return;
+			}
 
-		Map map = skinmanager.func_152788_a(player.getGameProfile());
-		if(map.isEmpty()){
-			map = mc.func_152347_ac().getTextures(mc.func_152347_ac().fillProfileProperties(player.getGameProfile(), false), false);
+			MinecraftProfileTexture profile = (MinecraftProfileTexture) map.get(Type.SKIN);
+			url = profile.getUrl();
+
+			Object skinManagerFile = ObfuscationReflectionHelper.getPrivateValue(SkinManager.class, skinmanager, 3);
+			if (skinManagerFile instanceof File) {
+				File dir = new File((File) skinManagerFile, profile.getHash().substring(0, 2));
+				File file = new File(dir, profile.getHash());
+
+				ResourceLocation location;
+				if (data.modelType > 0) {
+					location = new ResourceLocation("skins64/" + profile.getHash());
+					player.func_152121_a(Type.SKIN, location);
+					ClientCacheHandler.getPlayerSkin(url, true, location, file);
+				} else {
+					location = new ResourceLocation("skins/" + profile.getHash());
+					player.func_152121_a(Type.SKIN, location);
+					ClientCacheHandler.getPlayerSkin(url, false, location, file);
+				}
+				if (file.exists())
+					file.delete();
+
+				player.func_152121_a(Type.SKIN, location);
+				data.playerLoaded = true;
+			}
 		}
-		if(!map.containsKey(Type.SKIN)){
-			return;
-		}
-
-		MinecraftProfileTexture profile = (MinecraftProfileTexture) map.get(Type.SKIN);
-		url = profile.getUrl();
-		File dir = new File((File)ObfuscationReflectionHelper.getPrivateValue(SkinManager.class, skinmanager, 3), profile.getHash().substring(0, 2));
-		File file = new File(dir, profile.getHash());
-
-		ResourceLocation location;
-		if (data.modelType > 0) {
-			location = new ResourceLocation("skins64/" + profile.getHash());
-			player.func_152121_a(Type.SKIN, location);
-			ClientCacheHandler.getPlayerSkin(url, true, location, file);
-		} else {
-			location = new ResourceLocation("skins/" + profile.getHash());
-			player.func_152121_a(Type.SKIN, location);
-			ClientCacheHandler.getPlayerSkin(url, false, location, file);
-		}
-		if(file.exists())
-			file.delete();
-
-		player.func_152121_a(Type.SKIN, location);
 	}
 
 	@Override
