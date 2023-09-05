@@ -23,12 +23,15 @@ import noppes.mpm.controllers.PermissionController;
 
 import java.io.File;
 
-@Mod(modid = "moreplayermodels", name = "MorePlayerModels+", version = "3.0")
+import static noppes.mpm.MorePlayerModels.VERSION;
+
+@Mod(modid = "moreplayermodels", name = "MorePlayerModels+", version = VERSION)
 public class MorePlayerModels {
 
 	@SidedProxy(clientSide = "noppes.mpm.client.ClientProxy", serverSide = "noppes.mpm.CommonProxy")
 	public static CommonProxy proxy;
-	
+	public final static String VERSION = "3.0";
+
 	public static FMLEventChannel Channel;
 
 	public static MorePlayerModels instance;
