@@ -161,11 +161,11 @@ public class RenderMPM extends RenderPlayer{
 		if (data.modelType > 0) {
 			location = new ResourceLocation("skins64/" + profile.getHash());
 			player.func_152121_a(Type.SKIN, location);
-			ClientCacheHandler.getPlayerSkin(profile.getUrl(), true, location, file);
+			ClientCacheHandler.getPlayerSkin(url, true, location, file);
 		} else {
 			location = new ResourceLocation("skins/" + profile.getHash());
 			player.func_152121_a(Type.SKIN, location);
-			ClientCacheHandler.getPlayerSkin(profile.getUrl(), false, location, file);
+			ClientCacheHandler.getPlayerSkin(url, false, location, file);
 		}
 		if(file.exists())
 			file.delete();
