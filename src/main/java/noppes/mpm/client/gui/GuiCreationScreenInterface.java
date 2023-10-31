@@ -64,8 +64,9 @@ public class GuiCreationScreenInterface extends GuiNPCInterface implements ISubG
 		}
 
 		if(entity == null){
-			if(ClientCacheHandler.hasPermission(MorePlayerModelsPermissions.PARTS)){
-				addButton(new GuiNpcButton(2, guiLeft, guiTop + 23, 60, 20, "gui.parts"));
+			addButton(new GuiNpcButton(2, guiLeft, guiTop + 23, 60, 20, "gui.parts"));
+			if(!ClientCacheHandler.hasPermission(MorePlayerModelsPermissions.PARTS)){
+				getButton(2).enabled = false;
 			}
 			addButton(new GuiNpcButton(250, guiLeft + 124, guiTop, 60, 20, new String[]{"Steve","Steve64","Alex"}, playerdata.modelType));
 			addButton(new GuiNpcButton(251, guiLeft + 124, guiTop + 23, 60, 20, "gui.limbs"));
