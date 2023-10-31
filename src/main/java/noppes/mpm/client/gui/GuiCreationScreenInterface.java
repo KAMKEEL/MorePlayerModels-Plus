@@ -25,7 +25,7 @@ public class GuiCreationScreenInterface extends GuiNPCInterface implements ISubG
 	
 	private boolean saving = false;
 	protected boolean hasSaving = true;
-	public int active = 0;
+	public int active = -1;
 
 	public EntityPlayer player;
 	public int xOffset = 0;
@@ -95,7 +95,9 @@ public class GuiCreationScreenInterface extends GuiNPCInterface implements ISubG
 				addButton(new GuiNpcButton(5, guiLeft + 62, guiTop + ySize - 24, 60, 20, "gui.load"));
 			}
     	}
-    	getButton(active).enabled = false;
+		if(active != -1){
+			getButton(active).enabled = false;
+		}
 		addButton(unzoom = new GuiNpcButton(666, guiLeft + xSize - 79, guiTop, 20, 20, "-"));
 		addButton(zoom = new GuiNpcButton(667, guiLeft + xSize - 57 , guiTop, 20, 20, "+"));
     	addButton(new GuiNpcButton(66, guiLeft + xSize - 20, guiTop, 20, 20, "X"));

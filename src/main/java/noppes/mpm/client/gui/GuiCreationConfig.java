@@ -19,12 +19,12 @@ public class GuiCreationConfig extends GuiCreationScreenInterface implements ITe
 	public GuiCreationConfig(){
 		hasSaving = false;
 		xOffset = 150;
+		active = 0;
 	}
 
     @Override
     public void initGui() {
     	super.initGui();
-
 		int y = guiTop + 50;
 
 		if(ClientCacheHandler.hasPermission(MorePlayerModelsPermissions.CONFIG_SOUND)) {
