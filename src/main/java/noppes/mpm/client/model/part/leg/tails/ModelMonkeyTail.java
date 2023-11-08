@@ -210,7 +210,7 @@ public class ModelMonkeyTail extends ModelRenderer {
 			float scale = 0.18f; // Adjust the scale factor as needed
 
 			// Define a damping factor for smoother motion
-			float damping = 0.2f; // Adjust the damping factor as needed
+			float damping = 0.6f; // Adjust the damping factor as needed
 
 			// Calculate the difference between the current rotation angle and the motion influence
 			double deltaY = motionY * scale - monkey.rotateAngleX;
