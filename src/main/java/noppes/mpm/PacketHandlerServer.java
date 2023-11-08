@@ -1,9 +1,8 @@
 package noppes.mpm;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.network.FMLNetworkEvent.ServerCustomPacketEvent;
 import io.netty.buffer.ByteBuf;
-
-import java.io.IOException;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -11,8 +10,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetHandlerPlayServer;
 import noppes.mpm.constants.EnumAnimation;
 import noppes.mpm.constants.EnumPackets;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.network.FMLNetworkEvent.ServerCustomPacketEvent;
+import noppes.mpm.controllers.PermissionController;
+
+import java.io.IOException;
 
 public class PacketHandlerServer{
 
@@ -71,6 +71,19 @@ public class PacketHandlerServer{
 			
 			PlayerDataController.instance.savePlayerData(player, data);
 			Server.sendAssociatedData(player, EnumPackets.SEND_PLAYER_DATA, player.getCommandSenderName(), data.writeToNBT());
+		}
+		else if(type == EnumPackets.GET_PERMISSION){
+			long lastRequest = -1;
+			String uuid = player.getUniqueID().toString();
+			if(PermissionController.Instance.lastRequest.containsKey(uuid)){
+				lastRequest = PermissionController.Instance.lastRequest.get(uuid);
+			}
+
+			if(lastRequest == -1 || System.currentTimeMillis() - lastRequest > 60 * 1000){
+				NBTTagCompound nbtTagCompound =  PermissionController.Instance.writeNBT(player);
+				PermissionController.Instance.lastRequest.put(uuid, System.currentTimeMillis());
+				Server.sendData(player, EnumPackets.RECEIVE_PERMISSION, nbtTagCompound);
+			}
 		}
 		else if(type == EnumPackets.ANIMATION){
 

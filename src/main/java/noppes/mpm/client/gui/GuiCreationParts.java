@@ -1,54 +1,74 @@
 package noppes.mpm.client.gui;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-
+import kamkeel.MorePlayerModelsPermissions;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.util.StatCollector;
 import noppes.mpm.ModelData;
 import noppes.mpm.ModelPartData;
-import noppes.mpm.client.gui.util.GuiButtonBiDirectional;
-import noppes.mpm.client.gui.util.GuiColorButton;
-import noppes.mpm.client.gui.util.GuiCustomScroll;
-import noppes.mpm.client.gui.util.GuiNpcButton;
-import noppes.mpm.client.gui.util.GuiNpcButtonYesNo;
-import noppes.mpm.client.gui.util.GuiNpcLabel;
-import noppes.mpm.client.gui.util.GuiNpcTextField;
-import noppes.mpm.client.gui.util.ICustomScrollListener;
-import noppes.mpm.client.gui.util.ITextfieldListener;
+import noppes.mpm.client.ClientCacheHandler;
+import noppes.mpm.client.gui.util.*;
 import noppes.mpm.constants.EnumParts;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 public class GuiCreationParts extends GuiCreationScreenInterface implements ITextfieldListener, ICustomScrollListener{
 	private GuiCustomScroll scroll;
-
-	private GuiPart[] parts = {
-			new GuiPartBreasts(),
-			new GuiPart(EnumParts.WINGS).setTypes(new String[]{"gui.none","1","2","3","4","5","6","7","8","9",
-					"10","11","12","13","14","15"}),
-			new GuiPartCape(),
-			new GuiPart(EnumParts.FIN).setTypes(new String[]{"gui.none", "1","2","3","4","5","6"}),
-			new GuiPartParticles(),
-			new GuiPartLegs(),
-			new GuiPartTail(),
-			new GuiPartSnout(),
-			new GuiPart(EnumParts.EARS).setTypes(new String[]{"gui.none", "gui.normal", "ears.bunny"}),
-			new GuiPartHorns(),
-			new GuiPartHair(),
-			new GuiPart(EnumParts.MOHAWK).setTypes(new String[]{"gui.none", "1", "2"}).noPlayerOptions(),
-			new GuiPartBeard(),
-			new GuiPart(EnumParts.SKIRT).setTypes(new String[]{"gui.none", "gui.normal"}).noPlayerOptions(),
-			new GuiPartClaws(),
-
-	};
+	private ArrayList<GuiPart> partList = new ArrayList<GuiPart>();
 
 	private static int selected = 0;
 
 	public GuiCreationParts(){
-		active = 2;
-		Arrays.sort(parts, new Comparator<GuiPart>(){
+		if(ClientCacheHandler.hasPermission(MorePlayerModelsPermissions.PARTS_BREAST)){
+			partList.add(new GuiPartBreasts());
+		}
+		if(ClientCacheHandler.hasPermission(MorePlayerModelsPermissions.PARTS_WINGS)){
+			partList.add(new GuiPart(EnumParts.WINGS).setTypes(new String[]{"gui.none","1","2","3","4","5","6","7","8","9",
+					"10","11","12","13","14","15"}));
+		}
+		if(ClientCacheHandler.hasPermission(MorePlayerModelsPermissions.PARTS_CAPE)){
+			partList.add(new GuiPartCape());
+		}
+		if(ClientCacheHandler.hasPermission(MorePlayerModelsPermissions.PARTS_FIN)){
+			partList.add(new GuiPart(EnumParts.FIN).setTypes(new String[]{"gui.none", "1","2","3","4","5","6"}));
+		}
+		if(ClientCacheHandler.hasPermission(MorePlayerModelsPermissions.PARTS_PARTICLES)){
+			partList.add(new GuiPartParticles());
+		}
+		if(ClientCacheHandler.hasPermission(MorePlayerModelsPermissions.PARTS_LEGS)){
+			partList.add(new GuiPartLegs());
+		}
+		if(ClientCacheHandler.hasPermission(MorePlayerModelsPermissions.PARTS_TAIL)){
+			partList.add(new GuiPartTail());
+		}
+		if(ClientCacheHandler.hasPermission(MorePlayerModelsPermissions.PARTS_SNOUT)){
+			partList.add(new GuiPartSnout());
+		}
+		if(ClientCacheHandler.hasPermission(MorePlayerModelsPermissions.PARTS_EARS)){
+			partList.add(new GuiPart(EnumParts.EARS).setTypes(new String[]{"gui.none", "gui.normal", "ears.bunny"}));
+		}
+		if(ClientCacheHandler.hasPermission(MorePlayerModelsPermissions.PARTS_HORNS)){
+			partList.add(new GuiPartHorns());
+		}
+		if(ClientCacheHandler.hasPermission(MorePlayerModelsPermissions.PARTS_HAIR)){
+			partList.add(new GuiPartHair());
+		}
+		if(ClientCacheHandler.hasPermission(MorePlayerModelsPermissions.PARTS_MOHAWK)){
+			partList.add(new GuiPart(EnumParts.MOHAWK).setTypes(new String[]{"gui.none", "1", "2"}).noPlayerOptions());
+		}
+		if(ClientCacheHandler.hasPermission(MorePlayerModelsPermissions.PARTS_BEARD)){
+			partList.add(new GuiPartBeard());
+		}
+		if(ClientCacheHandler.hasPermission(MorePlayerModelsPermissions.PARTS_SKIRT)){
+			partList.add(new GuiPart(EnumParts.SKIRT).setTypes(new String[]{"gui.none", "gui.normal"}).noPlayerOptions());
+		}
+		if(ClientCacheHandler.hasPermission(MorePlayerModelsPermissions.PARTS_CLAWS)){
+			partList.add(new GuiPartClaws());
+		}
 
+		active = 2;
+		partList.sort(new Comparator<GuiPart>(){
 			@Override
 			public int compare(GuiPart o1, GuiPart o2) {
 				String s1 = StatCollector.translateToLocal("part." + o1.part.name);
@@ -69,7 +89,7 @@ public class GuiCreationParts extends GuiCreationScreenInterface implements ITex
 
 		if(scroll == null){
 			List<String> list = new ArrayList<String>();
-			for(GuiPart part : parts)
+			for(GuiPart part : partList)
 				list.add(StatCollector.translateToLocal("part." + part.part.name));
 			scroll = new GuiCustomScroll(this, 0);
 			scroll.setUnsortedList(list);
@@ -81,17 +101,17 @@ public class GuiCreationParts extends GuiCreationScreenInterface implements ITex
 		addScroll(scroll);
 
 
-		if(parts[selected] != null){
-			scroll.setSelected(StatCollector.translateToLocal("part." + parts[selected].part.name));
-			parts[selected].initGui();
+		if(partList.get(selected) != null){
+			scroll.setSelected(StatCollector.translateToLocal("part." + partList.get(selected).part.name));
+			partList.get(selected).initGui();
 		}
 	}
 
 	@Override
 	protected void actionPerformed(GuiButton btn) {
 		super.actionPerformed(btn);
-		if(parts[selected] != null){
-			parts[selected].actionPerformed(btn);
+		if(partList.get(selected) != null){
+			partList.get(selected).actionPerformed(btn);
 		}
 	}
 
@@ -100,8 +120,8 @@ public class GuiCreationParts extends GuiCreationScreenInterface implements ITex
 		if(textfield.id == 23){
 
 		}
-		if(parts[selected] != null){
-			parts[selected].unFocused(textfield);
+		if(partList.get(selected) != null){
+			partList.get(selected).unFocused(textfield);
 		}
 	}
 
@@ -199,7 +219,7 @@ public class GuiCreationParts extends GuiCreationScreenInterface implements ITex
 		public GuiPartTail() {
 			super(EnumParts.TAIL);
 			types = new String[]{"gui.none", "part.tail", "tail.dragon",
-					"tail.horse", "tail.squirrel", "tail.fin", "tail.rodent", "tail.feather", "tail.fox"};
+					"tail.horse", "tail.squirrel", "tail.fin", "tail.rodent", "tail.feather", "tail.fox", "tail.monkey"};
 		}
 
 		@Override
@@ -211,6 +231,10 @@ public class GuiCreationParts extends GuiCreationScreenInterface implements ITex
 				GuiCreationParts.this.addLabel(new GuiNpcLabel(22, "gui.pattern", guiLeft + 102, y + 5, 0xFFFFFF));
 				GuiCreationParts.this.addButton(new GuiButtonBiDirectional(22, guiLeft + 145, y, 100, 20, new String[]{"tail.wolf", "tail.cat"}, data.pattern));
 			}
+			if(data != null && (data.type == 8 || data.type == 9)){
+				GuiCreationParts.this.addLabel(new GuiNpcLabel(22, "gui.pattern", guiLeft + 102, y + 5, 0xFFFFFF));
+				GuiCreationParts.this.addButton(new GuiButtonBiDirectional(22, guiLeft + 145, y, 100, 20, new String[]{"tail.normal", "tail.wrapped", "tail.large"}, data.pattern));
+			}
 			return y;
 		}
 
@@ -218,12 +242,16 @@ public class GuiCreationParts extends GuiCreationScreenInterface implements ITex
 		protected void actionPerformed(GuiButton btn) {
 			super.actionPerformed(btn);
 			if(btn.id == 22){
-				if(data.pattern == 1){
-					data.setCustomResource("0-1");
-				} else {
-					data.setCustomResource("");
+				if(data != null){
+					if(data.type == 0){
+						if(data.pattern == 1){
+							data.setCustomResource("0-1");
+						} else {
+							data.setCustomResource("");
+						}
+						data.updateTextureLocation();
+					}
 				}
-				data.updateTextureLocation();
 			}
 		}
 	}

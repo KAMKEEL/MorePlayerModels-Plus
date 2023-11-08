@@ -1,14 +1,13 @@
 package noppes.mpm.client;
 
+import cpw.mods.fml.common.network.internal.FMLProxyPacket;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-
-import java.io.IOException;
-
 import noppes.mpm.MorePlayerModels;
 import noppes.mpm.Server;
 import noppes.mpm.constants.EnumPackets;
-import cpw.mods.fml.common.network.internal.FMLProxyPacket;
+
+import java.io.IOException;
 
 public class Client {
 

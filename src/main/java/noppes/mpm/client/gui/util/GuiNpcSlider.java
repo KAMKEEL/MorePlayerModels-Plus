@@ -3,7 +3,6 @@ package noppes.mpm.client.gui.util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 

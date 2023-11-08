@@ -1,9 +1,7 @@
 package noppes.mpm;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.List;
-
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -14,10 +12,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import noppes.mpm.client.AnalyticsTracking;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent;
 import noppes.mpm.constants.EnumAnimation;
 import noppes.mpm.constants.EnumPackets;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.List;
 
 public class ServerTickHandler {
 
@@ -98,7 +98,12 @@ public class ServerTickHandler {
 				data.animation == EnumAnimation.SITTING || data.animation == EnumAnimation.DANCING))
 			return;
 
-		if(speed > 0.01 || isJumping || player.isPlayerSleeping() || player.isRiding() || data.isSleeping() && speed > 0.001)
+		if(speed > 0.01 || isJumping || player.isPlayerSleeping() || player.isRiding() || data.isSleeping() && speed > 0.001){
+			// Fixes Sitting Animation when Disabling Sitting
+			if(data.animation == EnumAnimation.SITTING){
+				data.fixSit = true;
+			}
 			data.animation = EnumAnimation.NONE;
+		}
 	}
 }

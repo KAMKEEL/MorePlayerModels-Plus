@@ -1,8 +1,5 @@
 package noppes.mpm.client.model.part.leg;
 
-import noppes.mpm.client.model.part.leg.legs.*;
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
@@ -12,7 +9,9 @@ import noppes.mpm.ModelPartData;
 import noppes.mpm.client.ClientProxy;
 import noppes.mpm.client.model.ModelMPM;
 import noppes.mpm.client.model.ModelScaleRenderer;
+import noppes.mpm.client.model.part.leg.legs.*;
 import noppes.mpm.constants.EnumAnimation;
+import org.lwjgl.opengl.GL11;
 
 public class ModelLegs extends ModelScaleRenderer{
 

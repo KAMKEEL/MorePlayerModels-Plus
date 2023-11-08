@@ -1,23 +1,18 @@
-package noppes.mpm.config;
+package noppes.mpm.config.legacy;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-public class ConfigLoader {
+public class LegacyLoader {
 	private boolean updateFile = false;
 	private File dir;
 	private String fileName;
 	private Class<?> configClass;
 	private LinkedList<Field> configFields;
 	
-	public ConfigLoader(Class<?> clss, File dir, String fileName){
+	public LegacyLoader(Class<?> clss, File dir, String fileName){
 		if(!dir.exists())
 			dir.mkdir();
 		this.dir = dir;

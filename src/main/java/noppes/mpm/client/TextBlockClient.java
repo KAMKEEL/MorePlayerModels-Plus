@@ -1,14 +1,14 @@
 package noppes.mpm.client;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.IChatComponent;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TextBlockClient{
 	public List<IChatComponent> lines = new ArrayList<IChatComponent>();

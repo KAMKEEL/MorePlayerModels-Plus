@@ -2,7 +2,6 @@ package noppes.mpm.client;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
-import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
 import noppes.mpm.ModelData;
@@ -26,7 +25,7 @@ public class EntityRendererAlt extends EntityRenderer{
     	ModelData data = PlayerDataController.instance.getPlayerData(player);
 		player.yOffset -= data.offsetY();
 		if(data.animation == EnumAnimation.SITTING)
-			player.yOffset += 0.5f - data.getLegsY();
+			player.yOffset += 0.5f - data.getLegsY() * 0.8;
 		if(data.isSleeping() || data.animation == EnumAnimation.CRAWLING)
 			player.yOffset = 2.8f - (player.isSneaking()?0.125f:0);
 		if(player.yOffset < 1.4f && isBlocked(player))
@@ -52,7 +51,7 @@ public class EntityRendererAlt extends EntityRenderer{
 
 		float offset = -data.offsetY();
 		if(data.animation == EnumAnimation.SITTING){
-			offset += 0.5f - data.getLegsY();
+			offset += 0.5f - data.getLegsY() * 0.8;
 		}
 		if(data.isSleeping() || data.animation == EnumAnimation.CRAWLING)
 			offset = 1.18f;

@@ -2,8 +2,8 @@ package noppes.mpm.client.model.part.head;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
-import noppes.mpm.ModelPartData;
 import noppes.mpm.ModelData;
+import noppes.mpm.ModelPartData;
 import noppes.mpm.client.model.Model2DRenderer;
 import noppes.mpm.client.model.ModelMPM;
 import noppes.mpm.client.model.ModelPartInterface;

@@ -1,27 +1,16 @@
 package noppes.mpm.client;
 
-import static net.minecraftforge.client.IItemRenderer.ItemRenderType.EQUIPPED;
-import static net.minecraftforge.client.IItemRenderer.ItemRendererHelper.BLOCK_3D;
-
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.lang.reflect.Method;
-import java.util.Map;
-import java.util.UUID;
-
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.minecraft.MinecraftProfileTexture;
+import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
+import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.renderer.IImageBuffer;
-import net.minecraft.client.renderer.ImageBufferDownload;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.ThreadDownloadImageData;
-import net.minecraft.client.renderer.entity.RenderItem;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.entity.RenderPlayer;
-import net.minecraft.client.renderer.entity.MPMRendererHelper;
-import net.minecraft.client.renderer.entity.RendererLivingEntity;
+import net.minecraft.client.renderer.entity.*;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySkullRenderer;
@@ -38,32 +27,43 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.scoreboard.Scoreboard;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StringUtils;
 import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.client.event.RenderPlayerEvent;
 import noppes.mpm.ModelData;
 import noppes.mpm.ModelPartData;
 import noppes.mpm.PlayerDataController;
 import noppes.mpm.client.model.ModelMPM;
 import noppes.mpm.client.model.ModelRenderPassHelper;
 import noppes.mpm.constants.EnumAnimation;
-
 import org.lwjgl.opengl.GL11;
 
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.minecraft.MinecraftProfileTexture;
-import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
+import java.io.File;
+import java.lang.reflect.Method;
+import java.util.Map;
+import java.util.UUID;
 
-import cpw.mods.fml.common.ObfuscationReflectionHelper;
+import static net.minecraftforge.client.IItemRenderer.ItemRenderType.EQUIPPED;
+import static net.minecraftforge.client.IItemRenderer.ItemRendererHelper.BLOCK_3D;
 
 public class RenderMPM extends RenderPlayer{
 	public ModelMPM modelBipedMain;
 	public ModelMPM modelArmorChestplate;
 	public ModelMPM modelArmor;
 	private ModelData data;
+
+	// ModelMPM Presets
+	// Steve
+	public ModelMPM steve32 = new ModelMPM(0, 0);
+	public ModelMPM steve64 = new ModelMPM(0, false);
+	public ModelMPM alex = new ModelMPM(0, true);
+
+	public ModelMPM steveArmorChest = new ModelMPM(1,0);
+	public ModelMPM steveArmor = new ModelMPM(0.5F,0);
+
+	public ModelMPM alex32armorChest = new ModelMPM(1,1);
+	public ModelMPM alex32armor = new ModelMPM(0.5F,1);
 
 	private RendererLivingEntity renderEntity;
 	private EntityLivingBase entity;
@@ -75,17 +75,14 @@ public class RenderMPM extends RenderPlayer{
 	public RenderMPM() {
 		super();
 		this.setRenderManager(RenderManager.instance);
-		this.modelBipedMain = ModelMPM.steve32;
-		this.modelArmor = ModelMPM.steveArmor;
-		this.modelArmorChestplate = ModelMPM.steveArmorChest;
+		this.modelBipedMain = new ModelMPM(0, 0);
+		this.modelArmor = new ModelMPM(0.5f, 0);
+		this.modelArmorChestplate = new ModelMPM(1.0f, 0);
 	}
 
 	public void setModelData(ModelData data, EntityLivingBase entity){
 		this.data = data;
 		this.setModelType(data);
-		if (this.mainModel instanceof ModelMPM) {
-			((ModelMPM) this.mainModel).setPlayerData(this.data, entity);
-		}
 		modelBipedMain.setPlayerData(data, entity);
 		modelArmorChestplate.setPlayerData(data, entity);
 		modelArmor.setPlayerData(data, entity);
@@ -115,35 +112,7 @@ public class RenderMPM extends RenderPlayer{
 
 	@Override
 	public void doRender(AbstractClientPlayer player, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_){
-		ItemStack itemstack = player.getHeldItem();
-		this.modelArmorChestplate.heldItemRight = this.modelArmor.heldItemRight = this.modelBipedMain.heldItemRight = itemstack != null ? 1 : 0;
-		if (itemstack != null && player.getItemInUseCount() > 0)
-		{
-			EnumAction enumaction = itemstack.getItemUseAction();
-
-			if (enumaction == EnumAction.block)
-			{
-				this.modelArmorChestplate.heldItemRight = this.modelArmor.heldItemRight = this.modelBipedMain.heldItemRight = 3;
-			}
-			else if (enumaction == EnumAction.bow)
-			{
-				this.modelArmorChestplate.aimedBow = this.modelArmor.aimedBow = this.modelBipedMain.aimedBow = true;
-			}
-		}
-		modelArmorChestplate.isSneak = modelArmor.isSneak = modelBipedMain.isSneak = player.isSneaking();
-		modelArmorChestplate.isRiding = modelArmor.isRiding = modelBipedMain.isRiding = player.isRiding();
 		super.doRender(player, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
-		modelArmorChestplate.aimedBow = modelArmor.aimedBow = modelBipedMain.aimedBow = false;
-		modelArmorChestplate.isSneak = modelArmor.isSneak = modelBipedMain.isSneak = false;
-		modelArmorChestplate.heldItemRight = modelArmor.heldItemRight = modelBipedMain.heldItemRight = 0;
-		modelArmorChestplate.heldItemLeft = modelArmor.heldItemLeft = modelBipedMain.heldItemLeft = 0;
-	}
-
-	private void loadTexture(File file, ResourceLocation resource, String par1Str, boolean version, int modelType){
-		TextureManager texturemanager = Minecraft.getMinecraft().getTextureManager();
-		ResourceLocation defaultLoc = getDefaultSkin(modelType);
-		ITextureObject object = new ImageDownloadAlt(file, par1Str, defaultLoc, new ImageBufferDownloadAlt(version));
-		texturemanager.loadTexture(resource, object);
 	}
 
 	public void loadResource(AbstractClientPlayer player) {
@@ -155,52 +124,58 @@ public class RenderMPM extends RenderPlayer{
 				try {
 					Minecraft.getMinecraft().getTextureManager().bindTexture(location);
 				}
-				catch(Exception e){
-					// No Texture Found
-					location = getDefaultSkin(data.modelType);
-				}
+				catch(Exception ignored){}
 				player.func_152121_a(Type.SKIN, location);
 			}
 			else{
 				if (data.urlType == 1) {
 					location = new ResourceLocation("skins64/" + url.hashCode());
 					player.func_152121_a(Type.SKIN, location);
-					loadTexture(null, location, url, true, data.modelType);
+					ClientCacheHandler.getPlayerSkin(url, true, location, null);
 				} else {
 					location = new ResourceLocation("skins/" + url.hashCode());
 					player.func_152121_a(Type.SKIN, location);
-					loadTexture(null, location, url, false, data.modelType);
+					ClientCacheHandler.getPlayerSkin(url, false, location, null);
 				}
 			}
 			return;
-		} else if(!data.playerLoaded){
+		}
+		else if (!data.playerLoaded){
 			Minecraft mc = Minecraft.getMinecraft();
 			SkinManager skinmanager = mc.func_152342_ad();
+
 			Map map = skinmanager.func_152788_a(player.getGameProfile());
-			if(map.isEmpty()){
+			if (map.isEmpty()) {
 				map = mc.func_152347_ac().getTextures(mc.func_152347_ac().fillProfileProperties(player.getGameProfile(), false), false);
 			}
-			if (!map.containsKey(Type.SKIN)){
+			if (!map.containsKey(Type.SKIN)) {
 				return;
 			}
 
 			MinecraftProfileTexture profile = (MinecraftProfileTexture) map.get(Type.SKIN);
-			File dir = new File((File)ObfuscationReflectionHelper.getPrivateValue(SkinManager.class, skinmanager, 3), profile.getHash().substring(0, 2));
-			File file = new File(dir, profile.getHash());
-			if(file.exists())
-				file.delete();
+			url = profile.getUrl();
 
-			ResourceLocation location;
-			if (data.modelType > 0) {
-				location = new ResourceLocation("skins64/" + profile.getHash());
+			Object skinManagerFile = ObfuscationReflectionHelper.getPrivateValue(SkinManager.class, skinmanager, 3);
+			if (skinManagerFile instanceof File) {
+				File dir = new File((File) skinManagerFile, profile.getHash().substring(0, 2));
+				File file = new File(dir, profile.getHash());
+
+				ResourceLocation location;
+				if (data.modelType > 0) {
+					location = new ResourceLocation("skins64/" + profile.getHash());
+					player.func_152121_a(Type.SKIN, location);
+					ClientCacheHandler.getPlayerSkin(url, true, location, file);
+				} else {
+					location = new ResourceLocation("skins/" + profile.getHash());
+					player.func_152121_a(Type.SKIN, location);
+					ClientCacheHandler.getPlayerSkin(url, false, location, file);
+				}
+				if (file.exists())
+					file.delete();
+
+				data.playerLoaded = true;
 				player.func_152121_a(Type.SKIN, location);
-				loadTexture(file, location, profile.getUrl(), true, data.modelType);
-			} else {
-				location = new ResourceLocation("skins/" + profile.getHash());
-				player.func_152121_a(Type.SKIN, location);
-				loadTexture(file, location, profile.getUrl(), false, data.modelType);
 			}
-			data.playerLoaded = true;
 		}
 	}
 
@@ -237,10 +212,7 @@ public class RenderMPM extends RenderPlayer{
 				// player.func_152121_a(Type.CAPE, location);
 			} else {
 				location = new ResourceLocation("cape/" + url.hashCode());
-				// player.func_152121_a(MinecraftProfileTexture.Type.CAPE, location);
-				TextureManager texturemanager = Minecraft.getMinecraft().getTextureManager();
-				ITextureObject object = new ImageDownloadAlt(null, url, ModelPartData.defaultCape, new ImageBufferDownloadAlt(false));
-				texturemanager.loadTexture(location, object);
+				ClientCacheHandler.getCapeTexture(url, false, location, null, ModelPartData.defaultCape);
 			}
 			return location;
 		}
@@ -574,26 +546,26 @@ public class RenderMPM extends RenderPlayer{
 	public void setModelType(ModelData data){
 		int modelVal = data.modelType;
 		if(modelVal ==  1){
-			this.mainModel = ModelMPM.steve64;
-			this.modelBipedMain = ModelMPM.steve64;
-			this.modelArmorChestplate = ModelMPM.steveArmorChest;
-			this.modelArmor = ModelMPM.steveArmor;
+//			this.mainModel = steve64;
+			this.modelBipedMain = steve64;
+			this.modelArmorChestplate = steveArmorChest;
+			this.modelArmor = steveArmor;
 		}
 		else if(modelVal ==  2){
-			this.mainModel = ModelMPM.alex;
-			this.modelBipedMain = ModelMPM.alex;
-			this.modelArmorChestplate = ModelMPM.alex32armorChest;
-			this.modelArmor = ModelMPM.alex32armor;
+//			this.mainModel = alex;
+			this.modelBipedMain = alex;
+			this.modelArmorChestplate = alex32armorChest;
+			this.modelArmor = alex32armor;
 		}
 		else{
-			this.mainModel = ModelMPM.steve32;
-			this.modelBipedMain = ModelMPM.steve32;
-			this.modelArmorChestplate = ModelMPM.steveArmorChest;
-			this.modelArmor = ModelMPM.steveArmor;
+//			this.mainModel = steve32;
+			this.modelBipedMain = steve32;
+			this.modelArmorChestplate = steveArmorChest;
+			this.modelArmor = steveArmor;
 		}
 	}
 
-	public ResourceLocation getDefaultSkin(int modelType){
+	public static ResourceLocation getDefaultSkin(int modelType){
 		ResourceLocation location;
 		if(modelType == 2){
 			location = alexSkin;

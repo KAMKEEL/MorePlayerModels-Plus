@@ -1,11 +1,11 @@
 package noppes.mpm.client;
 
-import java.util.HashMap;
-
 import net.minecraft.nbt.NBTTagCompound;
 import noppes.mpm.ModelData;
 import noppes.mpm.ModelPartData;
 import noppes.mpm.constants.EnumParts;
+
+import java.util.HashMap;
 
 public class Preset {
 	

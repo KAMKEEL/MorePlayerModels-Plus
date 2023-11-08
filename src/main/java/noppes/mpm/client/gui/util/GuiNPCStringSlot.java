@@ -4,14 +4,13 @@
 
 package noppes.mpm.client.gui.util;
 
-import java.util.HashSet;
-import java.util.Vector;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiSlot;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
+
+import java.util.HashSet;
+import java.util.Vector;
 
 public class GuiNPCStringSlot extends GuiSlot
 {

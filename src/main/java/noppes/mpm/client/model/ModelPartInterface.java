@@ -8,7 +8,6 @@ import net.minecraft.util.ResourceLocation;
 import noppes.mpm.ModelData;
 import noppes.mpm.ModelPartData;
 import noppes.mpm.client.ClientProxy;
-
 import org.lwjgl.opengl.GL11;
 
 public abstract class ModelPartInterface extends ModelRenderer {

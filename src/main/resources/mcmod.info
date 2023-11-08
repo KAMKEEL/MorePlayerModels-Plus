@@ -9,7 +9,7 @@
   "updateUrl": "",
   "authorList": ["Kamkeel","Noppes"],
   "credits": "Louis XIV",
-  "logoFile": "assets/moreplayermodels/textures/gui/logo.png",
+  "logoFile": "assets/moreplayermodels/textures/gui/new_logo.png",
   "screenshots": [],
   "dependencies": []
 }

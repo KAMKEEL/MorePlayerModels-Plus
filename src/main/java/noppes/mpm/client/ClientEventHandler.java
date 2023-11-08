@@ -1,8 +1,10 @@
 package noppes.mpm.client;
 
-import java.util.List;
-import java.util.Random;
-
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.InputEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.Phase;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.renderer.EntityRenderer;
@@ -15,14 +17,13 @@ import noppes.mpm.*;
 import noppes.mpm.client.fx.EntityEnderFX;
 import noppes.mpm.client.fx.EntityRainbowFX;
 import noppes.mpm.client.gui.GuiCreationScreenInterface;
+import noppes.mpm.config.ConfigClient;
 import noppes.mpm.constants.EnumAnimation;
 import noppes.mpm.constants.EnumPackets;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.InputEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.Phase;
-import cpw.mods.fml.relauncher.Side;
 import noppes.mpm.constants.EnumParts;
+
+import java.util.List;
+import java.util.Random;
 
 public class ClientEventHandler {
 
@@ -48,19 +49,19 @@ public class ClientEventHandler {
 		if(!mc.inGameHasFocus)
 			return;
 		if(ClientProxy.Sleep.isPressed()){
-			processAnimation(MorePlayerModels.button1);
+			processAnimation(ConfigClient.button1);
 		}
 		if(ClientProxy.Sit.isPressed()){
-			processAnimation(MorePlayerModels.button2);
+			processAnimation(ConfigClient.button2);
 		}
 		if(ClientProxy.Dance.isPressed()){
-			processAnimation(MorePlayerModels.button3);
+			processAnimation(ConfigClient.button3);
 		}
 		if(ClientProxy.Hug.isPressed()){
-			processAnimation(MorePlayerModels.button4);
+			processAnimation(ConfigClient.button4);
 		}
 		if(ClientProxy.Crawl.isPressed()){
-			processAnimation(MorePlayerModels.button5);
+			processAnimation(ConfigClient.button5);
 		}
 	}
 
@@ -97,7 +98,7 @@ public class ClientEventHandler {
 	public void onRenderTick(TickEvent.RenderTickEvent event){
         partialTicks = event.renderTickTime;
 		Minecraft mc = Minecraft.getMinecraft();
-		if(MorePlayerModels.EnablePOV){
+		if(ConfigClient.EnablePOV){
 			if(alt == null)
 				alt = new EntityRendererAlt(mc);
     		if(mc.entityRenderer != alt){
@@ -115,6 +116,10 @@ public class ClientEventHandler {
 			return;
     	Minecraft mc = Minecraft.getMinecraft();
     	World world = mc.theWorld;
+		if ((this.prevWorld == null || world == null) && this.prevWorld != world) {
+			ClientCacheHandler.clearCache();
+			Client.sendData(EnumPackets.GET_PERMISSION);
+		}
     	if(world != null && prevWorld != world){
 			MorePlayerModels.HasServerSide = false;
 			ModelData data = PlayerDataController.instance.getPlayerData(mc.thePlayer);
@@ -179,7 +184,7 @@ public class ClientEventHandler {
 	}
 	
 	private void spawnParticles(EntityPlayer player, ModelData data, ModelPartData particles) {
-		if(!MorePlayerModels.EnableParticles)
+		if(!ConfigClient.EnableParticles)
 			return;
 		Minecraft minecraft =  Minecraft.getMinecraft();
 		double height = player.getYOffset() + data.getBodyY();

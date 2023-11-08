@@ -1,7 +1,5 @@
 package noppes.mpm.client.model;
 
-import java.util.Random;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.model.ModelBase;
@@ -26,9 +24,10 @@ import noppes.mpm.client.model.part.leg.ModelLegs;
 import noppes.mpm.client.model.part.leg.ModelSkirt;
 import noppes.mpm.client.model.part.leg.ModelTail;
 import noppes.mpm.constants.EnumAnimation;
-
 import noppes.mpm.constants.EnumParts;
 import org.lwjgl.opengl.GL11;
+
+import java.util.Random;
 
 public class ModelMPM extends ModelBiped{
 	public ModelData data;
@@ -71,18 +70,6 @@ public class ModelMPM extends ModelBiped{
 	public boolean isAlexArmor;
 	public boolean x64 = false;
 
-	// ModelMPM Presets
-	// Steve
-	public final static ModelMPM steve32 = new ModelMPM(0, 0);
-	public final static ModelMPM steve64 = new ModelMPM(0, false);
-	public final static ModelMPM steveArmorChest = new ModelMPM(1,0);
-	public final static ModelMPM steveArmor = new ModelMPM(0.5F,0);
-
-	// Alex
-	public final static ModelMPM alex = new ModelMPM(0, true);
-	public final static ModelMPM alex32armorChest = new ModelMPM(1,1);
-	public final static ModelMPM alex32armor = new ModelMPM(0.5F,1);
-
 	// Steve 64x64 and Alex 64x64
 	public ModelMPM(float par1, boolean alex) {
 
@@ -118,6 +105,9 @@ public class ModelMPM extends ModelBiped{
 		this.bipedBodywear.addBox(-4.0F, 0.0F, -2.0F, 8, 12, 4, par1 + 0.5F);
 		this.bipedBody.addChild(this.bipedBodywear);
 		// this.bipedBodywear.setRotationPoint(0.0F, 0.0F + par2, 0.0F);
+
+		bodywear = new ModelBodywear(this, 64, 64);
+		this.bipedBody.addChild(bodywear);
 
 		// Steve 64x64 Model or Alex 64x64 Model
 		if (alex){
@@ -188,7 +178,6 @@ public class ModelMPM extends ModelBiped{
 
 		headwear = new ModelHeadwear(this);
 		legs = new ModelLegs(this, (ModelScaleRenderer)bipedRightLeg, (ModelScaleRenderer)bipedLeftLeg, 64, 64);
-		bodywear = new ModelBodywear(this);
 
 		this.bipedBody.addChild(breasts = new ModelBreasts(this, 64, 64));
 		if(!isArmor){
@@ -280,6 +269,9 @@ public class ModelMPM extends ModelBiped{
 		// Body
 		this.bipedBodywear = (new ModelScaleRenderer(this, 0, 0));
 		this.bipedBody.addChild(this.bipedBodywear);
+
+		bodywear = new ModelBodywear(this, 0, 0);
+		this.bipedBody.addChild(bodywear);
 
 		// Arms
 		this.bipedRightArmWear = (new ModelScaleRenderer(this, 0, 0));
@@ -391,9 +383,16 @@ public class ModelMPM extends ModelBiped{
     @Override
     public void setRotationAngles(float par1, float par2, float par3, float par4, float par5, float par6, Entity entity)
     {
-    	if(!isRiding)
-    		isRiding = data.animation == EnumAnimation.SITTING;
-    	
+
+		// Fixes Sitting Animation when Disabling Sitting
+		if(data.fixSit){
+			isRiding = false;
+			data.fixSit = false;
+		}
+
+		if(!isRiding)
+			isRiding = data.animation == EnumAnimation.SITTING;
+
     	if(isSneak && (data.animation == EnumAnimation.CRAWLING || data.isSleeping()))
     		isSneak = false;
     	this.bipedBody.rotationPointZ = 0;
@@ -520,25 +519,12 @@ public class ModelMPM extends ModelBiped{
 		// Hide Body
 		((ModelScaleRenderer)this.bipedBody).isHidden = data.hideBody == 1;
 
-		// Hide Bodywear
-		((ModelScaleRenderer)this.bipedBodywear).isHidden = data.bodywear == 0;
 
-		if(bipedBodywear.showModel && !bipedBodywear.isHidden){
-			if(data.bodywear == 1 || isArmor){
-				((ModelScaleRenderer)this.bipedBodywear).setConfig(data.body,x,y,z);
-				((ModelScaleRenderer)this.bipedBodywear).render(f);
-			}
-			else if(data.bodywear == 2){
-				this.bodywear.rotateAngleX = bipedBodywear.rotateAngleX;
-				this.bodywear.rotateAngleY = bipedBodywear.rotateAngleY;
-				this.bodywear.rotateAngleZ = bipedBodywear.rotateAngleZ;
-				this.bodywear.rotationPointX = bipedBodywear.rotationPointX;
-				this.bodywear.rotationPointY = bipedBodywear.rotationPointY;
-				this.bodywear.rotationPointZ = bipedBodywear.rotationPointZ;
-				this.bodywear.setConfig(data.body,x,y,z);
-				this.bodywear.render(f);
-			}
-		}
+		// Hide Bodywear
+		this.bipedBodywear.isHidden = data.bodywear != 1;
+
+		// Hide Solid Bodywear
+		this.bodywear.isHidden = data.bodywear != 2;
     	
 		((ModelScaleRenderer)this.bipedBody).setConfig(body,x,y,z);
 		((ModelScaleRenderer)this.bipedBody).render(f);
@@ -554,6 +540,10 @@ public class ModelMPM extends ModelBiped{
 		float z = 0;
 
 		GL11.glPushMatrix();
+
+		if (isAlexArmor) {
+			GL11.glScalef(0.75F,1.0F,1.0F);
+		}
 
     	if(data.animation == EnumAnimation.DANCING){
 			float dancing = entity.ticksExisted / 4f;

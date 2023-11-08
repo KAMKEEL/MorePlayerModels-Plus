@@ -1,16 +1,12 @@
 package noppes.mpm.client;
 
+import net.minecraft.entity.player.EntityPlayer;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.UUID;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import noppes.mpm.LogWriter;
 
 public class AnalyticsTracking{
 

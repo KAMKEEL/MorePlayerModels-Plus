@@ -1,10 +1,5 @@
 package noppes.mpm.commands;
 
-import java.lang.reflect.Modifier;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.PlayerNotFoundException;
@@ -19,6 +14,11 @@ import noppes.mpm.ModelData;
 import noppes.mpm.PlayerDataController;
 import noppes.mpm.Server;
 import noppes.mpm.constants.EnumPackets;
+
+import java.lang.reflect.Modifier;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class CommandSetModel extends MpmCommandInterface {
 	public HashMap<String,Class<? extends EntityLivingBase>> entities = new HashMap<String, Class<? extends EntityLivingBase>>();

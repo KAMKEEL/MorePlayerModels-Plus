@@ -1,11 +1,5 @@
 package noppes.mpm.client.gui;
 
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
-
-import javax.imageio.ImageIO;
-
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.IResource;
@@ -16,6 +10,11 @@ import noppes.mpm.client.gui.util.GuiNpcTextField;
 import noppes.mpm.client.gui.util.ITextfieldListener;
 import noppes.mpm.client.gui.util.SubGuiInterface;
 import org.lwjgl.opengl.GL11;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class GuiModelColor extends SubGuiInterface implements ITextfieldListener{
 

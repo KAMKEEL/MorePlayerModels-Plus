@@ -1,7 +1,6 @@
 package noppes.mpm.client.gui;
 
-import java.io.IOException;
-
+import kamkeel.MorePlayerModelsPermissions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -12,29 +11,23 @@ import net.minecraft.nbt.NBTTagCompound;
 import noppes.mpm.ModelData;
 import noppes.mpm.PlayerDataController;
 import noppes.mpm.client.Client;
-import noppes.mpm.client.gui.util.GuiNPCInterface;
-import noppes.mpm.client.gui.util.GuiNpcButton;
-import noppes.mpm.client.gui.util.GuiNpcLabel;
-import noppes.mpm.client.gui.util.GuiNpcSlider;
-import noppes.mpm.client.gui.util.ISliderListener;
-import noppes.mpm.client.gui.util.ISubGuiListener;
-import noppes.mpm.client.gui.util.SubGuiInterface;
+import noppes.mpm.client.ClientCacheHandler;
+import noppes.mpm.client.gui.util.*;
 import noppes.mpm.constants.EnumPackets;
-
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import static noppes.mpm.client.gui.GuiCreationParts.fixPlayerSkinLegs;
 
-public class GuiCreationScreenInterface extends GuiNPCInterface implements ISubGuiListener, ISliderListener{
+public class GuiCreationScreenInterface extends GuiNPCInterface implements ISubGuiListener, ISliderListener {
 	public static String Message = "";
 	public EntityLivingBase entity;
 	
 	private boolean saving = false;
 	protected boolean hasSaving = true;
-	public int active = 0;
+	public int active = -1;
 
-	private EntityPlayer player;
+	public EntityPlayer player;
 	public int xOffset = 0;
 	public ModelData playerdata;
 
@@ -48,6 +41,7 @@ public class GuiCreationScreenInterface extends GuiNPCInterface implements ISubG
 	private static float rotation = 0.5f;
 	
 	public GuiCreationScreenInterface(){
+		Client.sendData(EnumPackets.GET_PERMISSION);
 		playerdata = PlayerDataController.instance.getPlayerData(Minecraft.getMinecraft().thePlayer);
 		original = playerdata.writeToNBT();
 		xSize = 400;
@@ -65,10 +59,15 @@ public class GuiCreationScreenInterface extends GuiNPCInterface implements ISubG
     	Keyboard.enableRepeatEvents(true);
 		guiTop += 2;
     	addButton(new GuiNpcButton(0, guiLeft, guiTop, 60, 20, "gui.config"));
-    	addButton(new GuiNpcButton(1, guiLeft + 62, guiTop, 60, 20, "gui.entity"));
+		if(ClientCacheHandler.hasPermission(MorePlayerModelsPermissions.CONFIG_ENTITY)) {
+			addButton(new GuiNpcButton(1, guiLeft + 62, guiTop, 60, 20, "gui.entity"));
+		}
 
 		if(entity == null){
 			addButton(new GuiNpcButton(2, guiLeft, guiTop + 23, 60, 20, "gui.parts"));
+			if(!ClientCacheHandler.hasPermission(MorePlayerModelsPermissions.PARTS)){
+				getButton(2).enabled = false;
+			}
 			addButton(new GuiNpcButton(250, guiLeft + 124, guiTop, 60, 20, new String[]{"Steve","Steve64","Alex"}, playerdata.modelType));
 			addButton(new GuiNpcButton(251, guiLeft + 124, guiTop + 23, 60, 20, "gui.limbs"));
 		}
@@ -82,13 +81,23 @@ public class GuiCreationScreenInterface extends GuiNPCInterface implements ISubG
     			return;
     		}
     	}
-    	if(entity == null)
-    		addButton(new GuiNpcButton(3, guiLeft + 62, guiTop + 23, 60, 20, "gui.scale"));
+    	if(entity == null){
+			if(ClientCacheHandler.hasPermission(MorePlayerModelsPermissions.CONFIG_SCALE)) {
+				addButton(new GuiNpcButton(3, guiLeft + 62, guiTop + 23, 60, 20, "gui.scale"));
+			}
+		}
+
     	if(hasSaving){
-    		addButton(new GuiNpcButton(4, guiLeft, guiTop + ySize - 24, 60, 20, "gui.save"));
-    		addButton(new GuiNpcButton(5, guiLeft + 62, guiTop + ySize - 24, 60, 20, "gui.load"));
+			if(ClientCacheHandler.hasPermission(MorePlayerModelsPermissions.CONFIG_SAVE)) {
+				addButton(new GuiNpcButton(4, guiLeft, guiTop + ySize - 24, 60, 20, "gui.save"));
+			}
+			if(ClientCacheHandler.hasPermission(MorePlayerModelsPermissions.CONFIG_LOAD)) {
+				addButton(new GuiNpcButton(5, guiLeft + 62, guiTop + ySize - 24, 60, 20, "gui.load"));
+			}
     	}
-    	getButton(active).enabled = false;
+		if(active != -1){
+			getButton(active).enabled = false;
+		}
 		addButton(unzoom = new GuiNpcButton(666, guiLeft + xSize - 79, guiTop, 20, 20, "-"));
 		addButton(zoom = new GuiNpcButton(667, guiLeft + xSize - 57 , guiTop, 20, 20, "+"));
     	addButton(new GuiNpcButton(66, guiLeft + xSize - 20, guiTop, 20, 20, "X"));

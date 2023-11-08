@@ -1,11 +1,5 @@
 package noppes.mpm.client.model.part.leg;
 
-import java.util.List;
-
-import noppes.mpm.constants.EnumParts;
-import org.lwjgl.opengl.GL11;
-
-import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
@@ -13,8 +7,9 @@ import noppes.mpm.ModelData;
 import noppes.mpm.ModelPartData;
 import noppes.mpm.client.model.ModelMPM;
 import noppes.mpm.client.model.ModelPartInterface;
-import noppes.mpm.client.model.ModelPlane;
 import noppes.mpm.client.model.ModelPlaneRenderer;
+import noppes.mpm.constants.EnumParts;
+import org.lwjgl.opengl.GL11;
 
 public class ModelSkirt extends ModelPartInterface {
 	private ModelPlaneRenderer Shape1;

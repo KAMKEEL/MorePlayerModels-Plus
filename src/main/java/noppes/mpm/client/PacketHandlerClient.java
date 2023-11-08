@@ -1,23 +1,18 @@
 package noppes.mpm.client;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.network.FMLNetworkEvent.ClientCustomPacketEvent;
 import io.netty.buffer.ByteBuf;
-
-import java.io.IOException;
-import java.util.List;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import noppes.mpm.LogWriter;
-import noppes.mpm.ModelData;
-import noppes.mpm.MorePlayerModels;
-import noppes.mpm.PacketHandlerServer;
-import noppes.mpm.PlayerDataController;
-import noppes.mpm.Server;
+import noppes.mpm.*;
 import noppes.mpm.constants.EnumPackets;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.network.FMLNetworkEvent.ClientCustomPacketEvent;
+import noppes.mpm.controllers.PermissionController;
+
+import java.io.IOException;
+import java.util.List;
 
 public class PacketHandlerClient extends PacketHandlerServer{
 
@@ -88,6 +83,10 @@ public class PacketHandlerClient extends PacketHandlerServer{
 			ItemStack item = ItemStack.loadItemStackFromNBT(compound);
 			ModelData data = PlayerDataController.instance.getPlayerData(pl);
 			data.backItem = item;
+		}
+		else if(type == EnumPackets.RECEIVE_PERMISSION){
+			NBTTagCompound compound = Server.readNBT(buffer);
+			ClientCacheHandler.clientPerms = PermissionController.readNBT(compound);
 		}
 		else if(type == EnumPackets.PARTICLE){
 			int animation = buffer.readInt();

@@ -1,17 +1,11 @@
 package noppes.mpm.client.model.part.body;
 
-import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.ResourceLocation;
 import noppes.mpm.ModelData;
-import noppes.mpm.ModelPartData;
-import noppes.mpm.client.ClientProxy;
 import noppes.mpm.client.model.Model2DRenderer;
 import noppes.mpm.client.model.ModelMPM;
 import noppes.mpm.client.model.ModelPartInterface;
-import noppes.mpm.constants.EnumParts;
-import org.lwjgl.opengl.GL11;
 
 public class ModelBreasts extends ModelPartInterface {
 	private Model2DRenderer breasts;

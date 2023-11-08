@@ -1,92 +1,54 @@
 package noppes.mpm;
 
-import java.io.File;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.GameRules;
-import net.minecraftforge.common.MinecraftForge;
-import noppes.mpm.commands.CommandAngry;
-import noppes.mpm.commands.CommandBow;
-import noppes.mpm.commands.CommandCrawl;
-import noppes.mpm.commands.CommandCry;
-import noppes.mpm.commands.CommandDance;
-import noppes.mpm.commands.CommandHug;
-import noppes.mpm.commands.CommandLove;
-import noppes.mpm.commands.CommandScale;
-import noppes.mpm.commands.CommandSetModel;
-import noppes.mpm.commands.CommandSetName;
-import noppes.mpm.commands.CommandSetUrl;
-import noppes.mpm.commands.CommandSing;
-import noppes.mpm.commands.CommandSit;
-import noppes.mpm.commands.CommandSleep;
-import noppes.mpm.commands.CommandWag;
-import noppes.mpm.commands.CommandWave;
-import noppes.mpm.config.ConfigLoader;
-import noppes.mpm.config.ConfigProp;
-import noppes.mpm.constants.EnumAnimation;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerAboutToStartEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.FMLEventChannel;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import kamkeel.MorePlayerModelsPermissions;
+import kamkeel.command.CommandMPM;
+import net.minecraft.client.Minecraft;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.GameRules;
+import net.minecraftforge.common.MinecraftForge;
+import noppes.mpm.commands.*;
+import noppes.mpm.config.ConfigClient;
+import noppes.mpm.config.LoadConfiguration;
+import noppes.mpm.config.legacy.LegacyConfig;
+import noppes.mpm.controllers.PermissionController;
 
-@Mod(modid = "moreplayermodels", name = "MorePlayerModels", version = "2.0")
+import java.io.File;
+
+import static noppes.mpm.MorePlayerModels.VERSION;
+
+@Mod(modid = "moreplayermodels", name = "MorePlayerModels+", version = VERSION)
 public class MorePlayerModels {
-	@ConfigProp
-	public static int Tooltips = 2;
 
 	@SidedProxy(clientSide = "noppes.mpm.client.ClientProxy", serverSide = "noppes.mpm.CommonProxy")
 	public static CommonProxy proxy;
-	
+	public final static String VERSION = "3.0";
+
 	public static FMLEventChannel Channel;
 
 	public static MorePlayerModels instance;
 
-	public static int Revision = 5;
+	public static int Revision = 6;
 	
 	public static File dir;
 	
 	public static boolean HasServerSide = false;
-	
-	@ConfigProp(info="Enable different perspective heights for different model sizes") 
-	public static boolean EnablePOV = true;
 
-	@ConfigProp(info="Enables the item on your back") 
-	public static boolean EnableBackItem = true;
+	public static String configPath;
+	public static String legacyPath;
+	public static boolean legacyExist;
 
-	@ConfigProp(info="Enables chat bubbles")
-	public static boolean EnableChatBubbles = false;
+	public static LegacyConfig legacyConfig;
 
-	@ConfigProp(info="Enables MorePlayerModels startup update message")
-	public static boolean EnableUpdateChecker = true;
-
-	@ConfigProp(info="Set to false if you dont want to see player particles")
-	public static boolean EnableParticles = true;
-
-	@ConfigProp(info="Set to true if you dont want to see hide player names")
-	public static boolean HidePlayerNames = false;
-
-	@ConfigProp(info="Set to true if you dont want to see hide selection boxes when pointing to blocks")
-	public static boolean HideSelectionBox = false;
-
-	@ConfigProp(info="Used to register buttons to animations")
-	public static int button1 = EnumAnimation.SLEEPING_SOUTH.ordinal();
-	@ConfigProp(info="Used to register buttons to animations")
-	public static int button2 = EnumAnimation.SITTING.ordinal();
-	@ConfigProp(info="Used to register buttons to animations")
-	public static int button3 = EnumAnimation.CRAWLING.ordinal();
-	@ConfigProp(info="Used to register buttons to animations")
-	public static int button4 = EnumAnimation.HUG.ordinal();
-	@ConfigProp(info="Used to register buttons to animations")
-	public static int button5 = EnumAnimation.DANCING.ordinal();
-	
-	public ConfigLoader configLoader;
-	
 	public MorePlayerModels(){
 		instance = this;
 	}
@@ -107,19 +69,41 @@ public class MorePlayerModels {
 		
 		new PlayerDataController(MorePlayerModels.dir);
 
-		configLoader = new ConfigLoader(this.getClass(), new File(dir, "config"), "MorePlayerModels");
-		configLoader.loadConfig();
+		configPath = ev.getModConfigurationDirectory() + File.separator + "MorePlayerModelsPlus";
+		legacyPath = ev.getModConfigurationDirectory() + "/MorePlayerModels.cfg";
+
+		File configDir = new File(configPath);
+		if(!configDir.exists()){
+			// Convert Legacy Config to New Config if NO Config Folder Exists
+			File legacyFile = new File(legacyPath);
+			if(legacyFile.exists()){
+				System.out.println("Loading Legacy Config");
+				legacyExist = true;
+				legacyConfig = new LegacyConfig();
+				legacyConfig.init();
+			}
+		}
+		configPath += File.separator;
+		LoadConfiguration.init(configPath);
 
 		if(Loader.isModLoaded("Morph"))
-			EnablePOV = false;
+			ConfigClient.EnablePOV = false;
 				
 		proxy.load();
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, proxy);
-
 		
 		MinecraftForge.EVENT_BUS.register(new ServerEventHandler());
 		FMLCommonHandler.instance().bus().register(new ServerTickHandler());
+
+		new MorePlayerModelsPermissions();
 	}
+
+	@EventHandler
+	public void setAboutToStart(FMLServerAboutToStartEvent event) {
+		new PermissionController();
+		PermissionController.Instance.reloadPermissionData();
+	}
+
 	@EventHandler
 	public void serverstart(FMLServerStartingEvent event) {
 		event.registerServerCommand(new CommandLove());
@@ -138,6 +122,7 @@ public class MorePlayerModels {
 		event.registerServerCommand(new CommandScale());
 		event.registerServerCommand(new CommandSetModel());
 		event.registerServerCommand(new CommandSetName());
+		event.registerServerCommand(new CommandMPM());
 
 		GameRules rules = event.getServer().worldServerForDimension(0).getGameRules();
 		if(!rules.hasRule("mpmAllowEntityModels"))

@@ -1,16 +1,15 @@
 package noppes.mpm.client.gui.util;
 
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
-
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
 
 public class GuiCustomScroll extends GuiScreen{
 	public static final ResourceLocation resource = new ResourceLocation("moreplayermodels","textures/gui/misc.png");
