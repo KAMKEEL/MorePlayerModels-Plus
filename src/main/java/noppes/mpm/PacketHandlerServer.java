@@ -79,7 +79,7 @@ public class PacketHandlerServer{
 				lastRequest = PermissionController.Instance.lastRequest.get(uuid);
 			}
 
-			if(lastRequest == -1 || System.currentTimeMillis() - lastRequest > 30 * 60 * 1000){
+			if(lastRequest == -1 || System.currentTimeMillis() - lastRequest > 60 * 1000){
 				NBTTagCompound nbtTagCompound =  PermissionController.Instance.writeNBT(player);
 				PermissionController.Instance.lastRequest.put(uuid, System.currentTimeMillis());
 				Server.sendData(player, EnumPackets.RECEIVE_PERMISSION, nbtTagCompound);
