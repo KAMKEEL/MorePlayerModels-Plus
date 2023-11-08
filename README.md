@@ -1,6 +1,6 @@
 
 ## 👋 Welcome to the MorePlayerModels+ Repository.
-![](images/new_logo.png)  
+![](images/logo_new.png)  
 
 > ModePlayerModels+ is a [Minecraft](https://minecraft.net/) mod that allows you to customize your player with different body parts. ModePlayerModels+ is only a branch version of the **1.7.10** Forge version of the original (down below) and has no plans to add or update any other version. This is not an official version of ModePlayerModels.
 
