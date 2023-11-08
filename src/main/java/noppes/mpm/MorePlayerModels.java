@@ -11,6 +11,7 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.FMLEventChannel;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import kamkeel.MorePlayerModelsPermissions;
+import kamkeel.command.CommandMPM;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.GameRules;
@@ -121,6 +122,7 @@ public class MorePlayerModels {
 		event.registerServerCommand(new CommandScale());
 		event.registerServerCommand(new CommandSetModel());
 		event.registerServerCommand(new CommandSetName());
+		event.registerServerCommand(new CommandMPM());
 
 		GameRules rules = event.getServer().worldServerForDimension(0).getGameRules();
 		if(!rules.hasRule("mpmAllowEntityModels"))
