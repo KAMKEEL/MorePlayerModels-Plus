@@ -130,8 +130,8 @@ public class ModelTail extends ModelScaleRenderer {
 		}
 
 		rotationPointZ += base.bipedRightLeg.rotationPointZ + 0.5f;
-		fox.rotateAngleX = tail.rotateAngleX = feather.rotateAngleX = dragon.rotateAngleX = squirrel.rotateAngleX = horse.rotateAngleX = fin.rotateAngleX = rodent.rotateAngleX = rotateAngleX;
-		fox.rotateAngleY = tail.rotateAngleY = feather.rotateAngleY = dragon.rotateAngleY = squirrel.rotateAngleY = horse.rotateAngleY = fin.rotateAngleY = rodent.rotateAngleY = rotateAngleY;
+		monkey.rotateAngleX = fox.rotateAngleX = tail.rotateAngleX = feather.rotateAngleX = dragon.rotateAngleX = squirrel.rotateAngleX = horse.rotateAngleX = fin.rotateAngleX = rodent.rotateAngleX = rotateAngleX;
+		monkey.rotateAngleY = fox.rotateAngleY = tail.rotateAngleY = feather.rotateAngleY = dragon.rotateAngleY = squirrel.rotateAngleY = horse.rotateAngleY = fin.rotateAngleY = rodent.rotateAngleY = rotateAngleY;
 	}
 
     public void setLivingAnimations(ModelPartData data, EntityLivingBase entity, float par2, float par3, float par4) {

@@ -202,6 +202,34 @@ public class ModelMonkeyTail extends ModelRenderer {
 				this.m6.rotateAngleX += xMotionReducer * (MathHelper.sin(f2 * angleSpeed) * 0.4f - 0.4f);
 				this.m6.rotateAngleY += yMotionReducer * (MathHelper.cos(f2 * angleSpeed) * 0.4f - 0.2f + r5 + r6);
 			}
+
+			double motionX = entity.motionX;
+			double motionY = -entity.motionY;
+
+			// Scale down the motion values to control the effect
+			float scale = 0.18f; // Adjust the scale factor as needed
+
+			// Define a damping factor for smoother motion
+			float damping = 0.2f; // Adjust the damping factor as needed
+
+			// Calculate the difference between the current rotation angle and the motion influence
+			double deltaY = motionY * scale - monkey.rotateAngleX;
+			double deltaX = motionX * scale - monkey.rotateAngleY;
+
+			// Apply damping to smooth out the motion
+			m1.rotateAngleX += deltaY * damping;
+			m2.rotateAngleX += deltaY * damping;
+			m3.rotateAngleX += deltaY * damping;
+			m4.rotateAngleX += deltaY * damping;
+			m5.rotateAngleX += deltaY * damping;
+			m6.rotateAngleX += deltaY * damping;
+
+			m1.rotateAngleY += deltaX * damping;
+			m2.rotateAngleY += deltaX * damping;
+			m3.rotateAngleY += deltaX * damping;
+			m4.rotateAngleY += deltaX * damping;
+			m5.rotateAngleY += deltaX * damping;
+			m6.rotateAngleY += deltaX * damping;
 		}
 	}
 }
