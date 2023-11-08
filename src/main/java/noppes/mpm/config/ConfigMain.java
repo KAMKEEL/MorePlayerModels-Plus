@@ -49,7 +49,7 @@ public class ConfigMain
         }
         catch (Exception e)
         {
-            FMLLog.log(Level.ERROR, e, "CNPC+ has had a problem loading its main configuration");
+            FMLLog.log(Level.ERROR, e, "MPM+ has had a problem loading its main configuration");
         }
         finally
         {
