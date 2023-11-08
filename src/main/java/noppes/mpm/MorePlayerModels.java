@@ -37,7 +37,7 @@ public class MorePlayerModels {
 
 	public static MorePlayerModels instance;
 
-	public static int Revision = 5;
+	public static int Revision = 6;
 	
 	public static File dir;
 	
