@@ -130,6 +130,15 @@ public class ModelMonkeyTail extends ModelRenderer {
 	}
 
 	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
+		// Scale down the motion values to control the effect
+		float scale = 0.18f; // Adjust the scale factor as needed
+
+		// Define a damping factor for smoother motion
+		float damping = 0.6f; // Adjust the damping factor as needed
+
+		double motionX = entity.motionX;
+		double motionY = -entity.motionY;
+
 		if(!monkey_large.isHidden){
 			this.monkey_large.rotateAngleY = 0.2f;
 			this.monkey_large.rotateAngleX = -0.3f;
@@ -164,6 +173,27 @@ public class ModelMonkeyTail extends ModelRenderer {
 				ml5.rotateAngleY += yMotionReducer * (MathHelper.cos(f2 * angleSpeed) * 0.4f - 0.2f + r2 + r3);
 				ml5.rotateAngleX += xMotionReducer * (MathHelper.sin(f2 * angleSpeed) * 0.4f - 0.4f);
 			}
+
+			// Calculate the difference between the current rotation angle and the motion influence
+			double deltaY = motionY * scale - monkey.rotateAngleX;
+			double deltaX = motionX * scale - monkey.rotateAngleY;
+
+			// Apply damping to smooth out the motion
+
+			monkey_large.rotateAngleX += deltaY * damping;
+			ml1.rotateAngleX += deltaY * damping;
+			ml2.rotateAngleX += deltaY * damping;
+			ml3.rotateAngleX += deltaY * damping;
+			ml4.rotateAngleX += deltaY * damping;
+			ml5.rotateAngleX += deltaY * damping;
+
+			monkey_large.rotateAngleY += deltaX * damping;
+			ml1.rotateAngleY += deltaX * damping;
+			ml2.rotateAngleY += deltaX * damping;
+			ml3.rotateAngleY += deltaX * damping;
+			ml4.rotateAngleY += deltaX * damping;
+			ml5.rotateAngleY += deltaX * damping;
+
 		} else if (!monkey.isHidden){
 			this.m1.rotateAngleX = -0.3f;
 			this.m1.rotateAngleY = 0.2f;
@@ -202,15 +232,6 @@ public class ModelMonkeyTail extends ModelRenderer {
 				this.m6.rotateAngleX += xMotionReducer * (MathHelper.sin(f2 * angleSpeed) * 0.4f - 0.4f);
 				this.m6.rotateAngleY += yMotionReducer * (MathHelper.cos(f2 * angleSpeed) * 0.4f - 0.2f + r5 + r6);
 			}
-
-			double motionX = entity.motionX;
-			double motionY = -entity.motionY;
-
-			// Scale down the motion values to control the effect
-			float scale = 0.18f; // Adjust the scale factor as needed
-
-			// Define a damping factor for smoother motion
-			float damping = 0.6f; // Adjust the damping factor as needed
 
 			// Calculate the difference between the current rotation angle and the motion influence
 			double deltaY = motionY * scale - monkey.rotateAngleX;
