@@ -15,39 +15,49 @@ import noppes.mpm.constants.EnumAnimation;
 import noppes.mpm.constants.EnumParts;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.lang.reflect.Method;
 import java.security.MessageDigest;
+import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 
 public class ModelData extends ModelDataShared implements IExtendedEntityProperties{
-	public static ExecutorService saveExecutor = Executors.newSingleThreadExecutor();
-	public boolean loaded = false;
-	public boolean playerLoaded = false;
+	public static ExecutorService saveExecutor = Executors.newFixedThreadPool(1);
+
+	public boolean resourceInit = false;
+	public boolean resourceLoaded = false;
 	public boolean cloakLoaded = false;
-	public boolean fixSit = false;
-	public EntityPlayer player = null;
-	
-	public int rev = MorePlayerModels.Revision;
+
+	public boolean webapiActive = false;
+	public boolean webapiInit = false;
+
+	public ResourceLocation cloakObject = null;
 
 	public ItemStack backItem;
-	
+
 	public int inLove = 0;
-	public int animationTime = 0;
-	
+	public int animationTime = -1;
+
 	public EnumAnimation animation = EnumAnimation.NONE;
+	public EnumAnimation prevAnimation = EnumAnimation.NONE;
 	public int animationStart = 0;
-	
+	public long lastEdited = System.currentTimeMillis();
+
 	public short soundType = 0;
-	public ResourceLocation cloakTexture;
+	public double prevPosX, prevPosY, prevPosZ;
+	public EntityPlayer player = null;
+
+	public int rev = MorePlayerModels.Revision;
 
 	public byte urlType = 0;	//	0:url, 1:url64
-	public String url= "";
-	public String cloakUrl = "";
-	public String displayName = "";
 	public int modelType = 0; 	// 	0: Steve, 1: Steve64, 2: Alex
+
+	public String url= "";
+	public String cloakUrl= "";
+	public String displayName = "";
 
 	public ModelData(){
 	}
@@ -65,35 +75,37 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 		compound.setByte("UrlType", urlType);
 		compound.setString("CloakUrl", cloakUrl);
 
+		compound.setLong("LastEdited", lastEdited);
+
 		return compound;
 	}
 	
 	public void readFromNBT(NBTTagCompound compound){
+		String prevUrl = url;
+		String prevCloakUrl = cloakUrl;
 		super.readFromNBT(compound);
 		rev = compound.getInteger("Revision");
 		
 		soundType = compound.getShort("SoundType");
+		lastEdited = compound.getLong("LastEdited");
 		displayName = compound.getString("DisplayName");
-		if(player != null)
+		if(player != null){
 			player.refreshDisplayName();
-		
-		String prevUrl = url;
-		String prevCloakUrl = cloakUrl;
-		byte prevUrlType = urlType;
-		int prevModelType = modelType;
+			if(entityClass == null)
+				player.getEntityData().removeTag("MPMModel");
+			else
+				player.getEntityData().setString("MPMModel", entityClass.getCanonicalName());
+		}
+		setAnimation(compound.getInteger("Animation"));
+
 		url = compound.getString("CustomSkinUrl");
 		urlType = compound.getByte("UrlType");
 		modelType = compound.getInteger("ModelType");
 		cloakUrl = compound.getString("CloakUrl");
 
-		setAnimation(compound.getInteger("Animation"));
-		
-		if(!prevUrl.equals(url) || prevUrlType != urlType || prevModelType != modelType){
-			loaded = false;
-			playerLoaded = false;
-		}
-		if(!prevCloakUrl.equals(cloakUrl)){
-			cloakLoaded = false;
+		if(!prevUrl.equals(url) && !prevCloakUrl.equals(cloakUrl)) {
+			resourceInit = false;
+			resourceLoaded = false;
 		}
 	}
 
@@ -102,9 +114,21 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 			animation = EnumAnimation.values()[i];
 		else
 			animation = EnumAnimation.NONE;
-		
+		setAnimation(animation);
+	}
+
+	public void setAnimation(EnumAnimation ani) {
+		animationTime = -1;
+		animation = ani;
+		lastEdited = System.currentTimeMillis();
+
 		if(animation == EnumAnimation.WAVING)
 			animationTime = 80;
+
+		if(player == null || ani == EnumAnimation.NONE)
+			animationStart = -1;
+		else
+			animationStart = player.ticksExisted;
 	}
 
 	public EntityLivingBase getEntity(World world, EntityPlayer player){
@@ -179,9 +203,8 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 	public ModelData copy(){
 		ModelData data = new ModelData();
 		data.readFromNBT(this.writeToNBT());
-		data.playerLoaded = playerLoaded;
+		data.resourceLoaded = false;
 		data.player = player;
-		data.cloakLoaded = cloakLoaded;
 		return data;
 	}
 
@@ -252,7 +275,7 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 
 	public void setExtra(EntityLivingBase entity, String key, String value){
 		key = key.toLowerCase();
-		
+
 		if(key.equals("breed") && EntityList.getEntityString(entity).equals("doggystyle.Dog")){
 			try {
 				Method method = entity.getClass().getMethod("setBreedID", int.class);
@@ -262,7 +285,7 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 				extra.setString("EntityData21", comp.getString("EntityData21"));
 	    		clearEntity();
 			} catch (Exception e) {
-				
+
 			}
 		}
 	}

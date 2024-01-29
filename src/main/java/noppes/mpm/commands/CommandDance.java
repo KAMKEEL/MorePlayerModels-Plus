@@ -22,7 +22,7 @@ public class CommandDance extends MpmCommandInterface {
 		EntityPlayerMP player = (EntityPlayerMP) icommandsender;
 		ModelData data = PlayerDataController.instance.getPlayerData(player);
 		EnumAnimation ani = data.animation == EnumAnimation.DANCING?EnumAnimation.NONE:EnumAnimation.DANCING;
-		Server.sendAssociatedData(player, EnumPackets.ANIMATION, player.getCommandSenderName(), ani);
+		Server.sendAssociatedData(player, EnumPackets.ANIMATION, player.getUniqueID(), ani);
 		data.animation = ani;
 	}
 	

@@ -47,30 +47,30 @@ public class PacketHandlerServer{
 
 			Server.sendData(player, EnumPackets.PING, MorePlayerModels.Revision);
 		}
-		else if(type == EnumPackets.REQUEST_PLAYER_DATA){
-			EntityPlayer pl = player.worldObj.getPlayerEntityByName(Server.readString(buffer));
-			if(pl == null)
-				return;
-			String hash = Server.readString(buffer);
-			ModelData data = PlayerDataController.instance.getPlayerData(pl);
-			if(!hash.equals(data.getHash()))
-				Server.sendData(player, EnumPackets.SEND_PLAYER_DATA, pl.getCommandSenderName(), data.writeToNBT());
-
-			ItemStack back = pl.inventory.mainInventory[0];
-			if(back != null)
-				Server.sendData(player, EnumPackets.BACK_ITEM_UPDATE, pl.getCommandSenderName(), back.writeToNBT(new NBTTagCompound()));
-			else
-				Server.sendData(player, EnumPackets.BACK_ITEM_REMOVE, pl.getCommandSenderName());
-		}
+//		else if(type == EnumPackets.REQUEST_PLAYER_DATA){
+//			EntityPlayer pl = player.worldObj.getPlayerEntityByName(Server.readString(buffer));
+//			if(pl == null)
+//				return;
+//			String hash = Server.readString(buffer);
+//			ModelData data = PlayerDataController.instance.getPlayerData(pl);
+//			if(!hash.equals(data.getHash()))
+//				Server.sendData(player, EnumPackets.SEND_PLAYER_DATA, pl.getCommandSenderName(), data.writeToNBT());
+//
+//			ItemStack back = pl.inventory.mainInventory[0];
+//			if(back != null)
+//				Server.sendData(player, EnumPackets.BACK_ITEM_UPDATE, pl.getCommandSenderName(), back.writeToNBT(new NBTTagCompound()));
+//			else
+//				Server.sendData(player, EnumPackets.BACK_ITEM_REMOVE, pl.getCommandSenderName());
+//		}
 		else if(type == EnumPackets.UPDATE_PLAYER_DATA){
 			ModelData data = PlayerDataController.instance.getPlayerData(player);
 			data.readFromNBT(Server.readNBT(buffer));
-			
+
 			if(!player.worldObj.getGameRules().getGameRuleBooleanValue("mpmAllowEntityModels"))
 				data.entityClass = null;
-			
+
 			PlayerDataController.instance.savePlayerData(player, data);
-			Server.sendAssociatedData(player, EnumPackets.SEND_PLAYER_DATA, player.getCommandSenderName(), data.writeToNBT());
+			Server.sendAssociatedData(player, EnumPackets.SEND_PLAYER_DATA, player.getUniqueID(), data.writeToNBT());
 		}
 		else if(type == EnumPackets.GET_PERMISSION){
 			long lastRequest = -1;
@@ -106,7 +106,7 @@ public class PacketHandlerServer{
 			if(data.animationEquals(animation))
 				animation = EnumAnimation.NONE;
 
-			Server.sendAssociatedData(player, EnumPackets.ANIMATION, player.getCommandSenderName(), animation);
+			Server.sendAssociatedData(player, EnumPackets.ANIMATION, player.getUniqueID(), animation);
 			data.animation = animation;
 		}
 	}

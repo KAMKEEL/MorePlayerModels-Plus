@@ -57,15 +57,18 @@ public class ServerTickHandler {
 		if(data.backItem == item)
 			return;
 		if(item == null){
-			Server.sendAssociatedData(player, EnumPackets.BACK_ITEM_REMOVE, player.getCommandSenderName());
+			Server.sendAssociatedData(player, EnumPackets.BACK_ITEM_REMOVE, player.getUniqueID());
 		}
 		else{
 			NBTTagCompound tag = item.writeToNBT(new NBTTagCompound());
-			Server.sendAssociatedData(player, EnumPackets.BACK_ITEM_UPDATE, player.getCommandSenderName(), tag);
+			Server.sendAssociatedData(player, EnumPackets.BACK_ITEM_UPDATE, player.getUniqueID(), tag);
 		}
 		data.backItem = item;
 		if(data.animation != EnumAnimation.NONE)
 			checkAnimation(player, data);
+		data.prevPosX = player.posX;
+		data.prevPosY = player.posY;
+		data.prevPosZ = player.posZ;
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -74,16 +77,18 @@ public class ServerTickHandler {
 		List<EntityPlayer> players = mc.theWorld.playerEntities;
 		for(EntityPlayer p : players){
 			ModelData data = PlayerDataController.instance.getPlayerData(p);
-			data.loaded = false;
-			data.playerLoaded = false;
+			data.resourceInit = false;
+			data.resourceLoaded = false;
 			data.cloakLoaded = false;
 		}
 	}
 
 	public static void checkAnimation(EntityPlayer player, ModelData data){
-		double motionX = player.prevPosX - player.posX;
-		double motionY = player.prevPosY - player.posY;
-		double motionZ = player.prevPosZ - player.posZ;
+		if(data.prevPosY <= 0 || player.ticksExisted < 40)
+			return;
+		double motionX = data.prevPosX - player.posX;
+		double motionY = data.prevPosY - player.posY;
+		double motionZ = data.prevPosZ - player.posZ;
 
 		double speed = motionX * motionX +  motionZ * motionZ;
 		boolean isJumping = motionY * motionY > 0.08;
@@ -91,19 +96,13 @@ public class ServerTickHandler {
 		if(data.animationTime > 0)
 			data.animationTime--;
 
-		if(player.isPlayerSleeping() || player.isRiding() || data.animationTime == 0 && data.animation == EnumAnimation.WAVING || data.animation == EnumAnimation.BOW && player.isSneaking())
-			data.animation = EnumAnimation.NONE;
+		if(player.isPlayerSleeping() || player.isRiding() || data.animationTime == 0  || data.animation == EnumAnimation.BOW && player.isSneaking())
+			data.setAnimation(EnumAnimation.NONE);
 
 		if(!isJumping && player.isSneaking() && (data.animation == EnumAnimation.HUG || data.animation == EnumAnimation.CRAWLING ||
 				data.animation == EnumAnimation.SITTING || data.animation == EnumAnimation.DANCING))
 			return;
-
-		if(speed > 0.01 || isJumping || player.isPlayerSleeping() || player.isRiding() || data.isSleeping() && speed > 0.001){
-			// Fixes Sitting Animation when Disabling Sitting
-			if(data.animation == EnumAnimation.SITTING){
-				data.fixSit = true;
-			}
-			data.animation = EnumAnimation.NONE;
-		}
+		if(speed > 0.01 || isJumping || player.isPlayerSleeping() || player.isRiding() || data.isSleeping() && speed > 0.001)
+			data.setAnimation(EnumAnimation.NONE);
 	}
 }

@@ -3,6 +3,9 @@ package noppes.mpm;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.entity.PlaySoundAtEntityEvent;
@@ -14,7 +17,23 @@ public class ServerEventHandler {
 
 	@SubscribeEvent
 	public void chat(ServerChatEvent event){
-		Server.sendToAll(EnumPackets.CHAT_EVENT, event.player.getCommandSenderName(), event.message);
+		Server.sendToAll(event.player.mcServer, EnumPackets.CHAT_EVENT, event.player.getUniqueID(), event.message);
+	}
+
+	@SubscribeEvent
+	public void playerTracking(PlayerEvent.StartTracking event){
+		if(!(event.target instanceof EntityPlayer))
+			return;
+		EntityPlayer target = (EntityPlayer) event.target;
+		EntityPlayerMP player = (EntityPlayerMP) event.entityPlayer;
+
+		ModelData data = PlayerDataController.instance.getPlayerData(target);
+		Server.sendDelayedData(player, EnumPackets.SEND_PLAYER_DATA, 100, target.getUniqueID(), data.writeToNBT());
+		ItemStack back = player.inventory.mainInventory[0];
+		if(back != null)
+			Server.sendDelayedData(player, EnumPackets.BACK_ITEM_UPDATE, 100, target.getUniqueID(), back.writeToNBT(new NBTTagCompound()));
+		else
+			Server.sendDelayedData(player, EnumPackets.BACK_ITEM_REMOVE, 100, target.getUniqueID());
 	}
 	
 	@SubscribeEvent

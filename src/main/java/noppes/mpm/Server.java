@@ -11,49 +11,83 @@ import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTSizeTracker;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.village.MerchantRecipeList;
 import noppes.mpm.constants.EnumPackets;
+import noppes.mpm.util.MPMScheduler;
 
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 public class Server {
 
 	public static boolean sendData(EntityPlayerMP player, EnumPackets enu, Object... obs) {
-		ByteBuf buffer = Unpooled.buffer();
+		PacketBuffer buffer = new PacketBuffer(Unpooled.buffer());
 		try {
 			if(!fillBuffer(buffer, enu, obs))
 				return false;
 			MorePlayerModels.Channel.sendTo(new FMLProxyPacket(buffer, "MorePlayerModels"), player);
 		} catch (IOException e) {
-			e.printStackTrace();
+			LogWriter.except(e);
 		}
 		return true;
 	}
-	
+
+	public static void sendDelayedData(final EntityPlayerMP player, EnumPackets enu, int delay, Object... obs) {
+		final PacketBuffer buffer = new PacketBuffer(Unpooled.buffer());
+		try {
+			if(!fillBuffer(buffer, enu, obs))
+				return;
+			MPMScheduler.runTack(() -> MorePlayerModels.Channel.sendTo(new FMLProxyPacket(buffer, "MorePlayerModels"), player), delay);
+		} catch (IOException e) {
+			LogWriter.except(e);
+		}
+	}
+
 	public static void sendAssociatedData(Entity entity, EnumPackets enu, Object... obs) {
-		ByteBuf buffer = Unpooled.buffer();
-		try {
-			if(!fillBuffer(buffer, enu, obs))
-				return;
-			TargetPoint point = new TargetPoint(entity.dimension, entity.posX, entity.posY, entity.posZ, 80);
-			MorePlayerModels.Channel.sendToAllAround(new FMLProxyPacket(buffer,"MorePlayerModels"), point);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		final List<EntityPlayerMP> list = entity.worldObj.getEntitiesWithinAABB(EntityPlayerMP.class, entity.boundingBox.expand(160, 160, 160));
+		if(list.isEmpty())
+			return;
+		MPMScheduler.runTack(() -> {
+			try {
+				final ByteBuf buffer = Unpooled.buffer();
+				if(!fillBuffer(buffer, enu, obs))
+					return;
+				for(EntityPlayerMP player : list){
+					MorePlayerModels.Channel.sendTo(new FMLProxyPacket(new PacketBuffer(buffer.copy()), "MorePlayerModels"), player);
+				}
+			} catch (IOException e) {
+				LogWriter.except(e);
+			}
+		});
 	}
-	public static void sendToAll(EnumPackets enu, Object... obs) {
-		ByteBuf buffer = Unpooled.buffer();
-		try {
-			if(!fillBuffer(buffer, enu, obs))
-				return;
-			MorePlayerModels.Channel.sendToAll(new FMLProxyPacket(buffer,"MorePlayerModels"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+
+
+	public static void sendToAll(MinecraftServer server, EnumPackets enu, Object... obs) {
+		List<EntityPlayerMP> list = new ArrayList<>(server.getConfigurationManager().playerEntityList);
+
+		if (list.isEmpty())
+			return;
+
+		MPMScheduler.runTack(() -> {
+			ByteBuf buffer = Unpooled.buffer();
+			try {
+				if (!fillBuffer(buffer, enu, obs))
+					return;
+
+				for (EntityPlayerMP player : list) {
+					MorePlayerModels.Channel.sendTo(new FMLProxyPacket(new PacketBuffer(buffer.copy()), "YourModChannel"), player);
+				}
+			} catch (IOException e) {
+				LogWriter.except(e);
+			}
+		});
 	}
-	
+
 	public static boolean fillBuffer(ByteBuf buffer, Enum enu, Object... obs) throws IOException{
 		buffer.writeInt(enu.ordinal());
 		for(Object ob : obs){
@@ -98,7 +132,17 @@ public class Server {
 	}
 
 	public static void writeNBT(ByteBuf buffer, NBTTagCompound compound) throws IOException {
-		byte[] bytes = CompressedStreamTools.compress(compound);
+		ByteArrayOutputStream bytearrayoutputstream = new ByteArrayOutputStream();
+		DataOutputStream dataoutputstream = new DataOutputStream(new GZIPOutputStream(bytearrayoutputstream));
+		try
+		{
+			CompressedStreamTools.write(compound, dataoutputstream);
+		}
+		finally
+		{
+			dataoutputstream.close();
+		}
+		byte[] bytes = bytearrayoutputstream.toByteArray();
 		buffer.writeShort((short)bytes.length);
 		buffer.writeBytes(bytes);
 	}
@@ -106,15 +150,21 @@ public class Server {
 	public static NBTTagCompound readNBT(ByteBuf buffer) throws IOException {
 		byte[] bytes = new byte[buffer.readShort()];
 		buffer.readBytes(bytes);
-		return CompressedStreamTools.func_152457_a(bytes, new NBTSizeTracker(2097152L));
+		DataInputStream datainputstream = new DataInputStream(new BufferedInputStream(new GZIPInputStream(new ByteArrayInputStream(bytes))));
+		try{
+			return CompressedStreamTools.read(datainputstream);
+		}
+		finally{
+			datainputstream.close();
+		}
 	}
-	
+
 	public static void writeString(ByteBuf buffer, String s){
-        byte[] bytes = s.getBytes(Charsets.UTF_8);
+		byte[] bytes = s.getBytes(Charsets.UTF_8);
 		buffer.writeShort((short)bytes.length);
 		buffer.writeBytes(bytes);
 	}
-	
+
 	public static String readString(ByteBuf buffer){
 		try{
 			byte[] bytes = new byte[buffer.readShort()];

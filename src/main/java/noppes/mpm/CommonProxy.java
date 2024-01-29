@@ -23,4 +23,8 @@ public class CommonProxy implements IGuiHandler{
 		MorePlayerModels.Channel.register(new PacketHandlerServer());
 	};
 
+	public void postLoad() {
+
+	}
+
 }

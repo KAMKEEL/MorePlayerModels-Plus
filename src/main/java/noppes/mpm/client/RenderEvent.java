@@ -29,8 +29,8 @@ import org.lwjgl.opengl.GL11;
 public class RenderEvent {
 	public static RenderEvent Instance;
 	public static RenderMPM renderer = new RenderMPM();
-	public static long lastSkinTick = 0;
-	public static long lastCapeTick = 0;
+	public static long lastSkinTick = -30;
+	public static long lastCapeTick = -30;
 	public final static long MaxSkinTick = 6;
 	private ModelData data;
 
@@ -52,10 +52,10 @@ public class RenderEvent {
 		data = PlayerDataController.instance.getPlayerData(player);
 		renderer.setModelData(data, player);
 		setModels(event.renderer);
-		if(!data.loaded && lastSkinTick > MaxSkinTick){
+		if(!data.resourceInit && lastSkinTick > MaxSkinTick){
 			renderer.loadResource((AbstractClientPlayer) player);
 			lastSkinTick = 0;
-			data.loaded = true;
+			data.resourceInit = true;
 		}
 		if(!(event.renderer instanceof RenderMPM)){
 			RenderManager.instance.entityRenderMap.put(EntityPlayer.class, renderer);
@@ -112,7 +112,7 @@ public class RenderEvent {
 			renderer.renderBackitem(event.entityPlayer);
 		if(event.renderCape){
 			if(!data.cloakLoaded && RenderEvent.lastCapeTick > RenderEvent.MaxSkinTick){
-				data.cloakTexture = renderer.loadCapeResource((AbstractClientPlayer) event.entityPlayer);
+				data.cloakObject = renderer.loadCapeResource((AbstractClientPlayer) event.entityPlayer);
 				RenderEvent.lastCapeTick = 0;
 				data.cloakLoaded = true;
 			}

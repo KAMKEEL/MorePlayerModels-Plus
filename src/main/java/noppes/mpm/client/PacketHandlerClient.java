@@ -8,11 +8,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import noppes.mpm.*;
+import noppes.mpm.client.gui.GuiCreationScreenInterface;
 import noppes.mpm.constants.EnumPackets;
 import noppes.mpm.controllers.PermissionController;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 public class PacketHandlerClient extends PacketHandlerServer{
 
@@ -33,12 +35,15 @@ public class PacketHandlerClient extends PacketHandlerServer{
 			int version = buffer.readInt();
 			if(version == MorePlayerModels.Revision){
 				MorePlayerModels.HasServerSide = true;
+				GuiCreationScreenInterface.Message = "";
 			}
 			else if(version < MorePlayerModels.Revision){
 				MorePlayerModels.HasServerSide = false;
+				GuiCreationScreenInterface.Message = "message.lowerversion";
 			}
 			else if(version > MorePlayerModels.Revision){
 				MorePlayerModels.HasServerSide = false;
+				GuiCreationScreenInterface.Message = "message.higherversion";
 			}
 		}
 		else if(type == EnumPackets.RELOAD_SKINS) {
@@ -46,37 +51,39 @@ public class PacketHandlerClient extends PacketHandlerServer{
 			List<EntityPlayer> players = mc.theWorld.playerEntities;
 			for(EntityPlayer p : players){
 				ModelData data = PlayerDataController.instance.getPlayerData(p);
-				data.playerLoaded = false;
-				data.loaded = false;
+				data.resourceLoaded = false;
+				data.resourceInit = false;
 				data.cloakLoaded = false;
 			}
 		}
 		else if(type == EnumPackets.SEND_PLAYER_DATA){
-			String username = Server.readString(buffer);
-			EntityPlayer pl = player.worldObj.getPlayerEntityByName(username);
+			EntityPlayer pl = player.worldObj.func_152378_a(UUID.fromString(Server.readString(buffer)));
 			if(pl == null)
 				return;
 			ModelData data = PlayerDataController.instance.getPlayerData(pl);
 			NBTTagCompound compound = Server.readNBT(buffer);
 			data.readFromNBT(compound);
 			PlayerDataController.instance.savePlayerData(pl, data);
+			if(pl == Minecraft.getMinecraft().thePlayer){
+				data.lastEdited = System.currentTimeMillis();
+			}
 		}
 		else if(type == EnumPackets.CHAT_EVENT){
-			EntityPlayer pl = player.worldObj.getPlayerEntityByName(Server.readString(buffer));
+			EntityPlayer pl = player.worldObj.func_152378_a(UUID.fromString(Server.readString(buffer)));
 			if(pl == null)
 				return;
 			String message = Server.readString(buffer);
 			ChatMessages.getChatMessages(pl.getCommandSenderName()).addMessage(message);
 		}
 		else if(type == EnumPackets.BACK_ITEM_REMOVE){
-			EntityPlayer pl = player.worldObj.getPlayerEntityByName(Server.readString(buffer));
+			EntityPlayer pl = player.worldObj.func_152378_a(UUID.fromString(Server.readString(buffer)));
 			if(pl == null)
 				return;
 			ModelData data = PlayerDataController.instance.getPlayerData(pl);
 			data.backItem = null;
 		}
 		else if(type == EnumPackets.BACK_ITEM_UPDATE){
-			EntityPlayer pl = player.worldObj.getPlayerEntityByName(Server.readString(buffer));
+			EntityPlayer pl = player.worldObj.func_152378_a(UUID.fromString(Server.readString(buffer)));
 			if(pl == null)
 				return;
 			NBTTagCompound compound = Server.readNBT(buffer);
@@ -91,7 +98,7 @@ public class PacketHandlerClient extends PacketHandlerServer{
 		else if(type == EnumPackets.PARTICLE){
 			int animation = buffer.readInt();
 			if(animation == 0){
-				EntityPlayer pl = player.worldObj.getPlayerEntityByName(Server.readString(buffer));
+				EntityPlayer pl = player.worldObj.func_152378_a(UUID.fromString(Server.readString(buffer)));
 				if(pl == null)
 					return;
 				ModelData data = PlayerDataController.instance.getPlayerData(pl);
@@ -101,7 +108,7 @@ public class PacketHandlerClient extends PacketHandlerServer{
 				player.worldObj.spawnParticle("note", buffer.readDouble(), buffer.readDouble(), buffer.readDouble(), buffer.readDouble(), 0, 0);
 			}
 			else if(animation == 2){
-				EntityPlayer pl = player.worldObj.getPlayerEntityByName(Server.readString(buffer));
+				EntityPlayer pl = player.worldObj.func_152378_a(UUID.fromString(Server.readString(buffer)));
 				if(pl == null)
 					return;
 				ModelData data = PlayerDataController.instance.getPlayerData(pl);
@@ -116,7 +123,7 @@ public class PacketHandlerClient extends PacketHandlerServer{
 			}
 		}
 		else if(type == EnumPackets.ANIMATION){
-			EntityPlayer pl = player.worldObj.getPlayerEntityByName(Server.readString(buffer));
+			EntityPlayer pl = player.worldObj.func_152378_a(UUID.fromString(Server.readString(buffer)));
 			if(pl == null)
 				return;
 			ModelData data = PlayerDataController.instance.getPlayerData(pl);

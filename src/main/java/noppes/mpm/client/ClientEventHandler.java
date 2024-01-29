@@ -1,5 +1,7 @@
 package noppes.mpm.client;
 
+import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
@@ -21,6 +23,7 @@ import noppes.mpm.config.ConfigClient;
 import noppes.mpm.constants.EnumAnimation;
 import noppes.mpm.constants.EnumPackets;
 import noppes.mpm.constants.EnumParts;
+import noppes.mpm.sync.WebApi;
 
 import java.util.List;
 import java.util.Random;
@@ -29,7 +32,7 @@ public class ClientEventHandler {
 
 	public static float partialTicks = 0;
 	private World prevWorld;
-	private List<EntityPlayer> playerlist;
+	public static List<EntityPlayer> playerlist;
 	private EntityRendererAlt alt;
 	private EntityRenderer prevAlt;
 
@@ -66,7 +69,7 @@ public class ClientEventHandler {
 	}
 
 	private void processAnimation(int type) {
-		if(type <= 0)
+		if(type < 0)
 			return;
 		if(MorePlayerModels.HasServerSide)
 			Client.sendData(EnumPackets.ANIMATION, type);
@@ -126,20 +129,15 @@ public class ClientEventHandler {
 			Client.sendData(EnumPackets.PING, MorePlayerModels.Revision, data.writeToNBT());
 			prevWorld = world;
     	}
-    	if(MorePlayerModels.HasServerSide && mc.thePlayer != null && world != null && world.getWorldTime() % 20 == 0){
-    		List<EntityPlayer> list = world.getEntitiesWithinAABB(EntityPlayer.class, mc.thePlayer.boundingBox.expand(64, 64, 64));
-    		for(EntityPlayer player : list){
-    			if(player == mc.thePlayer)
-    				continue;
-    			if(playerlist != null && playerlist.contains(player))
-    				continue;
-    			ModelData data = PlayerDataController.instance.getPlayerData(player);
-    			Client.sendData(EnumPackets.REQUEST_PLAYER_DATA, player.getCommandSenderName(), data.getHash());
-    		}
-    		playerlist = list;
-    	}
+
     	RenderEvent.lastSkinTick++;
 		RenderEvent.lastCapeTick++;
+
+		if(MorePlayerModels.HasServerSide && mc.thePlayer != null && world != null && world.getWorldTime() % 20 == 0){
+			playerlist = world.getEntitiesWithinAABB(EntityPlayer.class, mc.thePlayer.boundingBox.expand(64, 64, 64));
+			WebApi.instance.run();
+
+		}
 	}
 
 	@SubscribeEvent
@@ -150,9 +148,9 @@ public class ClientEventHandler {
 		ModelData data = PlayerDataController.instance.getPlayerData(player);
     	EntityLivingBase entity = data.getEntity(player.worldObj, player);
     	if(entity != null){
-    		entity.posY -= player.yOffset;
 			MPMEntityUtil.Copy(player, entity);
     		entity.onUpdate();
+			return;
     	}
         if (data.inLove > 0){
             --data.inLove;
@@ -177,7 +175,12 @@ public class ClientEventHandler {
         }
         if(data.animation != EnumAnimation.NONE)
         	ServerTickHandler.checkAnimation(player, data);
-        
+
+		data.prevAnimation = data.animation;
+		data.prevPosX = player.posX;
+		data.prevPosY = player.posY;
+		data.prevPosZ = player.posZ;
+
         ModelPartData particles = data.getPartData(EnumParts.PARTICLES);
         if(particles != null)
         	spawnParticles(player, data, particles);

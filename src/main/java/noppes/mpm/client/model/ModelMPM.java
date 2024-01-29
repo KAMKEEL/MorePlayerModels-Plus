@@ -383,18 +383,12 @@ public class ModelMPM extends ModelBiped{
     @Override
     public void setRotationAngles(float par1, float par2, float par3, float par4, float par5, float par6, Entity entity)
     {
-
-		// Fixes Sitting Animation when Disabling Sitting
-		if(data.fixSit){
-			isRiding = false;
-			data.fixSit = false;
-		}
-
 		if(!isRiding)
 			isRiding = data.animation == EnumAnimation.SITTING;
 
-    	if(isSneak && (data.animation == EnumAnimation.CRAWLING || data.isSleeping()))
-    		isSneak = false;
+		if(isSneak && (data.animation == EnumAnimation.CRAWLING || data.isSleeping()))
+			isSneak = false;
+
     	this.bipedBody.rotationPointZ = 0;
     	this.bipedBody.rotationPointY = 0;
 		this.bipedHead.rotateAngleZ = 0;
@@ -680,9 +674,9 @@ public class ModelMPM extends ModelBiped{
 	public void renderCloak(Entity npc, float f){
 		AbstractClientPlayer player = (AbstractClientPlayer) npc;
 		if(!player.isInvisible() && !data.cloakUrl.isEmpty() && !isArmor && data.entityClass == null && data.cloak == 1) {
-			if(data.cloakTexture != null){
+			if(data.cloakObject != null){
 				currentlyPlayerTexture = false;
-				Minecraft.getMinecraft().getTextureManager().bindTexture(data.cloakTexture);
+				Minecraft.getMinecraft().getTextureManager().bindTexture(data.cloakObject);
 				GL11.glPushMatrix();
 				GL11.glTranslatef(0.0f, 0.0f, 0.125f);
 				final double d3 = player.field_71091_bM + (player.field_71094_bP - player.field_71091_bM) * 0.0625 - (player.prevPosX + (player.posX - player.prevPosX) * 0.0625);

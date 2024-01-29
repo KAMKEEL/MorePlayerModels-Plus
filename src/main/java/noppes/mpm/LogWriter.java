@@ -11,10 +11,10 @@ public class LogWriter {
 
     static {
         try {
-            File file = new File("logs/MorePlayerModels-latest.log");
-            File file1 = new File("logs/MorePlayerModels-1.log");
-            File file2 = new File("logs/MorePlayerModels-2.log");
-            File file3 = new File("logs/MorePlayerModels-3.log");
+            File file = new File("logs/MorePlayerModelsPlus-latest.log");
+            File file1 = new File("logs/MorePlayerModelsPlus-1.log");
+            File file2 = new File("logs/MorePlayerModelsPlus-2.log");
+            File file3 = new File("logs/MorePlayerModelsPlus-3.log");
             if (file3.exists())
                 file3.delete();
             if (file2.exists())
@@ -24,7 +24,7 @@ public class LogWriter {
             if (file.exists())
                 file.renameTo(file1);
 
-            Handler handler = new FileHandler("logs/MorePlayerModels-latest.log");
+            Handler handler = new FileHandler("logs/MorePlayerModelsPlus-latest.log");
             handler.setLevel(Level.ALL);
             handler.setFormatter(new Formatter() {
                 @Override

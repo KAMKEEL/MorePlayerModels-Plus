@@ -31,13 +31,13 @@ public class MorePlayerModels {
 
 	@SidedProxy(clientSide = "noppes.mpm.client.ClientProxy", serverSide = "noppes.mpm.CommonProxy")
 	public static CommonProxy proxy;
-	public final static String VERSION = "3.0";
+	public final static String VERSION = "3.1";
 
 	public static FMLEventChannel Channel;
 
 	public static MorePlayerModels instance;
 
-	public static int Revision = 6;
+	public static int Revision = 7;
 	
 	public static File dir;
 	

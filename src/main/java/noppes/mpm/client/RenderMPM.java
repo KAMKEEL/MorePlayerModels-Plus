@@ -140,7 +140,7 @@ public class RenderMPM extends RenderPlayer{
 			}
 			return;
 		}
-		else if (!data.playerLoaded){
+		else if (!data.resourceLoaded){
 			Minecraft mc = Minecraft.getMinecraft();
 			SkinManager skinmanager = mc.func_152342_ad();
 
@@ -173,7 +173,7 @@ public class RenderMPM extends RenderPlayer{
 				if (file.exists())
 					file.delete();
 
-				data.playerLoaded = true;
+				data.resourceLoaded = true;
 				player.func_152121_a(Type.SKIN, location);
 			}
 		}
@@ -183,10 +183,10 @@ public class RenderMPM extends RenderPlayer{
 	public void renderFirstPersonArm(EntityPlayer player){
 		data = PlayerDataController.instance.getPlayerData(player);
 
-		if(!data.loaded && RenderEvent.lastSkinTick > RenderEvent.MaxSkinTick){
+		if(!data.resourceInit && RenderEvent.lastSkinTick > RenderEvent.MaxSkinTick){
 			loadResource((AbstractClientPlayer) player);
 			RenderEvent.lastSkinTick = 0;
-			data.loaded = true;
+			data.resourceInit = true;
 		}
 		setModelData(data, player);
 
