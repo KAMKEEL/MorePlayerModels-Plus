@@ -53,6 +53,7 @@ public class PacketHandlerClient extends PacketHandlerServer{
 				ModelData data = PlayerDataController.instance.getPlayerData(p);
 				data.resourceLoaded = false;
 				data.resourceInit = false;
+				data.cloakInnit = false;
 				data.cloakLoaded = false;
 			}
 		}

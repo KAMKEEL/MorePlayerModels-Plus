@@ -29,6 +29,7 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 
 	public boolean resourceInit = false;
 	public boolean resourceLoaded = false;
+	public boolean cloakInnit = false;
 	public boolean cloakLoaded = false;
 
 	public boolean webapiActive = false;
@@ -64,7 +65,7 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 	public NBTTagCompound writeToNBT(){
 		NBTTagCompound compound = super.writeToNBT();
 		compound.setInteger("Revision", rev);
-		
+
 		compound.setInteger("Animation", animation.ordinal());
 		
 		compound.setShort("SoundType", soundType);
@@ -89,13 +90,7 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 		soundType = compound.getShort("SoundType");
 		lastEdited = compound.getLong("LastEdited");
 		displayName = compound.getString("DisplayName");
-		if(player != null){
-			player.refreshDisplayName();
-			if(entityClass == null)
-				player.getEntityData().removeTag("MPMModel");
-			else
-				player.getEntityData().setString("MPMModel", entityClass.getCanonicalName());
-		}
+		player.refreshDisplayName();
 		setAnimation(compound.getInteger("Animation"));
 
 		url = compound.getString("CustomSkinUrl");
@@ -103,9 +98,13 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 		modelType = compound.getInteger("ModelType");
 		cloakUrl = compound.getString("CloakUrl");
 
-		if(!prevUrl.equals(url) && !prevCloakUrl.equals(cloakUrl)) {
+		if(!prevUrl.equals(url)) {
 			resourceInit = false;
 			resourceLoaded = false;
+		}
+		if(!prevCloakUrl.equals(cloakUrl)){
+			cloakLoaded = false;
+			cloakInnit = false;
 		}
 	}
 
@@ -204,6 +203,7 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 		ModelData data = new ModelData();
 		data.readFromNBT(this.writeToNBT());
 		data.resourceLoaded = false;
+		data.cloakLoaded = false;
 		data.player = player;
 		return data;
 	}
