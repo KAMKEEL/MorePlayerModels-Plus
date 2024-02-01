@@ -57,11 +57,11 @@ public class ServerTickHandler {
 		if(data.backItem == item)
 			return;
 		if(item == null){
-			Server.sendAssociatedData(player, EnumPackets.BACK_ITEM_REMOVE, player.getUniqueID());
+			Server.sendAssociatedData(player, EnumPackets.BACK_ITEM_REMOVE, player.getUniqueID().toString());
 		}
 		else{
 			NBTTagCompound tag = item.writeToNBT(new NBTTagCompound());
-			Server.sendAssociatedData(player, EnumPackets.BACK_ITEM_UPDATE, player.getUniqueID(), tag);
+			Server.sendAssociatedData(player, EnumPackets.BACK_ITEM_UPDATE, player.getUniqueID().toString(), tag);
 		}
 		data.backItem = item;
 		if(data.animation != EnumAnimation.NONE)
@@ -79,6 +79,7 @@ public class ServerTickHandler {
 			ModelData data = PlayerDataController.instance.getPlayerData(p);
 			data.resourceInit = false;
 			data.resourceLoaded = false;
+			data.cloakInnit = false;
 			data.cloakLoaded = false;
 		}
 	}
@@ -96,7 +97,7 @@ public class ServerTickHandler {
 		if(data.animationTime > 0)
 			data.animationTime--;
 
-		if(player.isPlayerSleeping() || player.isRiding() || data.animationTime == 0  || data.animation == EnumAnimation.BOW && player.isSneaking())
+		if(player.isPlayerSleeping() || player.isRiding() || data.animationTime == 0 && data.animation == EnumAnimation.WAVING || data.animation == EnumAnimation.BOW && player.isSneaking())
 			data.setAnimation(EnumAnimation.NONE);
 
 		if(!isJumping && player.isSneaking() && (data.animation == EnumAnimation.HUG || data.animation == EnumAnimation.CRAWLING ||

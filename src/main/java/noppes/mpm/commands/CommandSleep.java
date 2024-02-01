@@ -40,7 +40,7 @@ public class CommandSleep extends MpmCommandInterface {
 		if(data.animation == EnumAnimation.SLEEPING_EAST || data.animation == EnumAnimation.SLEEPING_NORTH || data.animation == EnumAnimation.SLEEPING_WEST || data.animation == EnumAnimation.SLEEPING_SOUTH)
 			animation = EnumAnimation.NONE;
 			
-		Server.sendAssociatedData(player, EnumPackets.ANIMATION, player.getUniqueID(), animation);
+		Server.sendAssociatedData(player, EnumPackets.ANIMATION, player.getUniqueID().toString(), animation);
 		data.animation = animation;
 	}
 

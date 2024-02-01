@@ -22,7 +22,7 @@ public class CommandHug extends MpmCommandInterface {
 		EntityPlayerMP player = (EntityPlayerMP) icommandsender;
 		ModelData data = PlayerDataController.instance.getPlayerData(player);
 		EnumAnimation ani = data.animation == EnumAnimation.HUG?EnumAnimation.NONE:EnumAnimation.HUG;
-		Server.sendAssociatedData(player, EnumPackets.ANIMATION, player.getUniqueID(), ani);
+		Server.sendAssociatedData(player, EnumPackets.ANIMATION, player.getUniqueID().toString(), ani);
 		data.animation = ani;
 	}
 

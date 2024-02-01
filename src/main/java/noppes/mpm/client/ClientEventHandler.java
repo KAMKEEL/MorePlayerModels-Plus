@@ -93,7 +93,8 @@ public class ClientEventHandler {
 			ModelData data = PlayerDataController.instance.getPlayerData(player);
 			if(data.animationEquals(animation))
 				animation = EnumAnimation.NONE;
-			data.setAnimation(animation.ordinal());
+
+			data.setAnimation(animation);
 		}
 	}
 

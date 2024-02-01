@@ -85,7 +85,7 @@ public class CommandSetModel extends MpmCommandInterface {
 			}
 		}
 		
-		Server.sendAssociatedData(player, EnumPackets.SEND_PLAYER_DATA, player.getUniqueID(), data.writeToNBT());
+		Server.sendAssociatedData(player, EnumPackets.SEND_PLAYER_DATA, player.getUniqueID().toString(), data.writeToNBT());
 	}
 
 	@Override

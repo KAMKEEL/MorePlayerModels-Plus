@@ -17,7 +17,7 @@ public class ServerEventHandler {
 
 	@SubscribeEvent
 	public void chat(ServerChatEvent event){
-		Server.sendToAll(event.player.mcServer, EnumPackets.CHAT_EVENT, event.player.getUniqueID(), event.message);
+		Server.sendToAll(EnumPackets.CHAT_EVENT, event.player.getUniqueID().toString(), event.message);
 	}
 
 	@SubscribeEvent
@@ -28,12 +28,13 @@ public class ServerEventHandler {
 		EntityPlayerMP player = (EntityPlayerMP) event.entityPlayer;
 
 		ModelData data = PlayerDataController.instance.getPlayerData(target);
-		Server.sendDelayedData(player, EnumPackets.SEND_PLAYER_DATA, 100, target.getUniqueID(), data.writeToNBT());
+		Server.sendData(player, EnumPackets.SEND_PLAYER_DATA, target.getUniqueID().toString(), data.writeToNBT());
+
 		ItemStack back = player.inventory.mainInventory[0];
 		if(back != null)
-			Server.sendDelayedData(player, EnumPackets.BACK_ITEM_UPDATE, 100, target.getUniqueID(), back.writeToNBT(new NBTTagCompound()));
+			Server.sendData(player, EnumPackets.BACK_ITEM_UPDATE, target.getUniqueID().toString(), back.writeToNBT(new NBTTagCompound()));
 		else
-			Server.sendDelayedData(player, EnumPackets.BACK_ITEM_REMOVE, 100, target.getUniqueID());
+			Server.sendData(player, EnumPackets.BACK_ITEM_REMOVE, target.getUniqueID().toString());
 	}
 	
 	@SubscribeEvent

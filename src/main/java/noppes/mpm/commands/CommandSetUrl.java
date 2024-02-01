@@ -53,9 +53,10 @@ public class CommandSetUrl extends MpmCommandInterface {
 		ModelData data = PlayerDataController.instance.getPlayerData(player);
 		data.url = url;
 		data.cloakLoaded = false;
+		data.cloakInnit = false;
 		data.resourceLoaded = false;
 		data.resourceInit = false;
-		Server.sendAssociatedData(player, EnumPackets.SEND_PLAYER_DATA, player.getUniqueID(), data.writeToNBT());
+		Server.sendAssociatedData(player, EnumPackets.SEND_PLAYER_DATA, player.getUniqueID().toString(), data.writeToNBT());
 	}
 
 	@Override

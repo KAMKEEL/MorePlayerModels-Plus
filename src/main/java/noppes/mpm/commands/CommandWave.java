@@ -22,7 +22,7 @@ public class CommandWave extends MpmCommandInterface {
 		EntityPlayerMP player = (EntityPlayerMP) icommandsender;
 		ModelData data = PlayerDataController.instance.getPlayerData(player);
 		EnumAnimation ani = data.animation == EnumAnimation.WAVING?EnumAnimation.NONE:EnumAnimation.WAVING;
-		Server.sendAssociatedData(player, EnumPackets.ANIMATION, player.getUniqueID(), ani);
+		Server.sendAssociatedData(player, EnumPackets.ANIMATION, player.getUniqueID().toString(), ani);
 		data.animation = ani;
 	}
 
