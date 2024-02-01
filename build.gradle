@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
         maven {
             name = "forge"
-            url = "http://files.minecraftforge.net/maven"
+            url = "https://maven.minecraftforge.net/"
         }
         maven {
             name = "sonatype"
@@ -12,6 +12,10 @@ buildscript {
         maven {
             name = "jitpack"
             url = "https://jitpack.io"
+        }
+        maven {
+            name = "gt"
+            url = "https://gregtech.mechaenetia.com/"
         }
     }
     dependencies {
@@ -68,5 +72,14 @@ processResources
                 exclude 'mcmod.info'
             }
         }
+
+
+jar {
+    manifest {
+        attributes(
+                'FMLAT': "moreplayermodels_at.cfg",
+        )
+    }
+}
 
 sourceSets {main { output.resourcesDir = output.classesDir }}
