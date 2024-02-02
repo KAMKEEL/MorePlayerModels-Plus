@@ -1,7 +1,5 @@
 package noppes.mpm.client;
 
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
@@ -51,19 +49,19 @@ public class ClientEventHandler {
 		}
 		if(!mc.inGameHasFocus)
 			return;
-		if(ClientProxy.Sleep.isPressed()){
+		if(ClientProxy.MPM1.isPressed()){
 			processAnimation(ConfigClient.button1);
 		}
-		if(ClientProxy.Sit.isPressed()){
+		if(ClientProxy.MPM2.isPressed()){
 			processAnimation(ConfigClient.button2);
 		}
-		if(ClientProxy.Dance.isPressed()){
+		if(ClientProxy.MPM3.isPressed()){
 			processAnimation(ConfigClient.button3);
 		}
-		if(ClientProxy.Hug.isPressed()){
+		if(ClientProxy.MPM4.isPressed()){
 			processAnimation(ConfigClient.button4);
 		}
-		if(ClientProxy.Crawl.isPressed()){
+		if(ClientProxy.MPM5.isPressed()){
 			processAnimation(ConfigClient.button5);
 		}
 	}
@@ -100,15 +98,15 @@ public class ClientEventHandler {
 
 	@SubscribeEvent
 	public void onRenderTick(TickEvent.RenderTickEvent event){
-        partialTicks = event.renderTickTime;
+		partialTicks = event.renderTickTime;
 		Minecraft mc = Minecraft.getMinecraft();
 		if(ConfigClient.EnablePOV){
 			if(alt == null)
 				alt = new EntityRendererAlt(mc);
-    		if(mc.entityRenderer != alt){
-    			prevAlt = mc.entityRenderer;
-    			mc.entityRenderer = alt;
-    		}
+			if(mc.entityRenderer != alt){
+				prevAlt = mc.entityRenderer;
+				mc.entityRenderer = alt;
+			}
 		}
 		else if(prevAlt != null && mc.entityRenderer != prevAlt){
 			mc.entityRenderer = prevAlt;
@@ -126,6 +124,7 @@ public class ClientEventHandler {
 		}
     	if(world != null && prevWorld != world){
 			MorePlayerModels.HasServerSide = false;
+			GuiCreationScreenInterface.Message = "message.noserver";
 			ModelData data = PlayerDataController.instance.getPlayerData(mc.thePlayer);
 			Client.sendData(EnumPackets.PING, MorePlayerModels.Revision, data.writeToNBT());
 			prevWorld = world;
@@ -149,8 +148,9 @@ public class ClientEventHandler {
 		ModelData data = PlayerDataController.instance.getPlayerData(player);
     	EntityLivingBase entity = data.getEntity(player.worldObj, player);
     	if(entity != null){
-			MPMEntityUtil.Copy(player, entity);
+			//entity.posY -= player.yOffset;
     		entity.onUpdate();
+			MPMEntityUtil.Copy(player, entity);
 			return;
     	}
         if (data.inLove > 0){
@@ -176,6 +176,20 @@ public class ClientEventHandler {
         }
         if(data.animation != EnumAnimation.NONE)
         	ServerTickHandler.checkAnimation(player, data);
+
+		if(data.animation == EnumAnimation.DEATH){
+			if(player.deathTime == 0) {
+				player.playSound("game.player.hurt", 1, 1);
+			}
+			if(player.deathTime < 19) {
+				player.deathTime++;
+			}
+		}
+		if(data.prevAnimation != data.animation && data.prevAnimation == EnumAnimation.DEATH) {
+			if(!player.isDead) {
+				player.deathTime = 0;
+			}
+		}
 
 		data.prevAnimation = data.animation;
 		data.prevPosX = player.posX;

@@ -54,16 +54,16 @@ public class ServerTickHandler {
 		EntityPlayerMP player = (EntityPlayerMP) event.player;
 		ModelData data = PlayerDataController.instance.getPlayerData(player);
 		ItemStack item = player.inventory.mainInventory[0];
-		if(data.backItem == item)
-			return;
-		if(item == null){
-			Server.sendAssociatedData(player, EnumPackets.BACK_ITEM_REMOVE, player.getUniqueID().toString());
+		if(data.backItem != item){
+			if(item.getItem() == null){
+				Server.sendAssociatedData(player, EnumPackets.BACK_ITEM_REMOVE, player.getUniqueID().toString());
+			}
+			else{
+				NBTTagCompound tag = item.writeToNBT(new NBTTagCompound());
+				Server.sendAssociatedData(player, EnumPackets.BACK_ITEM_UPDATE, player.getUniqueID().toString(), tag);
+			}
+			data.backItem = item;
 		}
-		else{
-			NBTTagCompound tag = item.writeToNBT(new NBTTagCompound());
-			Server.sendAssociatedData(player, EnumPackets.BACK_ITEM_UPDATE, player.getUniqueID().toString(), tag);
-		}
-		data.backItem = item;
 		if(data.animation != EnumAnimation.NONE)
 			checkAnimation(player, data);
 		data.prevPosX = player.posX;
@@ -97,13 +97,13 @@ public class ServerTickHandler {
 		if(data.animationTime > 0)
 			data.animationTime--;
 
-		if(player.isPlayerSleeping() || player.isRiding() || data.animationTime == 0 && data.animation == EnumAnimation.WAVING || data.animation == EnumAnimation.BOW && player.isSneaking())
+		if(player.isPlayerSleeping() || player.isRiding() || data.animationTime == 0  || data.animation == EnumAnimation.BOW && player.isSneaking())
 			data.setAnimation(EnumAnimation.NONE);
 
 		if(!isJumping && player.isSneaking() && (data.animation == EnumAnimation.HUG || data.animation == EnumAnimation.CRAWLING ||
 				data.animation == EnumAnimation.SITTING || data.animation == EnumAnimation.DANCING))
 			return;
 		if(speed > 0.01 || isJumping || player.isPlayerSleeping() || player.isRiding() || data.isSleeping() && speed > 0.001)
-			data.setAnimation(EnumAnimation.NONE);
+			data.animation = EnumAnimation.NONE;
 	}
 }

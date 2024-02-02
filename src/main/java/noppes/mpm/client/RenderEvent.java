@@ -52,6 +52,18 @@ public class RenderEvent {
 		data = PlayerDataController.instance.getPlayerData(player);
 		renderer.setModelData(data, player);
 		setModels(event.renderer);
+
+		if(data.isSleeping()){
+			if(data.animation == EnumAnimation.SLEEPING_EAST)
+				player.renderYawOffset = player.prevRenderYawOffset = -90;
+			if(data.animation == EnumAnimation.SLEEPING_WEST)
+				player.renderYawOffset = player.prevRenderYawOffset = 90;
+			if(data.animation == EnumAnimation.SLEEPING_NORTH)
+				player.renderYawOffset = player.prevRenderYawOffset = 180;
+			if(data.animation == EnumAnimation.SLEEPING_SOUTH)
+				player.renderYawOffset = player.prevRenderYawOffset = 0;
+		}
+
 		if(!data.resourceInit && lastSkinTick > MaxSkinTick){
 			renderer.loadResource((AbstractClientPlayer) player);
 			lastSkinTick = 0;
@@ -82,6 +94,12 @@ public class RenderEvent {
 		if(event.entity.riddenByEntity == hideNameSheep){
 			event.entity.riddenByEntity = null;
 		}
+
+		AbstractClientPlayer player = (AbstractClientPlayer) event.entity;
+		ModelData data = PlayerDataController.instance.getPlayerData(player);
+		if(data.isSleeping()){
+			player.renderYawOffset = player.prevRenderYawOffset = player.rotationYaw;
+		}
 	}
 
 	private void setModels(RenderPlayer render){
@@ -95,15 +113,6 @@ public class RenderEvent {
 
 	@SubscribeEvent
 	public void special(RenderPlayerEvent.Specials.Pre event){
-		if(data.animation == EnumAnimation.BOW){
-			float ticks = (event.entityPlayer.ticksExisted - data.animationStart) / 10f;
-			if(ticks > 1)
-				ticks = 1;
-			float scale = (2 - data.body.scaleY);
-			GL11.glTranslatef(0, 12 * scale * 0.065f, 0);
-			GL11.glRotatef(60 * ticks, 1, 0, 0);
-			GL11.glTranslatef(0, -12 * scale * 0.065f, 0);
-		}
 		event.renderItem = false;
 		event.renderHelmet = false;
 		renderer.renderItem(event.entityPlayer);
@@ -111,13 +120,24 @@ public class RenderEvent {
 		if(ConfigClient.EnableBackItem)
 			renderer.renderBackitem(event.entityPlayer);
 		if(event.renderCape){
-			if(!data.cloakLoaded && RenderEvent.lastCapeTick > RenderEvent.MaxSkinTick){
+			if(!data.cloakInnit && RenderEvent.lastCapeTick > RenderEvent.MaxSkinTick){
 				data.cloakObject = renderer.loadCapeResource((AbstractClientPlayer) event.entityPlayer);
 				RenderEvent.lastCapeTick = 0;
-				data.cloakLoaded = true;
+				data.cloakInnit = true;
 			}
 		}
 		GL11.glTranslatef(0, data.getBodyY(), 0); // Cape Fix
+	}
+
+	@SubscribeEvent()
+	public void hand(RenderHandEvent event){
+		Minecraft mc = Minecraft.getMinecraft();
+		data = PlayerDataController.instance.getPlayerData(mc.thePlayer);
+		Entity entity = data.getEntity(mc.thePlayer);
+		if(entity != null || data.isSleeping() || data.animation == EnumAnimation.BOW && mc.thePlayer.getHeldItem() == null){
+			event.setCanceled(true);
+			return;
+		}
 	}
 
 	@SubscribeEvent

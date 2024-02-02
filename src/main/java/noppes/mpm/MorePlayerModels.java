@@ -108,6 +108,10 @@ public class MorePlayerModels {
 	public void serverstart(FMLServerStartingEvent event) {
 		event.registerServerCommand(new CommandLove());
 		event.registerServerCommand(new CommandSing());
+		event.registerServerCommand(new CommandDeath());
+		event.registerServerCommand(new CommandYes());
+		event.registerServerCommand(new CommandNo());
+		event.registerServerCommand(new CommandPoint());
 		event.registerServerCommand(new CommandSleep());
 		event.registerServerCommand(new CommandHug());
 		event.registerServerCommand(new CommandCrawl());

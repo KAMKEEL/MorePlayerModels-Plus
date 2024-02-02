@@ -19,11 +19,11 @@ import org.lwjgl.input.Keyboard;
 public class ClientProxy extends CommonProxy{
 
 	public static KeyBinding Screen;
-	public static KeyBinding Sleep;
-	public static KeyBinding Sit;
-	public static KeyBinding Dance;
-	public static KeyBinding Hug;
-	public static KeyBinding Crawl;
+	public static KeyBinding MPM1;
+	public static KeyBinding MPM2;
+	public static KeyBinding MPM3;
+	public static KeyBinding MPM4;
+	public static KeyBinding MPM5;
 
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world,
@@ -38,13 +38,12 @@ public class ClientProxy extends CommonProxy{
 		new PresetController(MorePlayerModels.dir);
 
 		ClientRegistry.registerKeyBinding(Screen = new KeyBinding("CharacterScreen", Keyboard.KEY_F12, "key.categories.gameplay"));
-		ClientRegistry.registerKeyBinding(Sleep = new KeyBinding("MPM 1",Keyboard.KEY_Z, "key.categories.gameplay"));
-		ClientRegistry.registerKeyBinding(Sit = new KeyBinding("MPM 2",Keyboard.KEY_X, "key.categories.gameplay"));
-		ClientRegistry.registerKeyBinding(Dance = new KeyBinding("MPM 3",Keyboard.KEY_C, "key.categories.gameplay"));
-		ClientRegistry.registerKeyBinding(Hug = new KeyBinding("MPM 4",Keyboard.KEY_V, "key.categories.gameplay"));
-		ClientRegistry.registerKeyBinding(Crawl = new KeyBinding("MPM 5",Keyboard.KEY_B, "key.categories.gameplay"));
+		ClientRegistry.registerKeyBinding(MPM1 = new KeyBinding("MPM 1",Keyboard.KEY_Z, "key.categories.gameplay"));
+		ClientRegistry.registerKeyBinding(MPM2 = new KeyBinding("MPM 2",Keyboard.KEY_NONE, "key.categories.gameplay"));
+		ClientRegistry.registerKeyBinding(MPM3 = new KeyBinding("MPM 3",Keyboard.KEY_NONE, "key.categories.gameplay"));
+		ClientRegistry.registerKeyBinding(MPM4 = new KeyBinding("MPM 4",Keyboard.KEY_NONE, "key.categories.gameplay"));
+		ClientRegistry.registerKeyBinding(MPM5 = new KeyBinding("MPM 5",Keyboard.KEY_NONE, "key.categories.gameplay"));
 
-		
 		RenderingRegistry.registerEntityRenderingHandler(EntityPlayer.class, RenderEvent.renderer);
 
 		FMLCommonHandler.instance().bus().register(new ClientEventHandler());

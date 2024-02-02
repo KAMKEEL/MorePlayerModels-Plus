@@ -15,11 +15,9 @@ import noppes.mpm.constants.EnumAnimation;
 import noppes.mpm.constants.EnumParts;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.lang.reflect.Method;
 import java.security.MessageDigest;
-import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -31,6 +29,8 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 	public boolean resourceLoaded = false;
 	public boolean cloakInnit = false;
 	public boolean cloakLoaded = false;
+
+	public boolean didSit = false;
 
 	public boolean webapiActive = false;
 	public boolean webapiInit = false;
@@ -123,6 +123,12 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 
 		if(animation == EnumAnimation.WAVING)
 			animationTime = 80;
+
+		if(animation == EnumAnimation.YES || animation == EnumAnimation.NO)
+			animationTime = 60;
+
+		if(animation == EnumAnimation.SITTING)
+			didSit = true;
 
 		if(player == null || ani == EnumAnimation.NONE)
 			animationStart = -1;

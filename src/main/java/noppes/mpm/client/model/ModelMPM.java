@@ -12,9 +12,9 @@ import net.minecraft.util.MathHelper;
 import noppes.mpm.ModelData;
 import noppes.mpm.ModelPartConfig;
 import noppes.mpm.ModelPartData;
+import noppes.mpm.PlayerDataController;
 import noppes.mpm.client.ClientProxy;
-import noppes.mpm.client.model.animation.AniCrawling;
-import noppes.mpm.client.model.animation.AniHug;
+import noppes.mpm.client.model.animation.*;
 import noppes.mpm.client.model.part.ModelLimbWear;
 import noppes.mpm.client.model.part.arm.ModelClaws;
 import noppes.mpm.client.model.part.body.*;
@@ -65,7 +65,7 @@ public class ModelMPM extends ModelBiped{
 	private final ModelScaleRenderer solidRightLegWear;
 
 	public boolean currentlyPlayerTexture;
-	
+
 	public boolean isArmor;
 	public boolean isAlexArmor;
 	public boolean x64 = false;
@@ -359,48 +359,49 @@ public class ModelMPM extends ModelBiped{
 		}
     	currentlyPlayerTexture = true;
         this.setRotationAngles(par2, par3, par4, par5, par6, par7, par1Entity);
-
-
-    	if(data.animation == EnumAnimation.BOW){
-    		GL11.glPushMatrix();
-    		float ticks = (par1Entity.ticksExisted - data.animationStart) / 10f;
-    		if(ticks > 1)
-    			ticks = 1;
-    		float scale = (2 - data.body.scaleY + data.getLegsY());
-    		GL11.glTranslatef(0, 12 * scale * par7, 0);
-    		GL11.glRotatef(60 * ticks, 1, 0, 0);
-    		GL11.glTranslatef(0, -12 * scale * par7, 0);
-    	}
         renderHead(par1Entity, par7);
         renderArms(par1Entity, par7,false);
         renderBody(par1Entity, par7);
 		renderCloak(par1Entity, par7);
-    	if(data.animation == EnumAnimation.BOW){
-    		GL11.glPopMatrix();
-    	}
         renderLegs(par1Entity, par7);
     }
     @Override
     public void setRotationAngles(float par1, float par2, float par3, float par4, float par5, float par6, Entity entity)
     {
+		EntityPlayer player = (EntityPlayer) entity;
+		data = PlayerDataController.instance.getPlayerData(player);
+		// Fixes Sitting Animation when Disabling Sitting
+		if(data.didSit && data.animation != EnumAnimation.SITTING){
+			isRiding = false;
+			data.didSit = false;
+		}
+
 		if(!isRiding)
 			isRiding = data.animation == EnumAnimation.SITTING;
 
 		if(isSneak && (data.animation == EnumAnimation.CRAWLING || data.isSleeping()))
 			isSneak = false;
 
-    	this.bipedBody.rotationPointZ = 0;
-    	this.bipedBody.rotationPointY = 0;
-		this.bipedHead.rotateAngleZ = 0;
-		this.bipedHeadwear.rotateAngleZ = 0;
+		this.bipedBody.rotationPointX = this.bipedBody.rotationPointY = this.bipedBody.rotationPointZ = 0;
+		this.bipedBody.rotateAngleX = this.bipedBody.rotateAngleY = this.bipedBody.rotateAngleZ = 0;
+
+		this.bipedHeadwear.rotateAngleX = this.bipedHead.rotateAngleX = 0;
+		this.bipedHeadwear.rotateAngleZ = this.bipedHead.rotateAngleZ = 0;
+
+		this.bipedHeadwear.rotationPointX = this.bipedHead.rotationPointX = 0;
+		this.bipedHeadwear.rotationPointY = this.bipedHead.rotationPointY = 0;
+		this.bipedHeadwear.rotationPointZ = this.bipedHead.rotationPointZ = 0;
+
 		this.bipedLeftLeg.rotateAngleX = 0;
 		this.bipedLeftLeg.rotateAngleY = 0;
 		this.bipedLeftLeg.rotateAngleZ = 0;
 		this.bipedRightLeg.rotateAngleX = 0;
 		this.bipedRightLeg.rotateAngleY = 0;
 		this.bipedRightLeg.rotateAngleZ = 0;
+		this.bipedLeftArm.rotationPointX = 0;
 		this.bipedLeftArm.rotationPointY = 2;
 		this.bipedLeftArm.rotationPointZ = 0;
+		this.bipedRightArm.rotationPointX = 0;
 		this.bipedRightArm.rotationPointY = 2;
 		this.bipedRightArm.rotationPointZ = 0;
 		
@@ -427,15 +428,33 @@ public class ModelMPM extends ModelBiped{
     		AniHug.setRotationAngles(par1, par2, par3, par4, par5, par6, entity, this);
     	else if(data.animation == EnumAnimation.CRAWLING)
     		AniCrawling.setRotationAngles(par1, par2, par3, par4, par5, par6, entity, this);
-    	else if(data.animation == EnumAnimation.WAVING){
-    		bipedRightArm.rotateAngleX = -0.1f;
-    		bipedRightArm.rotateAngleY = 0;
-    		bipedRightArm.rotateAngleZ = (float) (Math.PI - 1f  - Math.sin(entity.ticksExisted * 0.27f) * 0.5f );
-    	}
+		else if(data.animation == EnumAnimation.WAVING){
+			AniWaving.setRotationAngles(par1, par2, par3, par4, par5, par6, entity, this);
+		}
+		else if(data.animation == EnumAnimation.DANCING){
+			AniDancing.setRotationAngles(par1, par2, par3, par4, par5, par6, entity, this);
+		}
+		else if(data.animation == EnumAnimation.BOW){
+			AniBow.setRotationAngles(par1, par2, par3, par4, par5, par6, entity, this, data);
+		}
+		else if(data.animation == EnumAnimation.YES){
+			AniYes.setRotationAngles(par1, par2, par3, par4, par5, par6, entity, this, data);
+		}
+		else if(data.animation == EnumAnimation.NO){
+			AniNo.setRotationAngles(par1, par2, par3, par4, par5, par6, entity, this, data);
+		}
+		else if(data.animation == EnumAnimation.POINT){
+			AniPoint.setRotationAngles(par1, par2, par3, par4, par5, par6, entity, this);
+		}
     	else if(isSneak)
             this.bipedBody.rotateAngleX = 0.5F / data.body.scaleY;
-    	
-    	
+
+		copyModelAngles(this.bipedLeftLeg, this.bipedLeftLegWear);
+		copyModelAngles(this.bipedRightLeg, this.bipedRightLegWear);
+		copyModelAngles(this.bipedLeftArm, this.bipedLeftArmwear);
+		copyModelAngles(this.bipedRightArm, this.bipedRightArmWear);
+		copyModelAngles(this.bipedBody, this.bipedBodywear);
+		copyModelAngles(this.bipedHead, this.bipedHeadwear);
     }
 
     public void setLivingAnimations(EntityLivingBase par1EntityLivingBase, float par2, float par3, float par4) 
@@ -737,5 +756,15 @@ public class ModelMPM extends ModelBiped{
 		if(entity instanceof EntityPlayer && ((EntityPlayer)entity).isPlayerSleeping())
 			return true;
 		return data.isSleeping();
+	}
+
+	public static void copyModelAngles(ModelRenderer source, ModelRenderer dest)
+	{
+		dest.rotateAngleX = source.rotateAngleX;
+		dest.rotateAngleY = source.rotateAngleY;
+		dest.rotateAngleZ = source.rotateAngleZ;
+		dest.rotationPointX = source.rotationPointX;
+		dest.rotationPointY = source.rotationPointY;
+		dest.rotationPointZ = source.rotationPointZ;
 	}
 }
