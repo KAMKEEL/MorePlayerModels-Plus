@@ -24,7 +24,7 @@ public class CommandYes extends MpmCommandInterface {
 		EnumAnimation ani = data.animation == EnumAnimation.YES?EnumAnimation.NONE:EnumAnimation.YES;
 		Server.sendAssociatedData(player, EnumPackets.ANIMATION, player.getUniqueID().toString(), ani);
 		data.animation = ani;
-		data.animationTime = player.ticksExisted;
+		data.animationStart = player.ticksExisted;
 	}
 
 	@Override
