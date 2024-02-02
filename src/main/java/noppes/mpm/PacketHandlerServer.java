@@ -48,21 +48,6 @@ public class PacketHandlerServer{
 
 			Server.sendData(player, EnumPackets.PING, MorePlayerModels.Revision);
 		}
-//		else if(type == EnumPackets.REQUEST_PLAYER_DATA){
-//			EntityPlayer pl = player.worldObj.func_152378_a(UUID.fromString(Server.readString(buffer)));
-//			if(pl == null)
-//				return;
-//			String hash = Server.readString(buffer);
-//			ModelData data = PlayerDataController.instance.getPlayerData(pl);
-//			if(!hash.equals(data.getHash()))
-//				Server.sendData(player, EnumPackets.SEND_PLAYER_DATA, pl.getUniqueID().toString(), data.writeToNBT());
-//
-//			ItemStack back = pl.inventory.mainInventory[0];
-//			if(back != null)
-//				Server.sendData(player, EnumPackets.BACK_ITEM_UPDATE, pl.getUniqueID().toString(), back.writeToNBT(new NBTTagCompound()));
-//			else
-//				Server.sendData(player, EnumPackets.BACK_ITEM_REMOVE, pl.getUniqueID().toString());
-//		}
 		else if(type == EnumPackets.UPDATE_PLAYER_DATA){
 			ModelData data = PlayerDataController.instance.getPlayerData(player);
 			data.readFromNBT(Server.readNBT(buffer));

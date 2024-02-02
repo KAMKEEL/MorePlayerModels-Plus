@@ -27,21 +27,21 @@ public class CommandSleep extends MpmCommandInterface {
 			rotation += 360;
 		while(rotation > 360)
 			rotation -= 360;
-		
+
 		int rotate = (int) ((rotation + 45) / 90);
-		EnumAnimation animation = EnumAnimation.SLEEPING_SOUTH;
+		EnumAnimation ani = EnumAnimation.SLEEPING_SOUTH;
 		if(rotate == 1)
-			animation = EnumAnimation.SLEEPING_WEST;
+			ani = EnumAnimation.SLEEPING_WEST;
 		if(rotate == 2)
-			animation = EnumAnimation.SLEEPING_NORTH;
+			ani = EnumAnimation.SLEEPING_NORTH;
 		if(rotate == 3)
-			animation = EnumAnimation.SLEEPING_EAST;
-		
+			ani = EnumAnimation.SLEEPING_EAST;
+
 		if(data.animation == EnumAnimation.SLEEPING_EAST || data.animation == EnumAnimation.SLEEPING_NORTH || data.animation == EnumAnimation.SLEEPING_WEST || data.animation == EnumAnimation.SLEEPING_SOUTH)
-			animation = EnumAnimation.NONE;
-			
-		Server.sendAssociatedData(player, EnumPackets.ANIMATION, player.getUniqueID().toString(), animation);
-		data.animation = animation;
+			ani = EnumAnimation.NONE;
+
+		Server.sendAssociatedData(player, EnumPackets.ANIMATION, player.getUniqueID().toString(), ani);
+		data.animation = ani;
 	}
 
 	@Override
