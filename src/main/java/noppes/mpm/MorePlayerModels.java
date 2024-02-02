@@ -123,6 +123,7 @@ public class MorePlayerModels {
 		event.registerServerCommand(new CommandCry());
 		event.registerServerCommand(new CommandAngry());
 		event.registerServerCommand(new CommandSetUrl());
+		event.registerServerCommand(new CommandSetCloak());
 		event.registerServerCommand(new CommandScale());
 		event.registerServerCommand(new CommandSetModel());
 		event.registerServerCommand(new CommandSetName());
