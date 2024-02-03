@@ -382,15 +382,10 @@ public class ModelMPM extends ModelBiped{
 		if(isSneak && (data.animation == EnumAnimation.CRAWLING || data.isSleeping()))
 			isSneak = false;
 
-		this.bipedBody.rotationPointX = this.bipedBody.rotationPointY = this.bipedBody.rotationPointZ = 0;
-		this.bipedBody.rotateAngleX = this.bipedBody.rotateAngleY = this.bipedBody.rotateAngleZ = 0;
-
-		this.bipedHeadwear.rotateAngleX = this.bipedHead.rotateAngleX = 0;
-		this.bipedHeadwear.rotateAngleZ = this.bipedHead.rotateAngleZ = 0;
-
-		this.bipedHeadwear.rotationPointX = this.bipedHead.rotationPointX = 0;
-		this.bipedHeadwear.rotationPointY = this.bipedHead.rotationPointY = 0;
-		this.bipedHeadwear.rotationPointZ = this.bipedHead.rotationPointZ = 0;
+		this.bipedBody.rotationPointZ = 0;
+		this.bipedBody.rotationPointY = 0;
+		this.bipedHead.rotateAngleZ = 0;
+		this.bipedHeadwear.rotateAngleZ = 0;
 
 		this.bipedLeftLeg.rotateAngleX = 0;
 		this.bipedLeftLeg.rotateAngleY = 0;
@@ -398,10 +393,8 @@ public class ModelMPM extends ModelBiped{
 		this.bipedRightLeg.rotateAngleX = 0;
 		this.bipedRightLeg.rotateAngleY = 0;
 		this.bipedRightLeg.rotateAngleZ = 0;
-		this.bipedLeftArm.rotationPointX = 0;
 		this.bipedLeftArm.rotationPointY = 2;
 		this.bipedLeftArm.rotationPointZ = 0;
-		this.bipedRightArm.rotationPointX = 0;
 		this.bipedRightArm.rotationPointY = 2;
 		this.bipedRightArm.rotationPointZ = 0;
 		
@@ -448,13 +441,6 @@ public class ModelMPM extends ModelBiped{
 		}
     	else if(isSneak)
             this.bipedBody.rotateAngleX = 0.5F / data.body.scaleY;
-
-		copyModelAngles(this.bipedLeftLeg, this.bipedLeftLegWear);
-		copyModelAngles(this.bipedRightLeg, this.bipedRightLegWear);
-		copyModelAngles(this.bipedLeftArm, this.bipedLeftArmwear);
-		copyModelAngles(this.bipedRightArm, this.bipedRightArmWear);
-		copyModelAngles(this.bipedBody, this.bipedBodywear);
-		copyModelAngles(this.bipedHead, this.bipedHeadwear);
     }
 
     public void setLivingAnimations(EntityLivingBase par1EntityLivingBase, float par2, float par3, float par4) 
@@ -756,15 +742,5 @@ public class ModelMPM extends ModelBiped{
 		if(entity instanceof EntityPlayer && ((EntityPlayer)entity).isPlayerSleeping())
 			return true;
 		return data.isSleeping();
-	}
-
-	public static void copyModelAngles(ModelRenderer source, ModelRenderer dest)
-	{
-		dest.rotateAngleX = source.rotateAngleX;
-		dest.rotateAngleY = source.rotateAngleY;
-		dest.rotateAngleZ = source.rotateAngleZ;
-		dest.rotationPointX = source.rotationPointX;
-		dest.rotationPointY = source.rotationPointY;
-		dest.rotationPointZ = source.rotationPointZ;
 	}
 }

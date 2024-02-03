@@ -54,16 +54,16 @@ public class ServerTickHandler {
 		EntityPlayerMP player = (EntityPlayerMP) event.player;
 		ModelData data = PlayerDataController.instance.getPlayerData(player);
 		ItemStack item = player.inventory.mainInventory[0];
-		if(data.backItem != item){
-			if(item.getItem() == null){
-				Server.sendAssociatedData(player, EnumPackets.BACK_ITEM_REMOVE, player.getUniqueID().toString());
-			}
-			else{
-				NBTTagCompound tag = item.writeToNBT(new NBTTagCompound());
-				Server.sendAssociatedData(player, EnumPackets.BACK_ITEM_UPDATE, player.getUniqueID().toString(), tag);
-			}
-			data.backItem = item;
+		if(data.backItem == item)
+			return;
+		if(item == null){
+			Server.sendAssociatedData(player, EnumPackets.BACK_ITEM_REMOVE, player.getUniqueID().toString());
 		}
+		else {
+			NBTTagCompound tag = item.writeToNBT(new NBTTagCompound());
+			Server.sendAssociatedData(player, EnumPackets.BACK_ITEM_UPDATE, player.getUniqueID().toString(), tag);
+		}
+		data.backItem = item;
 		if(data.animation != EnumAnimation.NONE)
 			checkAnimation(player, data);
 		data.prevPosX = player.posX;
