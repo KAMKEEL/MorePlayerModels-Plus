@@ -56,7 +56,7 @@ public class CommandSetCloak extends MpmCommandInterface {
 		data.cloakInnit = false;
 		data.resourceLoaded = false;
 		data.resourceInit = false;
-		Server.sendAssociatedData(player, EnumPackets.SEND_PLAYER_DATA, player.getUniqueID().toString(), data.writeToNBT());
+		Server.sendAssociatedData(player, EnumPackets.SEND_PLAYER_DATA, player.getCommandSenderName(), data.writeToNBT());
 	}
 
 	@Override

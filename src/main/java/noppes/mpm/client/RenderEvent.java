@@ -111,7 +111,7 @@ public class RenderEvent {
 		MPMRendererHelper.setMainModel(render, renderer.modelBipedMain);
 	}
 
-	@SubscribeEvent
+	@SubscribeEvent(priority=EventPriority.LOWEST)
 	public void special(RenderPlayerEvent.Specials.Pre event){
 		event.renderItem = false;
 		event.renderHelmet = false;

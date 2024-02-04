@@ -57,11 +57,11 @@ public class ServerTickHandler {
 		if(data.backItem == item)
 			return;
 		if(item == null){
-			Server.sendAssociatedData(player, EnumPackets.BACK_ITEM_REMOVE, player.getUniqueID().toString());
+			Server.sendAssociatedData(player, EnumPackets.BACK_ITEM_REMOVE, player.getCommandSenderName());
 		}
 		else {
 			NBTTagCompound tag = item.writeToNBT(new NBTTagCompound());
-			Server.sendAssociatedData(player, EnumPackets.BACK_ITEM_UPDATE, player.getUniqueID().toString(), tag);
+			Server.sendAssociatedData(player, EnumPackets.BACK_ITEM_UPDATE, player.getCommandSenderName(), tag);
 		}
 		data.backItem = item;
 		if(data.animation != EnumAnimation.NONE)
