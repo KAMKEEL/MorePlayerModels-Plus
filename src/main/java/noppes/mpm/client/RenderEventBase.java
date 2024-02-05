@@ -105,8 +105,8 @@ public class RenderEventBase {
 	public void special(RenderPlayerEvent.Specials.Pre event){
 		event.renderItem = false;
 		event.renderHelmet = false;
-		// renderer.renderItem(event.entityPlayer);
-		// renderer.renderHelmet(event.entityPlayer);
+		 RenderMPMBase.Instance.renderItem(event.entityPlayer);
+		RenderMPMBase.Instance.renderHelmet(event.entityPlayer);
 		if(ConfigClient.EnableBackItem)
 			// renderer.renderBackitem(event.entityPlayer);
 		if(event.renderCape){

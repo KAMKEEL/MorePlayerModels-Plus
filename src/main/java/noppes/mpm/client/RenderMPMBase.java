@@ -51,18 +51,6 @@ public class RenderMPMBase extends RenderPlayerBase {
 	public static RenderMPMBase Instance;
 	private ModelData data;
 
-	// ModelMPM Presets
-	// Steve
-	public ModelMPM steve32 = new ModelMPM(0, 0);
-	public ModelMPM steve64 = new ModelMPM(0, false);
-	public ModelMPM alex = new ModelMPM(0, true);
-
-	public ModelMPM steveArmorChest = new ModelMPM(1,0);
-	public ModelMPM steveArmor = new ModelMPM(0.5F,0);
-
-	public ModelMPM alex32armorChest = new ModelMPM(1,1);
-	public ModelMPM alex32armor = new ModelMPM(0.5F,1);
-
 	private RendererLivingEntity renderEntity;
 	private EntityLivingBase entity;
 	private ModelRenderPassHelper renderpass = new ModelRenderPassHelper();
@@ -199,8 +187,8 @@ public class RenderMPMBase extends RenderPlayerBase {
 		float f = 1.0F;
 		GL11.glColor3f(f, f, f);
 		this.renderPlayer.modelBipedMain.onGround = 0.0F;
-//		this.modelBipedMain.setRotationAngles(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F, player);
-//		this.modelBipedMain.renderArms(player, 0.0625F, true);
+		this.renderPlayer.modelBipedMain.setRotationAngles(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F, player);
+		// this.renderPlayer.modelBipedMain.renderArms(player, 0.0625F, true);
 	}
 
 	public ResourceLocation loadCapeResource(AbstractClientPlayer player) {
@@ -508,7 +496,7 @@ public class RenderMPMBase extends RenderPlayerBase {
 //		modelBipedMain.entityModel = modelArmorChestplate.entityModel = modelArmor.entityModel = model;
 //		modelBipedMain.entity = modelArmorChestplate.entity = modelArmor.entity = entity;
 	}
-//
+
 //	@Override
 //	protected void renderEquippedItems(EntityLivingBase entityliving, float f){
 //		if(renderEntity != null)
@@ -567,17 +555,17 @@ public class RenderMPMBase extends RenderPlayerBase {
 //			this.modelArmor = steveArmor;
 //		}
 //	}
-//
-//	public static ResourceLocation getDefaultSkin(int modelType){
-//		ResourceLocation location;
-//		if(modelType == 2){
-//			location = alexSkin;
-//		} else if(modelType == 1){
-//			location = steve64Skin;
-//		} else {
-//			location = SkinManager.field_152793_a;
-//		}
-//
-//		return location;
-//	}
+
+	public static ResourceLocation getDefaultSkin(int modelType){
+		ResourceLocation location;
+		if(modelType == 2){
+			location = alexSkin;
+		} else if(modelType == 1){
+			location = steve64Skin;
+		} else {
+			location = SkinManager.field_152793_a;
+		}
+
+		return location;
+	}
 }
