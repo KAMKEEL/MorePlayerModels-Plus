@@ -22,7 +22,7 @@ public class CommandSit extends MpmCommandInterface {
 		EntityPlayerMP player = (EntityPlayerMP) icommandsender;
 		ModelData data = PlayerDataController.instance.getPlayerData(player);
 		EnumAnimation ani = data.animation == EnumAnimation.SITTING?EnumAnimation.NONE:EnumAnimation.SITTING;
-		Server.sendAssociatedData(player, EnumPackets.ANIMATION, player.getCommandSenderName(), ani);
+		Server.sendAssociatedData(player, EnumPackets.ANIMATION, player.getUniqueID().toString(), ani);
 		data.animation = ani;
 	}
 

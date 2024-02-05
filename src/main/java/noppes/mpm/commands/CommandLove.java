@@ -17,7 +17,7 @@ public class CommandLove extends MpmCommandInterface {
 		if(!(icommandsender instanceof EntityPlayerMP))
 			return;
 		EntityPlayerMP player = (EntityPlayerMP) icommandsender;
-		Server.sendAssociatedData(player, EnumPackets.PARTICLE, 0, player.getCommandSenderName());
+		Server.sendAssociatedData(player, EnumPackets.PARTICLE, 0, player.getUniqueID().toString());
 	}
 
 	@Override

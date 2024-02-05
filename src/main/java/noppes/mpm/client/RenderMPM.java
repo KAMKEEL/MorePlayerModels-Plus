@@ -47,7 +47,7 @@ import java.util.UUID;
 import static net.minecraftforge.client.IItemRenderer.ItemRenderType.EQUIPPED;
 import static net.minecraftforge.client.IItemRenderer.ItemRendererHelper.BLOCK_3D;
 
-public class RenderMPM extends RenderPlayer {
+public class RenderMPM extends RenderPlayer{
 	public ModelMPM modelBipedMain;
 	public ModelMPM modelArmorChestplate;
 	public ModelMPM modelArmor;

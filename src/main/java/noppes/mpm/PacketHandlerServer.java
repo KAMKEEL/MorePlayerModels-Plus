@@ -40,11 +40,11 @@ public class PacketHandlerServer{
 					data.entityClass = null;
 
 				data.save();
-				Server.sendAssociatedData(player, EnumPackets.SEND_PLAYER_DATA, player.getCommandSenderName(), data.writeToNBT());
+				Server.sendAssociatedData(player, EnumPackets.SEND_PLAYER_DATA, player.getUniqueID().toString(), data.writeToNBT());
 			}
 			ItemStack back = player.inventory.mainInventory[0];
 			if(back != null)
-				Server.sendAssociatedData(player, EnumPackets.BACK_ITEM_UPDATE, player.getCommandSenderName(), back.writeToNBT(new NBTTagCompound()));
+				Server.sendAssociatedData(player, EnumPackets.BACK_ITEM_UPDATE, player.getUniqueID().toString(), back.writeToNBT(new NBTTagCompound()));
 
 			Server.sendData(player, EnumPackets.PING, MorePlayerModels.Revision);
 		}
@@ -56,7 +56,7 @@ public class PacketHandlerServer{
 				data.entityClass = null;
 
 			PlayerDataController.instance.savePlayerData(player, data);
-			Server.sendAssociatedData(player, EnumPackets.SEND_PLAYER_DATA, player.getCommandSenderName(), data.writeToNBT());
+			Server.sendAssociatedData(player, EnumPackets.SEND_PLAYER_DATA, player.getUniqueID().toString(), data.writeToNBT());
 		}
 		else if(type == EnumPackets.GET_PERMISSION){
 			long lastRequest = -1;
@@ -92,7 +92,7 @@ public class PacketHandlerServer{
 			if(data.animationEquals(animation))
 				animation = EnumAnimation.NONE;
 
-			Server.sendAssociatedData(player, EnumPackets.ANIMATION, player.getCommandSenderName(), animation);
+			Server.sendAssociatedData(player, EnumPackets.ANIMATION, player.getUniqueID().toString(), animation);
 			data.setAnimation(animation);
 		}
 	}

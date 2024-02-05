@@ -22,7 +22,7 @@ public class CommandBow extends MpmCommandInterface {
 		EntityPlayerMP player = (EntityPlayerMP) icommandsender;
 		ModelData data = PlayerDataController.instance.getPlayerData(player);
 		EnumAnimation ani = data.animation == EnumAnimation.BOW?EnumAnimation.NONE:EnumAnimation.BOW;
-		Server.sendAssociatedData(player, EnumPackets.ANIMATION, player.getCommandSenderName(), ani);
+		Server.sendAssociatedData(player, EnumPackets.ANIMATION, player.getUniqueID().toString(), ani);
 		data.animation = ani;
 		data.animationStart = player.ticksExisted;
 	}

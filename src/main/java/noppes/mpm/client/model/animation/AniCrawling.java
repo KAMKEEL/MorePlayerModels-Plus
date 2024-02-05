@@ -1,13 +1,12 @@
 package noppes.mpm.client.model.animation;
 
-import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
 import noppes.mpm.client.model.ModelMPM;
 
 public class AniCrawling {
 
-	public static void setRotationAngles(float par1, float par2, float par3, float par4, float par5, float par6, Entity entity, ModelBiped model){
+	public static void setRotationAngles(float par1, float par2, float par3, float par4, float par5, float par6, Entity entity, ModelMPM model){
 
         model.bipedHead.rotateAngleZ = -par4 / (180F / (float)Math.PI);
         model.bipedHead.rotateAngleY = 0;

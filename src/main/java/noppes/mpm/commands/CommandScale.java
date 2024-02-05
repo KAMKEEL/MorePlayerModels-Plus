@@ -68,7 +68,7 @@ public class CommandScale extends MpmCommandInterface {
 				icommandsender.addChatMessage(new ChatComponentTranslation("Not enough arguments given"));
 				return;
 			}
-			Server.sendAssociatedData(player, EnumPackets.SEND_PLAYER_DATA, player.getCommandSenderName(), data.writeToNBT());
+			Server.sendAssociatedData(player, EnumPackets.SEND_PLAYER_DATA, player.getUniqueID().toString(), data.writeToNBT());
 		}
 		catch(NumberFormatException ex){
 			icommandsender.addChatMessage(new ChatComponentTranslation("None number given"));
