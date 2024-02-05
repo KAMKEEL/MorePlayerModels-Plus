@@ -58,7 +58,7 @@ public class PacketHandlerClient extends PacketHandlerServer{
 			}
 		}
 		else if(type == EnumPackets.SEND_PLAYER_DATA){
-			EntityPlayer pl = player.worldObj.func_152378_a(UUID.fromString(Server.readString(buffer)));
+			EntityPlayer pl = player.worldObj.getPlayerEntityByName(Server.readString(buffer));
 			if(pl == null)
 				return;
 			ModelData data = PlayerDataController.instance.getPlayerData(pl);
@@ -70,21 +70,21 @@ public class PacketHandlerClient extends PacketHandlerServer{
 			}
 		}
 		else if(type == EnumPackets.CHAT_EVENT){
-			EntityPlayer pl = player.worldObj.func_152378_a(UUID.fromString(Server.readString(buffer)));
+			EntityPlayer pl = player.worldObj.getPlayerEntityByName(Server.readString(buffer));
 			if(pl == null)
 				return;
 			String message = Server.readString(buffer);
 			ChatMessages.getChatMessages(pl.getCommandSenderName()).addMessage(message);
 		}
 		else if(type == EnumPackets.BACK_ITEM_REMOVE){
-			EntityPlayer pl = player.worldObj.func_152378_a(UUID.fromString(Server.readString(buffer)));
+			EntityPlayer pl = player.worldObj.getPlayerEntityByName(Server.readString(buffer));
 			if(pl == null)
 				return;
 			ModelData data = PlayerDataController.instance.getPlayerData(pl);
 			data.backItem = null;
 		}
 		else if(type == EnumPackets.BACK_ITEM_UPDATE){
-			EntityPlayer pl = player.worldObj.func_152378_a(UUID.fromString(Server.readString(buffer)));
+			EntityPlayer pl = player.worldObj.getPlayerEntityByName(Server.readString(buffer));
 			if(pl == null)
 				return;
 			NBTTagCompound compound = Server.readNBT(buffer);
@@ -99,7 +99,7 @@ public class PacketHandlerClient extends PacketHandlerServer{
 		else if(type == EnumPackets.PARTICLE){
 			int animation = buffer.readInt();
 			if(animation == 0){
-				EntityPlayer pl = player.worldObj.func_152378_a(UUID.fromString(Server.readString(buffer)));
+				EntityPlayer pl = player.worldObj.getPlayerEntityByName(Server.readString(buffer));
 				if(pl == null)
 					return;
 				ModelData data = PlayerDataController.instance.getPlayerData(pl);
@@ -109,7 +109,7 @@ public class PacketHandlerClient extends PacketHandlerServer{
 				player.worldObj.spawnParticle("note", buffer.readDouble(), buffer.readDouble(), buffer.readDouble(), buffer.readDouble(), 0, 0);
 			}
 			else if(animation == 2){
-				EntityPlayer pl = player.worldObj.func_152378_a(UUID.fromString(Server.readString(buffer)));
+				EntityPlayer pl = player.worldObj.getPlayerEntityByName(Server.readString(buffer));
 				if(pl == null)
 					return;
 				ModelData data = PlayerDataController.instance.getPlayerData(pl);
@@ -124,7 +124,7 @@ public class PacketHandlerClient extends PacketHandlerServer{
 			}
 		}
 		else if(type == EnumPackets.ANIMATION){
-			EntityPlayer pl = player.worldObj.func_152378_a(UUID.fromString(Server.readString(buffer)));
+			EntityPlayer pl = player.worldObj.getPlayerEntityByName(Server.readString(buffer));
 			if(pl == null)
 				return;
 			ModelData data = PlayerDataController.instance.getPlayerData(pl);

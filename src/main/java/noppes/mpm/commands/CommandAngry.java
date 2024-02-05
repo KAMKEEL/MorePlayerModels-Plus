@@ -17,7 +17,7 @@ public class CommandAngry extends MpmCommandInterface {
 		if(!(icommandsender instanceof EntityPlayerMP))
 			return;
 		EntityPlayerMP player = (EntityPlayerMP) icommandsender;
-		Server.sendAssociatedData(player, EnumPackets.PARTICLE, 2, player.getUniqueID().toString());
+		Server.sendAssociatedData(player, EnumPackets.PARTICLE, 2, player.getCommandSenderName());
 	}
 
 	@Override
