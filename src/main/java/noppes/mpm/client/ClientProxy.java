@@ -58,6 +58,7 @@ public class ClientProxy extends CommonProxy{
 			MinecraftForge.EVENT_BUS.register(new RenderEventBase());
 		} else {
 			RenderingRegistry.registerEntityRenderingHandler(EntityPlayer.class, RenderEvent.renderer);
+			MinecraftForge.EVENT_BUS.register(new RenderEvent());
 		}
 
 		FMLCommonHandler.instance().bus().register(new ClientEventHandler());
