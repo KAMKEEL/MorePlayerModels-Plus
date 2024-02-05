@@ -48,6 +48,7 @@ import static net.minecraftforge.client.IItemRenderer.ItemRenderType.EQUIPPED;
 import static net.minecraftforge.client.IItemRenderer.ItemRendererHelper.BLOCK_3D;
 
 public class RenderMPMBase extends RenderPlayerBase {
+	public static RenderMPMBase Instance;
 	private ModelData data;
 
 	// ModelMPM Presets
@@ -71,19 +72,28 @@ public class RenderMPMBase extends RenderPlayerBase {
 
 	public RenderMPMBase(RenderPlayerAPI renderPlayerAPI) {
 		super(renderPlayerAPI);
+		Instance = this;
 	}
 
 	public void setModelData(ModelData data, EntityLivingBase entity){
 		this.data = data;
-		this.setModelType(data);
-		modelBipedMain.setPlayerData(data, entity);
-		modelArmorChestplate.setPlayerData(data, entity);
-		modelArmor.setPlayerData(data, entity);
+		// this.setModelType(data);
+		// modelBipedMain.setPlayerData(data, entity);
+		// modelArmorChestplate.setPlayerData(data, entity);
+		// modelArmor.setPlayerData(data, entity);
 	}
 
 	@Override
 	public void afterPassSpecialRender(EntityLivingBase base, double x, double y, double z)
 	{
+		if(!(base instanceof EntityPlayer))
+			return;
+
+		EntityPlayer player = (EntityPlayer) base;
+
+		if(data == null){
+			data = PlayerDataController.instance.getPlayerData(player);
+		}
 		if(data.isSleeping() || data.animation == EnumAnimation.CRAWLING)
 			y -= 1.5;
 		else if(data != null)
@@ -92,8 +102,6 @@ public class RenderMPMBase extends RenderPlayerBase {
 		if(data.animation == EnumAnimation.SITTING)
 			y -= 0.6;
 		super.passSpecialRender(base, x, y, z);
-		EntityPlayer player = (EntityPlayer) base;
-
 		Scoreboard scoreboard = ((EntityPlayer)base).getWorldScoreboard();
 		ScoreObjective scoreobjective = scoreboard.func_96539_a(2);
 		if(scoreobjective != null)
@@ -191,8 +199,8 @@ public class RenderMPMBase extends RenderPlayerBase {
 		float f = 1.0F;
 		GL11.glColor3f(f, f, f);
 		this.renderPlayer.modelBipedMain.onGround = 0.0F;
-		this.modelBipedMain.setRotationAngles(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F, player);
-		this.modelBipedMain.renderArms(player, 0.0625F, true);
+//		this.modelBipedMain.setRotationAngles(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F, player);
+//		this.modelBipedMain.renderArms(player, 0.0625F, true);
 	}
 
 	public ResourceLocation loadCapeResource(AbstractClientPlayer player) {
@@ -493,83 +501,83 @@ public class RenderMPMBase extends RenderPlayerBase {
 					e.printStackTrace();
 				}
 			}
-			renderPassModel = renderpass;
+			// renderPassModel = renderpass;
 			renderpass.renderer = renderEntity;
 			renderpass.entity = entity;
 		}
-		modelBipedMain.entityModel = modelArmorChestplate.entityModel = modelArmor.entityModel = model;
-		modelBipedMain.entity = modelArmorChestplate.entity = modelArmor.entity = entity;
+//		modelBipedMain.entityModel = modelArmorChestplate.entityModel = modelArmor.entityModel = model;
+//		modelBipedMain.entity = modelArmorChestplate.entity = modelArmor.entity = entity;
 	}
-
-	@Override
-	protected void renderEquippedItems(EntityLivingBase entityliving, float f){
-		if(renderEntity != null)
-			MPMRendererHelper.renderEquippedItems(entity, f, renderEntity);
-		else
-			super.renderEquippedItems(entityliving, f);
-	}
-
-	@Override
-	protected int shouldRenderPass(EntityLivingBase par1EntityLivingBase, int par2, float par3){
-		if(renderEntity != null){
-			if(renderPassModel != null)
-				renderPassModel.isChild = entity.isChild();
-			return MPMRendererHelper.shouldRenderPass(entity, par2, par3, renderEntity);
-		}
-		return this.shouldRenderPass((AbstractClientPlayer)par1EntityLivingBase, par2, par3);
-	}
-
-	@Override
-	protected void preRenderCallback(EntityLivingBase entityliving, float f){
-		if(renderEntity != null){
-			MPMRendererHelper.preRenderCallback(entity, f, renderEntity);
-		}
-		else
-			super.preRenderCallback(entityliving, f);
-	}
-
-	@Override
-	protected float handleRotationFloat(EntityLivingBase par1EntityLivingBase, float par2){
-		if(renderEntity != null){
-			return MPMRendererHelper.handleRotationFloat(entity, par2, renderEntity);
-		}
-		return super.handleRotationFloat(par1EntityLivingBase, par2);
-	}
-
-	@Override
-	protected ResourceLocation getEntityTexture(AbstractClientPlayer player){
-		return MPMRendererHelper.getResource(player, renderEntity, entity);
-	}
-
-	public void setModelType(ModelData data){
-		int modelVal = data.modelType;
-		if(modelVal ==  1){
-			this.modelBipedMain = steve64;
-			this.modelArmorChestplate = steveArmorChest;
-			this.modelArmor = steveArmor;
-		}
-		else if(modelVal ==  2){
-			this.modelBipedMain = alex;
-			this.modelArmorChestplate = alex32armorChest;
-			this.modelArmor = alex32armor;
-		}
-		else{
-			this.modelBipedMain = steve32;
-			this.modelArmorChestplate = steveArmorChest;
-			this.modelArmor = steveArmor;
-		}
-	}
-
-	public static ResourceLocation getDefaultSkin(int modelType){
-		ResourceLocation location;
-		if(modelType == 2){
-			location = alexSkin;
-		} else if(modelType == 1){
-			location = steve64Skin;
-		} else {
-			location = SkinManager.field_152793_a;
-		}
-
-		return location;
-	}
+//
+//	@Override
+//	protected void renderEquippedItems(EntityLivingBase entityliving, float f){
+//		if(renderEntity != null)
+//			MPMRendererHelper.renderEquippedItems(entity, f, renderEntity);
+//		else
+//			super.renderEquippedItems(entityliving, f);
+//	}
+//
+//	@Override
+//	protected int shouldRenderPass(EntityLivingBase par1EntityLivingBase, int par2, float par3){
+//		if(renderEntity != null){
+//			if(renderPassModel != null)
+//				renderPassModel.isChild = entity.isChild();
+//			return MPMRendererHelper.shouldRenderPass(entity, par2, par3, renderEntity);
+//		}
+//		return this.shouldRenderPass((AbstractClientPlayer)par1EntityLivingBase, par2, par3);
+//	}
+//
+//	@Override
+//	protected void preRenderCallback(EntityLivingBase entityliving, float f){
+//		if(renderEntity != null){
+//			MPMRendererHelper.preRenderCallback(entity, f, renderEntity);
+//		}
+//		else
+//			super.preRenderCallback(entityliving, f);
+//	}
+//
+//	@Override
+//	protected float handleRotationFloat(EntityLivingBase par1EntityLivingBase, float par2){
+//		if(renderEntity != null){
+//			return MPMRendererHelper.handleRotationFloat(entity, par2, renderEntity);
+//		}
+//		return super.handleRotationFloat(par1EntityLivingBase, par2);
+//	}
+//
+//	@Override
+//	protected ResourceLocation getEntityTexture(AbstractClientPlayer player){
+//		return MPMRendererHelper.getResource(player, renderEntity, entity);
+//	}
+//
+//	public void setModelType(ModelData data){
+//		int modelVal = data.modelType;
+//		if(modelVal ==  1){
+//			this.modelBipedMain = steve64;
+//			this.modelArmorChestplate = steveArmorChest;
+//			this.modelArmor = steveArmor;
+//		}
+//		else if(modelVal ==  2){
+//			this.modelBipedMain = alex;
+//			this.modelArmorChestplate = alex32armorChest;
+//			this.modelArmor = alex32armor;
+//		}
+//		else{
+//			this.modelBipedMain = steve32;
+//			this.modelArmorChestplate = steveArmorChest;
+//			this.modelArmor = steveArmor;
+//		}
+//	}
+//
+//	public static ResourceLocation getDefaultSkin(int modelType){
+//		ResourceLocation location;
+//		if(modelType == 2){
+//			location = alexSkin;
+//		} else if(modelType == 1){
+//			location = steve64Skin;
+//		} else {
+//			location = SkinManager.field_152793_a;
+//		}
+//
+//		return location;
+//	}
 }

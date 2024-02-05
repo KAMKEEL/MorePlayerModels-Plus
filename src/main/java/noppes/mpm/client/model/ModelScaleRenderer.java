@@ -16,9 +16,10 @@ public class ModelScaleRenderer extends ModelRenderer {
     public ModelScaleRenderer(ModelBase par1ModelBase, int par2, int par3)
     {
         this(par1ModelBase);
-        if (((ModelMPM)par1ModelBase).x64) {
-            this.textureHeight = 64;
-        }
+//        if (((IModelMPM)par1ModelBase).getX64()) {
+//
+//        }
+        this.textureHeight = 64;
         this.setTextureOffset(par2, par3);
     }
     

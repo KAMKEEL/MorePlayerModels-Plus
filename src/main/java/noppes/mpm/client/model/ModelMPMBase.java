@@ -11,10 +11,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
-import noppes.mpm.ModelData;
-import noppes.mpm.ModelPartConfig;
-import noppes.mpm.ModelPartData;
-import noppes.mpm.PlayerDataController;
+import noppes.mpm.*;
 import noppes.mpm.client.ClientProxy;
 import noppes.mpm.client.model.animation.*;
 import noppes.mpm.client.model.part.ModelLimbWear;
@@ -86,6 +83,8 @@ public class ModelMPMBase extends ModelPlayerBase implements IModelMPM {
 
 		if(solidLeftArmWear == null){
 			setAlex(1, false);
+			data = PlayerDataController.instance.getPlayerData((EntityPlayer) var1);
+			setPlayerData(data, (EntityPlayer) var1);
 		}
 	}
 

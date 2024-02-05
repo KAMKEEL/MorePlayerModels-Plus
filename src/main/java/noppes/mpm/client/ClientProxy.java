@@ -1,9 +1,14 @@
 package noppes.mpm.client;
 
+import api.player.model.ModelPlayerAPI;
+import api.player.render.RenderPlayerAPI;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Loader;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityOtherPlayerMP;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,6 +18,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import noppes.mpm.CommonProxy;
 import noppes.mpm.MorePlayerModels;
+import noppes.mpm.client.model.ModelMPM;
+import noppes.mpm.client.model.ModelMPMBase;
 import noppes.mpm.config.ConfigMain;
 import org.lwjgl.input.Keyboard;
 
@@ -44,11 +51,17 @@ public class ClientProxy extends CommonProxy{
 		ClientRegistry.registerKeyBinding(MPM4 = new KeyBinding("MPM 4",Keyboard.KEY_NONE, "key.categories.gameplay"));
 		ClientRegistry.registerKeyBinding(MPM5 = new KeyBinding("MPM 5",Keyboard.KEY_NONE, "key.categories.gameplay"));
 
-		RenderingRegistry.registerEntityRenderingHandler(EntityPlayer.class, RenderEvent.renderer);
+
+		if (Loader.isModLoaded("RenderPlayerAPI")) {
+			ModelPlayerAPI.register(MorePlayerModels.MODID, ModelMPMBase.class);
+			RenderPlayerAPI.register(MorePlayerModels.MODID, RenderMPMBase.class);
+			MinecraftForge.EVENT_BUS.register(new RenderEventBase());
+		} else {
+			RenderingRegistry.registerEntityRenderingHandler(EntityPlayer.class, RenderEvent.renderer);
+		}
 
 		FMLCommonHandler.instance().bus().register(new ClientEventHandler());
-		MinecraftForge.EVENT_BUS.register(new RenderEvent());
-		
+
 		if(ConfigMain.EnableUpdateChecker){
 			VersionChecker checker = new VersionChecker();
 			checker.start();

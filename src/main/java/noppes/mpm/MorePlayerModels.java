@@ -32,6 +32,7 @@ public class MorePlayerModels {
 	@SidedProxy(clientSide = "noppes.mpm.client.ClientProxy", serverSide = "noppes.mpm.CommonProxy")
 	public static CommonProxy proxy;
 	public final static String VERSION = "3.1";
+	public final static String MODID = "moreplayermodels";
 
 	public static FMLEventChannel Channel;
 
