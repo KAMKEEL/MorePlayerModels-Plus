@@ -2,6 +2,7 @@ package noppes.mpm.client.model;
 
 import api.player.model.ModelPlayerAPI;
 import api.player.model.ModelPlayerBase;
+import cpw.mods.fml.common.Loader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.model.ModelBase;
@@ -26,10 +27,17 @@ import noppes.mpm.constants.EnumAnimation;
 import noppes.mpm.constants.EnumParts;
 import org.lwjgl.opengl.GL11;
 
+import java.lang.reflect.Constructor;
 import java.util.Random;
 
 public class ModelMPMBase extends ModelPlayerBase implements IModelMPM {
 	public ModelData data;
+
+	// ModelPlayer =-- SmartMoving, GalacticCraft MANIPULATED MODEL --- Oxygen
+	// ModelPlayer.rightarm -- RightArm
+	//    ---- Children
+
+	// ModelPlayer.rightarm = ModelMPM.arm
 
 	private ModelPartInterface wings;
 	private ModelPartInterface mohawk;
@@ -69,6 +77,24 @@ public class ModelMPMBase extends ModelPlayerBase implements IModelMPM {
 	public boolean isAlexArmor;
 	public boolean x64 = false;
 
+	public static boolean isSmartMovingLoaded;
+	private static Class<? extends ModelRenderer> modelRotationGCSmartMoving;
+	private static Constructor<? extends ModelRenderer> modelRotationGCSmartMovingInit;
+
+	static {
+		isSmartMovingLoaded = Loader.isModLoaded("SmartRender");
+		if (isSmartMovingLoaded) {
+			try {
+				modelRotationGCSmartMoving = (Class<? extends ModelRenderer>) Class
+						.forName("micdoodle8.mods.galacticraft.core.client.model.ModelRotationRendererGC");
+				modelRotationGCSmartMovingInit = modelRotationGCSmartMoving
+						.getConstructor(ModelBase.class, int.class, int.class, ModelRenderer.class, int.class);
+			} catch (final Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 	public ModelMPMBase(ModelPlayerAPI modelPlayerAPI) {
 		super(modelPlayerAPI);
 	}
@@ -78,12 +104,10 @@ public class ModelMPMBase extends ModelPlayerBase implements IModelMPM {
 		if (!(var1 instanceof EntityPlayer)) {
 			return; // Deal with RenderPlayerAPIEnhancer calling this for skeletons etc
 		}
-
 		super.beforeRender(var1, var2, var3, var4, var5, var6, var7);
-
 		if(solidLeftArmWear == null){
-			setAlex(1, false);
 			data = PlayerDataController.instance.getPlayerData((EntityPlayer) var1);
+			setAlex(1, false);
 			setPlayerData(data, (EntityPlayer) var1);
 		}
 	}

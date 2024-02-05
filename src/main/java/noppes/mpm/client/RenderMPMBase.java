@@ -65,6 +65,9 @@ public class RenderMPMBase extends RenderPlayerBase {
 
 	public void setModelData(ModelData data, EntityLivingBase entity){
 		this.data = data;
+
+
+
 		// this.setModelType(data);
 		// modelBipedMain.setPlayerData(data, entity);
 		// modelArmorChestplate.setPlayerData(data, entity);

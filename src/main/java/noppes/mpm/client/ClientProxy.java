@@ -1,6 +1,7 @@
 package noppes.mpm.client;
 
 import api.player.model.ModelPlayerAPI;
+import api.player.model.ModelPlayerBaseSorting;
 import api.player.render.RenderPlayerAPI;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
@@ -16,6 +17,7 @@ import net.minecraft.util.ReportedException;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import net.smart.render.playerapi.SmartRender;
 import noppes.mpm.CommonProxy;
 import noppes.mpm.MorePlayerModels;
 import noppes.mpm.client.model.ModelMPM;
@@ -53,7 +55,14 @@ public class ClientProxy extends CommonProxy{
 
 
 		if (Loader.isModLoaded("RenderPlayerAPI")) {
-			ModelPlayerAPI.register(MorePlayerModels.MODID, ModelMPMBase.class);
+			String[] inferiors = new String[] {SmartRender.ID, "SmartMoving"};
+			ModelPlayerBaseSorting modelSorting = new ModelPlayerBaseSorting();
+			modelSorting.setBeforeLocalConstructingSuperiors(inferiors);
+			modelSorting.setAfterLocalConstructingSuperiors(inferiors);
+			modelSorting.setBeforeLocalConstructingInferiors(inferiors);
+			modelSorting.setAfterLocalConstructingInferiors(inferiors);
+
+			ModelPlayerAPI.register(MorePlayerModels.MODID, ModelMPMBase.class, modelSorting);
 			RenderPlayerAPI.register(MorePlayerModels.MODID, RenderMPMBase.class);
 			MinecraftForge.EVENT_BUS.register(new RenderEventBase());
 		} else {
