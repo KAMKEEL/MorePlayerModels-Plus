@@ -113,7 +113,7 @@ public class CommandMPM extends MpmCommandInterface {
 			animation = EnumAnimation.NONE;
 		}
 		
-		Server.sendAssociatedData(player, EnumPackets.ANIMATION, player.getCommandSenderName(), animation);
+		Server.sendAssociatedData(player, EnumPackets.ANIMATION, player.getUniqueID().toString(), animation);
 		data.setAnimation(animation.ordinal());
 	}
 	
@@ -137,7 +137,7 @@ public class CommandMPM extends MpmCommandInterface {
 			}
 		}
 		
-		Server.sendAssociatedData(player, EnumPackets.SEND_PLAYER_DATA, player.getCommandSenderName(), data.writeToNBT());
+		Server.sendAssociatedData(player, EnumPackets.SEND_PLAYER_DATA, player.getUniqueID().toString(), data.writeToNBT());
 	}
 	
 	private void name(EntityPlayer player, String[] args, ModelData data) throws WrongUsageException {
@@ -160,7 +160,7 @@ public class CommandMPM extends MpmCommandInterface {
 		if(data.displayName.equalsIgnoreCase("clear"))
 			data.displayName = "";
 		player.refreshDisplayName();
-		Server.sendAssociatedData(player, EnumPackets.SEND_PLAYER_DATA, player.getCommandSenderName(), data.writeToNBT());
+		Server.sendAssociatedData(player, EnumPackets.SEND_PLAYER_DATA, player.getUniqueID().toString(), data.writeToNBT());
 	}
 
 	private void url(EntityPlayer player, String[] args, ModelData data) throws WrongUsageException{
@@ -173,7 +173,7 @@ public class CommandMPM extends MpmCommandInterface {
 		if(url.equalsIgnoreCase("clear"))
 			url = "";
 		data.url = url;
-		Server.sendAssociatedData(player, EnumPackets.SEND_PLAYER_DATA, player.getCommandSenderName(), data.writeToNBT());
+		Server.sendAssociatedData(player, EnumPackets.SEND_PLAYER_DATA, player.getUniqueID().toString(), data.writeToNBT());
 	}
 	
 	private void sendmodel(EntityPlayer fromPlayer, String[] args, ModelData fromData) throws WrongUsageException{
@@ -205,7 +205,7 @@ public class CommandMPM extends MpmCommandInterface {
 		NBTTagCompound compound = fromData.writeToNBT();
 		toData.readFromNBT(compound);
 		toData.save();
-		Server.sendAssociatedData(toPlayer, EnumPackets.SEND_PLAYER_DATA, toPlayer.getCommandSenderName(), compound);
+		Server.sendAssociatedData(toPlayer, EnumPackets.SEND_PLAYER_DATA, toPlayer.getUniqueID().toString(), compound);
 	}
 	
 	private void scale(EntityPlayer player, String[] args, ModelData data) throws WrongUsageException{
@@ -216,7 +216,7 @@ public class CommandMPM extends MpmCommandInterface {
 				data.body.setScale(scale.scaleX, scale.scaleY, scale.scaleZ);
 				data.arms.setScale(scale.scaleX, scale.scaleY, scale.scaleZ);
 				data.legs.setScale(scale.scaleX, scale.scaleY, scale.scaleZ);
-				Server.sendAssociatedData(player, EnumPackets.SEND_PLAYER_DATA, player.getCommandSenderName(), data.writeToNBT());
+				Server.sendAssociatedData(player, EnumPackets.SEND_PLAYER_DATA, player.getUniqueID().toString(), data.writeToNBT());
 			}
 			else if(args.length == 4){
 				Scale scale = Scale.Parse(args[0]);
@@ -229,7 +229,7 @@ public class CommandMPM extends MpmCommandInterface {
 
 				scale = Scale.Parse(args[3]);
 				data.legs.setScale(scale.scaleX, scale.scaleY, scale.scaleZ);
-				Server.sendAssociatedData(player, EnumPackets.SEND_PLAYER_DATA, player.getCommandSenderName(), data.writeToNBT());
+				Server.sendAssociatedData(player, EnumPackets.SEND_PLAYER_DATA, player.getUniqueID().toString(), data.writeToNBT());
 			}
 			else{
 				throw new WrongUsageException("/mpm scale [@p] [head x,y,z] [body x,y,z] [arms x,y,z] [legs x,y,z]. Examples: /mpm scale @p 1, /mpm scale @p 1 1 1 1, /mpm scale 1,1,1 1,1,1 1,1,1 1,1,1");
