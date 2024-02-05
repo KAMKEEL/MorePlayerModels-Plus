@@ -5,8 +5,8 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import noppes.mpm.ModelData;
 import noppes.mpm.ModelPartData;
+import noppes.mpm.client.model.IModelMPM;
 import noppes.mpm.client.model.Model2DRenderer;
-import noppes.mpm.client.model.ModelMPM;
 import noppes.mpm.client.model.ModelPartInterface;
 import noppes.mpm.constants.EnumParts;
 
@@ -16,17 +16,17 @@ public class ModelWings extends ModelPartInterface {
 	private Model2DRenderer rWing;
 //	private final ModelMonarchWings monarchWings;
 
-	public ModelWings(ModelMPM base) {
+	public ModelWings(IModelMPM base) {
 		super(base);
 
-		lWing = new Model2DRenderer(base, 48, 32, 16, 32, 64, 32);
+		lWing = new Model2DRenderer(base.getBiped(), 48, 32, 16, 32, 64, 32);
 		lWing.mirror = true;
 		lWing.setRotationPoint(2F, 4, 2F);
 		lWing.setRotationOffset(-16, -12);
 		setRotation(lWing, 0.7141593F, -0.5235988F, -0.5090659F);
 		this.addChild(lWing);
 
-		rWing = new Model2DRenderer(base, 48, 32, 16, 32, 64, 32);
+		rWing = new Model2DRenderer(base.getBiped(), 48, 32, 16, 32, 64, 32);
 		rWing.setRotationPoint(-2F, 4F, 2F);
 		rWing.setRotationOffset(-16, -12);
 		setRotation(rWing, 0.7141593F, 0.5235988F, 0.5090659F);

@@ -1,32 +1,32 @@
 package noppes.mpm.client.model.part.head.horns;
 
 import net.minecraft.client.model.ModelRenderer;
-import noppes.mpm.client.model.ModelMPM;
+import noppes.mpm.client.model.IModelMPM;
 
 public class ModelAntennasFront extends ModelRenderer {
 
-	public ModelAntennasFront(ModelMPM base) {
-		super(base);
-		ModelRenderer rightantenna1 = new ModelRenderer(base, 36, 0);
+	public ModelAntennasFront(IModelMPM base) {
+		super(base.getBiped());
+		ModelRenderer rightantenna1 = new ModelRenderer(base.getBiped(), 36, 0);
 		rightantenna1.addBox(0F, 0F, 0F, 1, 4, 1);
 		rightantenna1.setRotationPoint(2F, -9.4F, -2F);
 		setRotation(rightantenna1, 0.4014257F, 0.0698132F, 0.0698132F);
 		addChild(rightantenna1);
 
-		ModelRenderer leftantenna1 = new ModelRenderer(base, 32, 0);
+		ModelRenderer leftantenna1 = new ModelRenderer(base.getBiped(), 32, 0);
 		leftantenna1.mirror = true;
 		leftantenna1.addBox(-1F, 0F, 0F, 1, 4, 1);
 		leftantenna1.setRotationPoint(-2F, -9.4F, -2F);
 		setRotation(leftantenna1, 0.4014257F, -0.0698132F, -0.0698132F);
 		addChild(leftantenna1);
 
-		ModelRenderer rightantenna2 = new ModelRenderer(base, 36, 0);
+		ModelRenderer rightantenna2 = new ModelRenderer(base.getBiped(), 36, 0);
 		rightantenna2.addBox(0F, 0F, 0F, 1, 4, 1);
 		rightantenna2.setRotationPoint(3F, -10.2F, -5.3F);
 		setRotation(rightantenna2, 1.22173F, -0.2094395F, 0.0698132F);
 		addChild(rightantenna2);
 
-		ModelRenderer leftantenna2 = new ModelRenderer(base, 32, 0);
+		ModelRenderer leftantenna2 = new ModelRenderer(base.getBiped(), 32, 0);
 		leftantenna2.mirror = true;
 		leftantenna2.addBox(-1F, 0F, 0F, 1, 4, 1);
 		leftantenna2.setRotationPoint(-3F, -10.2F, -5.3F);

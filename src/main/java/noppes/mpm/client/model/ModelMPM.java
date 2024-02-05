@@ -29,7 +29,7 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.Random;
 
-public class ModelMPM extends ModelBiped{
+public class ModelMPM extends ModelBiped implements IModelMPM {
 	public ModelData data;
 
 	private ModelPartInterface wings;
@@ -737,6 +737,36 @@ public class ModelMPM extends ModelBiped{
 
 		return bipedBody;
     }
+
+	@Override
+	public boolean getCurrentlyPlayerTexture() {
+		return currentlyPlayerTexture;
+	}
+
+	@Override
+	public void setCurrentlyPlayerTexture(boolean value) {
+		currentlyPlayerTexture = value;
+	}
+
+	@Override
+	public boolean getIsArmor() {
+		return isArmor;
+	}
+
+	@Override
+	public boolean getIsAlexArmor() {
+		return isAlexArmor;
+	}
+
+	@Override
+	public boolean getX64() {
+		return x64;
+	}
+
+	@Override
+	public ModelBiped getBiped() {
+		return this;
+	}
 
 	public boolean isSleeping(Entity entity) {
 		if(entity instanceof EntityPlayer && ((EntityPlayer)entity).isPlayerSleeping())

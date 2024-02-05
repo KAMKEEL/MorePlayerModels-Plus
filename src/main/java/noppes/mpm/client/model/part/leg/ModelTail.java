@@ -10,7 +10,7 @@ import noppes.mpm.ModelData;
 import noppes.mpm.ModelPartConfig;
 import noppes.mpm.ModelPartData;
 import noppes.mpm.client.ClientProxy;
-import noppes.mpm.client.model.ModelMPM;
+import noppes.mpm.client.model.IModelMPM;
 import noppes.mpm.client.model.ModelScaleRenderer;
 import noppes.mpm.client.model.part.leg.tails.*;
 import noppes.mpm.constants.EnumAnimation;
@@ -20,7 +20,7 @@ import org.lwjgl.opengl.GL11;
 public class ModelTail extends ModelScaleRenderer {
 	public ModelData data;
 	private EntityLivingBase entity;
-	private ModelMPM base;
+	private IModelMPM base;
 	
 	private ModelRenderer tail;
 	private ModelCanineTail fox;
@@ -36,34 +36,34 @@ public class ModelTail extends ModelScaleRenderer {
 	
 	private ResourceLocation location = null;
 	
-	public ModelTail(ModelMPM base) {
-		super(base);
+	public ModelTail(IModelMPM base) {
+		super(base.getBiped());
 		this.base = base;
 		this.rotationPointY = 11;
 
-		tail = new ModelRenderer(base, 56, 21);
+		tail = new ModelRenderer(base.getBiped(), 56, 21);
 		tail.setTextureSize(64, 32);
 		tail.addBox(-1F, 0F, 0F, 2, 9, 2);
 		tail.setRotationPoint(0F, 0, 1F);
 		setRotation(tail, 0.8714253F, 0F, 0F);
 		this.addChild(tail);
 		
-		horse = new ModelRenderer(base);
+		horse = new ModelRenderer(base.getBiped());
 		horse.setTextureSize(32, 32);
 		horse.setRotationPoint(0, -1, 1);
 		this.addChild(horse);
 
-		ModelRenderer tailBase = new ModelRenderer(base, 0, 26);
+		ModelRenderer tailBase = new ModelRenderer(base.getBiped(), 0, 26);
 		tailBase.setTextureSize(32, 32);
 		tailBase.addBox(-1.0F, -1.0F, 0.0F, 2, 2, 3);
 		setRotation(tailBase, -1.134464F, 0.0F, 0.0F);
 		horse.addChild(tailBase);
-		ModelRenderer tailMiddle = new ModelRenderer(base, 0, 13);
+		ModelRenderer tailMiddle = new ModelRenderer(base.getBiped(), 0, 13);
 		tailMiddle.setTextureSize(32, 32);
 		tailMiddle.addBox(-1.5F, -2.0F, 3.0F, 3, 4, 7);
 		setRotation(tailMiddle, -1.134464F, 0.0F, 0.0F);
 		horse.addChild(tailMiddle);
-		ModelRenderer tailTip = new ModelRenderer(base, 0, 0);
+		ModelRenderer tailTip = new ModelRenderer(base.getBiped(), 0, 0);
 		tailTip.setTextureSize(32, 32);
 		tailTip.addBox(-1.5F, -4.5F, 9.0F, 3, 4, 7);
 		setRotation(tailTip, -1.40215F, 0.0F, 0.0F);
@@ -74,9 +74,9 @@ public class ModelTail extends ModelScaleRenderer {
 		this.addChild(squirrel = new ModelSquirrelTail(base));
 		this.addChild(fin = new ModelTailFin(base));
 		this.addChild(rodent = new ModelRodentTail(base));
-		this.addChild(feather = new ModelFeatherTail(base));
-		this.addChild(fox = new ModelCanineTail(base));
-		this.addChild(monkey = new ModelMonkeyTail(base));
+		this.addChild(feather = new ModelFeatherTail(base.getBiped()));
+		this.addChild(fox = new ModelCanineTail(base.getBiped()));
+		this.addChild(monkey = new ModelMonkeyTail(base.getBiped()));
 	}
 
 	public void setData(ModelData data, EntityLivingBase entity) {
@@ -129,7 +129,7 @@ public class ModelTail extends ModelScaleRenderer {
 			}
 		}
 
-		rotationPointZ += base.bipedRightLeg.rotationPointZ + 0.5f;
+		rotationPointZ += base.getBiped().bipedRightLeg.rotationPointZ + 0.5f;
 		monkey.rotateAngleX = fox.rotateAngleX = tail.rotateAngleX = feather.rotateAngleX = dragon.rotateAngleX = squirrel.rotateAngleX = horse.rotateAngleX = fin.rotateAngleX = rodent.rotateAngleX = rotateAngleX;
 		monkey.rotateAngleY = fox.rotateAngleY = tail.rotateAngleY = feather.rotateAngleY = dragon.rotateAngleY = squirrel.rotateAngleY = horse.rotateAngleY = fin.rotateAngleY = rodent.rotateAngleY = rotateAngleY;
 	}
@@ -172,14 +172,14 @@ public class ModelTail extends ModelScaleRenderer {
     {
 		if (this.isHidden || !this.showModel)
 			return;
-		if(!base.isArmor){
+		if(!base.getIsArmor()){
 	    	if(location != null){
 				ClientProxy.bindTexture(location);
-	            base.currentlyPlayerTexture = false;
+	            base.setCurrentlyPlayerTexture(false);
 	    	}
-	    	else if(!base.currentlyPlayerTexture){
+	    	else if(!base.getCurrentlyPlayerTexture()){
 				ClientProxy.bindTexture(((AbstractClientPlayer)entity).getLocationSkin());
-	            base.currentlyPlayerTexture = true;
+	            base.setCurrentlyPlayerTexture(true);
 			}
 		}
     	boolean bo = entity.hurtTime <= 0 && entity.deathTime <= 0;

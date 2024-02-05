@@ -4,17 +4,17 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import noppes.mpm.ModelData;
 import noppes.mpm.ModelPartData;
+import noppes.mpm.client.model.IModelMPM;
 import noppes.mpm.client.model.Model2DRenderer;
-import noppes.mpm.client.model.ModelMPM;
 import noppes.mpm.client.model.ModelPartInterface;
 import noppes.mpm.constants.EnumParts;
 
 public class ModelMohawk extends ModelPartInterface {
 	private Model2DRenderer model;
-	public ModelMohawk(ModelMPM base) {
+	public ModelMohawk(IModelMPM base) {
 		super(base);
 
-		model = new Model2DRenderer(base, 0, 0, 13 , 13);
+		model = new Model2DRenderer(base.getBiped(), 0, 0, 13 , 13);
 		model.setRotationPoint(-0.5F, 0f, 9F);
         setRotation(model, 0, (float)(Math.PI/2f), 0);
         model.setScale(0.825f);

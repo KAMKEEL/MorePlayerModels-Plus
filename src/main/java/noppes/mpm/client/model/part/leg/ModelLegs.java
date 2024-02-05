@@ -7,7 +7,7 @@ import net.minecraft.entity.EntityLivingBase;
 import noppes.mpm.ModelData;
 import noppes.mpm.ModelPartData;
 import noppes.mpm.client.ClientProxy;
-import noppes.mpm.client.model.ModelMPM;
+import noppes.mpm.client.model.IModelMPM;
 import noppes.mpm.client.model.ModelScaleRenderer;
 import noppes.mpm.client.model.part.leg.legs.*;
 import noppes.mpm.constants.EnumAnimation;
@@ -27,34 +27,34 @@ public class ModelLegs extends ModelScaleRenderer{
 	private ModelMermaidLegs mermaid;
 	private ModelMermaidLegs2 mermaid2;
 
-    private ModelMPM base;
+    private IModelMPM base;
 
-	public ModelLegs(ModelMPM base, ModelScaleRenderer leg1, ModelScaleRenderer leg2, int textWidth, int textHeight) {
-		super(base);
+	public ModelLegs(IModelMPM base, ModelScaleRenderer leg1, ModelScaleRenderer leg2, int textWidth, int textHeight) {
+		super(base.getBiped());
 
 		this.base = base;
 		this.leg1 = leg1;
 		this.leg2 = leg2;
 
-		if(base.isArmor)
+		if(base.getIsArmor())
 			return;
 
-		spiderLegs = new ModelSpiderLegs(base);
+		spiderLegs = new ModelSpiderLegs(base.getBiped());
 		this.addChild(spiderLegs);
 
-		horseLegs = new ModelHorseLegs(base);
+		horseLegs = new ModelHorseLegs(base.getBiped());
 		this.addChild(horseLegs);
 
-		this.naga = new ModelNagaLegs(base, textWidth, textHeight);
+		this.naga = new ModelNagaLegs(base.getBiped(), textWidth, textHeight);
 		this.addChild(naga);
 
-		mermaid = new ModelMermaidLegs(base);
+		mermaid = new ModelMermaidLegs(base.getBiped());
 		this.addChild(mermaid);
 
-		mermaid2 = new ModelMermaidLegs2(base);
+		mermaid2 = new ModelMermaidLegs2(base.getBiped());
 		this.addChild(mermaid2);
 
-		digitigrade = new ModelDigitigradeLegs(base, textWidth, textHeight);
+		digitigrade = new ModelDigitigradeLegs(base.getBiped(), textWidth, textHeight);
 		this.addChild(digitigrade);
 	}
 	public void setRotation(ModelRenderer model, float x, float y, float z) {
@@ -68,7 +68,7 @@ public class ModelLegs extends ModelScaleRenderer{
     	rotationPointZ = 0;
     	rotationPointY = 0;
 
-		if(base.isArmor)
+		if(base.getIsArmor())
 			return;
 		if(part.type == 2){
 			spiderLegs.setRotationAngles(data, par1, par2, par3, par4, par5, par6, entity);
@@ -77,24 +77,24 @@ public class ModelLegs extends ModelScaleRenderer{
 			horseLegs.setRotationAngles(data, par1, par2, par3, par4, par5, par6, entity);
 		}
 		else if(part.type == 1){
-			naga.isRiding = base.isRiding;
+			naga.isRiding = base.getBiped().isRiding;
 			naga.isSleeping = base.isSleeping(entity);
 			naga.isCrawling = data.animation == EnumAnimation.CRAWLING;
-			naga.isSneaking = base.isSneak;
+			naga.isSneaking = base.getBiped().isSneak;
 			naga.setRotationAngles(par1, par2, par3, par4, par5, par6, entity);
 		}
 		else if(part.type == 4){
-			mermaid.isRiding = base.isRiding;
+			mermaid.isRiding = base.getBiped().isRiding;
 			mermaid.isSleeping = base.isSleeping(entity);
 			mermaid.isCrawling = data.animation == EnumAnimation.CRAWLING;
-			mermaid.isSneaking = base.isSneak;
+			mermaid.isSneaking = base.getBiped().isSneak;
 			mermaid.setRotationAngles(par1, par2, par3, par4, par5, par6, entity);
 		}
 		else if(part.type == 5){
-			mermaid2.isRiding = base.isRiding;
+			mermaid2.isRiding = base.getBiped().isRiding;
 			mermaid2.isSleeping = base.isSleeping(entity);
 			mermaid2.isCrawling = data.animation == EnumAnimation.CRAWLING;
-			mermaid2.isSneaking = base.isSneak;
+			mermaid2.isSneaking = base.getBiped().isSneak;
 			mermaid2.setRotationAngles(par1, par2, par3, par4, par5, par6, entity);
 		}
 		else if(part.type == 6){
@@ -116,14 +116,14 @@ public class ModelLegs extends ModelScaleRenderer{
 		if(part.type == 0){
 			part.playerTexture = true;
 		}
-		if(!base.isArmor){
+		if(!base.getIsArmor()){
 			if(!part.playerTexture){
 				ClientProxy.bindTexture(part.getResource());
-				base.currentlyPlayerTexture = false;
+				base.setCurrentlyPlayerTexture(false);
 			}
-			else if(!base.currentlyPlayerTexture){
+			else if(!base.getCurrentlyPlayerTexture()){
 				ClientProxy.bindTexture(((AbstractClientPlayer)entity).getLocationSkin());
-	            base.currentlyPlayerTexture = true;
+	            base.setCurrentlyPlayerTexture(true);
 			}
 		}
 		if(part.type == 0){
@@ -133,7 +133,7 @@ public class ModelLegs extends ModelScaleRenderer{
 			leg2.render(par1);
 		}
 
-		if(!base.isArmor){
+		if(!base.getIsArmor()){
 			naga.isHidden = part.type != 1;
 			spiderLegs.isHidden = part.type != 2;
 			horseLegs.isHidden = part.type != 3;
@@ -159,7 +159,7 @@ public class ModelLegs extends ModelScaleRenderer{
 				y *= 2f;
 			}
 		}
-		boolean bo = entity.hurtTime <= 0 && entity.deathTime <= 0 && !base.isArmor;
+		boolean bo = entity.hurtTime <= 0 && entity.deathTime <= 0 && !base.getIsArmor();
     	if(bo){
 	    	float red = (data.legParts.color >> 16 & 255) / 255f;
 	    	float green = (data.legParts.color >> 8  & 255) / 255f;

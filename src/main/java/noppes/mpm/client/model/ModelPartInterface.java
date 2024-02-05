@@ -18,10 +18,10 @@ public abstract class ModelPartInterface extends ModelRenderer {
 	protected ResourceLocation location;
 	public int color = 0xFFFFFF;
 	
-	public ModelMPM base;
+	public IModelMPM base;
 
-	public ModelPartInterface(ModelMPM par1ModelBase) {
-		super(par1ModelBase);
+	public ModelPartInterface(IModelMPM par1ModelBase) {
+		super(par1ModelBase.getBiped());
 		this.base = par1ModelBase;
 		this.setTextureSize(0, 0);
 	}
@@ -50,17 +50,17 @@ public abstract class ModelPartInterface extends ModelRenderer {
     {
 		if (this.isHidden || !this.showModel)
 			return;
-    	if(!base.isArmor){
+    	if(!base.getIsArmor()){
 	    	if(location != null){
 				ClientProxy.bindTexture(location);
-	            base.currentlyPlayerTexture = false;
+	            base.setCurrentlyPlayerTexture(false);
 	    	}
-	    	else if(!base.currentlyPlayerTexture){
+	    	else if(!base.getCurrentlyPlayerTexture()){
 				ClientProxy.bindTexture(entity.getLocationSkin());
-	            base.currentlyPlayerTexture = true;
+	            base.setCurrentlyPlayerTexture(true);
 			}
     	}
-    	boolean bo = entity.hurtTime <= 0 && entity.deathTime <= 0 && !base.isArmor;
+    	boolean bo = entity.hurtTime <= 0 && entity.deathTime <= 0 && !base.getIsArmor();
     	if(bo){
 	    	float red = (color >> 16 & 255) / 255f;
 	    	float green = (color >> 8  & 255) / 255f;

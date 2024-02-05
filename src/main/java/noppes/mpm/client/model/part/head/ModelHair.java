@@ -5,17 +5,17 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import noppes.mpm.ModelData;
 import noppes.mpm.ModelPartData;
+import noppes.mpm.client.model.IModelMPM;
 import noppes.mpm.client.model.Model2DRenderer;
-import noppes.mpm.client.model.ModelMPM;
 import noppes.mpm.client.model.ModelPartInterface;
 import noppes.mpm.constants.EnumParts;
 
 public class ModelHair extends ModelPartInterface {
 	private Model2DRenderer model;
 	
-	public ModelHair(ModelMPM base) {
+	public ModelHair(IModelMPM base) {
 		super(base);
-		model = new Model2DRenderer(base, 56, 20, 8, 12, 64, 32);
+		model = new Model2DRenderer(base.getBiped(), 56, 20, 8, 12, 64, 32);
 		model.setRotationPoint(-4F, 12, 3);
 		model.setScale(0.75f);
 		addChild(model);
@@ -24,7 +24,7 @@ public class ModelHair extends ModelPartInterface {
 	@Override
 	public void setRotationAngles(float par1, float par2, float par3,
 			float par4, float par5, float par6, Entity entity) {
-		ModelRenderer parent = this.base.bipedHead;
+		ModelRenderer parent = this.base.getBiped().bipedHead;
 		if(parent.rotateAngleX < 0){
 			rotateAngleX = -parent.rotateAngleX * 1.2f;
 			if(parent.rotateAngleX > -1){

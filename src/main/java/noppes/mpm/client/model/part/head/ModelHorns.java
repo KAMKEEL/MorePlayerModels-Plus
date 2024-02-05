@@ -5,6 +5,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import noppes.mpm.ModelData;
 import noppes.mpm.ModelPartData;
+import noppes.mpm.client.model.IModelMPM;
 import noppes.mpm.client.model.ModelMPM;
 import noppes.mpm.client.model.ModelPartInterface;
 import noppes.mpm.client.model.part.head.horns.ModelAntennasBack;
@@ -19,7 +20,7 @@ public class ModelHorns extends ModelPartInterface {
 	private ModelRenderer antennasBack;
 	private ModelRenderer antennasFront;
 	
-	public ModelHorns(ModelMPM base) {
+	public ModelHorns(IModelMPM base) {
 		super(base);
 
 		this.addChild(bull = new ModelBullHorns(base));

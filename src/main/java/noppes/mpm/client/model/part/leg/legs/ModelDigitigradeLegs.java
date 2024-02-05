@@ -1,5 +1,7 @@
 package noppes.mpm.client.model.part.leg.legs;
 
+import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import noppes.mpm.client.model.ModelMPM;
@@ -20,9 +22,9 @@ public class ModelDigitigradeLegs extends ModelRenderer {
 	public boolean isSleeping = false;
 	public boolean isCrawling = false;
 
-	private ModelMPM base;
+	private ModelBiped base;
 
-	public ModelDigitigradeLegs(ModelMPM base, int textWidth, int textHeight) {
+	public ModelDigitigradeLegs(ModelBiped base, int textWidth, int textHeight) {
 		super(base);
 		this.base = base;
 
