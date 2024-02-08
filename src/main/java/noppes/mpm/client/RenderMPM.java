@@ -65,9 +65,9 @@ public class RenderMPM extends RenderPlayer {
 	public ModelMPM alex32armorChest = new ModelMPM(1,1);
 	public ModelMPM alex32armor = new ModelMPM(0.5F,1);
 
-	private RendererLivingEntity renderEntity;
-	private EntityLivingBase entity;
-	private ModelRenderPassHelper renderpass = new ModelRenderPassHelper();
+	public RendererLivingEntity renderEntity;
+	public EntityLivingBase entity;
+	public ModelRenderPassHelper renderpass = new ModelRenderPassHelper();
 
 	private static final ResourceLocation steve64Skin = new ResourceLocation("moreplayermodels:textures/skins/steve.png");
 	private static final ResourceLocation alexSkin = new ResourceLocation("moreplayermodels:textures/skins/alex.png");
@@ -91,6 +91,10 @@ public class RenderMPM extends RenderPlayer {
 	@Override
 	protected void passSpecialRender(EntityLivingBase base, double x, double y, double z)
 	{
+		passSpecialExternal(base, x, y, z);
+	}
+
+	public void passSpecialExternal(EntityLivingBase base, double x, double y, double z){
 		if(data.isSleeping() || data.animation == EnumAnimation.CRAWLING)
 			y -= 1.5;
 		else if(data != null)
@@ -182,7 +186,6 @@ public class RenderMPM extends RenderPlayer {
 	@Override
 	public void renderFirstPersonArm(EntityPlayer player){
 		data = PlayerDataController.instance.getPlayerData(player);
-
 		if(!data.resourceInit && RenderEvent.lastSkinTick > RenderEvent.MaxSkinTick){
 			loadResource((AbstractClientPlayer) player);
 			RenderEvent.lastSkinTick = 0;
@@ -331,52 +334,63 @@ public class RenderMPM extends RenderPlayer {
 	@Override
 	protected void rotateCorpse(EntityLivingBase par1EntityLiving, float par2, float par3, float par4)
 	{
+		byte options = shouldRotateCorpse(par1EntityLiving, par2, par3, par4, false);
+		if(options != 2){
+			super.rotateCorpse(par1EntityLiving, par2, par3, par4);
+		}
+	}
+
+	// 0 -- Did Nothing
+	// 1 -- Did Something
+	// 2 -- Need Crawling Fix
+	public byte shouldRotateCorpse(EntityLivingBase par1EntityLiving, float par2, float par3, float par4, boolean manual) {
 		EntityPlayer player = (EntityPlayer) par1EntityLiving;
 		if(!player.isEntityAlive()){
-			super.rotateCorpse(par1EntityLiving, par2, par3, par4);
-			return;
+			return 0;
 		}
-
-		if(player.ridingEntity != null){
+		if (player.ridingEntity != null) {
 			GL11.glTranslatef(0, data.getLegsY(), 0);
 		}
-
-		if (data.animation == EnumAnimation.SITTING){
+		if (data.animation == EnumAnimation.SITTING) {
 			GL11.glTranslatef(0, -0.6f + data.getLegsY(), 0);
+			return 1;
 		}
-		if (data.animation == EnumAnimation.SLEEPING_EAST){
+		if (data.animation == EnumAnimation.SLEEPING_EAST) {
 			GL11.glRotatef(0, 0.0F, 1.0F, 0.0F);
 			GL11.glTranslatef(1.6f + data.offsetY(), 0.05f, 0);
 			GL11.glRotatef(getDeathMaxRotation(player), 0.0F, 0.0F, 1.0F);
 			GL11.glRotatef(270F, 0.0F, 1.0F, 0.0F);
-		}
-		else if (data.animation == EnumAnimation.SLEEPING_NORTH){
+			return 1;
+		} else if (data.animation == EnumAnimation.SLEEPING_NORTH) {
 			GL11.glRotatef(90, 0.0F, 1.0F, 0.0F);
 			GL11.glTranslatef(1.6f + data.offsetY(), 0.05f, 0);
 			GL11.glRotatef(getDeathMaxRotation(player), 0.0F, 0.0F, 1.0F);
 			GL11.glRotatef(270F, 0.0F, 1.0F, 0.0F);
-		}
-		else if (data.animation == EnumAnimation.SLEEPING_WEST){
+			return 1;
+		} else if (data.animation == EnumAnimation.SLEEPING_WEST) {
 			GL11.glRotatef(180, 0.0F, 1.0F, 0.0F);
 			GL11.glTranslatef(1.6f + data.offsetY(), 0.05f, 0);
 			GL11.glRotatef(getDeathMaxRotation(player), 0.0F, 0.0F, 1.0F);
 			GL11.glRotatef(270F, 0.0F, 1.0F, 0.0F);
-		}
-		else if (data.animation == EnumAnimation.SLEEPING_SOUTH){
+			return 1;
+		} else if (data.animation == EnumAnimation.SLEEPING_SOUTH) {
 			GL11.glRotatef(270, 0.0F, 1.0F, 0.0F);
 			GL11.glTranslatef(1.6f + data.offsetY(), 0.05f, 0);
 			GL11.glRotatef(getDeathMaxRotation(player), 0.0F, 0.0F, 1.0F);
 			GL11.glRotatef(270F, 0.0F, 1.0F, 0.0F);
-		}
-		else if(data.animation == EnumAnimation.CRAWLING){
+			return 1;
+		} else if (data.animation == EnumAnimation.CRAWLING) {
 			GL11.glTranslatef(0, 0.2f, 0);
 			super.rotateCorpse(par1EntityLiving, par2, par3, par4);
 			GL11.glTranslatef(0, 0f, 1.5f);
 			GL11.glRotatef(-90, 1.0F, 0F, 0.0F);
+			return 2;
 		}
-		else
-			super.rotateCorpse(par1EntityLiving, par2, par3, par4);
+		else {
+			return 0;
+		}
 	}
+
 	public void renderHelmet(EntityPlayer entityPlayer) {
 		ItemStack itemstack = entityPlayer.inventory.armorItemInSlot(3);
 		if(itemstack == null)
@@ -523,7 +537,7 @@ public class RenderMPM extends RenderPlayer {
 	}
 
 	@Override
-	protected void preRenderCallback(EntityLivingBase entityliving, float f){
+	public void preRenderCallback(EntityLivingBase entityliving, float f){
 		if(renderEntity != null){
 			MPMRendererHelper.preRenderCallback(entity, f, renderEntity);
 		}
@@ -546,35 +560,19 @@ public class RenderMPM extends RenderPlayer {
 	public void setModelType(ModelData data){
 		int modelVal = data.modelType;
 		if(modelVal ==  1){
-//			this.mainModel = steve64;
 			this.modelBipedMain = steve64;
 			this.modelArmorChestplate = steveArmorChest;
 			this.modelArmor = steveArmor;
 		}
 		else if(modelVal ==  2){
-//			this.mainModel = alex;
 			this.modelBipedMain = alex;
 			this.modelArmorChestplate = alex32armorChest;
 			this.modelArmor = alex32armor;
 		}
 		else{
-//			this.mainModel = steve32;
 			this.modelBipedMain = steve32;
 			this.modelArmorChestplate = steveArmorChest;
 			this.modelArmor = steveArmor;
 		}
-	}
-
-	public static ResourceLocation getDefaultSkin(int modelType){
-		ResourceLocation location;
-		if(modelType == 2){
-			location = alexSkin;
-		} else if(modelType == 1){
-			location = steve64Skin;
-		} else {
-			location = SkinManager.field_152793_a;
-		}
-
-		return location;
 	}
 }

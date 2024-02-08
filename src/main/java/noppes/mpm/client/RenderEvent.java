@@ -47,7 +47,6 @@ public class RenderEvent {
 		}
 		if(!(event.entity instanceof AbstractClientPlayer))
 			return;
-
 		EntityPlayer player = event.entityPlayer;
 		data = PlayerDataController.instance.getPlayerData(player);
 		renderer.setModelData(data, player);
