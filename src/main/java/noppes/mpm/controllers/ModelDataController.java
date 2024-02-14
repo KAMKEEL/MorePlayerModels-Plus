@@ -132,8 +132,7 @@ public class ModelDataController {
 
 		data = (ModelData) player.getExtendedProperties("MPMData");
 		if(data == null){
-			player.registerExtendedProperties("MPMData", data = new ModelData());
-			data.player = player;
+			player.registerExtendedProperties("MPMData", data = new ModelData(player));
 			data.load();
 		}
 		data.player = player;

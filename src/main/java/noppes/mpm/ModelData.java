@@ -66,8 +66,7 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 	public String cloakUrl= "";
 	public String displayName = "";
 
-	public ModelData(){
-	}
+	public ModelData(){}
 
 	public ModelData(EntityPlayer player){
 		this.player = player;
@@ -262,7 +261,7 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 	}
 
 	@Override
-	public void saveNBTData(NBTTagCompound compound) {}
+	public void saveNBTData(NBTTagCompound compound){}
 
 	@Override
 	public void loadNBTData(NBTTagCompound compound) {}

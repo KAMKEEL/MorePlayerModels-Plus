@@ -81,7 +81,7 @@ public class ServerEventHandler {
 		ModelData data = ModelData.getData(player);
 		if (data == null)
 			return;
-		
+
 		String sound = "";
 		if(data.soundType == 1)
 			sound = "moreplayermodels:human.female.attack";

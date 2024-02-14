@@ -36,7 +36,7 @@ public class GuiPresetSave extends SubGuiInterface{
     			return;
     		Preset preset = new Preset();
     		preset.name = name;
-    		preset.data = data.copy();
+    		// preset.data = data.copy();
     		PresetController.instance.addPreset(preset);
     	}
     	close();
