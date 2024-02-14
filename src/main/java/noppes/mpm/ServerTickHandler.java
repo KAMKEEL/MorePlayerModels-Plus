@@ -31,14 +31,35 @@ public class ServerTickHandler {
 		ModelData data = ModelData.getData(event.player);
 		if(!event.player.worldObj.getGameRules().getGameRuleBooleanValue("mpmAllowEntityModels"))
 			data.entityClass = null;
-
 		data.save();
+
 		ItemStack back = event.player.inventory.mainInventory[0];
 		if(back != null)
 			Server.sendAssociatedData(event.player, EnumPacketClient.BACK_ITEM_UPDATE, event.player.getCommandSenderName(), back.writeToNBT(new NBTTagCompound()));
 
 		Server.sendData((EntityPlayerMP) event.player, EnumPacketClient.SERVER_PING, MorePlayerModels.Revision);
-		Server.sendAssociatedData((EntityPlayerMP) event.player, EnumPacketClient.SEND_PLAYER_DATA, event.player.getCommandSenderName(), data.getNBT());
+		Server.sendAssociatedData(event.player, EnumPacketClient.LOGIN, event.player.getCommandSenderName(), data.getNBT());
+	}
+
+	@SubscribeEvent
+	public void invoke(PlayerEvent.PlayerLoggedOutEvent event) {
+		if(event.player == null || event.player.worldObj == null || event.player.worldObj.isRemote)
+			return;
+
+		Server.sendData((EntityPlayerMP) event.player, EnumPacketClient.LOGOUT, MorePlayerModels.Revision);
+	}
+
+	@SubscribeEvent
+	public void world(net.minecraftforge.event.entity.player.PlayerEvent.LoadFromFile event){
+		ModelData.getData(event.entityPlayer); // Load Data if Null : ty louis
+	}
+
+	@SubscribeEvent
+	public void world(net.minecraftforge.event.entity.player.PlayerEvent.SaveToFile event){
+		ModelData data = ModelData.getData(event.entityPlayer);
+		if (data != null) {
+			data.save();
+		}
 	}
 
 	@SubscribeEvent

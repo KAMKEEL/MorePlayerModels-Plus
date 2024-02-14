@@ -5,7 +5,6 @@ import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
 import noppes.mpm.ModelData;
-import noppes.mpm.client.data.ClientModelData;
 import noppes.mpm.constants.EnumAnimation;
 
 public class EntityRendererAlt extends EntityRenderer {

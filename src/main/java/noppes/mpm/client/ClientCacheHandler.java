@@ -1,10 +1,7 @@
 package noppes.mpm.client;
 
 import kamkeel.MorePlayerModelsPermissions;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-import noppes.mpm.ModelData;
-import noppes.mpm.client.data.ClientModelData;
 import noppes.mpm.config.ConfigClient;
 import noppes.mpm.util.CacheHashMap;
 

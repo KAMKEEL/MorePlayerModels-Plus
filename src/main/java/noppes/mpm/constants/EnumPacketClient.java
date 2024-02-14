@@ -5,6 +5,7 @@ public enum EnumPacketClient {
     SERVER_PING,
     SEND_PLAYER_DATA,
     LOGIN,
+    LOGOUT,
     BACK_ITEM_REMOVE,
     BACK_ITEM_UPDATE,
     PARTICLE,

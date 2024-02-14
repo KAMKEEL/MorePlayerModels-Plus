@@ -27,10 +27,11 @@ public class ServerEventHandler {
 			return;
 		EntityPlayer target = (EntityPlayer) event.target;
 		EntityPlayerMP player = (EntityPlayerMP) event.entityPlayer;
+		ModelData data = ModelData.getData(target);
+		if (data == null)
+			return;
 
-		ModelData data = ModelDataController.Instance.getModelData(target);
 		Server.sendData(player, EnumPacketClient.SEND_PLAYER_DATA, target.getCommandSenderName(), data.getNBT());
-
 		ItemStack back = player.inventory.mainInventory[0];
 		if(back != null)
 			Server.sendData(player, EnumPacketClient.BACK_ITEM_UPDATE, target.getCommandSenderName(), back.writeToNBT(new NBTTagCompound()));
@@ -44,9 +45,10 @@ public class ServerEventHandler {
     	if(!(event.entity instanceof EntityPlayer) || event.name == null || !event.name.equals("game.player.hurt"))
     		return;
     	EntityPlayer player = (EntityPlayer) event.entity;
-		ModelData data = getModelData(player);
-		if(data == null)
+		ModelData data = ModelData.getData(player);
+		if (data == null)
 			return;
+
 		if(data.soundType == 0)
 			return;
     	if(player.getHealth() <= 1 || player.isDead){
@@ -76,9 +78,10 @@ public class ServerEventHandler {
 		if(!flag || event.entityLiving.getHealth() < 0 || player.hurtResistantTime > player.maxHurtResistantTime / 2.0F)
 			return;
 
-		ModelData data = getModelData(player);
-		if(data == null)
+		ModelData data = ModelData.getData(player);
+		if (data == null)
 			return;
+		
 		String sound = "";
 		if(data.soundType == 1)
 			sound = "moreplayermodels:human.female.attack";
@@ -90,13 +93,6 @@ public class ServerEventHandler {
 		float pitch = (player.getRNG().nextFloat() - player.getRNG().nextFloat()) * 0.2F + 1.0F;
 		player.worldObj.playSoundAtEntity(player, sound,  0.98765432123456789f, pitch);
 		
-	}
-
-	private ModelData getModelData(EntityLivingBase entityLiving) {
-		if(entityLiving == null || !(entityLiving instanceof EntityPlayer))
-			return null;
-		EntityPlayer player = (EntityPlayer) entityLiving;
-		return ModelDataController.Instance.getModelData(player);
 	}
 
 	@SubscribeEvent

@@ -1,4 +1,4 @@
-package noppes.mpm.client.data;
+package noppes.mpm.client;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;

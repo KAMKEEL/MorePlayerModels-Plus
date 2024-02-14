@@ -14,7 +14,6 @@ import net.minecraftforge.common.MinecraftForge;
 import noppes.mpm.CommonProxy;
 import noppes.mpm.ModelData;
 import noppes.mpm.MorePlayerModels;
-import noppes.mpm.client.data.ClientModelData;
 import noppes.mpm.config.ConfigMain;
 import org.lwjgl.input.Keyboard;
 

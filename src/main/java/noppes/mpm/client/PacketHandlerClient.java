@@ -7,10 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChatComponentText;
 import noppes.mpm.*;
-import noppes.mpm.client.data.ClientModelData;
-import noppes.mpm.client.gui.GuiCreationScreenInterface;
 import noppes.mpm.constants.EnumPacketClient;
 
 import java.io.IOException;
@@ -33,6 +30,9 @@ public class PacketHandlerClient extends PacketHandlerServer{
 	private void handlePacket(ByteBuf buffer, EntityPlayer player, EnumPacketClient type) throws IOException {
 		if(type == EnumPacketClient.SERVER_PING){
 			MorePlayerModels.HasServerSide = true;
+		}
+		else if(type == EnumPacketClient.LOGOUT){
+			ClientCacheHandler.clearCache();
 		}
 		else if(type == EnumPacketClient.RELOAD_SKINS) {
 			Minecraft mc = Minecraft.getMinecraft();
@@ -60,7 +60,8 @@ public class PacketHandlerClient extends PacketHandlerServer{
 				return;
 
 			NBTTagCompound compound = Server.readNBT(buffer);
-			ClientModelData.Instance().getPlayerData(pl).setNBT(compound);
+			ModelData data = ClientModelData.Instance().getPlayerData(pl);
+			data.setNBT(compound);
 		}
 		else if(type == EnumPacketClient.CHAT_EVENT){
 			EntityPlayer pl = player.worldObj.getPlayerEntityByName(Server.readString(buffer));

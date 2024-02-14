@@ -30,7 +30,6 @@ import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.MinecraftForgeClient;
 import noppes.mpm.ModelData;
 import noppes.mpm.ModelPartData;
-import noppes.mpm.client.data.ClientModelData;
 import noppes.mpm.client.model.ModelMPM;
 import noppes.mpm.client.model.ModelRenderPassHelper;
 import noppes.mpm.constants.EnumAnimation;
