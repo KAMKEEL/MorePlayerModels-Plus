@@ -55,6 +55,7 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 
 	public byte urlType = 0;	//	0:url, 1:url64
 	public int modelType = 0; 	// 	0: Steve, 1: Steve64, 2: Alex
+	public int size = 5;
 
 	public String url= "";
 	public String cloakUrl= "";
@@ -67,6 +68,7 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 		compound.setInteger("Revision", rev);
 
 		compound.setInteger("Animation", animation.ordinal());
+		compound.setInteger("Size", size);
 		
 		compound.setShort("SoundType", soundType);
 		compound.setString("DisplayName", displayName);
@@ -86,7 +88,10 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 		String prevCloakUrl = cloakUrl;
 		super.readFromNBT(compound);
 		rev = compound.getInteger("Revision");
-		
+		size = compound.getInteger("Size");
+		if(size <= 0)
+			size = 5;
+
 		soundType = compound.getShort("SoundType");
 		lastEdited = compound.getLong("LastEdited");
 		displayName = compound.getString("DisplayName");

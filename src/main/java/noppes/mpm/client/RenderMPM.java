@@ -538,6 +538,8 @@ public class RenderMPM extends RenderPlayer {
 
 	@Override
 	public void preRenderCallback(EntityLivingBase entityliving, float f){
+		float ff = 0.9375f;
+		GL11.glScalef((ff / 5) * data.size, (ff / 5) * data.size, (ff / 5) * data.size);
 		if(renderEntity != null){
 			MPMRendererHelper.preRenderCallback(entity, f, renderEntity);
 		}

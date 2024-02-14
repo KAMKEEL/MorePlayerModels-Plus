@@ -128,6 +128,7 @@ public class MorePlayerModels {
 		event.registerServerCommand(new CommandSetModel());
 		event.registerServerCommand(new CommandSetName());
 		event.registerServerCommand(new CommandMPM());
+		event.registerServerCommand(new CommandSize());
 
 		GameRules rules = event.getServer().worldServerForDimension(0).getGameRules();
 		if(!rules.hasRule("mpmAllowEntityModels"))
