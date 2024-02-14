@@ -30,6 +30,7 @@ import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.MinecraftForgeClient;
 import noppes.mpm.ModelData;
 import noppes.mpm.ModelPartData;
+import noppes.mpm.client.data.ClientModelData;
 import noppes.mpm.client.model.ModelMPM;
 import noppes.mpm.client.model.ModelRenderPassHelper;
 import noppes.mpm.constants.EnumAnimation;
@@ -181,9 +182,7 @@ public class RenderMPM extends RenderPlayer {
 
 	@Override
 	public void renderFirstPersonArm(EntityPlayer player){
-		data = ClientCacheHandler.getPlayerData(player.getUniqueID().toString());
-		if(data == null)
-			return;
+		data = ClientModelData.Instance().getPlayerData(player);
 		if(!data.resourceInit && RenderEvent.lastSkinTick > RenderEvent.MaxSkinTick){
 			loadResource((AbstractClientPlayer) player);
 			RenderEvent.lastSkinTick = 0;

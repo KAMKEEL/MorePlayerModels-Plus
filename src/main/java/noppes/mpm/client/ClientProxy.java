@@ -12,7 +12,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import noppes.mpm.CommonProxy;
+import noppes.mpm.ModelData;
 import noppes.mpm.MorePlayerModels;
+import noppes.mpm.client.data.ClientModelData;
 import noppes.mpm.config.ConfigMain;
 import org.lwjgl.input.Keyboard;
 
@@ -53,6 +55,10 @@ public class ClientProxy extends CommonProxy{
 			VersionChecker checker = new VersionChecker();
 			checker.start();
 		}
+	}
+
+	public ModelData getClientPlayerData(EntityPlayer player) {
+		return ClientModelData.Instance().getPlayerData(player);
 	}
 
 	public static void bindTexture(ResourceLocation location) {

@@ -4,6 +4,7 @@ import kamkeel.MorePlayerModelsPermissions;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import noppes.mpm.ModelData;
+import noppes.mpm.client.data.ClientModelData;
 import noppes.mpm.config.ConfigClient;
 import noppes.mpm.util.CacheHashMap;
 
@@ -12,8 +13,9 @@ import java.util.HashMap;
 
 public class ClientCacheHandler {
     private static final CacheHashMap<String, CacheHashMap.CachedObject<ImageData>> imageDataCache = new CacheHashMap<>((long) ConfigClient.CacheLife * 60 * 1000);
-    private static final CacheHashMap<String, CacheHashMap.CachedObject<ModelData>> playerData = new CacheHashMap<>((long) ConfigClient.CacheLife * 60 * 1000);
     public static HashMap<String, Boolean> clientPerms = new HashMap<String, Boolean>();
+    public static boolean loaded = false;
+
     public static ImageData getPlayerSkin(String directory, boolean x64, ResourceLocation resource, File file) {
         synchronized (imageDataCache) {
             if (!imageDataCache.containsKey(resource.getResourcePath())) {
@@ -38,37 +40,28 @@ public class ClientCacheHandler {
         }
     }
 
-    public static ModelData getPlayerData(String uuid) {
-        synchronized (playerData) {
-            if (!playerData.containsKey(uuid)) {
-                return null;
-            }
-            return playerData.get(uuid).getObject();
-        }
-    }
 
-    public static void putPlayerData(String uuid, ModelData modelData) {
-        synchronized (playerData) {
-            playerData.put(uuid, new CacheHashMap.CachedObject<>(modelData));
-        }
+    public static void createCache() {
+        ClientModelData.Instance();
+        loaded = true;
     }
 
     public static void clearCache() {
+        ClientModelData.ClearInstance();
         ClientCacheHandler.imageDataCache.clear();
-        ClientCacheHandler.playerData.clear();
         ClientCacheHandler.clientPerms.clear();
     }
 
     public static void clearSkinData() {
         ClientCacheHandler.imageDataCache.clear();
-        ClientCacheHandler.playerData.clear();
     }
 
     public static boolean hasPermission(MorePlayerModelsPermissions.Permission permission){
-        if(clientPerms.containsKey(permission.name)){
-            return clientPerms.get(permission.name);
-        }
-        return false;
+        return true;
+//        if(clientPerms.containsKey(permission.name)){
+//            return clientPerms.get(permission.name);
+//        }
+//        return false;
     }
 
 }

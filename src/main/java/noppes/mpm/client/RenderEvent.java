@@ -21,6 +21,7 @@ import net.minecraftforge.client.event.*;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import noppes.mpm.ModelData;
 import noppes.mpm.MorePlayerModels;
+import noppes.mpm.client.data.ClientModelData;
 import noppes.mpm.config.ConfigClient;
 import noppes.mpm.constants.EnumAnimation;
 import org.lwjgl.opengl.GL11;
@@ -47,11 +48,7 @@ public class RenderEvent {
 		if(!(event.entity instanceof AbstractClientPlayer))
 			return;
 		EntityPlayer player = event.entityPlayer;
-		data = ClientCacheHandler.getPlayerData(player.getUniqueID().toString());
-		if(data == null)
-			return;
-		data.player = player;
-
+		data = ClientModelData.Instance().getPlayerData(player);
 		renderer.setModelData(data, player);
 		setModels(event.renderer);
 
@@ -98,11 +95,7 @@ public class RenderEvent {
 		}
 
 		AbstractClientPlayer player = (AbstractClientPlayer) event.entity;
-		data = ClientCacheHandler.getPlayerData(player.getUniqueID().toString());
-		if(data == null)
-			return;
-		data.player = player;
-
+		data = ClientModelData.Instance().getPlayerData(player);
 		if(data.isSleeping()){
 			player.renderYawOffset = player.prevRenderYawOffset = player.rotationYaw;
 		}
@@ -147,11 +140,7 @@ public class RenderEvent {
 	@SubscribeEvent()
 	public void hand(RenderHandEvent event){
 		Minecraft mc = Minecraft.getMinecraft();
-		data = ClientCacheHandler.getPlayerData(mc.thePlayer.getUniqueID().toString());
-		if(data == null)
-			return;
-		data.player = mc.thePlayer;
-
+		data = ClientModelData.Instance().getPlayerData(mc.thePlayer);
 		Entity entity = data.getEntity(mc.thePlayer);
 		if(entity != null || data.isSleeping() || data.animation == EnumAnimation.BOW && mc.thePlayer.getHeldItem() == null){
 			event.setCanceled(true);
@@ -173,39 +162,41 @@ public class RenderEvent {
 
 	@SubscribeEvent
 	public void overlay(RenderGameOverlayEvent event){
-		if(event.type != ElementType.ALL)
-			return;
+		if (ClientCacheHandler.loaded) {
+			if(event.type != ElementType.ALL)
+				return;
 
-		Minecraft mc = Minecraft.getMinecraft();
-		if(mc.currentScreen != null || ConfigClient.Tooltips == 0)
-			return;
-		ItemStack item = mc.thePlayer.getCurrentEquippedItem();
-		if(item == null)
-			return;
+			Minecraft mc = Minecraft.getMinecraft();
+			if(mc.currentScreen != null || ConfigClient.Tooltips == 0)
+				return;
+			ItemStack item = mc.thePlayer.getCurrentEquippedItem();
+			if(item == null)
+				return;
 
-		String name = item.getDisplayName();
-		int x = event.resolution.getScaledWidth() - mc.fontRenderer.getStringWidth(name);
+			String name = item.getDisplayName();
+			int x = event.resolution.getScaledWidth() - mc.fontRenderer.getStringWidth(name);
 
-		int posX = 4;
-		int posY = 4;
-		if(ConfigClient.Tooltips % 2 == 0)
-			posX = x - 4;
-
-		if(ConfigClient.Tooltips > 2)
-			posY = event.resolution.getScaledHeight() - 24;
-
-		mc.fontRenderer.drawStringWithShadow(name, posX, posY, 0xffffff);
-		if(item.isItemStackDamageable()){
-			int max = item.getMaxDamage();
-
-			String dam = (max - item.getItemDamage()) + "/" + max;
-
-			x = event.resolution.getScaledWidth() - mc.fontRenderer.getStringWidth(dam);
-
-			if(ConfigClient.Tooltips == 2 || ConfigClient.Tooltips == 4)
+			int posX = 4;
+			int posY = 4;
+			if(ConfigClient.Tooltips % 2 == 0)
 				posX = x - 4;
 
-			mc.fontRenderer.drawStringWithShadow(dam, posX, posY + 12, 0xffffff);
+			if(ConfigClient.Tooltips > 2)
+				posY = event.resolution.getScaledHeight() - 24;
+
+			mc.fontRenderer.drawStringWithShadow(name, posX, posY, 0xffffff);
+			if(item.isItemStackDamageable()){
+				int max = item.getMaxDamage();
+
+				String dam = (max - item.getItemDamage()) + "/" + max;
+
+				x = event.resolution.getScaledWidth() - mc.fontRenderer.getStringWidth(dam);
+
+				if(ConfigClient.Tooltips == 2 || ConfigClient.Tooltips == 4)
+					posX = x - 4;
+
+				mc.fontRenderer.drawStringWithShadow(dam, posX, posY + 12, 0xffffff);
+			}
 		}
 	}
 

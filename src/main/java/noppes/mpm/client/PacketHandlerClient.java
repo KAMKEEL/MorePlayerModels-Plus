@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentText;
 import noppes.mpm.*;
+import noppes.mpm.client.data.ClientModelData;
 import noppes.mpm.client.gui.GuiCreationScreenInterface;
 import noppes.mpm.constants.EnumPacketClient;
 
@@ -37,39 +38,29 @@ public class PacketHandlerClient extends PacketHandlerServer{
 			Minecraft mc = Minecraft.getMinecraft();
 			List<EntityPlayer> players = mc.theWorld.playerEntities;
 			for(EntityPlayer p : players){
-				ModelData data = ClientCacheHandler.getPlayerData(p.getUniqueID().toString());
-				if(data == null){
-					data = new ModelData();
-					data.playername = p.getCommandSenderName();
-					data.uuid = p.getUniqueID().toString();
-					data.player = p;
-				}
+				ModelData data = ClientModelData.Instance().getPlayerData(p);
 				data.resourceLoaded = false;
 				data.resourceInit = false;
 				data.cloakInnit = false;
 				data.cloakLoaded = false;
-				ClientCacheHandler.putPlayerData(p.getUniqueID().toString(), data);
 			}
+		}
+		else if(type == EnumPacketClient.LOGIN){
+			EntityPlayer pl = player.worldObj.getPlayerEntityByName(Server.readString(buffer));
+			if(pl == null)
+				return;
+
+			NBTTagCompound compound = Server.readNBT(buffer);
+			ClientCacheHandler.createCache();
+			ClientModelData.Instance().getPlayerData(pl).setNBT(compound);
 		}
 		else if(type == EnumPacketClient.SEND_PLAYER_DATA){
 			EntityPlayer pl = player.worldObj.getPlayerEntityByName(Server.readString(buffer));
 			if(pl == null)
 				return;
 
-			ModelData data = ClientCacheHandler.getPlayerData(pl.getUniqueID().toString());
-			if(data == null){
-				data = new ModelData();
-				data.playername = pl.getCommandSenderName();
-				data.uuid = pl.getUniqueID().toString();
-				data.player = pl;
-			}
-
 			NBTTagCompound compound = Server.readNBT(buffer);
-			data.setNBT(compound);
-			ClientCacheHandler.putPlayerData(pl.getUniqueID().toString(), data);
-			if(pl == Minecraft.getMinecraft().thePlayer){
-				data.lastEdited = System.currentTimeMillis();
-			}
+			ClientModelData.Instance().getPlayerData(pl).setNBT(compound);
 		}
 		else if(type == EnumPacketClient.CHAT_EVENT){
 			EntityPlayer pl = player.worldObj.getPlayerEntityByName(Server.readString(buffer));
@@ -83,16 +74,8 @@ public class PacketHandlerClient extends PacketHandlerServer{
 			if(pl == null)
 				return;
 
-			ModelData data = ClientCacheHandler.getPlayerData(pl.getUniqueID().toString());
-			if(data == null){
-				data = new ModelData();
-				data.playername = pl.getCommandSenderName();
-				data.uuid = pl.getUniqueID().toString();
-				data.player = pl;
-			}
-
+			ModelData data = ClientModelData.Instance().getPlayerData(pl);
 			data.backItem = null;
-			ClientCacheHandler.putPlayerData(pl.getUniqueID().toString(), data);
 		}
 		else if(type == EnumPacketClient.BACK_ITEM_UPDATE){
 			EntityPlayer pl = player.worldObj.getPlayerEntityByName(Server.readString(buffer));
@@ -100,17 +83,8 @@ public class PacketHandlerClient extends PacketHandlerServer{
 				return;
 			NBTTagCompound compound = Server.readNBT(buffer);
 			ItemStack item = ItemStack.loadItemStackFromNBT(compound);
-
-			ModelData data = ClientCacheHandler.getPlayerData(pl.getUniqueID().toString());
-			if(data == null){
-				data = new ModelData();
-				data.playername = pl.getCommandSenderName();
-				data.uuid = pl.getUniqueID().toString();
-				data.player = pl;
-			}
-
+			ModelData data = ModelData.getData(pl);
 			data.backItem = item;
-			ClientCacheHandler.putPlayerData(pl.getUniqueID().toString(), data);
 		}
 		else if(type == EnumPacketClient.PARTICLE){
 			int animation = buffer.readInt();
@@ -118,15 +92,8 @@ public class PacketHandlerClient extends PacketHandlerServer{
 				EntityPlayer pl = player.worldObj.getPlayerEntityByName(Server.readString(buffer));
 				if(pl == null)
 					return;
-				ModelData data = ClientCacheHandler.getPlayerData(pl.getUniqueID().toString());
-				if(data == null){
-					data = new ModelData();
-					data.playername = pl.getCommandSenderName();
-					data.uuid = pl.getUniqueID().toString();
-					data.player = pl;
-				}
+				ModelData data = ClientModelData.Instance().getPlayerData(pl);
 				data.inLove = 40;
-				ClientCacheHandler.putPlayerData(pl.getUniqueID().toString(), data);
 			}
 			else if(animation == 1){
 				player.worldObj.spawnParticle("note", buffer.readDouble(), buffer.readDouble(), buffer.readDouble(), buffer.readDouble(), 0, 0);
@@ -136,13 +103,7 @@ public class PacketHandlerClient extends PacketHandlerServer{
 				if(pl == null)
 					return;
 
-				ModelData data = ClientCacheHandler.getPlayerData(pl.getUniqueID().toString());
-				if(data == null){
-					data = new ModelData();
-					data.playername = pl.getCommandSenderName();
-					data.uuid = pl.getUniqueID().toString();
-					data.player = pl;
-				}
+				ModelData data = ClientModelData.Instance().getPlayerData(pl);
 		        for (int i = 0; i < 5; ++i){
 		            double d0 = player.getRNG().nextGaussian() * 0.02D;
 		            double d1 = player.getRNG().nextGaussian() * 0.02D;
@@ -151,8 +112,6 @@ public class PacketHandlerClient extends PacketHandlerServer{
 		            double z = player.posZ + ((player.getRNG().nextFloat() - 0.5f) * player.width) * 2;
 		            player.worldObj.spawnParticle("angryVillager",x , player.posY + 0.8f + (double)(player.getRNG().nextFloat() * player.height / 2) - player.getYOffset() - data.getBodyY(), z, d0, d1, d2);
 		        }
-
-				ClientCacheHandler.putPlayerData(pl.getUniqueID().toString(), data);
 			}
 		}
 		else if(type == EnumPacketClient.PLAY_ANIMATION){
@@ -160,17 +119,9 @@ public class PacketHandlerClient extends PacketHandlerServer{
 			if(pl == null)
 				return;
 
-			ModelData data = ClientCacheHandler.getPlayerData(pl.getUniqueID().toString());
-			if(data == null){
-				data = new ModelData();
-				data.playername = pl.getCommandSenderName();
-				data.uuid = pl.getUniqueID().toString();
-				data.player = pl;
-			}
-
+			ModelData data = ClientModelData.Instance().getPlayerData(pl);
 			data.setAnimation(buffer.readInt());
 			data.animationStart = pl.ticksExisted;
-			ClientCacheHandler.putPlayerData(pl.getUniqueID().toString(), data);
 		}
 		
 	}

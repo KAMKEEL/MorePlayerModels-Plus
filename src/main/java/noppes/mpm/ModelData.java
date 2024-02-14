@@ -1,5 +1,7 @@
 package noppes.mpm;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
@@ -24,8 +26,6 @@ import java.util.concurrent.Executors;
 
 
 public class ModelData extends ModelDataShared implements IExtendedEntityProperties{
-	public static ExecutorService saveExecutor = Executors.newFixedThreadPool(1);
-
 	public boolean resourceInit = false;
 	public boolean resourceLoaded = false;
 	public boolean cloakInnit = false;
@@ -68,6 +68,13 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 
 	public ModelData(){
 	}
+
+	public ModelData(EntityPlayer player){
+		this.player = player;
+		this.playername = player.getCommandSenderName();
+		this.uuid = player.getUniqueID().toString();
+	}
+
 	public NBTTagCompound getNBT(){
 		if(player != null){
 			playername = player.getCommandSenderName();
@@ -306,5 +313,14 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 	public void load() {
 		NBTTagCompound data = ModelDataController.Instance.loadModelData(player.getPersistentID().toString());
 		setNBT(data);
+	}
+
+
+	public static ModelData getData(EntityPlayer entity) {
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+			return MorePlayerModels.proxy.getClientPlayerData(entity);
+		} else {
+			return ModelDataController.Instance.getModelData(entity);
+		}
 	}
 }

@@ -10,6 +10,7 @@ import cpw.mods.fml.common.event.FMLServerAboutToStartEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.FMLEventChannel;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.relauncher.Side;
 import kamkeel.MorePlayerModelsPermissions;
 import kamkeel.command.CommandMPM;
 import net.minecraft.client.Minecraft;
@@ -137,5 +138,9 @@ public class MorePlayerModels {
 		GameRules rules = event.getServer().worldServerForDimension(0).getGameRules();
 		if(!rules.hasRule("mpmAllowEntityModels"))
 			rules.addGameRule("mpmAllowEntityModels", "true");
+	}
+
+	public static Side side() {
+		return FMLCommonHandler.instance().getEffectiveSide();
 	}
 }

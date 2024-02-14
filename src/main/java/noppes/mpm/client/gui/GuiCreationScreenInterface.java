@@ -11,6 +11,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import noppes.mpm.ModelData;
 import noppes.mpm.client.Client;
 import noppes.mpm.client.ClientCacheHandler;
+import noppes.mpm.client.ClientEventHandler;
+import noppes.mpm.client.data.ClientModelData;
 import noppes.mpm.client.gui.util.*;
 import noppes.mpm.constants.EnumPacketServer;
 import org.lwjgl.input.Keyboard;
@@ -39,15 +41,12 @@ public class GuiCreationScreenInterface extends GuiNPCInterface implements ISubG
 	private static float rotation = 0.5f;
 	
 	public GuiCreationScreenInterface(){
-		// Client.sendData(EnumClientPacketGET_PERMISSION);
-		// FIX THIS KAM.
-		playerdata = ClientCacheHandler.getPlayerData(Minecraft.getMinecraft().thePlayer.getUniqueID().toString());
+		player = Minecraft.getMinecraft().thePlayer;
+		playerdata = ClientModelData.Instance().getPlayerData(player);
 		original = playerdata.getNBT();
 		xSize = 400;
 		ySize = 240;
 		xOffset = 140;
-
-		player = Minecraft.getMinecraft().thePlayer;
 		this.closeOnEsc = true;
 	}
 
@@ -193,11 +192,10 @@ public class GuiCreationScreenInterface extends GuiNPCInterface implements ISubG
     public void save(){
     	NBTTagCompound newCompound = playerdata.getNBT();
     	if(!original.equals(newCompound)){
-			ClientCacheHandler.putPlayerData(this.mc.thePlayer.getUniqueID().toString(), playerdata);
-    		Client.sendData(EnumPacketServer.UPDATE_PLAYER_DATA, newCompound);
+			ClientModelData.Instance().getPlayerData(player).setNBT(newCompound);
+			Client.sendData(EnumPacketServer.UPDATE_PLAYER_DATA, newCompound);
     		original = newCompound;
     	}
-    	
     }
     
     public void openGui(GuiScreen gui){

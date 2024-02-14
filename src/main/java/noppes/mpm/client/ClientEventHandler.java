@@ -14,6 +14,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import noppes.mpm.*;
+import noppes.mpm.client.data.ClientModelData;
 import noppes.mpm.client.fx.EntityEnderFX;
 import noppes.mpm.client.fx.EntityRainbowFX;
 import noppes.mpm.client.gui.GuiCreationScreenInterface;
@@ -29,6 +30,7 @@ import java.util.Random;
 
 public class ClientEventHandler {
 
+	private final Minecraft mc = Minecraft.getMinecraft();
 	public static float partialTicks = 0;
 	private World prevWorld;
 	public static List<EntityPlayer> playerlist;
@@ -41,16 +43,7 @@ public class ClientEventHandler {
 		if(mc == null || mc.thePlayer == null)
 			return;
 		if(ClientProxy.Screen.isPressed()){
-
-			ModelData data = ClientCacheHandler.getPlayerData(mc.thePlayer.getUniqueID().toString());
-			if(data == null){
-				data = new ModelData();
-				data.playername = mc.thePlayer.getCommandSenderName();
-				data.uuid = mc.thePlayer.getUniqueID().toString();
-				data.player = mc.thePlayer;
-			}
-			ClientCacheHandler.putPlayerData(mc.thePlayer.getUniqueID().toString(), data);
-
+			ModelData data = ClientModelData.Instance().getPlayerData(mc.thePlayer);
 			data.animation = EnumAnimation.NONE;
 			if(mc.currentScreen == null)
 				mc.displayGuiScreen(new GuiCreationScreenInterface());
@@ -99,15 +92,7 @@ public class ClientEventHandler {
 					animation = EnumAnimation.SLEEPING_EAST;
 			}
 
-			ModelData data = ClientCacheHandler.getPlayerData(player.getUniqueID().toString());
-			if(data == null){
-				data = new ModelData();
-				data.playername = player.getCommandSenderName();
-				data.uuid = player.getUniqueID().toString();
-				data.player = player;
-			}
-			ClientCacheHandler.putPlayerData(player.getUniqueID().toString(), data);
-
+			ModelData data = ClientModelData.Instance().getPlayerData(player);
 			if(data.animationEquals(animation))
 				animation = EnumAnimation.NONE;
 
@@ -135,33 +120,27 @@ public class ClientEventHandler {
 	public void onClientTick(TickEvent.ClientTickEvent event){
 		if(event.side == Side.SERVER || event.phase == Phase.START)
 			return;
-    	Minecraft mc = Minecraft.getMinecraft();
+		if (mc.thePlayer == null) return;
+
+		Minecraft mc = Minecraft.getMinecraft();
     	World world = mc.theWorld;
+		ModelData data = ModelData.getData(mc.thePlayer);
+
 		if ((this.prevWorld == null || world == null) && this.prevWorld != world) {
 			ClientCacheHandler.clearCache();
 			// Client.sendData(EnumPacketClient.GET_PERMISSION);
 		}
     	if(world != null && prevWorld != world){
-			MorePlayerModels.HasServerSide = false;
-			ModelData data = ClientCacheHandler.getPlayerData(mc.thePlayer.getUniqueID().toString());
-			if(data == null){
-				data = new ModelData();
-				data.playername = mc.thePlayer.getCommandSenderName();
-				data.uuid = mc.thePlayer.getUniqueID().toString();
-				data.player = mc.thePlayer;
-			}
-			ClientCacheHandler.putPlayerData(mc.thePlayer.getUniqueID().toString(), data);
+			data = ClientModelData.Instance().getPlayerData(mc.thePlayer);
 			Client.sendData(EnumPacketServer.CLIENT_PING, MorePlayerModels.Revision, data.getNBT());
 			prevWorld = world;
     	}
-
     	RenderEvent.lastSkinTick++;
 		RenderEvent.lastCapeTick++;
 
 		if(MorePlayerModels.HasServerSide && mc.thePlayer != null && world != null && world.getWorldTime() % 20 == 0){
 			playerlist = world.getEntitiesWithinAABB(EntityPlayer.class, mc.thePlayer.boundingBox.expand(64, 64, 64));
 			WebApi.instance.run();
-
 		}
 	}
 
@@ -170,15 +149,7 @@ public class ClientEventHandler {
 		if(event.side == Side.SERVER || event.phase == Phase.START)
 			return;
     	EntityPlayer player = event.player;
-		ModelData data = ClientCacheHandler.getPlayerData(player.getUniqueID().toString());
-		if(data == null){
-			data = new ModelData();
-			data.playername = player.getCommandSenderName();
-			data.uuid = player.getUniqueID().toString();
-			data.player = player;
-		}
-		ClientCacheHandler.putPlayerData(player.getUniqueID().toString(), data);
-
+		ModelData data = ClientModelData.Instance().getPlayerData(player);
     	EntityLivingBase entity = data.getEntity(player.worldObj, player);
     	if(entity != null){
 			//entity.posY -= player.yOffset;
