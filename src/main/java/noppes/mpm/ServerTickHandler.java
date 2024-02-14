@@ -71,7 +71,7 @@ public class ServerTickHandler {
 			return;
 		}
 		EntityPlayerMP player = (EntityPlayerMP) event.player;
-		ModelData data = ModelDataController.Instance.getModelData(player);
+		ModelData data = ModelData.getData(player);
 		ItemStack item = player.inventory.mainInventory[0];
 		if(data.backItem == item)
 			return;
@@ -95,7 +95,7 @@ public class ServerTickHandler {
 		Minecraft mc = Minecraft.getMinecraft();
 		List<EntityPlayer> players = mc.theWorld.playerEntities;
 		for(EntityPlayer p : players){
-			ModelData data = ModelDataController.Instance.getModelData(p);
+			ModelData data = ModelData.getData(p);
 			data.resourceInit = false;
 			data.resourceLoaded = false;
 			data.cloakInnit = false;

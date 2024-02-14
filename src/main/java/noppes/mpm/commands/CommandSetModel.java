@@ -72,7 +72,7 @@ public class CommandSetModel extends MpmCommandInterface {
 			return;
 		}
 
-		ModelData data = ModelDataController.Instance.getModelData(player);
+		ModelData data = ModelData.getData(player);
 		data.setEntityClass(entities.get(arg));
 		i++;
 		if(var2.length > i){

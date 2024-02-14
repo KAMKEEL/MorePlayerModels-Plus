@@ -69,7 +69,7 @@ public class CommandMPM extends MpmCommandInterface {
 		if(player == null)
             throw new PlayerNotFoundException("commands.generic.player.notFound", icommandsender);
 
-		ModelData data = ModelDataController.Instance.getModelData(player);
+		ModelData data = ModelData.getData(player);
 		if(data == null)
 			return;
 
@@ -200,7 +200,7 @@ public class CommandMPM extends MpmCommandInterface {
 				throw new WrongUsageException("/mpm sendmodel [@from_player] <@to_player> (to go back to default /mpm sendmodel [@p] clear)");
 		}
 		else
-			toData = ModelDataController.Instance.getModelData(toPlayer);
+			toData = ModelData.getData(toPlayer);
 
 		if(toData == null){
 			return;

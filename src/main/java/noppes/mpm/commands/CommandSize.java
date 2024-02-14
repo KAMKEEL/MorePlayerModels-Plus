@@ -50,7 +50,7 @@ public class CommandSize extends MpmCommandInterface {
 		if(val > 10 || val <= 0)
 			val = 5;
 
-		ModelData data = ModelDataController.Instance.getModelData(player);
+		ModelData data = ModelData.getData(player);
 		data.size = val;
 		Server.sendAssociatedData(player, EnumPacketClient.SEND_PLAYER_DATA, player.getCommandSenderName(), data.getNBT());
 	}

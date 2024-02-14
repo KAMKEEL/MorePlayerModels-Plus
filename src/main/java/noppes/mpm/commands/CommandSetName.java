@@ -47,7 +47,7 @@ public class CommandSetName extends MpmCommandInterface {
 		if(player == null)
 			throw new PlayerNotFoundException();
 		
-		ModelData data = ModelDataController.Instance.getModelData(player);
+		ModelData data = ModelData.getData(player);
 		data.displayName = var2[0];
 		for(int i = 1; i < var2.length; i++)
 			data.displayName += " " + var2[i];

@@ -21,7 +21,6 @@ import noppes.mpm.config.ConfigClient;
 import noppes.mpm.constants.EnumAnimation;
 import noppes.mpm.constants.EnumPacketServer;
 import noppes.mpm.constants.EnumParts;
-import noppes.mpm.sync.WebApi;
 
 import java.util.List;
 import java.util.Random;
@@ -138,7 +137,6 @@ public class ClientEventHandler {
 
 		if(MorePlayerModels.HasServerSide && mc.thePlayer != null && world != null && world.getWorldTime() % 20 == 0){
 			playerlist = world.getEntitiesWithinAABB(EntityPlayer.class, mc.thePlayer.boundingBox.expand(64, 64, 64));
-			WebApi.instance.run();
 		}
 	}
 

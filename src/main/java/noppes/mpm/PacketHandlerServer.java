@@ -44,7 +44,7 @@ public class PacketHandlerServer{
 //			Server.sendAssociatedData(player, EnumPacketClient.SEND_PLAYER_DATA, player.getCommandSenderName(), data.getNBT());
 		}
 		else if(type == EnumPacketServer.UPDATE_PLAYER_DATA){
-			ModelData data = ModelDataController.Instance.getModelData(player);
+			ModelData data = ModelData.getData(player);
 			data.setNBT(Server.readNBT(buffer));
 			if(!player.worldObj.getGameRules().getGameRuleBooleanValue("mpmAllowEntityModels"))
 				data.entityClass = null;

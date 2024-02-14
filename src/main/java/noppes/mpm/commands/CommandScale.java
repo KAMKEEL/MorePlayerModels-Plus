@@ -43,7 +43,7 @@ public class CommandScale extends MpmCommandInterface {
 		if(player == null)
 			throw new PlayerNotFoundException();
 
-		ModelData data = ModelDataController.Instance.getModelData(player);
+		ModelData data = ModelData.getData(player);
 		try{
 			if(var2.length == 1){
 				Scale scale = Scale.Parse(var2[0]);

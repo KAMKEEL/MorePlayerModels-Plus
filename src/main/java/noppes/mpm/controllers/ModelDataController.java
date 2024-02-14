@@ -112,17 +112,6 @@ public class ModelDataController {
 		}
 	}
 
-	public ArrayList<ModelData> getAllModelData() {
-		ArrayList<ModelData> modelDataList = new ArrayList<>();
-		List<?> list = MinecraftServer.getServer().getConfigurationManager().playerEntityList;
-		for (Object o : list) {
-			if (o instanceof EntityPlayer) {
-				modelDataList.add(this.getModelData((EntityPlayer)o));
-			}
-		}
-		return modelDataList;
-	}
-
 	public ModelData getModelData(EntityPlayer player){
 		ModelData data = getModelDataCache(player.getUniqueID().toString());
 		if(data != null){
@@ -161,40 +150,5 @@ public class ModelDataController {
 		}
 
 		return "";
-	}
-
-	public ModelData getDataFromUsername(String username){
-		EntityPlayer player = MinecraftServer.getServer().getConfigurationManager().func_152612_a(username);
-		ModelData data = null;
-		if(player == null){
-			for(String name : nameUUIDs.keySet()){
-				if(name.equalsIgnoreCase(username)){
-					data = new ModelData();
-					data.setNBT(ModelDataController.Instance.loadModelData(nameUUIDs.get(name)));
-					break;
-				}
-			}
-		}
-		else
-			data = ModelDataController.Instance.getModelData(player);
-
-		return data;
-	}
-
-	public List<ModelData> getPlayersData(ICommandSender sender, String username){
-		ArrayList<ModelData> list = new ArrayList<ModelData>();
-		EntityPlayerMP[] players = PlayerSelector.matchPlayers(sender, username);
-		if(players == null || players.length == 0){
-			ModelData data = ModelDataController.Instance.getDataFromUsername(username);
-			if(data != null)
-				list.add(data);
-		}
-		else{
-			for(EntityPlayer player : players){
-				list.add(ModelDataController.Instance.getModelData(player));
-			}
-		}
-
-		return list;
 	}
 }

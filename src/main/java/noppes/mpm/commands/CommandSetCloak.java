@@ -50,7 +50,7 @@ public class CommandSetCloak extends MpmCommandInterface {
 		if(url.equalsIgnoreCase("clear"))
 			url = "";
 
-		ModelData data = ModelDataController.Instance.getModelData(player);
+		ModelData data = ModelData.getData(player);
 		data.cloakUrl = url;
 		data.cloakLoaded = false;
 		data.cloakInnit = false;

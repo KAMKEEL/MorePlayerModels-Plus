@@ -20,7 +20,7 @@ public class CommandSleep extends MpmCommandInterface {
 		if(!(icommandsender instanceof EntityPlayerMP))
 			return;
 		EntityPlayerMP player = (EntityPlayerMP) icommandsender;
-		ModelData data = ModelDataController.Instance.getModelData(player);
+		ModelData data = ModelData.getData(player);
 
 		float rotation = player.rotationYaw;
 		while(rotation < 0)

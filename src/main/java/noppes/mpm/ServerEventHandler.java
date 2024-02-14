@@ -97,7 +97,7 @@ public class ServerEventHandler {
 
 	@SubscribeEvent
 	public void onNameSet(PlayerEvent.NameFormat event){
-		ModelData data = ModelDataController.Instance.getModelData(event.entityPlayer);
+		ModelData data = ModelData.getData(event.entityPlayer);
 		if(!data.displayName.isEmpty()){
 			event.displayname = data.displayName;
 		}

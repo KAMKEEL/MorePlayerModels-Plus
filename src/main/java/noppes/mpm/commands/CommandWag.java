@@ -20,7 +20,7 @@ public class CommandWag extends MpmCommandInterface {
 		if(!(icommandsender instanceof EntityPlayerMP))
 			return;
 		EntityPlayerMP player = (EntityPlayerMP) icommandsender;
-		ModelData data = ModelDataController.Instance.getModelData(player);
+		ModelData data = ModelData.getData(player);
 		EnumAnimation ani = data.animation == EnumAnimation.WAG?EnumAnimation.NONE:EnumAnimation.WAG;
 		Server.sendAssociatedData(player, EnumPacketClient.PLAY_ANIMATION, player.getCommandSenderName(), ani);
 		data.animation = ani;

@@ -20,7 +20,7 @@ public class CommandSit extends MpmCommandInterface {
 		if(!(icommandsender instanceof EntityPlayerMP))
 			return;
 		EntityPlayerMP player = (EntityPlayerMP) icommandsender;
-		ModelData data = ModelDataController.Instance.getModelData(player);
+		ModelData data = ModelData.getData(player);
 		EnumAnimation ani = data.animation == EnumAnimation.SITTING?EnumAnimation.NONE:EnumAnimation.SITTING;
 		Server.sendAssociatedData(player, EnumPacketClient.PLAY_ANIMATION, player.getCommandSenderName(), ani);
 		data.animation = ani;
