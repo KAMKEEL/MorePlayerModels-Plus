@@ -119,25 +119,8 @@ public class ClientEventHandler {
 			return;
 		if (mc.thePlayer == null) return;
 
-		Minecraft mc = Minecraft.getMinecraft();
-    	World world = mc.theWorld;
-		ModelData data = ModelData.getData(mc.thePlayer);
-
-		if ((this.prevWorld == null || world == null) && this.prevWorld != world) {
-			ClientCacheHandler.clearCache();
-			// Client.sendData(EnumPacketClient.GET_PERMISSION);
-		}
-    	if(world != null && prevWorld != world){
-			data = ClientModelData.Instance().getPlayerData(mc.thePlayer);
-			Client.sendData(EnumPacketServer.CLIENT_PING, MorePlayerModels.Revision, data.getNBT());
-			prevWorld = world;
-    	}
-    	RenderEvent.lastSkinTick++;
+		RenderEvent.lastSkinTick++;
 		RenderEvent.lastCapeTick++;
-
-		if(MorePlayerModels.HasServerSide && mc.thePlayer != null && world != null && world.getWorldTime() % 20 == 0){
-			playerlist = world.getEntitiesWithinAABB(EntityPlayer.class, mc.thePlayer.boundingBox.expand(64, 64, 64));
-		}
 	}
 
 	@SubscribeEvent
@@ -148,7 +131,6 @@ public class ClientEventHandler {
 		ModelData data = ClientModelData.Instance().getPlayerData(player);
     	EntityLivingBase entity = data.getEntity(player.worldObj, player);
     	if(entity != null){
-			//entity.posY -= player.yOffset;
     		entity.onUpdate();
 			MPMEntityUtil.Copy(player, entity);
 			return;

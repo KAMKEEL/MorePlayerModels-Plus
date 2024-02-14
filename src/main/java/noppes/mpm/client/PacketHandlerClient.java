@@ -46,21 +46,23 @@ public class PacketHandlerClient extends PacketHandlerServer{
 			}
 		}
 		else if(type == EnumPacketClient.LOGIN){
-			EntityPlayer pl = player.worldObj.getPlayerEntityByName(Server.readString(buffer));
-			if(pl == null)
-				return;
-
 			NBTTagCompound compound = Server.readNBT(buffer);
 			ClientCacheHandler.createCache();
-			ClientModelData.Instance().getPlayerData(pl).setNBT(compound);
+			ClientModelData.Instance().getPlayerData(player).setNBT(compound);
 		}
 		else if(type == EnumPacketClient.SEND_PLAYER_DATA){
-			EntityPlayer pl = player.worldObj.getPlayerEntityByName(Server.readString(buffer));
-			if(pl == null)
+			ModelData data = null;
+			String playerName = Server.readString(buffer);
+			EntityPlayer sendingPlayer = Minecraft.getMinecraft().theWorld.getPlayerEntityByName(playerName);
+			if (sendingPlayer != null) {
+				data = ModelData.getData(sendingPlayer);
+			}
+
+			if (data == null) {
 				return;
+			}
 
 			NBTTagCompound compound = Server.readNBT(buffer);
-			ModelData data = ClientModelData.Instance().getPlayerData(pl);
 			data.setNBT(compound);
 		}
 		else if(type == EnumPacketClient.CHAT_EVENT){
@@ -124,7 +126,7 @@ public class PacketHandlerClient extends PacketHandlerServer{
 			data.setAnimation(buffer.readInt());
 			data.animationStart = pl.ticksExisted;
 		}
-		
+
 	}
 
 }

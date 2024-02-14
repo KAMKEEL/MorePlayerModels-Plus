@@ -29,21 +29,7 @@ public class PacketHandlerServer{
 	}
 
 	private void handlePacket(ByteBuf buffer, EntityPlayerMP player, EnumPacketServer type) throws IOException {
-		if(type == EnumPacketServer.CLIENT_PING){
-//			ModelData data = ModelDataController.Instance.getModelData(player);
-//			data.setNBT(Server.readNBT(buffer));
-//			if(!player.worldObj.getGameRules().getGameRuleBooleanValue("mpmAllowEntityModels"))
-//				data.entityClass = null;
-//
-//			data.save();
-//			ItemStack back = player.inventory.mainInventory[0];
-//			if(back != null)
-//				Server.sendAssociatedData(player, EnumPacketClient.BACK_ITEM_UPDATE, player.getCommandSenderName(), back.writeToNBT(new NBTTagCompound()));
-//
-//			Server.sendData(player, EnumPacketClient.SERVER_PING, MorePlayerModels.Revision);
-//			Server.sendAssociatedData(player, EnumPacketClient.SEND_PLAYER_DATA, player.getCommandSenderName(), data.getNBT());
-		}
-		else if(type == EnumPacketServer.UPDATE_PLAYER_DATA){
+		if(type == EnumPacketServer.UPDATE_PLAYER_DATA){
 			ModelData data = ModelData.getData(player);
 			data.setNBT(Server.readNBT(buffer));
 			if(!player.worldObj.getGameRules().getGameRuleBooleanValue("mpmAllowEntityModels"))
