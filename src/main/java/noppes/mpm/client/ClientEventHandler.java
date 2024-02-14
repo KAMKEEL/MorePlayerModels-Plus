@@ -19,7 +19,8 @@ import noppes.mpm.client.fx.EntityRainbowFX;
 import noppes.mpm.client.gui.GuiCreationScreenInterface;
 import noppes.mpm.config.ConfigClient;
 import noppes.mpm.constants.EnumAnimation;
-import noppes.mpm.constants.EnumPackets;
+import noppes.mpm.constants.EnumPacketClient;
+import noppes.mpm.constants.EnumPacketServer;
 import noppes.mpm.constants.EnumParts;
 import noppes.mpm.sync.WebApi;
 
@@ -40,7 +41,16 @@ public class ClientEventHandler {
 		if(mc == null || mc.thePlayer == null)
 			return;
 		if(ClientProxy.Screen.isPressed()){
-			ModelData data = PlayerDataController.instance.getPlayerData(mc.thePlayer);
+
+			ModelData data = ClientCacheHandler.getPlayerData(mc.thePlayer.getUniqueID().toString());
+			if(data == null){
+				data = new ModelData();
+				data.playername = mc.thePlayer.getCommandSenderName();
+				data.uuid = mc.thePlayer.getUniqueID().toString();
+				data.player = mc.thePlayer;
+			}
+			ClientCacheHandler.putPlayerData(mc.thePlayer.getUniqueID().toString(), data);
+
 			data.animation = EnumAnimation.NONE;
 			if(mc.currentScreen == null)
 				mc.displayGuiScreen(new GuiCreationScreenInterface());
@@ -70,7 +80,7 @@ public class ClientEventHandler {
 		if(type < 0)
 			return;
 		if(MorePlayerModels.HasServerSide)
-			Client.sendData(EnumPackets.ANIMATION, type);
+			Client.sendData(EnumPacketServer.ANIMATION, type);
 		else{
 			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 			EnumAnimation animation = EnumAnimation.values()[type];
@@ -88,7 +98,16 @@ public class ClientEventHandler {
 				if(rotate == 3)
 					animation = EnumAnimation.SLEEPING_EAST;
 			}
-			ModelData data = PlayerDataController.instance.getPlayerData(player);
+
+			ModelData data = ClientCacheHandler.getPlayerData(player.getUniqueID().toString());
+			if(data == null){
+				data = new ModelData();
+				data.playername = player.getCommandSenderName();
+				data.uuid = player.getUniqueID().toString();
+				data.player = player;
+			}
+			ClientCacheHandler.putPlayerData(player.getUniqueID().toString(), data);
+
 			if(data.animationEquals(animation))
 				animation = EnumAnimation.NONE;
 
@@ -120,13 +139,19 @@ public class ClientEventHandler {
     	World world = mc.theWorld;
 		if ((this.prevWorld == null || world == null) && this.prevWorld != world) {
 			ClientCacheHandler.clearCache();
-			Client.sendData(EnumPackets.GET_PERMISSION);
+			// Client.sendData(EnumPacketClient.GET_PERMISSION);
 		}
     	if(world != null && prevWorld != world){
 			MorePlayerModels.HasServerSide = false;
-			GuiCreationScreenInterface.Message = "message.noserver";
-			ModelData data = PlayerDataController.instance.getPlayerData(mc.thePlayer);
-			Client.sendData(EnumPackets.PING, MorePlayerModels.Revision, data.writeToNBT());
+			ModelData data = ClientCacheHandler.getPlayerData(mc.thePlayer.getUniqueID().toString());
+			if(data == null){
+				data = new ModelData();
+				data.playername = mc.thePlayer.getCommandSenderName();
+				data.uuid = mc.thePlayer.getUniqueID().toString();
+				data.player = mc.thePlayer;
+			}
+			ClientCacheHandler.putPlayerData(mc.thePlayer.getUniqueID().toString(), data);
+			Client.sendData(EnumPacketServer.CLIENT_PING, MorePlayerModels.Revision, data.getNBT());
 			prevWorld = world;
     	}
 
@@ -145,7 +170,15 @@ public class ClientEventHandler {
 		if(event.side == Side.SERVER || event.phase == Phase.START)
 			return;
     	EntityPlayer player = event.player;
-		ModelData data = PlayerDataController.instance.getPlayerData(player);
+		ModelData data = ClientCacheHandler.getPlayerData(player.getUniqueID().toString());
+		if(data == null){
+			data = new ModelData();
+			data.playername = player.getCommandSenderName();
+			data.uuid = player.getUniqueID().toString();
+			data.player = player;
+		}
+		ClientCacheHandler.putPlayerData(player.getUniqueID().toString(), data);
+
     	EntityLivingBase entity = data.getEntity(player.worldObj, player);
     	if(entity != null){
 			//entity.posY -= player.yOffset;

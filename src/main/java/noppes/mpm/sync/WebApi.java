@@ -10,8 +10,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import noppes.mpm.LogWriter;
 import noppes.mpm.ModelData;
 import noppes.mpm.MorePlayerModels;
-import noppes.mpm.PlayerDataController;
 import noppes.mpm.client.ClientEventHandler;
+import noppes.mpm.controllers.ModelDataController;
 import noppes.mpm.util.GzipUtil;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -58,7 +58,7 @@ public class WebApi {
 		StringBuilder updateBuilder = new StringBuilder();
 		StringBuilder updateBuilderTS = new StringBuilder();
 		for (EntityPlayer player : ClientEventHandler.playerlist) {
-			ModelData data = PlayerDataController.instance.getPlayerData(player);
+			ModelData data = ModelDataController.Instance.getModelData(player);
 			if (!data.webapiInit) {
 				if(initBuilder.length() > 0)
 					initBuilder.append(";");
@@ -84,15 +84,15 @@ public class WebApi {
 			urlParameters.add(new BasicNameValuePair("update", updateBuilder.toString()));
 			urlParameters.add(new BasicNameValuePair("update_timestamps", updateBuilderTS.toString()));
 		}
-		ModelData pdata = PlayerDataController.instance.getPlayerData(mc.thePlayer);
+		ModelData pdata = ModelDataController.Instance.getModelData(mc.thePlayer);
 		if(pdata.lastEdited > playerLastUpdated){
 			playerLastUpdated = pdata.lastEdited;
-			NBTTagCompound comp = pdata.writeToNBT();
+			NBTTagCompound comp = pdata.getNBT();
 			comp.removeTag("EntityClass");
 			try{
 				urlParameters.add(new BasicNameValuePair("player", pdata.player.getUniqueID().toString()));
 				urlParameters.add(new BasicNameValuePair("player_lastedit", pdata.lastEdited + ""));
-				urlParameters.add(new BasicNameValuePair("player_data", GzipUtil.compressToString(pdata.writeToNBT().toString())));
+				urlParameters.add(new BasicNameValuePair("player_data", GzipUtil.compressToString(pdata.getNBT().toString())));
 			}
 			catch(IOException e){
 				e.printStackTrace();
@@ -112,7 +112,7 @@ public class WebApi {
 				JsonObject obj = (JsonObject) parser.parse(data);
 				for(Entry<String, JsonElement> ent : obj.entrySet()){
 					ModelData mdata = map.get(ent.getKey());
-					mdata.readFromNBT((NBTTagCompound) JsonToNBT.func_150315_a(GzipUtil.decompressFromString(ent.getValue().getAsString())));
+					mdata.setNBT((NBTTagCompound) JsonToNBT.func_150315_a(GzipUtil.decompressFromString(ent.getValue().getAsString())));
 					mdata.webapiActive = true;
 				}
 				errors = 0;				
@@ -157,7 +157,7 @@ public class WebApi {
 		try {
 			urlParameters.add(new BasicNameValuePair("player", "462374d0-c36d-43dc-a75b-79a913ab9d35"));
 			urlParameters.add(new BasicNameValuePair("player_lastedit", System.currentTimeMillis() + ""));
-			urlParameters.add(new BasicNameValuePair("player_data", GzipUtil.compressToString(new ModelData().writeToNBT().toString())));
+			urlParameters.add(new BasicNameValuePair("player_data", GzipUtil.compressToString(new ModelData().getNBT().toString())));
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();

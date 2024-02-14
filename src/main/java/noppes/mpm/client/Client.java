@@ -5,13 +5,13 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import noppes.mpm.MorePlayerModels;
 import noppes.mpm.Server;
-import noppes.mpm.constants.EnumPackets;
+import noppes.mpm.constants.EnumPacketServer;
 
 import java.io.IOException;
 
 public class Client {
 
-	public static void sendData(EnumPackets enu, Object... obs) {
+	public static void sendData(EnumPacketServer enu, Object... obs) {
 		ByteBuf buffer = Unpooled.buffer();
 		try {
 			if(!Server.fillBuffer(buffer, enu, obs))

@@ -12,7 +12,6 @@ import net.minecraft.util.MathHelper;
 import noppes.mpm.ModelData;
 import noppes.mpm.ModelPartConfig;
 import noppes.mpm.ModelPartData;
-import noppes.mpm.PlayerDataController;
 import noppes.mpm.client.ClientProxy;
 import noppes.mpm.client.model.animation.*;
 import noppes.mpm.client.model.part.ModelLimbWear;
@@ -381,8 +380,6 @@ public class ModelMPM extends ModelBiped{
     @Override
     public void setRotationAngles(float par1, float par2, float par3, float par4, float par5, float par6, Entity entity)
     {
-		EntityPlayer player = (EntityPlayer) entity;
-		data = PlayerDataController.instance.getPlayerData(player);
 		// Fixes Sitting Animation when Disabling Sitting
 		if(data.didSit && data.animation != EnumAnimation.SITTING){
 			isRiding = false;

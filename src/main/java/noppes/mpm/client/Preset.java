@@ -15,13 +15,13 @@ public class Preset {
 	public NBTTagCompound writeToNBT(){
 		NBTTagCompound compound = new NBTTagCompound();
 		compound.setString("PresetName", name);
-		compound.setTag("PresetData", data.writeToNBT());
+		compound.setTag("PresetData", data.getNBT());
 		return compound;
 	}
 	
 	public void readFromNBT(NBTTagCompound compound){
 		name = compound.getString("PresetName");
-		data.readFromNBT(compound.getCompoundTag("PresetData"));
+		data.setNBT(compound.getCompoundTag("PresetData"));
 	}
 
 	public static void FillDefault(HashMap<String,Preset> presets){

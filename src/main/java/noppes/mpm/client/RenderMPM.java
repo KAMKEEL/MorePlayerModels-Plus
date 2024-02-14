@@ -9,10 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.ThreadDownloadImageData;
 import net.minecraft.client.renderer.entity.*;
-import net.minecraft.client.renderer.texture.ITextureObject;
-import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySkullRenderer;
 import net.minecraft.client.resources.SkinManager;
 import net.minecraft.entity.EntityList;
@@ -33,7 +30,6 @@ import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.MinecraftForgeClient;
 import noppes.mpm.ModelData;
 import noppes.mpm.ModelPartData;
-import noppes.mpm.PlayerDataController;
 import noppes.mpm.client.model.ModelMPM;
 import noppes.mpm.client.model.ModelRenderPassHelper;
 import noppes.mpm.constants.EnumAnimation;
@@ -185,7 +181,9 @@ public class RenderMPM extends RenderPlayer {
 
 	@Override
 	public void renderFirstPersonArm(EntityPlayer player){
-		data = PlayerDataController.instance.getPlayerData(player);
+		data = ClientCacheHandler.getPlayerData(player.getUniqueID().toString());
+		if(data == null)
+			return;
 		if(!data.resourceInit && RenderEvent.lastSkinTick > RenderEvent.MaxSkinTick){
 			loadResource((AbstractClientPlayer) player);
 			RenderEvent.lastSkinTick = 0;

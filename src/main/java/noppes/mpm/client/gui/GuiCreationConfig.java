@@ -4,7 +4,6 @@ import kamkeel.MorePlayerModelsPermissions;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 import noppes.mpm.ModelData;
-import noppes.mpm.PlayerDataController;
 import noppes.mpm.client.ClientCacheHandler;
 import noppes.mpm.client.gui.util.GuiNpcButton;
 import noppes.mpm.client.gui.util.GuiNpcLabel;
@@ -79,7 +78,9 @@ public class GuiCreationConfig extends GuiCreationScreenInterface implements ITe
     	if(button.id == 46){
     		List<EntityPlayer> players = mc.theWorld.playerEntities;
     		for(EntityPlayer player : players){
-    			ModelData data = PlayerDataController.instance.getPlayerData(player);
+    			ModelData data = ClientCacheHandler.getPlayerData(player.getUniqueID().toString());
+				if(data == null)
+					continue;
     			data.resourceInit = false;
 				data.cloakLoaded = false;
 				data.cloakInnit = false;

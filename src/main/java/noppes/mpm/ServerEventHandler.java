@@ -11,13 +11,14 @@ import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.entity.PlaySoundAtEntityEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import noppes.mpm.constants.EnumPackets;
+import noppes.mpm.constants.EnumPacketClient;
+import noppes.mpm.controllers.ModelDataController;
 
 public class ServerEventHandler {
 
 	@SubscribeEvent
 	public void chat(ServerChatEvent event){
-		Server.sendToAll(EnumPackets.CHAT_EVENT, event.player.getCommandSenderName(), event.message);
+		Server.sendToAll(EnumPacketClient.CHAT_EVENT, event.player.getCommandSenderName(), event.message);
 	}
 
 	@SubscribeEvent
@@ -27,14 +28,14 @@ public class ServerEventHandler {
 		EntityPlayer target = (EntityPlayer) event.target;
 		EntityPlayerMP player = (EntityPlayerMP) event.entityPlayer;
 
-		ModelData data = PlayerDataController.instance.getPlayerData(target);
-		Server.sendData(player, EnumPackets.SEND_PLAYER_DATA, target.getCommandSenderName(), data.writeToNBT());
+		ModelData data = ModelDataController.Instance.getModelData(target);
+		Server.sendData(player, EnumPacketClient.SEND_PLAYER_DATA, target.getCommandSenderName(), data.getNBT());
 
 		ItemStack back = player.inventory.mainInventory[0];
 		if(back != null)
-			Server.sendData(player, EnumPackets.BACK_ITEM_UPDATE, target.getCommandSenderName(), back.writeToNBT(new NBTTagCompound()));
+			Server.sendData(player, EnumPacketClient.BACK_ITEM_UPDATE, target.getCommandSenderName(), back.writeToNBT(new NBTTagCompound()));
 		else
-			Server.sendData(player, EnumPackets.BACK_ITEM_REMOVE, target.getCommandSenderName());
+			Server.sendData(player, EnumPacketClient.BACK_ITEM_REMOVE, target.getCommandSenderName());
 	}
 	
 	@SubscribeEvent
@@ -95,12 +96,12 @@ public class ServerEventHandler {
 		if(entityLiving == null || !(entityLiving instanceof EntityPlayer))
 			return null;
 		EntityPlayer player = (EntityPlayer) entityLiving;
-		return PlayerDataController.instance.getPlayerData(player);
+		return ModelDataController.Instance.getModelData(player);
 	}
 
 	@SubscribeEvent
 	public void onNameSet(PlayerEvent.NameFormat event){
-		ModelData data = PlayerDataController.instance.getPlayerData(event.entityPlayer);
+		ModelData data = ModelDataController.Instance.getModelData(event.entityPlayer);
 		if(!data.displayName.isEmpty()){
 			event.displayname = data.displayName;
 		}

@@ -9,18 +9,16 @@ import net.minecraft.entity.MPMEntityUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import noppes.mpm.ModelData;
-import noppes.mpm.PlayerDataController;
 import noppes.mpm.client.Client;
 import noppes.mpm.client.ClientCacheHandler;
 import noppes.mpm.client.gui.util.*;
-import noppes.mpm.constants.EnumPackets;
+import noppes.mpm.constants.EnumPacketServer;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import static noppes.mpm.client.gui.GuiCreationParts.fixPlayerSkinLegs;
 
 public class GuiCreationScreenInterface extends GuiNPCInterface implements ISubGuiListener, ISliderListener {
-	public static String Message = "";
 	public EntityLivingBase entity;
 	
 	private boolean saving = false;
@@ -41,9 +39,10 @@ public class GuiCreationScreenInterface extends GuiNPCInterface implements ISubG
 	private static float rotation = 0.5f;
 	
 	public GuiCreationScreenInterface(){
-		Client.sendData(EnumPackets.GET_PERMISSION);
-		playerdata = PlayerDataController.instance.getPlayerData(Minecraft.getMinecraft().thePlayer);
-		original = playerdata.writeToNBT();
+		// Client.sendData(EnumClientPacketGET_PERMISSION);
+		// FIX THIS KAM.
+		playerdata = ClientCacheHandler.getPlayerData(Minecraft.getMinecraft().thePlayer.getUniqueID().toString());
+		original = playerdata.getNBT();
 		xSize = 400;
 		ySize = 240;
 		xOffset = 140;
@@ -101,9 +100,6 @@ public class GuiCreationScreenInterface extends GuiNPCInterface implements ISubG
 		addButton(unzoom = new GuiNpcButton(666, guiLeft + xSize - 79, guiTop, 20, 20, "-"));
 		addButton(zoom = new GuiNpcButton(667, guiLeft + xSize - 57 , guiTop, 20, 20, "+"));
     	addButton(new GuiNpcButton(66, guiLeft + xSize - 20, guiTop, 20, 20, "X"));
-    	    	
-    	addLabel(new GuiNpcLabel(0, Message, guiLeft + 120, guiTop + ySize - 10, 0xff0000));
-    	getLabel(0).center(xSize - 120);
 		addSlider(new GuiNpcSlider(this, 500, guiLeft + xOffset + 142, guiTop + 210, 120, 20, rotation));
     }
 
@@ -195,10 +191,10 @@ public class GuiCreationScreenInterface extends GuiNPCInterface implements ISubG
     }
     @Override
     public void save(){
-    	NBTTagCompound newCompound = playerdata.writeToNBT();
+    	NBTTagCompound newCompound = playerdata.getNBT();
     	if(!original.equals(newCompound)){
-    		PlayerDataController.instance.savePlayerData(this.mc.thePlayer, playerdata);
-    		Client.sendData(EnumPackets.UPDATE_PLAYER_DATA, newCompound);
+			ClientCacheHandler.putPlayerData(this.mc.thePlayer.getUniqueID().toString(), playerdata);
+    		Client.sendData(EnumPacketServer.UPDATE_PLAYER_DATA, newCompound);
     		original = newCompound;
     	}
     	

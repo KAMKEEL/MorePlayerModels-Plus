@@ -13,7 +13,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import noppes.mpm.client.AnalyticsTracking;
 import noppes.mpm.constants.EnumAnimation;
-import noppes.mpm.constants.EnumPackets;
+import noppes.mpm.constants.EnumPacketClient;
+import noppes.mpm.controllers.ModelDataController;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -52,16 +53,16 @@ public class ServerTickHandler {
 			return;
 		}
 		EntityPlayerMP player = (EntityPlayerMP) event.player;
-		ModelData data = PlayerDataController.instance.getPlayerData(player);
+		ModelData data = ModelDataController.Instance.getModelData(player);
 		ItemStack item = player.inventory.mainInventory[0];
 		if(data.backItem == item)
 			return;
 		if(item == null){
-			Server.sendAssociatedData(player, EnumPackets.BACK_ITEM_REMOVE, player.getCommandSenderName());
+			Server.sendAssociatedData(player, EnumPacketClient.BACK_ITEM_REMOVE, player.getCommandSenderName());
 		}
 		else {
 			NBTTagCompound tag = item.writeToNBT(new NBTTagCompound());
-			Server.sendAssociatedData(player, EnumPackets.BACK_ITEM_UPDATE, player.getCommandSenderName(), tag);
+			Server.sendAssociatedData(player, EnumPacketClient.BACK_ITEM_UPDATE, player.getCommandSenderName(), tag);
 		}
 		data.backItem = item;
 		if(data.animation != EnumAnimation.NONE)
@@ -76,7 +77,7 @@ public class ServerTickHandler {
 		Minecraft mc = Minecraft.getMinecraft();
 		List<EntityPlayer> players = mc.theWorld.playerEntities;
 		for(EntityPlayer p : players){
-			ModelData data = PlayerDataController.instance.getPlayerData(p);
+			ModelData data = ModelDataController.Instance.getModelData(p);
 			data.resourceInit = false;
 			data.resourceLoaded = false;
 			data.cloakInnit = false;

@@ -11,9 +11,9 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.World;
 import noppes.mpm.ModelData;
-import noppes.mpm.PlayerDataController;
 import noppes.mpm.Server;
-import noppes.mpm.constants.EnumPackets;
+import noppes.mpm.constants.EnumPacketClient;
+import noppes.mpm.controllers.ModelDataController;
 
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
@@ -72,7 +72,7 @@ public class CommandSetModel extends MpmCommandInterface {
 			return;
 		}
 
-		ModelData data = PlayerDataController.instance.getPlayerData(player);
+		ModelData data = ModelDataController.Instance.getModelData(player);
 		data.setEntityClass(entities.get(arg));
 		i++;
 		if(var2.length > i){
@@ -85,7 +85,7 @@ public class CommandSetModel extends MpmCommandInterface {
 			}
 		}
 		
-		Server.sendAssociatedData(player, EnumPackets.SEND_PLAYER_DATA, player.getCommandSenderName(), data.writeToNBT());
+		Server.sendAssociatedData(player, EnumPacketClient.SEND_PLAYER_DATA, player.getCommandSenderName(), data.getNBT());
 	}
 
 	@Override

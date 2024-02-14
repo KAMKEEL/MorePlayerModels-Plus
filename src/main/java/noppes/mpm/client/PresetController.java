@@ -6,7 +6,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import noppes.mpm.LogWriter;
 import noppes.mpm.ModelData;
-import noppes.mpm.PlayerDataController;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -51,7 +50,7 @@ public class PresetController {
 		}
 		if(presets.isEmpty()){
 			Preset preset = new Preset();
-			preset.data = PlayerDataController.instance.getPlayerData(Minecraft.getMinecraft().thePlayer);
+			// preset.data = PlayerDataController.instance.getPlayerData(Minecraft.getMinecraft().thePlayer);
 			preset.name = "Default";
 			presets.put("default", preset);
 

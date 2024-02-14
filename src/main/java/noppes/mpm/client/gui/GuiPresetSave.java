@@ -11,9 +11,9 @@ import noppes.mpm.client.gui.util.SubGuiInterface;
 
 public class GuiPresetSave extends SubGuiInterface{
 	private ModelData data;
-	private GuiScreen parent;
+	private GuiCreationScreenInterface parent;
 	
-	public GuiPresetSave(GuiScreen parent, ModelData data){
+	public GuiPresetSave(GuiCreationScreenInterface parent, ModelData data){
 		this.data = data;
 		this.parent = parent;
 		xSize = 200;

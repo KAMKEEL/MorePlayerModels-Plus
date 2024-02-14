@@ -20,6 +20,7 @@ import noppes.mpm.commands.*;
 import noppes.mpm.config.ConfigClient;
 import noppes.mpm.config.LoadConfiguration;
 import noppes.mpm.config.legacy.LegacyConfig;
+import noppes.mpm.controllers.ModelDataController;
 import noppes.mpm.controllers.PermissionController;
 
 import java.io.File;
@@ -31,7 +32,7 @@ public class MorePlayerModels {
 
 	@SidedProxy(clientSide = "noppes.mpm.client.ClientProxy", serverSide = "noppes.mpm.CommonProxy")
 	public static CommonProxy proxy;
-	public final static String VERSION = "3.1";
+	public final static String VERSION = "3.3";
 
 	public static FMLEventChannel Channel;
 
@@ -52,22 +53,23 @@ public class MorePlayerModels {
 	public MorePlayerModels(){
 		instance = this;
 	}
+
 	@EventHandler
 	public void load(FMLPreInitializationEvent ev) {
 		Channel = NetworkRegistry.INSTANCE.newEventDrivenChannel("MorePlayerModels");
 		
-		MinecraftServer server = MinecraftServer.getServer();
-		String dir = "";
-		if (server != null)
-			dir = new File(".").getAbsolutePath();
-		else
-			dir = Minecraft.getMinecraft().mcDataDir.getAbsolutePath();
-		
-		MorePlayerModels.dir = new File(dir,"moreplayermodels");
-		if(!MorePlayerModels.dir.exists())
-			MorePlayerModels.dir.mkdir();
-		
-		new PlayerDataController(MorePlayerModels.dir);
+//		MinecraftServer server = MinecraftServer.getServer();
+//		String dir = "";
+//		if (server != null)
+//			dir = new File(".").getAbsolutePath();
+//		else
+//			dir = Minecraft.getMinecraft().mcDataDir.getAbsolutePath();
+//
+//		MorePlayerModels.dir = new File(dir,"moreplayermodels");
+//		if(!MorePlayerModels.dir.exists())
+//			MorePlayerModels.dir.mkdir();
+//
+//		new PlayerDataController(MorePlayerModels.dir);
 
 		configPath = ev.getModConfigurationDirectory() + File.separator + "MorePlayerModelsPlus";
 		legacyPath = ev.getModConfigurationDirectory() + "/MorePlayerModels.cfg";
@@ -100,8 +102,10 @@ public class MorePlayerModels {
 
 	@EventHandler
 	public void setAboutToStart(FMLServerAboutToStartEvent event) {
+		new ModelDataController();
 		new PermissionController();
 		PermissionController.Instance.reloadPermissionData();
+		ModelDataController.Instance.clearCache();
 	}
 
 	@EventHandler

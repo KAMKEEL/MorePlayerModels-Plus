@@ -12,10 +12,10 @@ import org.lwjgl.input.Keyboard;
 
 public class GuiEditButtons extends SubGuiInterface{
 
-	private GuiScreen parent;
+	private GuiCreationScreenInterface parent;
 	private final String[] animations = new String[]{"None","Sleep","Crawl","Hug","Sit","Dance","Wave","Wag","Bow","Cry","Yes","No","Point","Death"};
 	
-	public GuiEditButtons(GuiScreen parent){
+	public GuiEditButtons(GuiCreationScreenInterface parent){
 		this.parent = parent;
 		this.closeOnEsc = true;
 	}

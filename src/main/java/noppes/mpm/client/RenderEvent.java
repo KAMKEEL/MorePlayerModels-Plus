@@ -21,7 +21,6 @@ import net.minecraftforge.client.event.*;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import noppes.mpm.ModelData;
 import noppes.mpm.MorePlayerModels;
-import noppes.mpm.PlayerDataController;
 import noppes.mpm.config.ConfigClient;
 import noppes.mpm.constants.EnumAnimation;
 import org.lwjgl.opengl.GL11;
@@ -48,7 +47,11 @@ public class RenderEvent {
 		if(!(event.entity instanceof AbstractClientPlayer))
 			return;
 		EntityPlayer player = event.entityPlayer;
-		data = PlayerDataController.instance.getPlayerData(player);
+		data = ClientCacheHandler.getPlayerData(player.getUniqueID().toString());
+		if(data == null)
+			return;
+		data.player = player;
+
 		renderer.setModelData(data, player);
 		setModels(event.renderer);
 
@@ -95,7 +98,11 @@ public class RenderEvent {
 		}
 
 		AbstractClientPlayer player = (AbstractClientPlayer) event.entity;
-		ModelData data = PlayerDataController.instance.getPlayerData(player);
+		data = ClientCacheHandler.getPlayerData(player.getUniqueID().toString());
+		if(data == null)
+			return;
+		data.player = player;
+
 		if(data.isSleeping()){
 			player.renderYawOffset = player.prevRenderYawOffset = player.rotationYaw;
 		}
@@ -140,7 +147,11 @@ public class RenderEvent {
 	@SubscribeEvent()
 	public void hand(RenderHandEvent event){
 		Minecraft mc = Minecraft.getMinecraft();
-		data = PlayerDataController.instance.getPlayerData(mc.thePlayer);
+		data = ClientCacheHandler.getPlayerData(mc.thePlayer.getUniqueID().toString());
+		if(data == null)
+			return;
+		data.player = mc.thePlayer;
+
 		Entity entity = data.getEntity(mc.thePlayer);
 		if(entity != null || data.isSleeping() || data.animation == EnumAnimation.BOW && mc.thePlayer.getHeldItem() == null){
 			event.setCanceled(true);

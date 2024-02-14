@@ -5,10 +5,9 @@ import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
 import noppes.mpm.ModelData;
-import noppes.mpm.PlayerDataController;
 import noppes.mpm.constants.EnumAnimation;
 
-public class EntityRendererAlt extends EntityRenderer{
+public class EntityRendererAlt extends EntityRenderer {
 
 	public EntityRendererAlt(Minecraft par1Minecraft) {
 		super(par1Minecraft, par1Minecraft.getResourceManager());
@@ -22,7 +21,11 @@ public class EntityRendererAlt extends EntityRenderer{
     		super.updateCameraAndRender(par1);
     		return;
     	}
-    	ModelData data = PlayerDataController.instance.getPlayerData(player);
+
+		ModelData data = ClientCacheHandler.getPlayerData(player.getUniqueID().toString());
+		if(data == null)
+			return;
+
 		player.yOffset -= (float) (data.offsetY() + (-1.615 + data.size * 0.315));
 		if(data.animation == EnumAnimation.SITTING)
 			player.yOffset += (float) (0.5f - data.getLegsY() * 0.8);
@@ -47,7 +50,10 @@ public class EntityRendererAlt extends EntityRenderer{
     		super.getMouseOver(par1);
     		return;
     	}
-    	ModelData data = PlayerDataController.instance.getPlayerData(player);
+
+		ModelData data = ClientCacheHandler.getPlayerData(player.getUniqueID().toString());
+		if(data == null)
+			return;
 
 		float offset = -data.offsetY() - (-1.615f + data.size * 0.315f);
 		if(data.animation == EnumAnimation.SITTING){
