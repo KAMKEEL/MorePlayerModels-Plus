@@ -91,6 +91,8 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 		size = compound.getInteger("Size");
 		if(size <= 0)
 			size = 5;
+		if(size > 10)
+			size = 5;
 
 		soundType = compound.getShort("SoundType");
 		lastEdited = compound.getLong("LastEdited");
