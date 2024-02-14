@@ -339,20 +339,22 @@ public class RenderMPM extends RenderPlayer {
 			super.rotateCorpse(par1EntityLiving, par2, par3, par4);
 	}
 
-	// 0 -- Requires Super
-	// 1 -- Did Something
-	// 2 -- Crawling Fix
+	// True -- Requires Super
+	// False -- Did Something
 	public boolean shouldRotateCorpse(EntityLivingBase par1EntityLiving, float par2, float par3, float par4, boolean manual) {
 		EntityPlayer player = (EntityPlayer) par1EntityLiving;
 		if(!player.isEntityAlive()){
 			return true;
 		}
 
+		boolean requireSuper = true;
 		if(player.ridingEntity != null){
 			GL11.glTranslatef(0, data.getLegsY(), 0);
+			requireSuper = false;
 		}
 		if (data.animation == EnumAnimation.SITTING){
 			GL11.glTranslatef(0, -0.6f + data.getLegsY(), 0);
+			requireSuper = false;
 		}
 
 		if (data.animation == EnumAnimation.SLEEPING_EAST) {
@@ -387,7 +389,7 @@ public class RenderMPM extends RenderPlayer {
 			return false;
 		}
 
-		return true;
+		return requireSuper;
 	}
 
 	public void renderHelmet(EntityPlayer entityPlayer) {
