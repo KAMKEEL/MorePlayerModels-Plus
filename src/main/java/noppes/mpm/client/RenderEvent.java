@@ -112,6 +112,15 @@ public class RenderEvent {
 
 	@SubscribeEvent(priority=EventPriority.LOWEST)
 	public void special(RenderPlayerEvent.Specials.Pre event){
+		if(data.animation == EnumAnimation.BOW){
+			float ticks = (event.entityPlayer.ticksExisted - data.animationStart) / 10f;
+			if(ticks > 1)
+				ticks = 1;
+			float scale = (2 - data.body.scaleY);
+			GL11.glTranslatef(0, 12 * scale * 0.065f, 0);
+			GL11.glRotatef(60 * ticks, 1, 0, 0);
+			GL11.glTranslatef(0, -12 * scale * 0.065f, 0);
+		}
 		event.renderItem = false;
 		event.renderHelmet = false;
 		renderer.renderItem(event.entityPlayer);

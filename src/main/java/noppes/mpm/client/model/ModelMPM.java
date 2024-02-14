@@ -359,11 +359,24 @@ public class ModelMPM extends ModelBiped{
 		}
     	currentlyPlayerTexture = true;
         this.setRotationAngles(par2, par3, par4, par5, par6, par7, par1Entity);
-        renderHead(par1Entity, par7);
+		if(data.animation == EnumAnimation.BOW){
+			GL11.glPushMatrix();
+			float ticks = (par1Entity.ticksExisted - data.animationStart) / 10f;
+			if(ticks > 1)
+				ticks = 1;
+			float scale = (2 - data.body.scaleY + data.getLegsY());
+			GL11.glTranslatef(0, 12 * scale * par7, 0);
+			GL11.glRotatef(60 * ticks, 1, 0, 0);
+			GL11.glTranslatef(0, -12 * scale * par7, 0);
+		}
+		renderHead(par1Entity, par7);
         renderArms(par1Entity, par7,false);
         renderBody(par1Entity, par7);
 		renderCloak(par1Entity, par7);
-        renderLegs(par1Entity, par7);
+		if(data.animation == EnumAnimation.BOW){
+			GL11.glPopMatrix();
+		}
+		renderLegs(par1Entity, par7);
     }
     @Override
     public void setRotationAngles(float par1, float par2, float par3, float par4, float par5, float par6, Entity entity)
@@ -426,9 +439,6 @@ public class ModelMPM extends ModelBiped{
 		}
 		else if(data.animation == EnumAnimation.DANCING){
 			AniDancing.setRotationAngles(par1, par2, par3, par4, par5, par6, entity, this);
-		}
-		else if(data.animation == EnumAnimation.BOW){
-			AniBow.setRotationAngles(par1, par2, par3, par4, par5, par6, entity, this, data);
 		}
 		else if(data.animation == EnumAnimation.YES){
 			AniYes.setRotationAngles(par1, par2, par3, par4, par5, par6, entity, this, data);
