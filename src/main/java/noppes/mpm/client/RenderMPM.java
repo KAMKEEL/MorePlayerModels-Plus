@@ -334,61 +334,60 @@ public class RenderMPM extends RenderPlayer {
 	@Override
 	protected void rotateCorpse(EntityLivingBase par1EntityLiving, float par2, float par3, float par4)
 	{
-		byte options = shouldRotateCorpse(par1EntityLiving, par2, par3, par4, false);
-		if(options != 2){
+		boolean options = shouldRotateCorpse(par1EntityLiving, par2, par3, par4, false);
+		if(options)
 			super.rotateCorpse(par1EntityLiving, par2, par3, par4);
-		}
 	}
 
-	// 0 -- Did Nothing
+	// 0 -- Requires Super
 	// 1 -- Did Something
-	// 2 -- Need Crawling Fix
-	public byte shouldRotateCorpse(EntityLivingBase par1EntityLiving, float par2, float par3, float par4, boolean manual) {
+	// 2 -- Crawling Fix
+	public boolean shouldRotateCorpse(EntityLivingBase par1EntityLiving, float par2, float par3, float par4, boolean manual) {
 		EntityPlayer player = (EntityPlayer) par1EntityLiving;
 		if(!player.isEntityAlive()){
-			return 0;
+			return true;
 		}
-		if (player.ridingEntity != null) {
+
+		if(player.ridingEntity != null){
 			GL11.glTranslatef(0, data.getLegsY(), 0);
 		}
-		if (data.animation == EnumAnimation.SITTING) {
+		if (data.animation == EnumAnimation.SITTING){
 			GL11.glTranslatef(0, -0.6f + data.getLegsY(), 0);
-			return 1;
 		}
+
 		if (data.animation == EnumAnimation.SLEEPING_EAST) {
 			GL11.glRotatef(0, 0.0F, 1.0F, 0.0F);
 			GL11.glTranslatef(1.6f + data.offsetY(), 0.05f, 0);
 			GL11.glRotatef(getDeathMaxRotation(player), 0.0F, 0.0F, 1.0F);
 			GL11.glRotatef(270F, 0.0F, 1.0F, 0.0F);
-			return 1;
+			return false;
 		} else if (data.animation == EnumAnimation.SLEEPING_NORTH) {
 			GL11.glRotatef(90, 0.0F, 1.0F, 0.0F);
 			GL11.glTranslatef(1.6f + data.offsetY(), 0.05f, 0);
 			GL11.glRotatef(getDeathMaxRotation(player), 0.0F, 0.0F, 1.0F);
 			GL11.glRotatef(270F, 0.0F, 1.0F, 0.0F);
-			return 1;
+			return false;
 		} else if (data.animation == EnumAnimation.SLEEPING_WEST) {
 			GL11.glRotatef(180, 0.0F, 1.0F, 0.0F);
 			GL11.glTranslatef(1.6f + data.offsetY(), 0.05f, 0);
 			GL11.glRotatef(getDeathMaxRotation(player), 0.0F, 0.0F, 1.0F);
 			GL11.glRotatef(270F, 0.0F, 1.0F, 0.0F);
-			return 1;
+			return false;
 		} else if (data.animation == EnumAnimation.SLEEPING_SOUTH) {
 			GL11.glRotatef(270, 0.0F, 1.0F, 0.0F);
 			GL11.glTranslatef(1.6f + data.offsetY(), 0.05f, 0);
 			GL11.glRotatef(getDeathMaxRotation(player), 0.0F, 0.0F, 1.0F);
 			GL11.glRotatef(270F, 0.0F, 1.0F, 0.0F);
-			return 1;
+			return false;
 		} else if (data.animation == EnumAnimation.CRAWLING) {
 			GL11.glTranslatef(0, 0.2f, 0);
 			super.rotateCorpse(par1EntityLiving, par2, par3, par4);
 			GL11.glTranslatef(0, 0f, 1.5f);
 			GL11.glRotatef(-90, 1.0F, 0F, 0.0F);
-			return 2;
+			return false;
 		}
-		else {
-			return 0;
-		}
+
+		return true;
 	}
 
 	public void renderHelmet(EntityPlayer entityPlayer) {
