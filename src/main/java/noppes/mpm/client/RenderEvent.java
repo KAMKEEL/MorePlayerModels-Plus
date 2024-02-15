@@ -28,7 +28,7 @@ import org.lwjgl.opengl.GL11;
 public class RenderEvent {
 	public static RenderEvent Instance;
 	public static RenderMPM renderer = new RenderMPM();
-	public static long lastSkinTick = 0;
+	public static long lastSkinTick = -10;
 	public final static long MaxSkinTick = 6;
 	private ModelData data;
 

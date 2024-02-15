@@ -4,6 +4,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
+import cpw.mods.fml.common.network.FMLNetworkEvent;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
@@ -13,6 +14,7 @@ import net.minecraft.entity.MPMEntityUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import noppes.mpm.*;
 import noppes.mpm.client.fx.EntityEnderFX;
 import noppes.mpm.client.fx.EntityRainbowFX;
@@ -120,6 +122,12 @@ public class ClientEventHandler {
 		if (mc.thePlayer == null) return;
 
 		RenderEvent.lastSkinTick++;
+	}
+
+	@SubscribeEvent
+	public void world(FMLNetworkEvent.ClientConnectedToServerEvent event){
+		// Reset Cache on Join World
+		ClientCacheHandler.clearCache();
 	}
 
 	@SubscribeEvent

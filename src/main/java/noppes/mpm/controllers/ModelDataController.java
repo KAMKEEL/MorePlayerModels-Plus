@@ -67,7 +67,6 @@ public class ModelDataController {
 		try {
 			File file = new File(saveDir, filename);
 			if(file.exists()){
-				System.out.println("Found File for: " + filename);
 				return loadNBTData(file);
 			}
 		} catch (Exception e) {
