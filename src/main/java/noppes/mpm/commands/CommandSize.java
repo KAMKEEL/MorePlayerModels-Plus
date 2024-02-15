@@ -13,11 +13,11 @@ import noppes.mpm.constants.EnumPackets;
 
 import java.util.List;
 
-public class CommandSetUrl extends MpmCommandInterface {
+public class CommandSize extends MpmCommandInterface {
 
 	@Override
 	public String getCommandName() {
-		return "seturl";
+		return "setsize";
 	}
 
 	@Override
@@ -41,27 +41,23 @@ public class CommandSetUrl extends MpmCommandInterface {
 
 		if(player == null)
 			throw new PlayerNotFoundException();
-		
-		String url = var2[i];
-		i++;
-		for(; i < var2.length; i++){
-			url += " " + var2[i];
-		}
-		if(url.equalsIgnoreCase("clear"))
-			url = "";
+
+		int val = 5;
+		try {
+			val = Integer.parseInt(var2[i]);
+		} catch (Exception ignored){}
+
+		if(val > 10 || val <= 0)
+			val = 5;
 
 		ModelData data = PlayerDataController.instance.getPlayerData(player);
-		data.url = url;
-		data.cloakLoaded = false;
-		data.cloakInnit = false;
-		data.resourceLoaded = false;
-		data.resourceInit = false;
+		data.size = val;
 		Server.sendAssociatedData(player, EnumPackets.SEND_PLAYER_DATA, player.getCommandSenderName(), data.writeToNBT());
 	}
 
 	@Override
 	public String getCommandUsage(ICommandSender icommandsender) {
-		return "/seturl [@p] url (to go back to default /seturl clear)";
+		return "/setcloak [@p] url (to go back to default /setcloak clear)";
 	}
 
 	@Override

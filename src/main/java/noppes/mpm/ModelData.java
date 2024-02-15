@@ -23,39 +23,52 @@ import java.util.concurrent.Executors;
 
 
 public class ModelData extends ModelDataShared implements IExtendedEntityProperties{
-	public static ExecutorService saveExecutor = Executors.newSingleThreadExecutor();
-	public boolean loaded = false;
-	public boolean playerLoaded = false;
+	public static ExecutorService saveExecutor = Executors.newFixedThreadPool(1);
+
+	public boolean resourceInit = false;
+	public boolean resourceLoaded = false;
+	public boolean cloakInnit = false;
 	public boolean cloakLoaded = false;
-	public boolean fixSit = false;
-	public EntityPlayer player = null;
-	
-	public int rev = MorePlayerModels.Revision;
+
+	public boolean didSit = false;
+
+	public boolean webapiActive = false;
+	public boolean webapiInit = false;
+
+	public ResourceLocation cloakObject = null;
 
 	public ItemStack backItem;
-	
+
 	public int inLove = 0;
-	public int animationTime = 0;
-	
+	public int animationTime = -1;
+
 	public EnumAnimation animation = EnumAnimation.NONE;
+	public EnumAnimation prevAnimation = EnumAnimation.NONE;
 	public int animationStart = 0;
-	
+	public long lastEdited = System.currentTimeMillis();
+
 	public short soundType = 0;
-	public ResourceLocation cloakTexture;
+	public double prevPosX, prevPosY, prevPosZ;
+	public EntityPlayer player = null;
+
+	public int rev = MorePlayerModels.Revision;
 
 	public byte urlType = 0;	//	0:url, 1:url64
-	public String url= "";
-	public String cloakUrl = "";
-	public String displayName = "";
 	public int modelType = 0; 	// 	0: Steve, 1: Steve64, 2: Alex
+	public int size = 5;
+
+	public String url= "";
+	public String cloakUrl= "";
+	public String displayName = "";
 
 	public ModelData(){
 	}
 	public NBTTagCompound writeToNBT(){
 		NBTTagCompound compound = super.writeToNBT();
 		compound.setInteger("Revision", rev);
-		
+
 		compound.setInteger("Animation", animation.ordinal());
+		compound.setInteger("Size", size);
 		
 		compound.setShort("SoundType", soundType);
 		compound.setString("DisplayName", displayName);
@@ -65,35 +78,40 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 		compound.setByte("UrlType", urlType);
 		compound.setString("CloakUrl", cloakUrl);
 
+		compound.setLong("LastEdited", lastEdited);
+
 		return compound;
 	}
 	
 	public void readFromNBT(NBTTagCompound compound){
-		super.readFromNBT(compound);
-		rev = compound.getInteger("Revision");
-		
-		soundType = compound.getShort("SoundType");
-		displayName = compound.getString("DisplayName");
-		if(player != null)
-			player.refreshDisplayName();
-		
 		String prevUrl = url;
 		String prevCloakUrl = cloakUrl;
-		byte prevUrlType = urlType;
-		int prevModelType = modelType;
+		super.readFromNBT(compound);
+		rev = compound.getInteger("Revision");
+		size = compound.getInteger("Size");
+		if(size <= 0)
+			size = 5;
+		if(size > 10)
+			size = 5;
+
+		soundType = compound.getShort("SoundType");
+		lastEdited = compound.getLong("LastEdited");
+		displayName = compound.getString("DisplayName");
+		player.refreshDisplayName();
+		setAnimation(compound.getInteger("Animation"));
+
 		url = compound.getString("CustomSkinUrl");
 		urlType = compound.getByte("UrlType");
 		modelType = compound.getInteger("ModelType");
 		cloakUrl = compound.getString("CloakUrl");
 
-		setAnimation(compound.getInteger("Animation"));
-		
-		if(!prevUrl.equals(url) || prevUrlType != urlType || prevModelType != modelType){
-			loaded = false;
-			playerLoaded = false;
+		if(!prevUrl.equals(url)) {
+			resourceInit = false;
+			resourceLoaded = false;
 		}
 		if(!prevCloakUrl.equals(cloakUrl)){
 			cloakLoaded = false;
+			cloakInnit = false;
 		}
 	}
 
@@ -102,9 +120,27 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 			animation = EnumAnimation.values()[i];
 		else
 			animation = EnumAnimation.NONE;
-		
+		setAnimation(animation);
+	}
+
+	public void setAnimation(EnumAnimation ani) {
+		animationTime = -1;
+		animation = ani;
+		lastEdited = System.currentTimeMillis();
+
 		if(animation == EnumAnimation.WAVING)
 			animationTime = 80;
+
+		if(animation == EnumAnimation.YES || animation == EnumAnimation.NO)
+			animationTime = 60;
+
+		if(animation == EnumAnimation.SITTING)
+			didSit = true;
+
+		if(player == null || ani == EnumAnimation.NONE)
+			animationStart = -1;
+		else
+			animationStart = player.ticksExisted;
 	}
 
 	public EntityLivingBase getEntity(World world, EntityPlayer player){
@@ -179,9 +215,9 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 	public ModelData copy(){
 		ModelData data = new ModelData();
 		data.readFromNBT(this.writeToNBT());
-		data.playerLoaded = playerLoaded;
+		data.resourceLoaded = false;
+		data.cloakLoaded = false;
 		data.player = player;
-		data.cloakLoaded = cloakLoaded;
 		return data;
 	}
 
@@ -252,7 +288,7 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 
 	public void setExtra(EntityLivingBase entity, String key, String value){
 		key = key.toLowerCase();
-		
+
 		if(key.equals("breed") && EntityList.getEntityString(entity).equals("doggystyle.Dog")){
 			try {
 				Method method = entity.getClass().getMethod("setBreedID", int.class);
@@ -262,7 +298,7 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 				extra.setString("EntityData21", comp.getString("EntityData21"));
 	    		clearEntity();
 			} catch (Exception e) {
-				
+
 			}
 		}
 	}

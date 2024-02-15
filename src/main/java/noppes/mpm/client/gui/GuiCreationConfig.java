@@ -80,12 +80,13 @@ public class GuiCreationConfig extends GuiCreationScreenInterface implements ITe
     		List<EntityPlayer> players = mc.theWorld.playerEntities;
     		for(EntityPlayer player : players){
     			ModelData data = PlayerDataController.instance.getPlayerData(player);
-    			data.playerLoaded = false;
+    			data.resourceInit = false;
 				data.cloakLoaded = false;
-    			data.loaded = false;
+				data.cloakInnit = false;
+    			data.resourceLoaded = false;
     		}
 			ClientCacheHandler.clearSkinData();
-    	}
+		}
     	if(button.id == 47){
 			ConfigClient.EnablePOV = button.getValue() == 1;
 			ConfigClient.EnablePOVProperty.set(ConfigClient.EnablePOV);
@@ -119,7 +120,8 @@ public class GuiCreationConfig extends GuiCreationScreenInterface implements ITe
     	}
 		if(button.id == 254){
 			playerdata.urlType = (byte) button.getValue();
-			playerdata.loaded = false;
+			playerdata.resourceLoaded = false;
+			playerdata.resourceInit = false;
 		}
     }
     
@@ -128,10 +130,8 @@ public class GuiCreationConfig extends GuiCreationScreenInterface implements ITe
 	public void unFocused(GuiNpcTextField guiNpcTextField) {
 		if(guiNpcTextField.id == 52){
 			playerdata.url = guiNpcTextField.getText();
-			if(playerdata.url.trim().equals("")){
-				playerdata.playerLoaded = false;
-			}
-			playerdata.loaded = false;
+			playerdata.resourceLoaded = false;
+			playerdata.resourceInit = false;
 		}
 	}
 }

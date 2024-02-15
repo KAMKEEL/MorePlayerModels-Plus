@@ -3,6 +3,9 @@ package noppes.mpm;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.entity.PlaySoundAtEntityEvent;
@@ -15,6 +18,23 @@ public class ServerEventHandler {
 	@SubscribeEvent
 	public void chat(ServerChatEvent event){
 		Server.sendToAll(EnumPackets.CHAT_EVENT, event.player.getCommandSenderName(), event.message);
+	}
+
+	@SubscribeEvent
+	public void playerTracking(PlayerEvent.StartTracking event){
+		if(!(event.target instanceof EntityPlayer))
+			return;
+		EntityPlayer target = (EntityPlayer) event.target;
+		EntityPlayerMP player = (EntityPlayerMP) event.entityPlayer;
+
+		ModelData data = PlayerDataController.instance.getPlayerData(target);
+		Server.sendData(player, EnumPackets.SEND_PLAYER_DATA, target.getCommandSenderName(), data.writeToNBT());
+
+		ItemStack back = player.inventory.mainInventory[0];
+		if(back != null)
+			Server.sendData(player, EnumPackets.BACK_ITEM_UPDATE, target.getCommandSenderName(), back.writeToNBT(new NBTTagCompound()));
+		else
+			Server.sendData(player, EnumPackets.BACK_ITEM_REMOVE, target.getCommandSenderName());
 	}
 	
 	@SubscribeEvent

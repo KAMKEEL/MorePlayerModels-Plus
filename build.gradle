@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
         maven {
             name = "forge"
-            url = "http://files.minecraftforge.net/maven"
+            url = "https://maven.minecraftforge.net/"
         }
         maven {
             name = "sonatype"
@@ -13,6 +13,10 @@ buildscript {
             name = "jitpack"
             url = "https://jitpack.io"
         }
+        maven {
+            name = "gt"
+            url = "https://gregtech.mechaenetia.com/"
+        }
     }
     dependencies {
         classpath 'com.github.GTNewHorizons:ForgeGradle:1.2.11'
@@ -21,7 +25,7 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "3.0"
+version = "3.2"
 group= "kamkeel.mpmplus" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "MorePlayerModels-Plus"
 
@@ -68,5 +72,14 @@ processResources
                 exclude 'mcmod.info'
             }
         }
+
+
+jar {
+    manifest {
+        attributes(
+                'FMLAT': "moreplayermodels_at.cfg",
+        )
+    }
+}
 
 sourceSets {main { output.resourcesDir = output.classesDir }}

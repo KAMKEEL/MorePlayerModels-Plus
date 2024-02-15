@@ -29,8 +29,8 @@ import org.lwjgl.opengl.GL11;
 public class RenderEvent {
 	public static RenderEvent Instance;
 	public static RenderMPM renderer = new RenderMPM();
-	public static long lastSkinTick = 0;
-	public static long lastCapeTick = 0;
+	public static long lastSkinTick = -30;
+	public static long lastCapeTick = -30;
 	public final static long MaxSkinTick = 6;
 	private ModelData data;
 
@@ -47,15 +47,26 @@ public class RenderEvent {
 		}
 		if(!(event.entity instanceof AbstractClientPlayer))
 			return;
-
 		EntityPlayer player = event.entityPlayer;
 		data = PlayerDataController.instance.getPlayerData(player);
 		renderer.setModelData(data, player);
 		setModels(event.renderer);
-		if(!data.loaded && lastSkinTick > MaxSkinTick){
+
+		if(data.isSleeping()){
+			if(data.animation == EnumAnimation.SLEEPING_EAST)
+				player.renderYawOffset = player.prevRenderYawOffset = -90;
+			if(data.animation == EnumAnimation.SLEEPING_WEST)
+				player.renderYawOffset = player.prevRenderYawOffset = 90;
+			if(data.animation == EnumAnimation.SLEEPING_NORTH)
+				player.renderYawOffset = player.prevRenderYawOffset = 180;
+			if(data.animation == EnumAnimation.SLEEPING_SOUTH)
+				player.renderYawOffset = player.prevRenderYawOffset = 0;
+		}
+
+		if(!data.resourceInit && lastSkinTick > MaxSkinTick){
 			renderer.loadResource((AbstractClientPlayer) player);
 			lastSkinTick = 0;
-			data.loaded = true;
+			data.resourceInit = true;
 		}
 		if(!(event.renderer instanceof RenderMPM)){
 			RenderManager.instance.entityRenderMap.put(EntityPlayer.class, renderer);
@@ -82,6 +93,12 @@ public class RenderEvent {
 		if(event.entity.riddenByEntity == hideNameSheep){
 			event.entity.riddenByEntity = null;
 		}
+
+		AbstractClientPlayer player = (AbstractClientPlayer) event.entity;
+		ModelData data = PlayerDataController.instance.getPlayerData(player);
+		if(data.isSleeping()){
+			player.renderYawOffset = player.prevRenderYawOffset = player.rotationYaw;
+		}
 	}
 
 	private void setModels(RenderPlayer render){
@@ -93,7 +110,7 @@ public class RenderEvent {
 		MPMRendererHelper.setMainModel(render, renderer.modelBipedMain);
 	}
 
-	@SubscribeEvent
+	@SubscribeEvent(priority=EventPriority.LOWEST)
 	public void special(RenderPlayerEvent.Specials.Pre event){
 		if(data.animation == EnumAnimation.BOW){
 			float ticks = (event.entityPlayer.ticksExisted - data.animationStart) / 10f;
@@ -111,13 +128,24 @@ public class RenderEvent {
 		if(ConfigClient.EnableBackItem)
 			renderer.renderBackitem(event.entityPlayer);
 		if(event.renderCape){
-			if(!data.cloakLoaded && RenderEvent.lastCapeTick > RenderEvent.MaxSkinTick){
-				data.cloakTexture = renderer.loadCapeResource((AbstractClientPlayer) event.entityPlayer);
+			if(!data.cloakInnit && RenderEvent.lastCapeTick > RenderEvent.MaxSkinTick){
+				data.cloakObject = renderer.loadCapeResource((AbstractClientPlayer) event.entityPlayer);
 				RenderEvent.lastCapeTick = 0;
-				data.cloakLoaded = true;
+				data.cloakInnit = true;
 			}
 		}
 		GL11.glTranslatef(0, data.getBodyY(), 0); // Cape Fix
+	}
+
+	@SubscribeEvent()
+	public void hand(RenderHandEvent event){
+		Minecraft mc = Minecraft.getMinecraft();
+		data = PlayerDataController.instance.getPlayerData(mc.thePlayer);
+		Entity entity = data.getEntity(mc.thePlayer);
+		if(entity != null || data.isSleeping() || data.animation == EnumAnimation.BOW && mc.thePlayer.getHeldItem() == null){
+			event.setCanceled(true);
+			return;
+		}
 	}
 
 	@SubscribeEvent

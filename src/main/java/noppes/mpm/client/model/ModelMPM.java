@@ -12,9 +12,9 @@ import net.minecraft.util.MathHelper;
 import noppes.mpm.ModelData;
 import noppes.mpm.ModelPartConfig;
 import noppes.mpm.ModelPartData;
+import noppes.mpm.PlayerDataController;
 import noppes.mpm.client.ClientProxy;
-import noppes.mpm.client.model.animation.AniCrawling;
-import noppes.mpm.client.model.animation.AniHug;
+import noppes.mpm.client.model.animation.*;
 import noppes.mpm.client.model.part.ModelLimbWear;
 import noppes.mpm.client.model.part.arm.ModelClaws;
 import noppes.mpm.client.model.part.body.*;
@@ -65,7 +65,7 @@ public class ModelMPM extends ModelBiped{
 	private final ModelScaleRenderer solidRightLegWear;
 
 	public boolean currentlyPlayerTexture;
-	
+
 	public boolean isArmor;
 	public boolean isAlexArmor;
 	public boolean x64 = false;
@@ -359,46 +359,47 @@ public class ModelMPM extends ModelBiped{
 		}
     	currentlyPlayerTexture = true;
         this.setRotationAngles(par2, par3, par4, par5, par6, par7, par1Entity);
-
-
-    	if(data.animation == EnumAnimation.BOW){
-    		GL11.glPushMatrix();
-    		float ticks = (par1Entity.ticksExisted - data.animationStart) / 10f;
-    		if(ticks > 1)
-    			ticks = 1;
-    		float scale = (2 - data.body.scaleY + data.getLegsY());
-    		GL11.glTranslatef(0, 12 * scale * par7, 0);
-    		GL11.glRotatef(60 * ticks, 1, 0, 0);
-    		GL11.glTranslatef(0, -12 * scale * par7, 0);
-    	}
-        renderHead(par1Entity, par7);
+		if(data.animation == EnumAnimation.BOW){
+			GL11.glPushMatrix();
+			float ticks = (par1Entity.ticksExisted - data.animationStart) / 10f;
+			if(ticks > 1)
+				ticks = 1;
+			float scale = (2 - data.body.scaleY + data.getLegsY());
+			GL11.glTranslatef(0, 12 * scale * par7, 0);
+			GL11.glRotatef(60 * ticks, 1, 0, 0);
+			GL11.glTranslatef(0, -12 * scale * par7, 0);
+		}
+		renderHead(par1Entity, par7);
         renderArms(par1Entity, par7,false);
         renderBody(par1Entity, par7);
 		renderCloak(par1Entity, par7);
-    	if(data.animation == EnumAnimation.BOW){
-    		GL11.glPopMatrix();
-    	}
-        renderLegs(par1Entity, par7);
+		if(data.animation == EnumAnimation.BOW){
+			GL11.glPopMatrix();
+		}
+		renderLegs(par1Entity, par7);
     }
     @Override
     public void setRotationAngles(float par1, float par2, float par3, float par4, float par5, float par6, Entity entity)
     {
-
+		EntityPlayer player = (EntityPlayer) entity;
+		data = PlayerDataController.instance.getPlayerData(player);
 		// Fixes Sitting Animation when Disabling Sitting
-		if(data.fixSit){
+		if(data.didSit && data.animation != EnumAnimation.SITTING){
 			isRiding = false;
-			data.fixSit = false;
+			data.didSit = false;
 		}
 
 		if(!isRiding)
 			isRiding = data.animation == EnumAnimation.SITTING;
 
-    	if(isSneak && (data.animation == EnumAnimation.CRAWLING || data.isSleeping()))
-    		isSneak = false;
-    	this.bipedBody.rotationPointZ = 0;
-    	this.bipedBody.rotationPointY = 0;
+		if(isSneak && (data.animation == EnumAnimation.CRAWLING || data.isSleeping()))
+			isSneak = false;
+
+		this.bipedBody.rotationPointZ = 0;
+		this.bipedBody.rotationPointY = 0;
 		this.bipedHead.rotateAngleZ = 0;
 		this.bipedHeadwear.rotateAngleZ = 0;
+
 		this.bipedLeftLeg.rotateAngleX = 0;
 		this.bipedLeftLeg.rotateAngleY = 0;
 		this.bipedLeftLeg.rotateAngleZ = 0;
@@ -433,15 +434,23 @@ public class ModelMPM extends ModelBiped{
     		AniHug.setRotationAngles(par1, par2, par3, par4, par5, par6, entity, this);
     	else if(data.animation == EnumAnimation.CRAWLING)
     		AniCrawling.setRotationAngles(par1, par2, par3, par4, par5, par6, entity, this);
-    	else if(data.animation == EnumAnimation.WAVING){
-    		bipedRightArm.rotateAngleX = -0.1f;
-    		bipedRightArm.rotateAngleY = 0;
-    		bipedRightArm.rotateAngleZ = (float) (Math.PI - 1f  - Math.sin(entity.ticksExisted * 0.27f) * 0.5f );
-    	}
+		else if(data.animation == EnumAnimation.WAVING){
+			AniWaving.setRotationAngles(par1, par2, par3, par4, par5, par6, entity, this);
+		}
+		else if(data.animation == EnumAnimation.DANCING){
+			AniDancing.setRotationAngles(par1, par2, par3, par4, par5, par6, entity, this);
+		}
+		else if(data.animation == EnumAnimation.YES){
+			AniYes.setRotationAngles(par1, par2, par3, par4, par5, par6, entity, this, data);
+		}
+		else if(data.animation == EnumAnimation.NO){
+			AniNo.setRotationAngles(par1, par2, par3, par4, par5, par6, entity, this, data);
+		}
+		else if(data.animation == EnumAnimation.POINT){
+			AniPoint.setRotationAngles(par1, par2, par3, par4, par5, par6, entity, this);
+		}
     	else if(isSneak)
             this.bipedBody.rotateAngleX = 0.5F / data.body.scaleY;
-    	
-    	
     }
 
     public void setLivingAnimations(EntityLivingBase par1EntityLivingBase, float par2, float par3, float par4) 
@@ -680,9 +689,9 @@ public class ModelMPM extends ModelBiped{
 	public void renderCloak(Entity npc, float f){
 		AbstractClientPlayer player = (AbstractClientPlayer) npc;
 		if(!player.isInvisible() && !data.cloakUrl.isEmpty() && !isArmor && data.entityClass == null && data.cloak == 1) {
-			if(data.cloakTexture != null){
+			if(data.cloakObject != null){
 				currentlyPlayerTexture = false;
-				Minecraft.getMinecraft().getTextureManager().bindTexture(data.cloakTexture);
+				Minecraft.getMinecraft().getTextureManager().bindTexture(data.cloakObject);
 				GL11.glPushMatrix();
 				GL11.glTranslatef(0.0f, 0.0f, 0.125f);
 				final double d3 = player.field_71091_bM + (player.field_71094_bP - player.field_71091_bM) * 0.0625 - (player.prevPosX + (player.posX - player.prevPosX) * 0.0625);

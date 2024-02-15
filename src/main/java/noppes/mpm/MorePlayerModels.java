@@ -31,13 +31,13 @@ public class MorePlayerModels {
 
 	@SidedProxy(clientSide = "noppes.mpm.client.ClientProxy", serverSide = "noppes.mpm.CommonProxy")
 	public static CommonProxy proxy;
-	public final static String VERSION = "3.0";
+	public final static String VERSION = "3.1";
 
 	public static FMLEventChannel Channel;
 
 	public static MorePlayerModels instance;
 
-	public static int Revision = 6;
+	public static int Revision = 7;
 	
 	public static File dir;
 	
@@ -108,6 +108,10 @@ public class MorePlayerModels {
 	public void serverstart(FMLServerStartingEvent event) {
 		event.registerServerCommand(new CommandLove());
 		event.registerServerCommand(new CommandSing());
+		event.registerServerCommand(new CommandDeath());
+		event.registerServerCommand(new CommandYes());
+		event.registerServerCommand(new CommandNo());
+		event.registerServerCommand(new CommandPoint());
 		event.registerServerCommand(new CommandSleep());
 		event.registerServerCommand(new CommandHug());
 		event.registerServerCommand(new CommandCrawl());
@@ -119,10 +123,12 @@ public class MorePlayerModels {
 		event.registerServerCommand(new CommandCry());
 		event.registerServerCommand(new CommandAngry());
 		event.registerServerCommand(new CommandSetUrl());
+		event.registerServerCommand(new CommandSetCloak());
 		event.registerServerCommand(new CommandScale());
 		event.registerServerCommand(new CommandSetModel());
 		event.registerServerCommand(new CommandSetName());
 		event.registerServerCommand(new CommandMPM());
+		event.registerServerCommand(new CommandSize());
 
 		GameRules rules = event.getServer().worldServerForDimension(0).getGameRules();
 		if(!rules.hasRule("mpmAllowEntityModels"))

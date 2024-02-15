@@ -23,9 +23,9 @@ public class EntityRendererAlt extends EntityRenderer{
     		return;
     	}
     	ModelData data = PlayerDataController.instance.getPlayerData(player);
-		player.yOffset -= data.offsetY();
+		player.yOffset -= (float) (data.offsetY() + (-1.615 + data.size * 0.315));
 		if(data.animation == EnumAnimation.SITTING)
-			player.yOffset += 0.5f - data.getLegsY() * 0.8;
+			player.yOffset += (float) (0.5f - data.getLegsY() * 0.8);
 		if(data.isSleeping() || data.animation == EnumAnimation.CRAWLING)
 			player.yOffset = 2.8f - (player.isSneaking()?0.125f:0);
 		if(player.yOffset < 1.4f && isBlocked(player))
@@ -49,9 +49,9 @@ public class EntityRendererAlt extends EntityRenderer{
     	}
     	ModelData data = PlayerDataController.instance.getPlayerData(player);
 
-		float offset = -data.offsetY();
+		float offset = -data.offsetY() - (-1.615f + data.size * 0.315f);
 		if(data.animation == EnumAnimation.SITTING){
-			offset += 0.5f - data.getLegsY() * 0.8;
+			offset += (float) (0.5f - data.getLegsY() * 0.8);
 		}
 		if(data.isSleeping() || data.animation == EnumAnimation.CRAWLING)
 			offset = 1.18f;
