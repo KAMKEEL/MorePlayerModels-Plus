@@ -12,7 +12,9 @@ import net.minecraft.util.MathHelper;
 import noppes.mpm.ModelData;
 import noppes.mpm.ModelPartConfig;
 import noppes.mpm.ModelPartData;
+import noppes.mpm.client.ClientCacheHandler;
 import noppes.mpm.client.ClientProxy;
+import noppes.mpm.client.ImageData;
 import noppes.mpm.client.model.animation.*;
 import noppes.mpm.client.model.part.ModelLimbWear;
 import noppes.mpm.client.model.part.arm.ModelClaws;
@@ -686,42 +688,48 @@ public class ModelMPM extends ModelBiped{
 	public void renderCloak(Entity npc, float f){
 		AbstractClientPlayer player = (AbstractClientPlayer) npc;
 		if(!player.isInvisible() && !data.cloakUrl.isEmpty() && !isArmor && data.entityClass == null && data.cloak == 1) {
-			if(data.cloakObject != null){
-				currentlyPlayerTexture = false;
-				Minecraft.getMinecraft().getTextureManager().bindTexture(data.cloakObject);
-				GL11.glPushMatrix();
-				GL11.glTranslatef(0.0f, 0.0f, 0.125f);
-				final double d3 = player.field_71091_bM + (player.field_71094_bP - player.field_71091_bM) * 0.0625 - (player.prevPosX + (player.posX - player.prevPosX) * 0.0625);
-				final double d4 = player.field_71096_bN + (player.field_71095_bQ - player.field_71096_bN) * 0.0625 - (player.prevPosY + (player.posY - player.prevPosY) * 0.0625);
-				final double d5 = player.field_71097_bO + (player.field_71085_bR - player.field_71097_bO) * 0.0625 - (player.prevPosZ + (player.posZ - player.prevPosZ) * 0.0625);
-				final float f4 = player.prevRenderYawOffset + (player.renderYawOffset - player.prevRenderYawOffset) * 0.0625f;
-				final double d6 = MathHelper.sin(f4 * 3.1415927f / 180.0f);
-				final double d7 = -MathHelper.cos(f4 * 3.1415927f / 180.0f);
-				float f5 = (float) d4 * 10.0f;
-				if (f5 < -6.0f) {
-					f5 = -6.0f;
-				}
-				if (f5 > 32.0f) {
-					f5 = 32.0f;
-				}
-				float f6 = (float) (d3 * d6 + d5 * d7) * 100.0f;
-				final float f7 = (float) (d3 * d7 - d5 * d6) * 100.0f;
-				if (f6 < 0.0f) {
-					f6 = 0.0f;
-				}
-				final float f8 = player.prevCameraYaw + (player.cameraYaw - player.prevCameraYaw) * 0.0625f;
-				f5 += MathHelper.sin((player.prevDistanceWalkedModified + (player.distanceWalkedModified - player.prevDistanceWalkedModified) * 0.0625f) * 6.0f) * 32.0f * f8;
-				if (player.isSneaking() && data.animation != EnumAnimation.CRAWLING) {
-					f5 += 25.0f;
-				}
-				GL11.glRotatef(6.0f + f6 / 2.0f + f5, 1.0f, 0.0f, 0.0f);
-				GL11.glRotatef(f7 / 2.0f, 0.0f, 0.0f, 1.0f);
-				GL11.glRotatef(-f7 / 2.0f, 0.0f, 1.0f, 0.0f);
-				GL11.glTranslatef(0.0f, 0.0f, 0.125f);
-				GL11.glRotatef(180.0f, 0.0f, 1.0f, 0.0f);
-				cape.cape.render(0.0625F);
-				GL11.glPopMatrix();
+			currentlyPlayerTexture = false;
+			ImageData imageData = ClientCacheHandler.getCapeTexture(data.cloakUrl);
+			if (!imageData.imageLoaded())
+				return;
+
+			try {
+				imageData.bindTexture();
+			} catch (Exception e) { return;
 			}
+
+			GL11.glPushMatrix();
+			GL11.glTranslatef(0.0f, 0.0f, 0.125f);
+			final double d3 = player.field_71091_bM + (player.field_71094_bP - player.field_71091_bM) * 0.0625 - (player.prevPosX + (player.posX - player.prevPosX) * 0.0625);
+			final double d4 = player.field_71096_bN + (player.field_71095_bQ - player.field_71096_bN) * 0.0625 - (player.prevPosY + (player.posY - player.prevPosY) * 0.0625);
+			final double d5 = player.field_71097_bO + (player.field_71085_bR - player.field_71097_bO) * 0.0625 - (player.prevPosZ + (player.posZ - player.prevPosZ) * 0.0625);
+			final float f4 = player.prevRenderYawOffset + (player.renderYawOffset - player.prevRenderYawOffset) * 0.0625f;
+			final double d6 = MathHelper.sin(f4 * 3.1415927f / 180.0f);
+			final double d7 = -MathHelper.cos(f4 * 3.1415927f / 180.0f);
+			float f5 = (float) d4 * 10.0f;
+			if (f5 < -6.0f) {
+				f5 = -6.0f;
+			}
+			if (f5 > 32.0f) {
+				f5 = 32.0f;
+			}
+			float f6 = (float) (d3 * d6 + d5 * d7) * 100.0f;
+			final float f7 = (float) (d3 * d7 - d5 * d6) * 100.0f;
+			if (f6 < 0.0f) {
+				f6 = 0.0f;
+			}
+			final float f8 = player.prevCameraYaw + (player.cameraYaw - player.prevCameraYaw) * 0.0625f;
+			f5 += MathHelper.sin((player.prevDistanceWalkedModified + (player.distanceWalkedModified - player.prevDistanceWalkedModified) * 0.0625f) * 6.0f) * 32.0f * f8;
+			if (player.isSneaking() && data.animation != EnumAnimation.CRAWLING) {
+				f5 += 25.0f;
+			}
+			GL11.glRotatef(6.0f + f6 / 2.0f + f5, 1.0f, 0.0f, 0.0f);
+			GL11.glRotatef(f7 / 2.0f, 0.0f, 0.0f, 1.0f);
+			GL11.glRotatef(-f7 / 2.0f, 0.0f, 1.0f, 0.0f);
+			GL11.glTranslatef(0.0f, 0.0f, 0.125f);
+			GL11.glRotatef(180.0f, 0.0f, 1.0f, 0.0f);
+			cape.cape.render(0.0625F);
+			GL11.glPopMatrix();
 		}
 	}
 

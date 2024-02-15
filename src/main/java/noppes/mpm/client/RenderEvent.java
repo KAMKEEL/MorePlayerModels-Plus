@@ -28,8 +28,8 @@ import org.lwjgl.opengl.GL11;
 public class RenderEvent {
 	public static RenderEvent Instance;
 	public static RenderMPM renderer = new RenderMPM();
-	public static long lastSkinTick = -30;
-	public static long lastCapeTick = -30;
+	public static long lastSkinTick = 0;
+	public static long lastCapeTick = 0;
 	public final static long MaxSkinTick = 6;
 	private ModelData data;
 
@@ -66,10 +66,9 @@ public class RenderEvent {
 				player.renderYawOffset = player.prevRenderYawOffset = 0;
 		}
 
-		if(!data.resourceInit && lastSkinTick > MaxSkinTick){
-			renderer.loadResource((AbstractClientPlayer) player);
+		if(data.textureLocation == null && lastSkinTick > MaxSkinTick){
 			lastSkinTick = 0;
-			data.resourceInit = true;
+			renderer.getPlayerTexture((AbstractClientPlayer) player);
 		}
 		if(!(event.renderer instanceof RenderMPM)){
 			RenderManager.instance.entityRenderMap.put(EntityPlayer.class, renderer);
@@ -133,13 +132,13 @@ public class RenderEvent {
 		renderer.renderHelmet(event.entityPlayer);
 		if(ConfigClient.EnableBackItem)
 			renderer.renderBackitem(event.entityPlayer);
-		if(event.renderCape){
-			if(!data.cloakInnit && RenderEvent.lastCapeTick > RenderEvent.MaxSkinTick){
-				data.cloakObject = renderer.loadCapeResource((AbstractClientPlayer) event.entityPlayer);
-				RenderEvent.lastCapeTick = 0;
-				data.cloakInnit = true;
-			}
-		}
+//		if(event.renderCape){
+//			if(RenderEvent.lastCapeTick > RenderEvent.MaxSkinTick){
+//				data.textureCloakLocation = renderer.loadCapeResource((AbstractClientPlayer) event.entityPlayer);
+//				RenderEvent.lastCapeTick = 0;
+//				data.cloakInnit = true;
+//			}
+//		}
 		GL11.glTranslatef(0, data.getBodyY(), 0); // Cape Fix
 	}
 
@@ -153,7 +152,6 @@ public class RenderEvent {
 		Entity entity = data.getEntity(mc.thePlayer);
 		if(entity != null || data.isSleeping() || data.animation == EnumAnimation.BOW && mc.thePlayer.getHeldItem() == null){
 			event.setCanceled(true);
-			return;
 		}
 	}
 

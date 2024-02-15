@@ -13,30 +13,23 @@ public class ClientCacheHandler {
     public static HashMap<String, Boolean> clientPerms = new HashMap<String, Boolean>();
     public static boolean loaded = false;
 
-    public static ImageData getPlayerSkin(String directory, boolean x64, ResourceLocation resource, File file) {
+    public static ImageData getPlayerSkin(String directory, boolean x64, ResourceLocation resource) {
         synchronized (imageDataCache) {
             if (!imageDataCache.containsKey(resource.getResourcePath())) {
-                imageDataCache.put(resource.getResourcePath(), new CacheHashMap.CachedObject<>(new ImageData(directory, x64, resource, file)));
+                imageDataCache.put(resource.getResourcePath(), new CacheHashMap.CachedObject<>(new ImageData(directory, x64, resource)));
             }
-
-            ImageData data = imageDataCache.get(resource.getResourcePath()).getObject();
-            data.refreshLoad();
-            return data;
+            return imageDataCache.get(resource.getResourcePath()).getObject();
         }
     }
 
-    public static ImageData getCapeTexture(String directory, boolean x64, ResourceLocation resource, File file, ResourceLocation defLoc) {
+    public static ImageData getCapeTexture(String directory) {
         synchronized (imageDataCache) {
-            if (!imageDataCache.containsKey(resource.getResourcePath())) {
-                imageDataCache.put(resource.getResourcePath(), new CacheHashMap.CachedObject<>(new ImageData(directory, x64, resource, file, defLoc)));
+            if (!imageDataCache.containsKey(directory)) {
+                imageDataCache.put(directory, new CacheHashMap.CachedObject<>(new ImageData(directory)));
             }
-
-            ImageData data = imageDataCache.get(resource.getResourcePath()).getObject();
-            data.refreshLoad();
-            return data;
+            return imageDataCache.get(directory).getObject();
         }
     }
-
 
     public static void createCache() {
         ClientModelData.Instance();

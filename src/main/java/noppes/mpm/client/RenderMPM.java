@@ -3,7 +3,6 @@ package noppes.mpm.client;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
-import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
@@ -35,13 +34,15 @@ import noppes.mpm.client.model.ModelRenderPassHelper;
 import noppes.mpm.constants.EnumAnimation;
 import org.lwjgl.opengl.GL11;
 
-import java.io.File;
 import java.lang.reflect.Method;
+import java.security.MessageDigest;
 import java.util.Map;
 import java.util.UUID;
 
 import static net.minecraftforge.client.IItemRenderer.ItemRenderType.EQUIPPED;
 import static net.minecraftforge.client.IItemRenderer.ItemRendererHelper.BLOCK_3D;
+import static noppes.mpm.client.RenderEvent.MaxSkinTick;
+import static noppes.mpm.client.RenderEvent.lastSkinTick;
 
 public class RenderMPM extends RenderPlayer {
 	public ModelMPM modelBipedMain;
@@ -115,66 +116,46 @@ public class RenderMPM extends RenderPlayer {
 		super.doRender(player, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
 	}
 
-	public void loadResource(AbstractClientPlayer player) {
-		String url = data.url;
-		if(url != null && !url.isEmpty()){
-			ResourceLocation location;
-			if(!url.startsWith("http://") && !url.startsWith("https://")){
-				location = new ResourceLocation(url);
-				try {
-					Minecraft.getMinecraft().getTextureManager().bindTexture(location);
-				}
-				catch(Exception ignored){}
-				player.func_152121_a(Type.SKIN, location);
-			}
-			else{
-				if (data.urlType == 1) {
-					location = new ResourceLocation("skins64/" + url.hashCode());
-					player.func_152121_a(Type.SKIN, location);
-					ClientCacheHandler.getPlayerSkin(url, true, location, null);
-				} else {
-					location = new ResourceLocation("skins/" + url.hashCode());
-					player.func_152121_a(Type.SKIN, location);
-					ClientCacheHandler.getPlayerSkin(url, false, location, null);
-				}
-			}
-			return;
-		}
-		else if (!data.resourceLoaded){
+	public void getPlayerTexture(AbstractClientPlayer player) {
+		if(data.url.isEmpty()){ //player skin
 			Minecraft mc = Minecraft.getMinecraft();
 			SkinManager skinmanager = mc.func_152342_ad();
-
 			Map map = skinmanager.func_152788_a(player.getGameProfile());
 			if (map.isEmpty()) {
 				map = mc.func_152347_ac().getTextures(mc.func_152347_ac().fillProfileProperties(player.getGameProfile(), false), false);
 			}
-			if (!map.containsKey(Type.SKIN)) {
-				return;
+			if (map.containsKey(Type.SKIN)){
+				data.textureLocation = mc.func_152342_ad().func_152792_a((MinecraftProfileTexture)map.get(Type.SKIN), Type.SKIN);
+				player.func_152121_a(Type.SKIN, data.textureLocation);
 			}
-
-			MinecraftProfileTexture profile = (MinecraftProfileTexture) map.get(Type.SKIN);
-			url = profile.getUrl();
-
-			Object skinManagerFile = ObfuscationReflectionHelper.getPrivateValue(SkinManager.class, skinmanager, 3);
-			if (skinManagerFile instanceof File) {
-				File dir = new File((File) skinManagerFile, profile.getHash().substring(0, 2));
-				File file = new File(dir, profile.getHash());
-
-				ResourceLocation location;
-				if (data.modelType > 0) {
-					location = new ResourceLocation("skins64/" + profile.getHash());
-					player.func_152121_a(Type.SKIN, location);
-					ClientCacheHandler.getPlayerSkin(url, true, location, file);
-				} else {
-					location = new ResourceLocation("skins/" + profile.getHash());
-					player.func_152121_a(Type.SKIN, location);
-					ClientCacheHandler.getPlayerSkin(url, false, location, file);
+		}
+		else { // url skin
+			if(!data.url.startsWith("http://") && !data.url.startsWith("https://")){
+				data.textureLocation = new ResourceLocation(data.url);
+				try {
+					Minecraft.getMinecraft().getTextureManager().bindTexture(data.textureLocation);
 				}
-				if (file.exists())
-					file.delete();
-
-				data.resourceLoaded = true;
-				player.func_152121_a(Type.SKIN, location);
+				catch(Exception ignored){}
+				player.func_152121_a(Type.SKIN, data.textureLocation);
+			}
+			else {
+				try {
+					MessageDigest digest = MessageDigest.getInstance("MD5");
+					byte[] hash = digest.digest(data.url.getBytes("UTF-8"));
+					StringBuilder sb = new StringBuilder(2*hash.length);
+					for (byte b : hash) {
+						sb.append(String.format("%02x", b&0xff));
+					}
+					if (data.modelType == 0) {
+						data.textureLocation = new ResourceLocation("skins/" + sb.toString());
+						player.func_152121_a(Type.SKIN, data.textureLocation);
+						ClientCacheHandler.getPlayerSkin(data.url, false, data.textureLocation);
+					} else {
+						data.textureLocation = new ResourceLocation("skins64/" + sb.toString());
+						player.func_152121_a(Type.SKIN, data.textureLocation);
+						ClientCacheHandler.getPlayerSkin(data.url, true, data.textureLocation);
+					}
+				} catch(Exception ignored){}
 			}
 		}
 	}
@@ -185,10 +166,9 @@ public class RenderMPM extends RenderPlayer {
 		if(data == null)
 			return;
 
-		if(!data.resourceInit && RenderEvent.lastSkinTick > RenderEvent.MaxSkinTick){
-			loadResource((AbstractClientPlayer) player);
-			RenderEvent.lastSkinTick = 0;
-			data.resourceInit = true;
+		if(data.textureLocation == null && lastSkinTick > RenderEvent.MaxSkinTick){
+			getPlayerTexture((AbstractClientPlayer) player);
+			lastSkinTick = 0;
 		}
 		setModelData(data, player);
 
@@ -197,28 +177,6 @@ public class RenderMPM extends RenderPlayer {
 		this.modelBipedMain.onGround = 0.0F;
 		this.modelBipedMain.setRotationAngles(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F, player);
 		this.modelBipedMain.renderArms(player, 0.0625F, true);
-	}
-
-	public ResourceLocation loadCapeResource(AbstractClientPlayer player) {
-		String url = data.cloakUrl;
-		ResourceLocation location;
-		if (url != null && !url.isEmpty()) {
-			if (!url.startsWith("http://") && !url.startsWith("https://")) {
-				location = new ResourceLocation(url);
-				try {
-					Minecraft.getMinecraft().getTextureManager().bindTexture(location);
-				} catch (Exception e) {
-					// No Texture Found
-					location = ModelPartData.defaultCape;
-				}
-				// player.func_152121_a(Type.CAPE, location);
-			} else {
-				location = new ResourceLocation("cape/" + url.hashCode());
-				ClientCacheHandler.getCapeTexture(url, false, location, null, ModelPartData.defaultCape);
-			}
-			return location;
-		}
-		return null;
 	}
 
 	public void renderItem(EntityPlayer par1AbstractClientPlayer) {

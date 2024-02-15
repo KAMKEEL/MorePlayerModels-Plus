@@ -54,8 +54,7 @@ public class CommandSetCloak extends MpmCommandInterface {
 		data.cloakUrl = url;
 		data.cloakLoaded = false;
 		data.cloakInnit = false;
-		data.resourceLoaded = false;
-		data.resourceInit = false;
+		data.textureLocation = null;
 		Server.sendAssociatedData(player, EnumPacketClient.SEND_PLAYER_DATA, player.getCommandSenderName(), data.getNBT());
 	}
 

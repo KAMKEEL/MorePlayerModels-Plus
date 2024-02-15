@@ -26,18 +26,13 @@ import java.util.concurrent.Executors;
 
 
 public class ModelData extends ModelDataShared implements IExtendedEntityProperties{
-	public boolean resourceInit = false;
-	public boolean resourceLoaded = false;
 	public boolean cloakInnit = false;
 	public boolean cloakLoaded = false;
 
+	public ResourceLocation textureLocation = null;
+	public ResourceLocation textureCloakLocation = null;
+
 	public boolean didSit = false;
-
-	public boolean webapiActive = false;
-	public boolean webapiInit = false;
-
-	public ResourceLocation cloakObject = null;
-
 	public ItemStack backItem;
 
 	public int inLove = 0;
@@ -124,12 +119,7 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 		cloakUrl = compound.getString("CloakUrl");
 
 		if(!prevUrl.equals(url)) {
-			resourceInit = false;
-			resourceLoaded = false;
-		}
-		if(!prevCloakUrl.equals(cloakUrl)){
-			cloakLoaded = false;
-			cloakInnit = false;
+			textureLocation = null;
 		}
 
 		if(player != null){
@@ -242,7 +232,7 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 	public ModelData copy(){
 		ModelData data = new ModelData();
 		data.setNBT(this.getNBT());
-		data.resourceLoaded = false;
+		data.textureLocation = null;
 		data.cloakLoaded = false;
 		data.player = player;
 		return data;
