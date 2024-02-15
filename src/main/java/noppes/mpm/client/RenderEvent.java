@@ -29,7 +29,6 @@ public class RenderEvent {
 	public static RenderEvent Instance;
 	public static RenderMPM renderer = new RenderMPM();
 	public static long lastSkinTick = 0;
-	public static long lastCapeTick = 0;
 	public final static long MaxSkinTick = 6;
 	private ModelData data;
 
@@ -132,13 +131,6 @@ public class RenderEvent {
 		renderer.renderHelmet(event.entityPlayer);
 		if(ConfigClient.EnableBackItem)
 			renderer.renderBackitem(event.entityPlayer);
-//		if(event.renderCape){
-//			if(RenderEvent.lastCapeTick > RenderEvent.MaxSkinTick){
-//				data.textureCloakLocation = renderer.loadCapeResource((AbstractClientPlayer) event.entityPlayer);
-//				RenderEvent.lastCapeTick = 0;
-//				data.cloakInnit = true;
-//			}
-//		}
 		GL11.glTranslatef(0, data.getBodyY(), 0); // Cape Fix
 	}
 

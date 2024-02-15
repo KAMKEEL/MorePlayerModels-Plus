@@ -120,7 +120,6 @@ public class ClientEventHandler {
 		if (mc.thePlayer == null) return;
 
 		RenderEvent.lastSkinTick++;
-		RenderEvent.lastCapeTick++;
 	}
 
 	@SubscribeEvent
