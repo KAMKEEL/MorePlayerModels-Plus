@@ -28,7 +28,7 @@ import net.minecraft.util.StringUtils;
 import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.MinecraftForgeClient;
 import noppes.mpm.ModelData;
-import noppes.mpm.ModelPartData;
+import noppes.mpm.client.controller.ClientCacheController;
 import noppes.mpm.client.model.ModelMPM;
 import noppes.mpm.client.model.ModelRenderPassHelper;
 import noppes.mpm.constants.EnumAnimation;
@@ -41,7 +41,6 @@ import java.util.UUID;
 
 import static net.minecraftforge.client.IItemRenderer.ItemRenderType.EQUIPPED;
 import static net.minecraftforge.client.IItemRenderer.ItemRendererHelper.BLOCK_3D;
-import static noppes.mpm.client.RenderEvent.MaxSkinTick;
 import static noppes.mpm.client.RenderEvent.lastSkinTick;
 
 public class RenderMPM extends RenderPlayer {
@@ -149,11 +148,11 @@ public class RenderMPM extends RenderPlayer {
 					if (data.modelType == 0) {
 						data.textureLocation = new ResourceLocation("skins/" + sb.toString());
 						player.func_152121_a(Type.SKIN, data.textureLocation);
-						ClientCacheHandler.getPlayerSkin(data.url, false, data.textureLocation);
+						ClientCacheController.getPlayerSkin(data.url, false, data.textureLocation);
 					} else {
 						data.textureLocation = new ResourceLocation("skins64/" + sb.toString());
 						player.func_152121_a(Type.SKIN, data.textureLocation);
-						ClientCacheHandler.getPlayerSkin(data.url, true, data.textureLocation);
+						ClientCacheController.getPlayerSkin(data.url, true, data.textureLocation);
 					}
 				} catch(Exception ignored){}
 			}

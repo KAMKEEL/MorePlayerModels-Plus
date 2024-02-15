@@ -21,6 +21,7 @@ import net.minecraftforge.client.event.*;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import noppes.mpm.ModelData;
 import noppes.mpm.MorePlayerModels;
+import noppes.mpm.client.controller.ClientCacheController;
 import noppes.mpm.config.ConfigClient;
 import noppes.mpm.constants.EnumAnimation;
 import org.lwjgl.opengl.GL11;
@@ -161,7 +162,7 @@ public class RenderEvent {
 
 	@SubscribeEvent
 	public void overlay(RenderGameOverlayEvent event){
-		if (ClientCacheHandler.loaded) {
+		if (ClientCacheController.loaded) {
 			if(event.type != ElementType.ALL)
 				return;
 

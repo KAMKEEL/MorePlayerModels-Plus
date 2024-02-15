@@ -8,6 +8,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import noppes.mpm.*;
+import noppes.mpm.client.controller.ClientCacheController;
+import noppes.mpm.client.controller.ClientDataController;
 import noppes.mpm.constants.EnumPacketClient;
 
 import java.io.IOException;
@@ -32,20 +34,20 @@ public class PacketHandlerClient extends PacketHandlerServer{
 			MorePlayerModels.HasServerSide = true;
 		}
 		else if(type == EnumPacketClient.LOGOUT){
-			ClientCacheHandler.clearCache();
+			ClientCacheController.clearCache();
 		}
 		else if(type == EnumPacketClient.RELOAD_SKINS) {
 			Minecraft mc = Minecraft.getMinecraft();
 			List<EntityPlayer> players = mc.theWorld.playerEntities;
 			for(EntityPlayer p : players){
-				ModelData data = ClientModelData.Instance().getPlayerData(p);
+				ModelData data = ClientDataController.Instance().getPlayerData(p);
 				data.textureLocation = null;
 			}
 		}
 		else if(type == EnumPacketClient.LOGIN){
 			NBTTagCompound compound = Server.readNBT(buffer);
-			ClientCacheHandler.createCache();
-			ClientModelData.Instance().getPlayerData(player).setNBT(compound);
+			ClientCacheController.createCache();
+			ClientDataController.Instance().getPlayerData(player).setNBT(compound);
 		}
 		else if(type == EnumPacketClient.SEND_PLAYER_DATA){
 			ModelData data = null;
@@ -74,7 +76,7 @@ public class PacketHandlerClient extends PacketHandlerServer{
 			if(pl == null)
 				return;
 
-			ModelData data = ClientModelData.Instance().getPlayerData(pl);
+			ModelData data = ClientDataController.Instance().getPlayerData(pl);
 			data.backItem = null;
 		}
 		else if(type == EnumPacketClient.BACK_ITEM_UPDATE){
@@ -92,7 +94,7 @@ public class PacketHandlerClient extends PacketHandlerServer{
 				EntityPlayer pl = player.worldObj.getPlayerEntityByName(Server.readString(buffer));
 				if(pl == null)
 					return;
-				ModelData data = ClientModelData.Instance().getPlayerData(pl);
+				ModelData data = ClientDataController.Instance().getPlayerData(pl);
 				data.inLove = 40;
 			}
 			else if(animation == 1){
@@ -103,7 +105,7 @@ public class PacketHandlerClient extends PacketHandlerServer{
 				if(pl == null)
 					return;
 
-				ModelData data = ClientModelData.Instance().getPlayerData(pl);
+				ModelData data = ClientDataController.Instance().getPlayerData(pl);
 		        for (int i = 0; i < 5; ++i){
 		            double d0 = player.getRNG().nextGaussian() * 0.02D;
 		            double d1 = player.getRNG().nextGaussian() * 0.02D;
@@ -119,7 +121,7 @@ public class PacketHandlerClient extends PacketHandlerServer{
 			if(pl == null)
 				return;
 
-			ModelData data = ClientModelData.Instance().getPlayerData(pl);
+			ModelData data = ClientDataController.Instance().getPlayerData(pl);
 			data.setAnimation(buffer.readInt());
 			data.animationStart = pl.ticksExisted;
 		}

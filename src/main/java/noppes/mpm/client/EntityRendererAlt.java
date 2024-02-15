@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
 import noppes.mpm.ModelData;
+import noppes.mpm.client.controller.ClientDataController;
 import noppes.mpm.constants.EnumAnimation;
 
 public class EntityRendererAlt extends EntityRenderer {
@@ -22,7 +23,7 @@ public class EntityRendererAlt extends EntityRenderer {
     		return;
     	}
 
-		ModelData data = ClientModelData.Instance().getPlayerData(player);
+		ModelData data = ClientDataController.Instance().getPlayerData(player);
 		player.yOffset -= (float) (data.offsetY() + (-1.615 + data.size * 0.315));
 		if(data.animation == EnumAnimation.SITTING)
 			player.yOffset += (float) (0.5f - data.getLegsY() * 0.8);
@@ -48,7 +49,7 @@ public class EntityRendererAlt extends EntityRenderer {
     		return;
     	}
 
-		ModelData data = ClientModelData.Instance().getPlayerData(player);
+		ModelData data = ClientDataController.Instance().getPlayerData(player);
 		float offset = -data.offsetY() - (-1.615f + data.size * 0.315f);
 		if(data.animation == EnumAnimation.SITTING){
 			offset += (float) (0.5f - data.getLegsY() * 0.8);

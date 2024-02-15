@@ -4,8 +4,8 @@ import kamkeel.MorePlayerModelsPermissions;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 import noppes.mpm.ModelData;
-import noppes.mpm.client.ClientCacheHandler;
-import noppes.mpm.client.ClientModelData;
+import noppes.mpm.client.controller.ClientCacheController;
+import noppes.mpm.client.controller.ClientDataController;
 import noppes.mpm.client.gui.util.GuiNpcButton;
 import noppes.mpm.client.gui.util.GuiNpcLabel;
 import noppes.mpm.client.gui.util.GuiNpcTextField;
@@ -27,12 +27,12 @@ public class GuiCreationConfig extends GuiCreationScreenInterface implements ITe
     	super.initGui();
 		int y = guiTop + 50;
 
-		if(ClientCacheHandler.hasPermission(MorePlayerModelsPermissions.CONFIG_SOUND)) {
+		if(ClientCacheController.hasPermission(MorePlayerModelsPermissions.CONFIG_SOUND)) {
 			addButton(new GuiNpcButton(9, guiLeft + 79, y, 80, 20, new String[]{"gui.default", "config.humanfemale", "config.humanmale", "config.goblinmale"}, playerdata.soundType));
 			addLabel(new GuiNpcLabel(5, "config.sounds", guiLeft, y + 5, 0xFFFFFF));
 		}
 
-		if(ClientCacheHandler.hasPermission(MorePlayerModelsPermissions.CONFIG_SKIN)) {
+		if(ClientCacheController.hasPermission(MorePlayerModelsPermissions.CONFIG_SKIN)) {
 			addTextField(new GuiNpcTextField(52, this, guiLeft + 80, y += 22, 160, 20, playerdata.url));
 			addLabel(new GuiNpcLabel(52, "config.skinurl", guiLeft, y + 5, 0xFFFFFF));
 		}
@@ -40,7 +40,7 @@ public class GuiCreationConfig extends GuiCreationScreenInterface implements ITe
     	addButton(new GuiNpcButton(46, guiLeft, y += 32, 80, 20, "config.reloadskins"));
     	addButton(new GuiNpcButton(51, guiLeft + 90, y, 80, 20, "config.editbuttons"));
 
-		if(ClientCacheHandler.hasPermission(MorePlayerModelsPermissions.CONFIG_SKIN)) {
+		if(ClientCacheController.hasPermission(MorePlayerModelsPermissions.CONFIG_SKIN)) {
 			addButton(new GuiNpcButton(254, guiLeft + 90, y + 22, 50, 20, new String[]{"url.default", "url.full"}, playerdata.urlType));
 			addLabel(new GuiNpcLabel(254, "config.urltype", guiLeft, y + 27, 0xFFFFFF));
 		}
@@ -79,10 +79,10 @@ public class GuiCreationConfig extends GuiCreationScreenInterface implements ITe
     	if(button.id == 46){
     		List<EntityPlayer> players = mc.theWorld.playerEntities;
     		for(EntityPlayer player : players){
-				ModelData data = ClientModelData.Instance().getPlayerData(player);
+				ModelData data = ClientDataController.Instance().getPlayerData(player);
 				data.textureLocation = null;
     		}
-			ClientCacheHandler.clearSkinData();
+			ClientCacheController.clearSkinData();
 		}
     	if(button.id == 47){
 			ConfigClient.EnablePOV = button.getValue() == 1;

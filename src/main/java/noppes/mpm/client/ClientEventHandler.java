@@ -14,8 +14,9 @@ import net.minecraft.entity.MPMEntityUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import noppes.mpm.*;
+import noppes.mpm.client.controller.ClientCacheController;
+import noppes.mpm.client.controller.ClientDataController;
 import noppes.mpm.client.fx.EntityEnderFX;
 import noppes.mpm.client.fx.EntityRainbowFX;
 import noppes.mpm.client.gui.GuiCreationScreenInterface;
@@ -42,7 +43,7 @@ public class ClientEventHandler {
 		if(mc == null || mc.thePlayer == null)
 			return;
 		if(ClientProxy.Screen.isPressed()){
-			ModelData data = ClientModelData.Instance().getPlayerData(mc.thePlayer);
+			ModelData data = ClientDataController.Instance().getPlayerData(mc.thePlayer);
 			data.animation = EnumAnimation.NONE;
 			if(mc.currentScreen == null)
 				mc.displayGuiScreen(new GuiCreationScreenInterface());
@@ -91,7 +92,7 @@ public class ClientEventHandler {
 					animation = EnumAnimation.SLEEPING_EAST;
 			}
 
-			ModelData data = ClientModelData.Instance().getPlayerData(player);
+			ModelData data = ClientDataController.Instance().getPlayerData(player);
 			if(data.animationEquals(animation))
 				animation = EnumAnimation.NONE;
 
@@ -127,7 +128,7 @@ public class ClientEventHandler {
 	@SubscribeEvent
 	public void world(FMLNetworkEvent.ClientConnectedToServerEvent event){
 		// Reset Cache on Join World
-		ClientCacheHandler.clearCache();
+		ClientCacheController.clearCache();
 	}
 
 	@SubscribeEvent
@@ -135,7 +136,7 @@ public class ClientEventHandler {
 		if(event.side == Side.SERVER || event.phase == Phase.START)
 			return;
     	EntityPlayer player = event.player;
-		ModelData data = ClientModelData.Instance().getPlayerData(player);
+		ModelData data = ClientDataController.Instance().getPlayerData(player);
     	EntityLivingBase entity = data.getEntity(player.worldObj, player);
     	if(entity != null){
     		entity.onUpdate();

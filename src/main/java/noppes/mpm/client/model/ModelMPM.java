@@ -1,6 +1,5 @@
 package noppes.mpm.client.model;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBiped;
@@ -12,7 +11,7 @@ import net.minecraft.util.MathHelper;
 import noppes.mpm.ModelData;
 import noppes.mpm.ModelPartConfig;
 import noppes.mpm.ModelPartData;
-import noppes.mpm.client.ClientCacheHandler;
+import noppes.mpm.client.controller.ClientCacheController;
 import noppes.mpm.client.ClientProxy;
 import noppes.mpm.client.ImageData;
 import noppes.mpm.client.model.animation.*;
@@ -689,7 +688,7 @@ public class ModelMPM extends ModelBiped{
 		AbstractClientPlayer player = (AbstractClientPlayer) npc;
 		if(!player.isInvisible() && !data.cloakUrl.isEmpty() && !isArmor && data.entityClass == null && data.cloak == 1) {
 			currentlyPlayerTexture = false;
-			ImageData imageData = ClientCacheHandler.getCapeTexture(data.cloakUrl);
+			ImageData imageData = ClientCacheController.getCapeTexture(data.cloakUrl);
 			if (!imageData.imageLoaded())
 				return;
 

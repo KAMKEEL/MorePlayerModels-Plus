@@ -1,4 +1,4 @@
-package noppes.mpm.client;
+package noppes.mpm.client.controller;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
@@ -8,18 +8,18 @@ import noppes.mpm.ModelData;
 import java.util.HashMap;
 import java.util.UUID;
 
-public class ClientModelData {
-    private static ClientModelData Instance;
+public class ClientDataController {
+    private static ClientDataController Instance;
     private final HashMap<UUID, ModelData> playerData = new HashMap<>();
 
-    private ClientModelData() {
+    private ClientDataController() {
         EntityClientPlayerMP player = Minecraft.getMinecraft().thePlayer;
         this.playerData.put(player.getUniqueID(), new ModelData(player));
     }
 
-    public static ClientModelData Instance() {
+    public static ClientDataController Instance() {
         if (Instance == null) {
-            Instance = new ClientModelData();
+            Instance = new ClientDataController();
         }
         return Instance;
     }

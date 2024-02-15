@@ -14,6 +14,7 @@ import net.minecraftforge.common.MinecraftForge;
 import noppes.mpm.CommonProxy;
 import noppes.mpm.ModelData;
 import noppes.mpm.MorePlayerModels;
+import noppes.mpm.client.controller.ClientDataController;
 import noppes.mpm.config.ConfigMain;
 import org.lwjgl.input.Keyboard;
 
@@ -57,7 +58,7 @@ public class ClientProxy extends CommonProxy{
 	}
 
 	public ModelData getClientPlayerData(EntityPlayer player) {
-		return ClientModelData.Instance().getPlayerData(player);
+		return ClientDataController.Instance().getPlayerData(player);
 	}
 
 	public static void bindTexture(ResourceLocation location) {
