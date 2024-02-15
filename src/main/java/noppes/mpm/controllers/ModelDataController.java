@@ -73,7 +73,7 @@ public class ModelDataController {
 			LogWriter.error("Error loading: " + filename, e);
 		}
 
-		return new NBTTagCompound();
+		return null;
 	}
 
 	public NBTTagCompound loadModelDataOld(String player){
