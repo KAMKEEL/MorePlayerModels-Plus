@@ -34,7 +34,7 @@ public class PacketHandlerClient extends PacketHandlerServer{
 			MorePlayerModels.HasServerSide = true;
 		}
 		else if(type == EnumPacketClient.LOGOUT){
-			ClientCacheController.clearCache();
+			ClientCacheController.clearDataCache();
 		}
 		else if(type == EnumPacketClient.RELOAD_SKINS) {
 			Minecraft mc = Minecraft.getMinecraft();

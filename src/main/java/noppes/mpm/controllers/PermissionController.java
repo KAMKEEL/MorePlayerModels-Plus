@@ -11,8 +11,7 @@ import java.util.HashMap;
 public class PermissionController {
 
     public static PermissionController Instance;
-    public HashMap<String, Long> lastRequest = new HashMap<>();
-    private HashMap<String, PermissionData> permissionData = new HashMap<>();
+    private final HashMap<String, PermissionData> permissionData = new HashMap<>();
 
     public PermissionController(){
         Instance = this;
@@ -20,7 +19,6 @@ public class PermissionController {
 
     public void reloadPermissionData(){
         permissionData.clear();
-        lastRequest.clear();
     }
 
     public static HashMap<String, Boolean> readNBT(NBTTagCompound compound){

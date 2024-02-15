@@ -1,17 +1,12 @@
 package noppes.mpm.client.controller;
 
-import kamkeel.MorePlayerModelsPermissions;
 import net.minecraft.util.ResourceLocation;
-import noppes.mpm.MorePlayerModels;
 import noppes.mpm.client.ImageData;
 import noppes.mpm.config.ConfigClient;
 import noppes.mpm.util.CacheHashMap;
 
-import java.util.HashMap;
-
 public class ClientCacheController {
     private static final CacheHashMap<String, CacheHashMap.CachedObject<ImageData>> imageDataCache = new CacheHashMap<>((long) ConfigClient.CacheLife * 60 * 1000);
-    public static HashMap<String, Boolean> clientPerms = new HashMap<String, Boolean>();
     public static boolean loaded = false;
 
     public static ImageData getPlayerSkin(String directory, boolean x64, ResourceLocation resource) {
@@ -37,25 +32,19 @@ public class ClientCacheController {
         loaded = true;
     }
 
-    public static void clearCache() {
+    public static void clearAllCache() {
         ClientDataController.ClearInstance();
         ClientCacheController.imageDataCache.clear();
-        ClientCacheController.clientPerms.clear();
+        ClientPermController.clientPerms.clear();
+        loaded = false;
+    }
+
+    public static void clearDataCache() {
+        ClientDataController.ClearInstance();
+        ClientCacheController.imageDataCache.clear();
     }
 
     public static void clearSkinData() {
         ClientCacheController.imageDataCache.clear();
     }
-
-    public static boolean hasPermission(MorePlayerModelsPermissions.Permission permission){
-        if(!MorePlayerModels.HasServerSide)
-            return true;
-
-        if(clientPerms.containsKey(permission.name)){
-            return clientPerms.get(permission.name);
-        }
-
-        return false;
-    }
-
 }

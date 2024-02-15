@@ -128,7 +128,14 @@ public class ClientEventHandler {
 	@SubscribeEvent
 	public void world(FMLNetworkEvent.ClientConnectedToServerEvent event){
 		// Reset Cache on Join World
-		ClientCacheController.clearCache();
+		ClientCacheController.clearDataCache();
+	}
+
+	@SubscribeEvent
+	public void world(FMLNetworkEvent.ClientDisconnectionFromServerEvent  event){
+		// Reset Cache on Leave World
+		MorePlayerModels.HasServerSide = false;
+		ClientCacheController.clearAllCache();
 	}
 
 	@SubscribeEvent
