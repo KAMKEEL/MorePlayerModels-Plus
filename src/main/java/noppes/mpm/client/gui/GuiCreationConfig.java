@@ -81,8 +81,6 @@ public class GuiCreationConfig extends GuiCreationScreenInterface implements ITe
     		for(EntityPlayer player : players){
 				ModelData data = ClientModelData.Instance().getPlayerData(player);
 				data.textureLocation = null;
-				data.cloakLoaded = false;
-				data.cloakInnit = false;
     		}
 			ClientCacheHandler.clearSkinData();
 		}

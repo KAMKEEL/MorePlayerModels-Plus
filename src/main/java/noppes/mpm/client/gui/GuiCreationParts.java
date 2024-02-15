@@ -377,8 +377,6 @@ public class GuiCreationParts extends GuiCreationScreenInterface implements ITex
 			if(btn.id == 20){
 				int i = ((GuiNpcButton)btn).getValue();
 				playerdata.cloakUrl = "";
-				playerdata.cloakLoaded = false;
-				playerdata.cloakInnit = false;
 				playerdata.cloak = (byte)i;
 			}
 			super.actionPerformed(btn);
@@ -388,8 +386,6 @@ public class GuiCreationParts extends GuiCreationScreenInterface implements ITex
 		public void unFocused(GuiNpcTextField guiNpcTextField) {
 			if(guiNpcTextField.id == 300){
 				playerdata.cloakUrl = guiNpcTextField.getText();
-				playerdata.cloakInnit = false;
-				playerdata.cloakLoaded = false;
 			}
 		}
 	}
