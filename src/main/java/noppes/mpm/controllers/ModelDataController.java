@@ -76,6 +76,37 @@ public class ModelDataController {
 		return new NBTTagCompound();
 	}
 
+	public NBTTagCompound loadModelDataOld(String player){
+		File saveDir = getSaveDir();
+		String filename = player;
+		if(filename.isEmpty())
+			filename = "noplayername";
+		filename += ".dat";
+		try {
+			File file = new File(saveDir, filename);
+			if(file.exists()){
+				NBTTagCompound comp = CompressedStreamTools.readCompressed(new FileInputStream(file));
+				file.delete();
+				file = new File(saveDir, filename+"_old");
+				if(file.exists())
+					file.delete();
+				return comp;
+			}
+		} catch (Exception e) {
+			LogWriter.except(e);
+		}
+		try {
+			File file = new File(saveDir, filename+"_old");
+			if(file.exists()){
+				return CompressedStreamTools.readCompressed(new FileInputStream(file));
+			}
+
+		} catch (Exception e) {
+			LogWriter.except(e);
+		}
+
+		return new NBTTagCompound();
+	}
 	public NBTTagCompound loadNBTData(File file){
 		try {
 			return CompressedStreamTools.readCompressed(new FileInputStream(file));

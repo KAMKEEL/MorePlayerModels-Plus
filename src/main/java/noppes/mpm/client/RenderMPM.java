@@ -181,7 +181,10 @@ public class RenderMPM extends RenderPlayer {
 
 	@Override
 	public void renderFirstPersonArm(EntityPlayer player){
-		data = ClientModelData.Instance().getPlayerData(player);
+		data = ModelData.getData(player);
+		if(data == null)
+			return;
+
 		if(!data.resourceInit && RenderEvent.lastSkinTick > RenderEvent.MaxSkinTick){
 			loadResource((AbstractClientPlayer) player);
 			RenderEvent.lastSkinTick = 0;

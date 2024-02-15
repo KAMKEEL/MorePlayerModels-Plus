@@ -55,7 +55,7 @@ public class PacketHandlerServer{
 				if(rotate == 3)
 					animation = EnumAnimation.SLEEPING_EAST;
 			}
-			ModelData data = ModelDataController.Instance.getModelData(player);
+			ModelData data = ModelData.getData(player);
 			if(data.animationEquals(animation))
 				animation = EnumAnimation.NONE;
 

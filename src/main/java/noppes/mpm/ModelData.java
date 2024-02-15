@@ -311,14 +311,17 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 
 	public void load() {
 		NBTTagCompound data = ModelDataController.Instance.loadModelData(player.getPersistentID().toString());
-		setNBT(data);
+		if (data.hasNoTags()) {
+			data = ModelDataController.Instance.loadModelDataOld(player.getCommandSenderName());
+		}
+		this.setNBT(data);
 	}
-
 
 	public static ModelData getData(EntityPlayer entity) {
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
 			return MorePlayerModels.proxy.getClientPlayerData(entity);
 		} else {
+			System.out.println("CALLED!!!");
 			return ModelDataController.Instance.getModelData(entity);
 		}
 	}

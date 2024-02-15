@@ -46,8 +46,12 @@ public class RenderEvent {
 		}
 		if(!(event.entity instanceof AbstractClientPlayer))
 			return;
+
 		EntityPlayer player = event.entityPlayer;
-		data = ClientModelData.Instance().getPlayerData(player);
+		data = ModelData.getData(player);
+		if(data == null)
+			return;
+
 		renderer.setModelData(data, player);
 		setModels(event.renderer);
 
@@ -94,7 +98,7 @@ public class RenderEvent {
 		}
 
 		AbstractClientPlayer player = (AbstractClientPlayer) event.entity;
-		data = ClientModelData.Instance().getPlayerData(player);
+		data = ModelData.getData(player);
 		if(data.isSleeping()){
 			player.renderYawOffset = player.prevRenderYawOffset = player.rotationYaw;
 		}
@@ -111,6 +115,9 @@ public class RenderEvent {
 
 	@SubscribeEvent(priority=EventPriority.LOWEST)
 	public void special(RenderPlayerEvent.Specials.Pre event){
+		if(data == null)
+			return;
+
 		if(data.animation == EnumAnimation.BOW){
 			float ticks = (event.entityPlayer.ticksExisted - data.animationStart) / 10f;
 			if(ticks > 1)
@@ -139,7 +146,10 @@ public class RenderEvent {
 	@SubscribeEvent()
 	public void hand(RenderHandEvent event){
 		Minecraft mc = Minecraft.getMinecraft();
-		data = ClientModelData.Instance().getPlayerData(mc.thePlayer);
+		data = ModelData.getData(mc.thePlayer);
+		if(data == null)
+			return;
+
 		Entity entity = data.getEntity(mc.thePlayer);
 		if(entity != null || data.isSleeping() || data.animation == EnumAnimation.BOW && mc.thePlayer.getHeldItem() == null){
 			event.setCanceled(true);

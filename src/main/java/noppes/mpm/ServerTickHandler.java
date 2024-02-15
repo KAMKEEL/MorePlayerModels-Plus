@@ -34,8 +34,8 @@ public class ServerTickHandler {
 
 		Server.sendData((EntityPlayerMP) event.player, EnumPacketClient.SERVER_PING, MorePlayerModels.Revision);
 		ModelData data = ModelData.getData(event.player);
-		if(data != null){
 
+		if(data != null){
 			if(!event.player.worldObj.getGameRules().getGameRuleBooleanValue("mpmAllowEntityModels"))
 				data.entityClass = null;
 
