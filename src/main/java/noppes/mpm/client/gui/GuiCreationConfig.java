@@ -6,6 +6,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import noppes.mpm.ModelData;
 import noppes.mpm.client.controller.ClientCacheController;
 import noppes.mpm.client.controller.ClientDataController;
+import noppes.mpm.client.controller.ClientPermController;
 import noppes.mpm.client.gui.util.GuiNpcButton;
 import noppes.mpm.client.gui.util.GuiNpcLabel;
 import noppes.mpm.client.gui.util.GuiNpcTextField;
@@ -27,23 +28,25 @@ public class GuiCreationConfig extends GuiCreationScreenInterface implements ITe
     	super.initGui();
 		int y = guiTop + 50;
 
-		if(ClientCacheController.hasPermission(MorePlayerModelsPermissions.CONFIG_SOUND)) {
-			addButton(new GuiNpcButton(9, guiLeft + 79, y, 80, 20, new String[]{"gui.default", "config.humanfemale", "config.humanmale", "config.goblinmale"}, playerdata.soundType));
-			addLabel(new GuiNpcLabel(5, "config.sounds", guiLeft, y + 5, 0xFFFFFF));
-		}
+		addButton(new GuiNpcButton(9, guiLeft + 79, y, 80, 20, new String[]{"gui.default", "config.humanfemale", "config.humanmale", "config.goblinmale"}, playerdata.soundType));
+		addLabel(new GuiNpcLabel(5, "config.sounds", guiLeft, y + 5, 0xFFFFFF));
+		if(!ClientPermController.hasPermission(MorePlayerModelsPermissions.CONFIG_SOUND))
+			getButton(9).enabled = false;
 
-		if(ClientCacheController.hasPermission(MorePlayerModelsPermissions.CONFIG_SKIN)) {
-			addTextField(new GuiNpcTextField(52, this, guiLeft + 80, y += 22, 160, 20, playerdata.url));
-			addLabel(new GuiNpcLabel(52, "config.skinurl", guiLeft, y + 5, 0xFFFFFF));
-		}
-		
-    	addButton(new GuiNpcButton(46, guiLeft, y += 32, 80, 20, "config.reloadskins"));
-    	addButton(new GuiNpcButton(51, guiLeft + 90, y, 80, 20, "config.editbuttons"));
+		addTextField(new GuiNpcTextField(52, this, guiLeft + 80, y += 22, 160, 20, playerdata.url));
+		addLabel(new GuiNpcLabel(52, "config.skinurl", guiLeft, y + 5, 0xFFFFFF));
+		if(!ClientPermController.hasPermission(MorePlayerModelsPermissions.CONFIG_SKIN))
+			getTextField(52).enabled = false;
 
-		if(ClientCacheController.hasPermission(MorePlayerModelsPermissions.CONFIG_SKIN)) {
-			addButton(new GuiNpcButton(254, guiLeft + 90, y + 22, 50, 20, new String[]{"url.default", "url.full"}, playerdata.urlType));
-			addLabel(new GuiNpcLabel(254, "config.urltype", guiLeft, y + 27, 0xFFFFFF));
-		}
+		addButton(new GuiNpcButton(46, guiLeft, y += 32, 80, 20, "config.reloadskins"));
+		addButton(new GuiNpcButton(51, guiLeft + 90, y, 80, 20, "config.editbuttons"));
+		if(!ClientPermController.hasPermission(MorePlayerModelsPermissions.EMOTE))
+			getButton(51).enabled = false;
+
+		addLabel(new GuiNpcLabel(254, "config.urltype", guiLeft, y + 27, 0xFFFFFF));
+		addButton(new GuiNpcButton(254, guiLeft + 90, y + 22, 50, 20, new String[]{"url.default", "url.full"}, playerdata.urlType));
+		if(!ClientPermController.hasPermission(MorePlayerModelsPermissions.CONFIG_SKIN))
+			getButton(254).enabled = false;
 
 		addButton(new GuiNpcButton(48, guiLeft + 90 + 144, y += 22, 50, 20, new String[]{"gui.no","gui.yes"}, ConfigClient.EnableChatBubbles?1:0));
 		addLabel(new GuiNpcLabel(48, "config.chatbubbles", guiLeft + 144, y + 5, 0xFFFFFF));

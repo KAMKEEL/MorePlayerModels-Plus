@@ -6,6 +6,7 @@ import net.minecraft.util.StatCollector;
 import noppes.mpm.ModelData;
 import noppes.mpm.ModelPartData;
 import noppes.mpm.client.controller.ClientCacheController;
+import noppes.mpm.client.controller.ClientPermController;
 import noppes.mpm.client.gui.util.*;
 import noppes.mpm.constants.EnumParts;
 
@@ -20,50 +21,50 @@ public class GuiCreationParts extends GuiCreationScreenInterface implements ITex
 	private static int selected = 0;
 
 	public GuiCreationParts(){
-		if(ClientCacheController.hasPermission(MorePlayerModelsPermissions.PARTS_BREAST)){
+		if(ClientPermController.hasPermission(MorePlayerModelsPermissions.PARTS_BREAST)){
 			partList.add(new GuiPartBreasts());
 		}
-		if(ClientCacheController.hasPermission(MorePlayerModelsPermissions.PARTS_WINGS)){
+		if(ClientPermController.hasPermission(MorePlayerModelsPermissions.PARTS_WINGS)){
 			partList.add(new GuiPart(EnumParts.WINGS).setTypes(new String[]{"gui.none","1","2","3","4","5","6","7","8","9",
 					"10","11","12","13","14","15"}));
 		}
-		if(ClientCacheController.hasPermission(MorePlayerModelsPermissions.PARTS_CAPE)){
+		if(ClientPermController.hasPermission(MorePlayerModelsPermissions.PARTS_CAPE)){
 			partList.add(new GuiPartCape());
 		}
-		if(ClientCacheController.hasPermission(MorePlayerModelsPermissions.PARTS_FIN)){
+		if(ClientPermController.hasPermission(MorePlayerModelsPermissions.PARTS_FIN)){
 			partList.add(new GuiPart(EnumParts.FIN).setTypes(new String[]{"gui.none", "1","2","3","4","5","6"}));
 		}
-		if(ClientCacheController.hasPermission(MorePlayerModelsPermissions.PARTS_PARTICLES)){
+		if(ClientPermController.hasPermission(MorePlayerModelsPermissions.PARTS_PARTICLES)){
 			partList.add(new GuiPartParticles());
 		}
-		if(ClientCacheController.hasPermission(MorePlayerModelsPermissions.PARTS_LEGS)){
+		if(ClientPermController.hasPermission(MorePlayerModelsPermissions.PARTS_LEGS)){
 			partList.add(new GuiPartLegs());
 		}
-		if(ClientCacheController.hasPermission(MorePlayerModelsPermissions.PARTS_TAIL)){
+		if(ClientPermController.hasPermission(MorePlayerModelsPermissions.PARTS_TAIL)){
 			partList.add(new GuiPartTail());
 		}
-		if(ClientCacheController.hasPermission(MorePlayerModelsPermissions.PARTS_SNOUT)){
+		if(ClientPermController.hasPermission(MorePlayerModelsPermissions.PARTS_SNOUT)){
 			partList.add(new GuiPartSnout());
 		}
-		if(ClientCacheController.hasPermission(MorePlayerModelsPermissions.PARTS_EARS)){
+		if(ClientPermController.hasPermission(MorePlayerModelsPermissions.PARTS_EARS)){
 			partList.add(new GuiPart(EnumParts.EARS).setTypes(new String[]{"gui.none", "gui.normal", "ears.bunny"}));
 		}
-		if(ClientCacheController.hasPermission(MorePlayerModelsPermissions.PARTS_HORNS)){
+		if(ClientPermController.hasPermission(MorePlayerModelsPermissions.PARTS_HORNS)){
 			partList.add(new GuiPartHorns());
 		}
-		if(ClientCacheController.hasPermission(MorePlayerModelsPermissions.PARTS_HAIR)){
+		if(ClientPermController.hasPermission(MorePlayerModelsPermissions.PARTS_HAIR)){
 			partList.add(new GuiPartHair());
 		}
-		if(ClientCacheController.hasPermission(MorePlayerModelsPermissions.PARTS_MOHAWK)){
+		if(ClientPermController.hasPermission(MorePlayerModelsPermissions.PARTS_MOHAWK)){
 			partList.add(new GuiPart(EnumParts.MOHAWK).setTypes(new String[]{"gui.none", "1", "2"}).noPlayerOptions());
 		}
-		if(ClientCacheController.hasPermission(MorePlayerModelsPermissions.PARTS_BEARD)){
+		if(ClientPermController.hasPermission(MorePlayerModelsPermissions.PARTS_BEARD)){
 			partList.add(new GuiPartBeard());
 		}
-		if(ClientCacheController.hasPermission(MorePlayerModelsPermissions.PARTS_SKIRT)){
+		if(ClientPermController.hasPermission(MorePlayerModelsPermissions.PARTS_SKIRT)){
 			partList.add(new GuiPart(EnumParts.SKIRT).setTypes(new String[]{"gui.none", "gui.normal"}).noPlayerOptions());
 		}
-		if(ClientCacheController.hasPermission(MorePlayerModelsPermissions.PARTS_CLAWS)){
+		if(ClientPermController.hasPermission(MorePlayerModelsPermissions.PARTS_CLAWS)){
 			partList.add(new GuiPartClaws());
 		}
 

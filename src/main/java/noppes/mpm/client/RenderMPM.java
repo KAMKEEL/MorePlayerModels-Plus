@@ -117,16 +117,33 @@ public class RenderMPM extends RenderPlayer {
 
 	public void getPlayerTexture(AbstractClientPlayer player) {
 		if(data.url.isEmpty()){ //player skin
-			Minecraft mc = Minecraft.getMinecraft();
-			SkinManager skinmanager = mc.func_152342_ad();
-			Map map = skinmanager.func_152788_a(player.getGameProfile());
-			if (map.isEmpty()) {
-				map = mc.func_152347_ac().getTextures(mc.func_152347_ac().fillProfileProperties(player.getGameProfile(), false), false);
+			if(data.modelType == 0){
+				Minecraft mc = Minecraft.getMinecraft();
+				SkinManager skinmanager = mc.func_152342_ad();
+				Map map = skinmanager.func_152788_a(player.getGameProfile());
+				if (map.isEmpty()) {
+					map = mc.func_152347_ac().getTextures(mc.func_152347_ac().fillProfileProperties(player.getGameProfile(), false), false);
+				}
+				if (map.containsKey(Type.SKIN)){
+					data.textureLocation = mc.func_152342_ad().func_152792_a((MinecraftProfileTexture)map.get(Type.SKIN), Type.SKIN);
+					player.func_152121_a(Type.SKIN, data.textureLocation);
+				}
 			}
-			if (map.containsKey(Type.SKIN)){
-				data.textureLocation = mc.func_152342_ad().func_152792_a((MinecraftProfileTexture)map.get(Type.SKIN), Type.SKIN);
-				player.func_152121_a(Type.SKIN, data.textureLocation);
+			else {
+				String futureSkin = "https://crafatar.com/skins/" + player.getUniqueID();
+				try {
+					MessageDigest digest = MessageDigest.getInstance("MD5");
+					byte[] hash = digest.digest(futureSkin.getBytes("UTF-8"));
+					StringBuilder sb = new StringBuilder(2*hash.length);
+					for (byte b : hash) {
+						sb.append(String.format("%02x", b&0xff));
+					}
+					data.textureLocation = new ResourceLocation("skins64/" + sb.toString());
+					player.func_152121_a(Type.SKIN, data.textureLocation);
+					ClientCacheController.getPlayerSkin(data.url, true, data.textureLocation);
+				} catch(Exception ignored){}
 			}
+
 		}
 		else { // url skin
 			if(!data.url.startsWith("http://") && !data.url.startsWith("https://")){

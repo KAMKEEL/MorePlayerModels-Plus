@@ -12,6 +12,7 @@ import noppes.mpm.ModelData;
 import noppes.mpm.client.Client;
 import noppes.mpm.client.controller.ClientCacheController;
 import noppes.mpm.client.controller.ClientDataController;
+import noppes.mpm.client.controller.ClientPermController;
 import noppes.mpm.client.gui.util.*;
 import noppes.mpm.constants.EnumPacketServer;
 import org.lwjgl.input.Keyboard;
@@ -55,16 +56,17 @@ public class GuiCreationScreenInterface extends GuiNPCInterface implements ISubG
     	entity = playerdata.getEntity(mc.thePlayer);
     	Keyboard.enableRepeatEvents(true);
 		guiTop += 2;
-    	addButton(new GuiNpcButton(0, guiLeft, guiTop, 60, 20, "gui.config"));
-		if(ClientCacheController.hasPermission(MorePlayerModelsPermissions.CONFIG_ENTITY)) {
-			addButton(new GuiNpcButton(1, guiLeft + 62, guiTop, 60, 20, "gui.entity"));
-		}
+
+		addButton(new GuiNpcButton(0, guiLeft, guiTop, 60, 20, "gui.config"));
+		addButton(new GuiNpcButton(1, guiLeft + 62, guiTop, 60, 20, "gui.entity"));
+		if(!ClientPermController.hasPermission(MorePlayerModelsPermissions.CONFIG_ENTITY))
+			getButton(1).enabled = false;
 
 		if(entity == null){
 			addButton(new GuiNpcButton(2, guiLeft, guiTop + 23, 60, 20, "gui.parts"));
-			if(!ClientCacheController.hasPermission(MorePlayerModelsPermissions.PARTS)){
+			if(!ClientPermController.hasPermission(MorePlayerModelsPermissions.PARTS))
 				getButton(2).enabled = false;
-			}
+
 			addButton(new GuiNpcButton(250, guiLeft + 124, guiTop, 60, 20, new String[]{"Steve","Steve64","Alex"}, playerdata.modelType));
 			addButton(new GuiNpcButton(251, guiLeft + 124, guiTop + 23, 60, 20, "gui.limbs"));
 		}
@@ -79,17 +81,17 @@ public class GuiCreationScreenInterface extends GuiNPCInterface implements ISubG
     		}
     	}
     	if(entity == null){
-			if(ClientCacheController.hasPermission(MorePlayerModelsPermissions.CONFIG_SCALE)) {
-				addButton(new GuiNpcButton(3, guiLeft + 62, guiTop + 23, 60, 20, "gui.scale"));
-			}
+			addButton(new GuiNpcButton(3, guiLeft + 62, guiTop + 23, 60, 20, "gui.scale"));
+			if(!ClientPermController.hasPermission(MorePlayerModelsPermissions.CONFIG_SCALE))
+				getButton(3).enabled = false;
 		}
 
     	if(hasSaving){
-			if(ClientCacheController.hasPermission(MorePlayerModelsPermissions.CONFIG_SAVE)) {
-				addButton(new GuiNpcButton(4, guiLeft, guiTop + ySize - 24, 60, 20, "gui.save"));
-			}
-			if(ClientCacheController.hasPermission(MorePlayerModelsPermissions.CONFIG_LOAD)) {
-				addButton(new GuiNpcButton(5, guiLeft + 62, guiTop + ySize - 24, 60, 20, "gui.load"));
+			addButton(new GuiNpcButton(4, guiLeft, guiTop + ySize - 24, 60, 20, "gui.save"));
+			addButton(new GuiNpcButton(5, guiLeft + 62, guiTop + ySize - 24, 60, 20, "gui.load"));
+			if(!ClientPermController.hasPermission(MorePlayerModelsPermissions.CONFIG_PRESET)){
+				getButton(4).enabled = false;
+				getButton(5).enabled = false;
 			}
     	}
 		if(active != -1){

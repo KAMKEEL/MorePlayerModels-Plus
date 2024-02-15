@@ -18,8 +18,7 @@ public class MorePlayerModelsPermissions {
 	public static final Permission CONFIG_ENTITY = new Permission("mpm.config.entity");
 	public static final Permission CONFIG_SCALE = new Permission("mpm.config.scale");
 	public static final Permission CONFIG_HIDE = new Permission("mpm.config.hide");
-	public static final Permission CONFIG_SAVE = new Permission("mpm.config.save");
-	public static final Permission CONFIG_LOAD = new Permission("mpm.config.load");
+	public static final Permission CONFIG_PRESET = new Permission("mpm.config.preset");
 
 	public static final Permission PARTS = new Permission("mpm.parts");
 	public static final Permission PARTS_BEARD = new Permission("mpm.parts.beard");
