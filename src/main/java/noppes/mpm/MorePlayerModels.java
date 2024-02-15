@@ -55,20 +55,6 @@ public class MorePlayerModels {
 	@EventHandler
 	public void load(FMLPreInitializationEvent ev) {
 		Channel = NetworkRegistry.INSTANCE.newEventDrivenChannel("MorePlayerModels");
-		
-//		MinecraftServer server = MinecraftServer.getServer();
-//		String dir = "";
-//		if (server != null)
-//			dir = new File(".").getAbsolutePath();
-//		else
-//			dir = Minecraft.getMinecraft().mcDataDir.getAbsolutePath();
-//
-//		MorePlayerModels.dir = new File(dir,"moreplayermodels");
-//		if(!MorePlayerModels.dir.exists())
-//			MorePlayerModels.dir.mkdir();
-//
-//		new PlayerDataController(MorePlayerModels.dir);
-
 		configPath = ev.getModConfigurationDirectory() + File.separator + "MorePlayerModelsPlus";
 		legacyPath = ev.getModConfigurationDirectory() + "/MorePlayerModels.cfg";
 

@@ -284,7 +284,7 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 		ModelDataController.Instance.putModelDataCache(uuid, this);
 		ModelDataController.modelDataThread.execute(() -> {
 			try {
-				File saveDir = ModelDataController.Instance.getSaveDir();
+				File saveDir = ModelDataController.getSaveDir();
 				File file = new File(saveDir, filename + "_new");
 				File file1 = new File(saveDir, filename);
 				CompressedStreamTools.writeCompressed(compound, new FileOutputStream(file));

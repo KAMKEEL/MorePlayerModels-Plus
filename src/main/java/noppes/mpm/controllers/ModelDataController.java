@@ -44,17 +44,8 @@ public class ModelDataController {
 		return null;
 	}
 
-	public File getSaveDir(){
-		try{
-			File file = new File(getWorldSaveDirectory(),"playerdata");
-			if(!file.exists())
-				file.mkdir();
-			return file;
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
+	public static File getSaveDir(){
+		return getWorldSaveDirectory();
 	}
 
 	public NBTTagCompound loadModelData(String player){
