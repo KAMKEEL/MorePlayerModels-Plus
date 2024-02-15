@@ -32,6 +32,7 @@ import noppes.mpm.client.controller.ClientCacheController;
 import noppes.mpm.client.model.ModelMPM;
 import noppes.mpm.client.model.ModelRenderPassHelper;
 import noppes.mpm.constants.EnumAnimation;
+import org.lwjgl.Sys;
 import org.lwjgl.opengl.GL11;
 
 import java.lang.reflect.Method;
@@ -130,7 +131,7 @@ public class RenderMPM extends RenderPlayer {
 				}
 			}
 			else {
-				String futureSkin = "https://crafatar.com/skins/" + player.getUniqueID();
+				String futureSkin = "https://crafatar.com/skins/" + player.getUniqueID().toString().replace("-", "") + ".png";
 				try {
 					MessageDigest digest = MessageDigest.getInstance("MD5");
 					byte[] hash = digest.digest(futureSkin.getBytes("UTF-8"));
@@ -140,7 +141,7 @@ public class RenderMPM extends RenderPlayer {
 					}
 					data.textureLocation = new ResourceLocation("skins64/" + sb.toString());
 					player.func_152121_a(Type.SKIN, data.textureLocation);
-					ClientCacheController.getPlayerSkin(data.url, true, data.textureLocation);
+					ClientCacheController.getPlayerSkin(futureSkin, true, data.textureLocation);
 				} catch(Exception ignored){}
 			}
 
