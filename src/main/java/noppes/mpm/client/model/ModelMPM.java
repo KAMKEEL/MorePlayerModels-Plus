@@ -177,6 +177,8 @@ public class ModelMPM extends ModelBiped{
 
 
 		headwear = new ModelHeadwear(this);
+		this.bipedHead.addChild(headwear);
+
 		legs = new ModelLegs(this, (ModelScaleRenderer)bipedRightLeg, (ModelScaleRenderer)bipedLeftLeg, 64, 64);
 
 		this.bipedBody.addChild(breasts = new ModelBreasts(this, 64, 64));
@@ -294,6 +296,8 @@ public class ModelMPM extends ModelBiped{
 		this.bipedLeftLeg.addChild(this.solidLeftLegWear);
 
 		headwear = new ModelHeadwear(this, true);
+		this.bipedHead.addChild(headwear);
+
 		legs = new ModelLegs(this, (ModelScaleRenderer)bipedRightLeg, (ModelScaleRenderer)bipedLeftLeg, 64, 32);
 
 		this.bipedBody.addChild(breasts = new ModelBreasts(this, 64, 32));
@@ -486,26 +490,17 @@ public class ModelMPM extends ModelBiped{
 
 		// Hide Head
 		((ModelScaleRenderer)this.bipedHead).isHidden = data.hideHead == 1;
-    	
-		if(bipedHeadwear.showModel && !bipedHeadwear.isHidden){
-			if(data.headwear == 1 || isArmor){
-				((ModelScaleRenderer)this.bipedHeadwear).setConfig(head,x,y,z);
-				((ModelScaleRenderer)this.bipedHeadwear).render(f);
-			}
-			else if(data.headwear == 2){
-				this.headwear.rotateAngleX = bipedHeadwear.rotateAngleX;
-				this.headwear.rotateAngleY = bipedHeadwear.rotateAngleY;
-				this.headwear.rotateAngleZ = bipedHeadwear.rotateAngleZ;
-				this.headwear.rotationPointX = bipedHeadwear.rotationPointX;
-				this.headwear.rotationPointY = bipedHeadwear.rotationPointY;
-				this.headwear.rotationPointZ = bipedHeadwear.rotationPointZ;
-				this.headwear.setConfig(head,x,y,z);
-				this.headwear.render(f);
-			}
+
+		// Hide Solid Headwear
+		((ModelScaleRenderer)this.headwear).isHidden = data.headwear != 2;
+
+		if(data.headwear == 1 || isArmor){
+			((ModelScaleRenderer)this.bipedHeadwear).setConfig(head,x,y,z);
+			((ModelScaleRenderer)this.bipedHeadwear).render(f);
 		}
+
 		((ModelScaleRenderer)this.bipedHead).setConfig(head,x,y,z);
 		((ModelScaleRenderer)this.bipedHead).render(f);
-
 		GL11.glPopMatrix();
 	}
 	
