@@ -105,7 +105,10 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 		soundType = compound.getShort("SoundType");
 		lastEdited = compound.getLong("LastEdited");
 		displayName = compound.getString("DisplayName");
-		player.refreshDisplayName();
+
+		if(player != null)
+			player.refreshDisplayName();
+
 		setAnimation(compound.getInteger("Animation"));
 
 		url = compound.getString("CustomSkinUrl");

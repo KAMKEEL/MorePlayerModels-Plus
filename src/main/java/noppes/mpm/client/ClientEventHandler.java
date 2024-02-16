@@ -32,7 +32,6 @@ public class ClientEventHandler {
 
 	private final Minecraft mc = Minecraft.getMinecraft();
 	public static float partialTicks = 0;
-	private World prevWorld;
 	public static List<EntityPlayer> playerlist;
 	private EntityRendererAlt alt;
 	private EntityRenderer prevAlt;

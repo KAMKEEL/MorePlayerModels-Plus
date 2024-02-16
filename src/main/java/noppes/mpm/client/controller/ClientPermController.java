@@ -10,7 +10,7 @@ public class ClientPermController {
     public static HashMap<String, Boolean> clientPerms = new HashMap<String, Boolean>();
 
     public static boolean hasPermission(MorePlayerModelsPermissions.Permission permission){
-        if(!MorePlayerModels.HasServerSide)
+        if(MorePlayerModels.HasServerSide)
             return true;
 
         if(clientPerms.containsKey(permission.name)){

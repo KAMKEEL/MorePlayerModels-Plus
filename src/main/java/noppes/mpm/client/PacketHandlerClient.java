@@ -47,7 +47,9 @@ public class PacketHandlerClient extends PacketHandlerServer{
 		else if(type == EnumPacketClient.LOGIN){
 			NBTTagCompound compound = Server.readNBT(buffer);
 			ClientCacheController.createCache();
-			ClientDataController.Instance().getPlayerData(player).setNBT(compound);
+			ModelData playersData = ClientDataController.Instance().getPlayerData(player);
+			playersData.player = player;
+			playersData.setNBT(compound);
 		}
 		else if(type == EnumPacketClient.SEND_PLAYER_DATA){
 			ModelData data = null;

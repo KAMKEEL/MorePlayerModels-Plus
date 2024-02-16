@@ -2,7 +2,9 @@ package noppes.mpm.client.controller;
 
 import net.minecraft.util.ResourceLocation;
 import noppes.mpm.client.ImageData;
+import noppes.mpm.client.PresetController;
 import noppes.mpm.config.ConfigClient;
+import noppes.mpm.controllers.PermissionController;
 import noppes.mpm.util.CacheHashMap;
 
 public class ClientCacheController {
@@ -36,6 +38,8 @@ public class ClientCacheController {
         ClientDataController.ClearInstance();
         ClientCacheController.imageDataCache.clear();
         ClientPermController.clientPerms.clear();
+        PresetController.Instance.presets.clear();
+        PresetController.Instance.loaded = false;
         loaded = false;
     }
 

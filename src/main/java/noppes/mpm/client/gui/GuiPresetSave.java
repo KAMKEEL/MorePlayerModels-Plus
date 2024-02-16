@@ -1,7 +1,6 @@
 package noppes.mpm.client.gui;
 
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
 import noppes.mpm.ModelData;
 import noppes.mpm.client.Preset;
 import noppes.mpm.client.PresetController;
@@ -36,8 +35,9 @@ public class GuiPresetSave extends SubGuiInterface{
     			return;
     		Preset preset = new Preset();
     		preset.name = name;
-    		// preset.data = data.copy();
-    		PresetController.instance.addPreset(preset);
+			preset.fileName = name.replaceAll("[^a-zA-Z0-9_-]", "").toLowerCase();
+			preset.data = data.copy();
+    		preset.save();
     	}
     	close();
     }

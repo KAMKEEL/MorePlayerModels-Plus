@@ -39,6 +39,7 @@ public class MorePlayerModels {
 	public static MorePlayerModels instance;
 	public static int Revision = 7;
 	public static File dir;
+	public static File presetDir;
 	
 	public static boolean HasServerSide = false;
 
@@ -52,9 +53,32 @@ public class MorePlayerModels {
 		instance = this;
 	}
 
+	// - Enable / Disable Auto Perms
+	// - NBT Verification Checker with Perms
+	// --- IF no server
+	// ------ Allow Creation of Parts
+	// ------ Modify Saving Locally
+	// ------ WebAPI Returns
+
 	@EventHandler
 	public void load(FMLPreInitializationEvent ev) {
 		Channel = NetworkRegistry.INSTANCE.newEventDrivenChannel("MorePlayerModels");
+
+		MinecraftServer server = MinecraftServer.getServer();
+		String dir = "";
+		if (server != null)
+			dir = new File(".").getAbsolutePath();
+		else
+			dir = Minecraft.getMinecraft().mcDataDir.getAbsolutePath();
+
+		MorePlayerModels.dir = new File(dir,"moreplayermodels");
+		if(!MorePlayerModels.dir.exists())
+			MorePlayerModels.dir.mkdir();
+
+		MorePlayerModels.presetDir = new File(MorePlayerModels.dir,"presets");
+		if(!MorePlayerModels.presetDir.exists())
+			MorePlayerModels.presetDir.mkdir();
+
 		configPath = ev.getModConfigurationDirectory() + File.separator + "MorePlayerModelsPlus";
 		legacyPath = ev.getModConfigurationDirectory() + "/MorePlayerModels.cfg";
 

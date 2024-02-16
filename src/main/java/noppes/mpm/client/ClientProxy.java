@@ -37,7 +37,7 @@ public class ClientProxy extends CommonProxy{
 	@Override
 	public void load() {
 		MorePlayerModels.Channel.register(new PacketHandlerClient());
-		new PresetController(MorePlayerModels.dir);
+		new PresetController(MorePlayerModels.presetDir);
 
 		ClientRegistry.registerKeyBinding(Screen = new KeyBinding("CharacterScreen", Keyboard.KEY_F12, "key.categories.gameplay"));
 		ClientRegistry.registerKeyBinding(MPM1 = new KeyBinding("MPM 1",Keyboard.KEY_Z, "key.categories.gameplay"));

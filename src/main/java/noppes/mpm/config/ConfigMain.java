@@ -21,6 +21,9 @@ public class ConfigMain
     public static Property EnablePermissionsProperty;
     public static boolean EnablePermissions = false;
 
+    public static Property EnablePresetDefaultsProperty;
+    public static boolean EnablePresetDefaults = false;
+
     /**
      *  General Main Properties
      **/
@@ -39,6 +42,9 @@ public class ConfigMain
 
             EnablePermissionsProperty = config.get(GENERAL, "Enable Permissions", false);
             EnablePermissions = EnablePermissionsProperty.getBoolean(false);
+
+            EnablePresetDefaultsProperty = config.get(GENERAL, "Enable Default Presets", false);
+            EnablePresetDefaults = EnablePresetDefaultsProperty.getBoolean(false);
 
             // Convert to Legacy
             if(MorePlayerModels.legacyExist){
