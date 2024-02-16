@@ -52,9 +52,7 @@ public class MorePlayerModels {
 	public MorePlayerModels(){
 		instance = this;
 	}
-
-	// - Enable / Disable Auto Perms
-	// - NBT Verification Checker with Perms
+	
 	// --- IF no server
 	// ------ Allow Creation of Parts
 	// ------ Modify Saving Locally
