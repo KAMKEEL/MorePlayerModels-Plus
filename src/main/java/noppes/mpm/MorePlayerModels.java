@@ -146,8 +146,4 @@ public class MorePlayerModels {
 		if(!rules.hasRule("mpmAllowEntityModels"))
 			rules.addGameRule("mpmAllowEntityModels", "true");
 	}
-
-	public static Side side() {
-		return FMLCommonHandler.instance().getEffectiveSide();
-	}
 }

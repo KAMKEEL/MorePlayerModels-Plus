@@ -6,6 +6,7 @@ import cpw.mods.fml.common.gameevent.PlayerEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import kamkeel.MorePlayerModelsPermissions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -16,6 +17,8 @@ import noppes.mpm.client.AnalyticsTracking;
 import noppes.mpm.constants.EnumAnimation;
 import noppes.mpm.constants.EnumPacketClient;
 import noppes.mpm.controllers.ModelDataController;
+import noppes.mpm.controllers.PermissionController;
+import noppes.mpm.controllers.data.PermissionData;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -44,8 +47,24 @@ public class ServerTickHandler {
 			if(back != null)
 				Server.sendAssociatedData(event.player, EnumPacketClient.BACK_ITEM_UPDATE, event.player.getCommandSenderName(), back.writeToNBT(new NBTTagCompound()));
 
-
 			Server.sendData((EntityPlayerMP) event.player, EnumPacketClient.LOGIN, data.getNBT());
+		}
+
+		if(!PermissionController.Instance.hasPlayer(event.player.getUniqueID())){
+			PermissionData permissionData = new PermissionData(event.player);
+			permissionData.updatePermissions();
+			PermissionController.Instance.addPlayer(event.player.getUniqueID(), permissionData);
+
+			NBTTagCompound permissionCompound = PermissionController.Instance.writeNBT(event.player);
+			Server.sendData((EntityPlayerMP) event.player, EnumPacketClient.PERMISSION_RECEIVE, permissionCompound);
+		}
+		else {
+			PermissionData permissionData = PermissionController.Instance.getPermissionData(event.player.getUniqueID());
+			if(permissionData.lastUpdated < PermissionData.reloadedTime){
+				permissionData.updatePermissions();
+				NBTTagCompound permissionCompound = PermissionController.Instance.writeNBT(event.player);
+				Server.sendData((EntityPlayerMP) event.player, EnumPacketClient.PERMISSION_RECEIVE, permissionCompound);
+			}
 		}
 	}
 
@@ -54,6 +73,7 @@ public class ServerTickHandler {
 		if(event.player == null || event.player.worldObj == null || event.player.worldObj.isRemote)
 			return;
 
+		PermissionController.Instance.removePlayer(event.player.getUniqueID());
 		Server.sendData((EntityPlayerMP) event.player, EnumPacketClient.LOGOUT, MorePlayerModels.Revision);
 	}
 

@@ -7,11 +7,12 @@ import net.minecraft.nbt.NBTTagList;
 import noppes.mpm.controllers.data.PermissionData;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 public class PermissionController {
 
     public static PermissionController Instance;
-    private final HashMap<String, PermissionData> permissionData = new HashMap<>();
+    public HashMap<String, PermissionData> permissionData = new HashMap<>();
 
     public PermissionController(){
         Instance = this;
@@ -19,6 +20,22 @@ public class PermissionController {
 
     public void reloadPermissionData(){
         permissionData.clear();
+    }
+
+    public void addPlayer(UUID uuid, PermissionData data){
+        permissionData.put(uuid.toString(), data);
+    }
+
+    public void removePlayer(UUID uuid){
+        permissionData.remove(uuid.toString());
+    }
+
+    public PermissionData getPermissionData(UUID uuid){
+        return permissionData.get(uuid.toString());
+    }
+
+    public boolean hasPlayer(UUID uuid){
+        return permissionData.containsKey(uuid.toString());
     }
 
     public static HashMap<String, Boolean> readNBT(NBTTagCompound compound){
