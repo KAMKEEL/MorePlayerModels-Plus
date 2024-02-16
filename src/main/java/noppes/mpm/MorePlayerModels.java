@@ -62,7 +62,7 @@ public class MorePlayerModels {
 
 	@EventHandler
 	public void load(FMLPreInitializationEvent ev) {
-		Channel = NetworkRegistry.INSTANCE.newEventDrivenChannel("MorePlayerModels");
+		Channel = NetworkRegistry.INSTANCE.newEventDrivenChannel("MorePlayerModelsPlus");
 
 		MinecraftServer server = MinecraftServer.getServer();
 		String dir = "";
