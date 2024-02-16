@@ -26,8 +26,6 @@ public class CommandReload extends MpmCommandInterface {
 
 	@Override
 	public void processCommand(ICommandSender icommandsender, String[] var2) {
-		PermissionData.reloadedTime = System.currentTimeMillis();
-
 		String[] usernames = MinecraftServer.getServer().getAllUsernames();
 		for (String username : usernames) {
 			EntityPlayerMP player = MinecraftServer.getServer().getConfigurationManager().func_152612_a(username);
@@ -38,6 +36,8 @@ public class CommandReload extends MpmCommandInterface {
 				Server.sendData((EntityPlayerMP) player, EnumPacketClient.PERMISSION_RECEIVE, permissionCompound);
 			}
 		}
+
+		PermissionData.reloadedTime = System.currentTimeMillis();
 	}
 
 	@Override
