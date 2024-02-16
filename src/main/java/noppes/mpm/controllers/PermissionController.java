@@ -38,21 +38,6 @@ public class PermissionController {
         return permissionData.containsKey(uuid.toString());
     }
 
-    public static HashMap<String, Boolean> readNBT(NBTTagCompound compound){
-        HashMap<String, Boolean> permissionMap = new HashMap<String, Boolean>();
-        NBTTagList list = compound.getTagList("PermissionMap", 10);
-        if(list != null){
-            for(int i = 0; i < list.tagCount(); i++)
-            {
-                NBTTagCompound nbttagcompound = list.getCompoundTagAt(i);
-                String permissionName = nbttagcompound.getString("Name");
-                Boolean bool = nbttagcompound.getBoolean("Bool");
-                permissionMap.put(permissionName, bool);
-            }
-        }
-        return permissionMap;
-    }
-
     public NBTTagCompound writeNBT(EntityPlayer player){
         String uuid = player.getUniqueID().toString();
         if(!permissionData.containsKey(uuid)){

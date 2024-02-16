@@ -10,6 +10,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import noppes.mpm.*;
 import noppes.mpm.client.controller.ClientCacheController;
 import noppes.mpm.client.controller.ClientDataController;
+import noppes.mpm.client.controller.ClientPermController;
 import noppes.mpm.constants.EnumPacketClient;
 
 import java.io.IOException;
@@ -53,10 +54,7 @@ public class PacketHandlerClient extends PacketHandlerServer{
 		}
 		else if(type == EnumPacketClient.PERMISSION_RECEIVE){
 			NBTTagCompound compound = Server.readNBT(buffer);
-			ClientCacheController.createCache();
-			ModelData playersData = ClientDataController.Instance().getPlayerData(player);
-			playersData.player = player;
-			playersData.setNBT(compound);
+			ClientPermController.readNBT(compound);
 		}
 		else if(type == EnumPacketClient.SEND_PLAYER_DATA){
 			ModelData data = null;
