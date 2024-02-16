@@ -26,11 +26,7 @@ import java.util.concurrent.Executors;
 
 
 public class ModelData extends ModelDataShared implements IExtendedEntityProperties{
-	public boolean cloakInnit = false;
-	public boolean cloakLoaded = false;
-
 	public ResourceLocation textureLocation = null;
-	public ResourceLocation textureCloakLocation = null;
 
 	public boolean didSit = false;
 	public ItemStack backItem;
@@ -98,7 +94,6 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 	
 	public void setNBT(NBTTagCompound compound){
 		String prevUrl = url;
-		String prevCloakUrl = cloakUrl;
 		super.setNBT(compound);
 		rev = compound.getInteger("Revision");
 		size = compound.getInteger("Size");
@@ -233,7 +228,6 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 		ModelData data = new ModelData();
 		data.setNBT(this.getNBT());
 		data.textureLocation = null;
-		data.cloakLoaded = false;
 		data.player = player;
 		return data;
 	}
