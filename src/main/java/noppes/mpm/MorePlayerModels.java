@@ -52,10 +52,6 @@ public class MorePlayerModels {
 	public MorePlayerModels(){
 		instance = this;
 	}
-	
-	// --- IF no server
-	// ------ Allow Creation of Parts
-	// ------ Modify Saving Locally
 
 	@EventHandler
 	public void load(FMLPreInitializationEvent ev) {
