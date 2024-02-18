@@ -1,5 +1,6 @@
 package noppes.mpm.client;
 
+
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
@@ -13,7 +14,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MPMEntityUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
-import net.minecraft.world.World;
 import noppes.mpm.*;
 import noppes.mpm.client.controller.ClientCacheController;
 import noppes.mpm.client.controller.ClientDataController;
@@ -116,10 +116,12 @@ public class ClientEventHandler {
 		}
 	}
 	@SubscribeEvent
-	public void onClientTick(TickEvent.ClientTickEvent event){
-		if(event.side == Side.SERVER || event.phase == Phase.START)
+	public void onClientTick(TickEvent.ClientTickEvent event) {
+		if (event.side == Side.SERVER || event.phase == Phase.START)
 			return;
 		if (mc.thePlayer == null) return;
+
+		if(mc.theWorld == null) return;
 
 		RenderEvent.lastSkinTick++;
 	}

@@ -56,11 +56,10 @@ public class MorePlayerModels {
 	// --- IF no server
 	// ------ Allow Creation of Parts
 	// ------ Modify Saving Locally
-	// ------ WebAPI Returns
 
 	@EventHandler
 	public void load(FMLPreInitializationEvent ev) {
-		Channel = NetworkRegistry.INSTANCE.newEventDrivenChannel("MorePlayerModelsPlus");
+		Channel = NetworkRegistry.INSTANCE.newEventDrivenChannel("MorePlayerModels");
 
 		MinecraftServer server = MinecraftServer.getServer();
 		String dir = "";
@@ -99,7 +98,7 @@ public class MorePlayerModels {
 				
 		proxy.load();
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, proxy);
-		
+
 		MinecraftForge.EVENT_BUS.register(new ServerEventHandler());
 		FMLCommonHandler.instance().bus().register(new ServerTickHandler());
 

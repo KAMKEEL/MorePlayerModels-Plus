@@ -45,6 +45,7 @@ public class Server {
 			e.printStackTrace();
 		}
 	}
+
 	public static void sendToAll(EnumPacketClient enu, Object... obs) {
 		ByteBuf buffer = Unpooled.buffer();
 		try {

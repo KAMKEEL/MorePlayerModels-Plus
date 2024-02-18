@@ -28,7 +28,7 @@ public class ModelDataController {
 		modelDataThread = Executors.newSingleThreadExecutor();
 	}
 
-	public static File getWorldSaveDirectory() {
+	public static File getSaveDir(){
 		MinecraftServer server = MinecraftServer.getServer();
 		File saves = new File(".");
 		if (server != null && !server.isDedicatedServer()) {
@@ -42,10 +42,6 @@ public class ModelDataController {
 			return savedir;
 		}
 		return null;
-	}
-
-	public static File getSaveDir(){
-		return getWorldSaveDirectory();
 	}
 
 	public NBTTagCompound loadModelData(String player){
@@ -88,12 +84,6 @@ public class ModelDataController {
 				return null;
 			}
 			return modelDataCache.get(uuid).getObject();
-		}
-	}
-
-	public void removeModelDataCache(final String uuid) {
-		synchronized (modelDataCache) {
-			modelDataCache.remove(uuid);
 		}
 	}
 

@@ -46,6 +46,7 @@ public class PacketHandlerClient extends PacketHandlerServer{
 			}
 		}
 		else if(type == EnumPacketClient.LOGIN){
+			MorePlayerModels.HasServerSide = true;
 			NBTTagCompound compound = Server.readNBT(buffer);
 			ClientCacheController.createCache();
 			ModelData playersData = ClientDataController.Instance().getPlayerData(player);
@@ -53,6 +54,7 @@ public class PacketHandlerClient extends PacketHandlerServer{
 			playersData.setNBT(compound);
 		}
 		else if(type == EnumPacketClient.PERMISSION_RECEIVE){
+			MorePlayerModels.HasServerSide = true;
 			NBTTagCompound compound = Server.readNBT(buffer);
 			ClientPermController.readNBT(compound);
 		}

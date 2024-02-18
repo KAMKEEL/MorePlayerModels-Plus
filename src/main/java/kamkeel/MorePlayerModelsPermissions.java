@@ -106,7 +106,7 @@ public class MorePlayerModelsPermissions {
 				}
 			}
 		}
-		return true;
+		return false;
 	}
 
 	private boolean bukkitPermission(String username, String permission) {

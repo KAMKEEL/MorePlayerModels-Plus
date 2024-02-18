@@ -35,7 +35,7 @@ public class ServerTickHandler {
 		if(side == Side.CLIENT)
 			return;
 
-		Server.sendData((EntityPlayerMP) event.player, EnumPacketClient.SERVER_PING, MorePlayerModels.Revision);
+		Server.sendData((EntityPlayerMP) event.player, EnumPacketClient.SERVER_PING);
 		ModelData data = ModelData.getData(event.player);
 
 		if(data != null){
