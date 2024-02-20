@@ -103,6 +103,9 @@ public class ClientEventHandler {
 	public void onRenderTick(TickEvent.RenderTickEvent event){
 		partialTicks = event.renderTickTime;
 		Minecraft mc = Minecraft.getMinecraft();
+		if(mc.entityRenderer == null)
+			return;
+
 		if(ConfigClient.EnablePOV){
 			if(alt == null)
 				alt = new EntityRendererAlt(mc);
