@@ -145,6 +145,7 @@ public class GuiCreationScreenInterface extends GuiNPCInterface implements ISubG
 			}
 			fixPlayerSkinLegs(playerdata);
 			playerdata.textureLocation = null;
+			playerdata.resourceInit = false;
 			this.initGui();
 		}
 		if(btn.id == 251){

@@ -1,5 +1,6 @@
 package noppes.mpm;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -27,6 +28,7 @@ public class ServerEventHandler {
 			return;
 		EntityPlayer target = (EntityPlayer) event.target;
 		EntityPlayerMP player = (EntityPlayerMP) event.entityPlayer;
+
 		ModelData data = ModelData.getData(target);
 		if (data == null)
 			return;

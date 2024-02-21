@@ -183,9 +183,10 @@ public class RenderMPM extends RenderPlayer {
 		if(data == null)
 			return;
 
-		if(data.textureLocation == null && lastSkinTick > RenderEvent.MaxSkinTick){
-			getPlayerTexture((AbstractClientPlayer) player);
+		if(!data.resourceInit && lastSkinTick > RenderEvent.MaxSkinTick){
 			lastSkinTick = 0;
+			getPlayerTexture((AbstractClientPlayer) player);
+			data.resourceInit = true;
 		}
 		setModelData(data, player);
 

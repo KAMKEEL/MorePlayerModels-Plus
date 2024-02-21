@@ -66,9 +66,10 @@ public class RenderEvent {
 				player.renderYawOffset = player.prevRenderYawOffset = 0;
 		}
 
-		if(data.textureLocation == null && lastSkinTick > MaxSkinTick){
+		if(!data.resourceInit && lastSkinTick > MaxSkinTick){
 			lastSkinTick = 0;
 			renderer.getPlayerTexture((AbstractClientPlayer) player);
+			data.resourceInit = true;
 		}
 		if(!(event.renderer instanceof RenderMPM)){
 			RenderManager.instance.entityRenderMap.put(EntityPlayer.class, renderer);

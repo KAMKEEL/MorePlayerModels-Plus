@@ -33,11 +33,6 @@ public class MPMRendererHelper {
 	public static void setMainModel(RenderPlayer renderer, ModelMPM modelBipedMain) {
 		renderer.mainModel = modelBipedMain;
 	}
-	
-	public static String getTexture(RendererLivingEntity render, Entity entity){
-		ResourceLocation location = render.getEntityTexture(entity);
-		return location.toString();
-	}
 
 	public static ResourceLocation getResource(AbstractClientPlayer player, RendererLivingEntity render, Entity entity){
 		if(render != null){

@@ -84,6 +84,7 @@ public class GuiCreationConfig extends GuiCreationScreenInterface implements ITe
     		for(EntityPlayer player : players){
 				ModelData data = ClientDataController.Instance().getPlayerData(player);
 				data.textureLocation = null;
+				data.resourceInit = false;
     		}
 			ClientCacheController.clearSkinData();
 		}
@@ -121,6 +122,7 @@ public class GuiCreationConfig extends GuiCreationScreenInterface implements ITe
 		if(button.id == 254){
 			playerdata.urlType = (byte) button.getValue();
 			playerdata.textureLocation = null;
+			playerdata.resourceInit = false;
 		}
     }
     
@@ -130,6 +132,7 @@ public class GuiCreationConfig extends GuiCreationScreenInterface implements ITe
 		if(guiNpcTextField.id == 52){
 			playerdata.url = guiNpcTextField.getText();
 			playerdata.textureLocation = null;
+			playerdata.resourceInit = false;
 		}
 	}
 }

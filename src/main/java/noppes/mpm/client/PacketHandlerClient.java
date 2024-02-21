@@ -43,6 +43,7 @@ public class PacketHandlerClient extends PacketHandlerServer{
 			for(EntityPlayer p : players){
 				ModelData data = ClientDataController.Instance().getPlayerData(p);
 				data.textureLocation = null;
+				data.resourceInit = false;
 			}
 		}
 		else if(type == EnumPacketClient.LOGIN){

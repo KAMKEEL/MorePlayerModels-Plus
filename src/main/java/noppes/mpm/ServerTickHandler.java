@@ -39,7 +39,7 @@ public class ServerTickHandler {
 		ModelData data = ModelData.getData(event.player);
 
 		if(data != null){
-			data.textureLocation = null;
+			data.resourceInit = false;
 			if(!event.player.worldObj.getGameRules().getGameRuleBooleanValue("mpmAllowEntityModels"))
 				data.entityClass = null;
 
