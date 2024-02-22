@@ -116,7 +116,7 @@ public class RenderMPM extends RenderPlayer {
 		super.doRender(player, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
 	}
 
-	public void getPlayerTexture(AbstractClientPlayer player) {
+	public ResourceLocation getPlayerTextureLocation(AbstractClientPlayer player) {
 		if(data.url.isEmpty()){ //player skin
 			if(data.modelType == 0){
 				Minecraft mc = Minecraft.getMinecraft();
@@ -127,8 +127,13 @@ public class RenderMPM extends RenderPlayer {
 				}
 				if (map.containsKey(Type.SKIN)){
 					data.textureLocation = mc.func_152342_ad().func_152792_a((MinecraftProfileTexture)map.get(Type.SKIN), Type.SKIN);
+					if(data.textureLocation == null)
+						return AbstractClientPlayer.locationStevePng;
+
 					player.func_152121_a(Type.SKIN, data.textureLocation);
+					return data.textureLocation;
 				}
+				return AbstractClientPlayer.locationStevePng;
 			}
 			else {
 				String futureSkin = "https://crafatar.com/skins/" + player.getUniqueID().toString().replace("-", "") + ".png";
@@ -141,19 +146,19 @@ public class RenderMPM extends RenderPlayer {
 					}
 					data.textureLocation = new ResourceLocation("skins64/" + sb.toString());
 					player.func_152121_a(Type.SKIN, data.textureLocation);
-					ClientCacheController.getPlayerSkin(futureSkin, true, data.textureLocation);
+					return ClientCacheController.getPlayerSkin(futureSkin, true, data.textureLocation).getLocation();
 				} catch(Exception ignored){}
-			}
 
+				if(data.modelType == 1)
+					return steve64Skin;
+				return alexSkin;
+			}
 		}
 		else { // url skin
 			if(!data.url.startsWith("http://") && !data.url.startsWith("https://")){
 				data.textureLocation = new ResourceLocation(data.url);
-				try {
-					Minecraft.getMinecraft().getTextureManager().bindTexture(data.textureLocation);
-				}
-				catch(Exception ignored){}
 				player.func_152121_a(Type.SKIN, data.textureLocation);
+				return data.textureLocation;
 			}
 			else {
 				try {
@@ -166,13 +171,19 @@ public class RenderMPM extends RenderPlayer {
 					if (data.modelType == 0) {
 						data.textureLocation = new ResourceLocation("skins/" + sb.toString());
 						player.func_152121_a(Type.SKIN, data.textureLocation);
-						ClientCacheController.getPlayerSkin(data.url, false, data.textureLocation);
+						return ClientCacheController.getPlayerSkin(data.url, false, data.textureLocation).getLocation();
 					} else {
 						data.textureLocation = new ResourceLocation("skins64/" + sb.toString());
 						player.func_152121_a(Type.SKIN, data.textureLocation);
-						ClientCacheController.getPlayerSkin(data.url, true, data.textureLocation);
+						return ClientCacheController.getPlayerSkin(data.url, true, data.textureLocation).getLocation();
 					}
 				} catch(Exception ignored){}
+
+				if(data.modelType == 0)
+					return AbstractClientPlayer.locationStevePng;
+				else if(data.modelType == 1)
+					return steve64Skin;
+				return alexSkin;
 			}
 		}
 	}
@@ -185,7 +196,7 @@ public class RenderMPM extends RenderPlayer {
 
 		if(!data.resourceInit && lastSkinTick > RenderEvent.MaxSkinTick){
 			lastSkinTick = 0;
-			getPlayerTexture((AbstractClientPlayer) player);
+			data.textureLocation = getPlayerTextureLocation((AbstractClientPlayer) player);
 			data.resourceInit = true;
 		}
 		setModelData(data, player);
@@ -533,7 +544,16 @@ public class RenderMPM extends RenderPlayer {
 	}
 	@Override
 	protected ResourceLocation getEntityTexture(AbstractClientPlayer player){
-		return MPMRendererHelper.getResource(player, renderEntity, entity);
+		if (this.data == null || renderEntity != null) {
+			return MPMRendererHelper.getResource(player, renderEntity, entity);
+		}
+
+		ResourceLocation resourceLocation =  getPlayerTextureLocation(player);
+		if(resourceLocation == null){
+			return AbstractClientPlayer.locationStevePng;
+		}
+
+		return resourceLocation;
 	}
 
 	public void setModelType(ModelData data){

@@ -39,9 +39,7 @@ public class MPMRendererHelper {
 			try{
 				return render.getEntityTexture(entity);
 			}
-			catch(Exception ex){
-				
-			}
+			catch(Exception ex){}
 		}
 		return player.getLocationSkin();
 	}

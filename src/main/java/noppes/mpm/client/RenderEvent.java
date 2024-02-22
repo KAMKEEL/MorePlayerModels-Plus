@@ -68,7 +68,7 @@ public class RenderEvent {
 
 		if(!data.resourceInit && lastSkinTick > MaxSkinTick){
 			lastSkinTick = 0;
-			renderer.getPlayerTexture((AbstractClientPlayer) player);
+			renderer.getPlayerTextureLocation((AbstractClientPlayer) player);
 			data.resourceInit = true;
 		}
 		if(!(event.renderer instanceof RenderMPM)){

@@ -56,7 +56,7 @@ public class ImageData {
         }
     }
 
-    private ResourceLocation getLocation() {
+    public ResourceLocation getLocation() {
         return this.isUrl && this.imageDownloadAlt.getBufferedImage() == null ? null : this.location;
     }
 
