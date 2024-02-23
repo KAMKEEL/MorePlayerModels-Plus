@@ -194,7 +194,7 @@ public class RenderMPM extends RenderPlayer {
 		if(data == null)
 			return;
 
-		if((!data.resourceInit || data.textureLocation == null) && lastSkinTick > RenderEvent.MaxSkinTick){
+		if(!data.resourceInit && lastSkinTick > RenderEvent.MaxSkinTick){
 			lastSkinTick = 0;
 			data.textureLocation = getPlayerTextureLocation((AbstractClientPlayer) player);
 			data.resourceInit = true;
@@ -544,6 +544,7 @@ public class RenderMPM extends RenderPlayer {
 	}
 	@Override
 	protected ResourceLocation getEntityTexture(AbstractClientPlayer player){
+		this.data = ModelData.getData(player);
 		if (this.data == null || renderEntity != null) {
 			return MPMRendererHelper.getResource(player, renderEntity, entity);
 		}
