@@ -132,6 +132,32 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 		}
 	}
 
+	public String getHash(){
+		try {
+			MessageDigest digest = MessageDigest.getInstance("MD5");
+			String toHash = arms.toString() + legs.toString() + body.toString() + head.toString();
+
+			if(entityClass != null)
+				toHash += entityClass.getCanonicalName();
+
+			toHash += legParts.toString() + headwear + soundType + url;
+
+			for(EnumParts e : parts.keySet()){
+				toHash += e.name + ":" + parts.get(e).toString();
+			}
+			byte[] hash = digest.digest(toHash.getBytes("UTF-8"));
+			StringBuilder sb = new StringBuilder(2*hash.length);
+			for(byte b : hash){
+				sb.append(String.format("%02x", b&0xff));
+			}
+
+			return sb.toString();
+		} catch (Exception e) {
+
+		}
+		return "";
+	}
+
 	public void setAnimation(int i) {
 		if(i < EnumAnimation.values().length)
 			animation = EnumAnimation.values()[i];

@@ -3,6 +3,7 @@ package noppes.mpm;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.network.FMLNetworkEvent.ServerCustomPacketEvent;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -61,6 +62,21 @@ public class PacketHandlerServer{
 
 			Server.sendAssociatedData(player, EnumPacketClient.PLAY_ANIMATION, player.getCommandSenderName(), animation);
 			data.setAnimation(animation);
+		}
+		else if(type == EnumPacketServer.REQUEST_PLAYER_DATA){
+			EntityPlayer pl = player.worldObj.getPlayerEntityByName(Server.readString(buffer));
+			if(pl == null)
+				return;
+			String hash = Server.readString(buffer);
+			if(hash == null)
+				return;
+
+			ModelData data = ModelData.getData(player);
+			if(data == null)
+				return;
+
+			if(!hash.equals(data.getHash()))
+				Server.sendData(player, EnumPacketClient.SEND_PLAYER_DATA, pl.getCommandSenderName(), data.getNBT());
 		}
 	}
 }

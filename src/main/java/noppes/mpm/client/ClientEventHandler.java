@@ -14,6 +14,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MPMEntityUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
 import noppes.mpm.*;
 import noppes.mpm.client.controller.ClientCacheController;
 import noppes.mpm.client.controller.ClientDataController;
@@ -122,9 +123,20 @@ public class ClientEventHandler {
 	public void onClientTick(TickEvent.ClientTickEvent event) {
 		if (event.side == Side.SERVER || event.phase == Phase.START)
 			return;
-		if (mc.thePlayer == null) return;
+		if (mc.thePlayer == null || mc.theWorld == null) return;
 
-		if(mc.theWorld == null) return;
+		if(MorePlayerModels.HasServerSide && mc.theWorld .getWorldTime() % 20 == 0){
+			List<EntityPlayer> list = mc.theWorld.getEntitiesWithinAABB(EntityPlayer.class, mc.thePlayer.boundingBox.expand(64, 64, 64));
+			for(EntityPlayer player : list){
+				if(player == mc.thePlayer)
+					continue;
+				if(playerlist != null && playerlist.contains(player))
+					continue;
+				ModelData data = ModelData.getData(player);
+				Client.sendData(EnumPacketServer.REQUEST_PLAYER_DATA, player.getCommandSenderName(), data.getHash());
+			}
+			playerlist = list;
+		}
 
 		RenderEvent.lastSkinTick++;
 	}
