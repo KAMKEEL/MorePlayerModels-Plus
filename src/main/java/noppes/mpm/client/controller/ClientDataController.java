@@ -10,10 +10,11 @@ import java.util.UUID;
 
 public class ClientDataController {
     private static ClientDataController Instance;
-    private final HashMap<UUID, ModelData> playerData;
+    private final HashMap<UUID, ModelData> playerData = new HashMap<>();
 
     private ClientDataController() {
-        playerData = new HashMap<>();
+        EntityClientPlayerMP player = Minecraft.getMinecraft().thePlayer;
+        this.playerData.put(player.getUniqueID(), new ModelData(player));
     }
 
     public static ClientDataController Instance() {
