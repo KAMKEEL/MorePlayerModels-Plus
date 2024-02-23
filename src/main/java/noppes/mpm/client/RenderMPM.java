@@ -66,8 +66,8 @@ public class RenderMPM extends RenderPlayer {
 	public EntityLivingBase entity;
 	public ModelRenderPassHelper renderpass = new ModelRenderPassHelper();
 
-	private static final ResourceLocation steve64Skin = new ResourceLocation("moreplayermodels:textures/skins/steve.png");
-	private static final ResourceLocation alexSkin = new ResourceLocation("moreplayermodels:textures/skins/alex.png");
+	public static final ResourceLocation steve64Skin = new ResourceLocation("moreplayermodels:textures/skins/steve.png");
+	public static final ResourceLocation alexSkin = new ResourceLocation("moreplayermodels:textures/skins/alex.png");
 
 	public RenderMPM() {
 		super();

@@ -13,6 +13,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.village.MerchantRecipeList;
 import noppes.mpm.constants.EnumPacketClient;
+import noppes.mpm.util.MPMScheduler;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -32,6 +33,17 @@ public class Server {
 			e.printStackTrace();
 		}
 		return true;
+	}
+
+	public static void sendDelayedData(final EntityPlayerMP player, EnumPacketClient enu, int delay, Object... obs) {
+		final PacketBuffer buffer = new PacketBuffer(Unpooled.buffer());
+		try {
+			if(!fillBuffer(buffer, enu, obs))
+				return;
+			MPMScheduler.runTack(() -> MorePlayerModels.Channel.sendTo(new FMLProxyPacket(buffer, "MorePlayerModels"), player), delay);
+		} catch (IOException e) {
+			LogWriter.except(e);
+		}
 	}
 
 	public static void sendAssociatedData(Entity entity, EnumPacketClient enu, Object... obs) {
