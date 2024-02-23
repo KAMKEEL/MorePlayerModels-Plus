@@ -139,6 +139,6 @@ public class ServerTickHandler {
 				data.animation == EnumAnimation.SITTING || data.animation == EnumAnimation.DANCING))
 			return;
 		if(speed > 0.01 || isJumping || player.isPlayerSleeping() || player.isRiding() || data.isSleeping() && speed > 0.001)
-			data.animation = EnumAnimation.NONE;
+			data.setAnimation(EnumAnimation.NONE);
 	}
 }

@@ -42,7 +42,7 @@ public class ClientEventHandler {
 		if(mc == null || mc.thePlayer == null)
 			return;
 		if(ClientProxy.Screen.isPressed()){
-			ModelData data = ClientDataController.Instance().getPlayerData(mc.thePlayer);
+			ModelData data = ModelData.getData(mc.thePlayer);
 			data.animation = EnumAnimation.NONE;
 			if(mc.currentScreen == null)
 				mc.displayGuiScreen(new GuiCreationScreenInterface());
@@ -91,7 +91,7 @@ public class ClientEventHandler {
 					animation = EnumAnimation.SLEEPING_EAST;
 			}
 
-			ModelData data = ClientDataController.Instance().getPlayerData(player);
+			ModelData data = ModelData.getData(player);
 			if(data.animationEquals(animation))
 				animation = EnumAnimation.NONE;
 
