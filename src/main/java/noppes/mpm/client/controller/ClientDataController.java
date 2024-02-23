@@ -4,17 +4,18 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.entity.player.EntityPlayer;
 import noppes.mpm.ModelData;
+import org.lwjgl.Sys;
 
 import java.util.HashMap;
 import java.util.UUID;
 
 public class ClientDataController {
     private static ClientDataController Instance;
-    private final HashMap<UUID, ModelData> playerData = new HashMap<>();
+    private final HashMap<String , ModelData> playerData = new HashMap<>();
 
     private ClientDataController() {
         EntityClientPlayerMP player = Minecraft.getMinecraft().thePlayer;
-        this.playerData.put(player.getUniqueID(), new ModelData(player));
+        this.playerData.put(player.getCommandSenderName(), new ModelData(player));
     }
 
     public static ClientDataController Instance() {
@@ -28,10 +29,10 @@ public class ClientDataController {
         Instance = null;
     }
 
-    public ModelData getPlayerData(EntityPlayer entity) {
-        if (!this.playerData.containsKey(entity.getUniqueID())) {
-            this.playerData.put(entity.getUniqueID(), new ModelData(entity));
+    public ModelData getPlayerData(EntityPlayer entity){
+        if (!this.playerData.containsKey(entity.getCommandSenderName())) {
+            this.playerData.put(entity.getCommandSenderName(), new ModelData(entity));
         }
-        return this.playerData.get(entity.getUniqueID());
+        return this.playerData.get(entity.getCommandSenderName());
     }
 }

@@ -33,6 +33,8 @@ public class ServerEventHandler {
 		if (data == null)
 			return;
 
+		data.resourceInit = false;
+		data.textureLocation = null;
 		Server.sendData(player, EnumPacketClient.SEND_PLAYER_DATA, target.getCommandSenderName(), data.getNBT());
 		ItemStack back = player.inventory.mainInventory[0];
 		if(back != null)
