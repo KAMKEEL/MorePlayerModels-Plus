@@ -99,17 +99,16 @@ public class ServerTickHandler {
 		EntityPlayerMP player = (EntityPlayerMP) event.player;
 		ModelData data = ModelData.getData(player);
 		ItemStack item = player.inventory.mainInventory[0];
-		if(data.backItem == item)
-			return;
-
-		if(item == null){
-			Server.sendAssociatedData(player, EnumPacketClient.BACK_ITEM_REMOVE, player.getCommandSenderName());
+		if(data.backItem != item){
+			if(item == null){
+				Server.sendAssociatedData(player, EnumPacketClient.BACK_ITEM_REMOVE, player.getCommandSenderName());
+			}
+			else {
+				NBTTagCompound tag = item.writeToNBT(new NBTTagCompound());
+				Server.sendAssociatedData(player, EnumPacketClient.BACK_ITEM_UPDATE, player.getCommandSenderName(), tag);
+			}
+			data.backItem = item;
 		}
-		else {
-			NBTTagCompound tag = item.writeToNBT(new NBTTagCompound());
-			Server.sendAssociatedData(player, EnumPacketClient.BACK_ITEM_UPDATE, player.getCommandSenderName(), tag);
-		}
-		data.backItem = item;
 
 		if(data.animation != EnumAnimation.NONE)
 			checkAnimation(player, data);
@@ -128,6 +127,9 @@ public class ServerTickHandler {
 
 		double speed = motionX * motionX +  motionZ * motionZ;
 		boolean isJumping = motionY * motionY > 0.08;
+
+		if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
+			System.out.println("Okay!");
 
 		if(data.animationTime > 0)
 			data.animationTime--;

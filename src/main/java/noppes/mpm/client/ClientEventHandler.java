@@ -147,7 +147,7 @@ public class ClientEventHandler {
 		if(event.side == Side.SERVER || event.phase == Phase.START)
 			return;
     	EntityPlayer player = event.player;
-		ModelData data = ClientDataController.Instance().getPlayerData(player);
+		ModelData data = ModelData.getData(player);
     	EntityLivingBase entity = data.getEntity(player.worldObj, player);
     	if(entity != null){
     		entity.onUpdate();
