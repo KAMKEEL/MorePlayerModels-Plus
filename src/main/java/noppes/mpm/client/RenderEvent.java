@@ -66,7 +66,7 @@ public class RenderEvent {
 				player.renderYawOffset = player.prevRenderYawOffset = 0;
 		}
 
-		if(!data.resourceInit && lastSkinTick > MaxSkinTick){
+		if((!data.resourceInit || data.textureLocation == null) && lastSkinTick > MaxSkinTick){
 			lastSkinTick = 0;
 			renderer.getPlayerTextureLocation((AbstractClientPlayer) player);
 			data.resourceInit = true;

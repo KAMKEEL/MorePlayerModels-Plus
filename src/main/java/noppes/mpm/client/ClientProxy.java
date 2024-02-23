@@ -7,6 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ReportedException;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -46,11 +47,11 @@ public class ClientProxy extends CommonProxy{
 		ClientRegistry.registerKeyBinding(MPM4 = new KeyBinding("MPM 4",Keyboard.KEY_NONE, "key.categories.gameplay"));
 		ClientRegistry.registerKeyBinding(MPM5 = new KeyBinding("MPM 5",Keyboard.KEY_NONE, "key.categories.gameplay"));
 
-		RenderingRegistry.registerEntityRenderingHandler(EntityPlayer.class, RenderEvent.renderer);
-
 		FMLCommonHandler.instance().bus().register(new ClientEventHandler());
 		MinecraftForge.EVENT_BUS.register(new RenderEvent());
-		
+
+		RenderingRegistry.registerEntityRenderingHandler(EntityPlayer.class, RenderEvent.renderer);
+
 		if(ConfigMain.EnableUpdateChecker){
 			VersionChecker checker = new VersionChecker();
 			checker.start();
