@@ -128,9 +128,6 @@ public class ServerTickHandler {
 		double speed = motionX * motionX +  motionZ * motionZ;
 		boolean isJumping = motionY * motionY > 0.08;
 
-		if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
-			System.out.println("Okay!");
-
 		if(data.animationTime > 0)
 			data.animationTime--;
 
