@@ -198,20 +198,16 @@ public class RenderMPM extends RenderPlayer {
 
 
 		if(data.textureLocation != null){
-			ImageData imageData = ClientCacheController.getTextureUnsafe(data.textureLocation.getResourcePath());
-			if(imageData == null){
-				data.resourceInit = false;
-			}
-			else {
-				if(!imageData.imageLoaded()){
-					try {
-						imageData.bindTexture();
-					} catch (Exception e) { return;}
+			if(!(data.modelType == 0 && data.url.isEmpty())){
+				ImageData imageData = ClientCacheController.getTextureUnsafe(data.textureLocation.getResourcePath());
+				if(imageData == null || !imageData.imageLoaded()){
+					data.resourceInit = false;
 				}
 			}
+			setPlayerTexture((AbstractClientPlayer) player, data.textureLocation);
 		}
 
-		if(!data.resourceInit && lastSkinTick > RenderEvent.MaxSkinTick){
+		if((!data.resourceInit || data.textureLocation == null) && lastSkinTick > RenderEvent.MaxSkinTick){
 			lastSkinTick = 0;
 			loadPlayerResource(player, data);
 			data.resourceInit = true;

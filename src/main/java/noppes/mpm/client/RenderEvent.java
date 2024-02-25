@@ -71,29 +71,10 @@ public class RenderEvent {
 
 
 		if(data.textureLocation != null){
-			if(data.modelType == 0 && data.url.isEmpty()){
-//				try {
-//					ClientProxy.bindTexture(data.textureLocation);
-//				} catch (Exception e) {
-//					data.resourceInit = false;
-//				}
-			}
-			else {
+			if(!(data.modelType == 0 && data.url.isEmpty())){
 				ImageData imageData = ClientCacheController.getTextureUnsafe(data.textureLocation.getResourcePath());
-				if(imageData == null){
+				if(imageData == null || !imageData.imageLoaded()){
 					data.resourceInit = false;
-				}
-				else {
-					if(!imageData.imageLoaded()){
-						data.resourceInit = false;
-					}
-//					else {
-//						try {
-//							imageData.bindTexture();
-//						} catch (Exception e) {
-//							data.resourceInit = false;
-//						}
-//					}
 				}
 			}
 			renderer.setPlayerTexture((AbstractClientPlayer) player, data.textureLocation);
@@ -104,7 +85,6 @@ public class RenderEvent {
 			renderer.loadPlayerResource(player, data);
 			data.resourceInit = true;
 		}
-
 
 		if(!(event.renderer instanceof RenderMPM)){
 			RenderManager.instance.entityRenderMap.put(EntityPlayer.class, renderer);
