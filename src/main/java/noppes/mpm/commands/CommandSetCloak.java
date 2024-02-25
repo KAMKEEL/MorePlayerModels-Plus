@@ -9,7 +9,6 @@ import net.minecraft.util.ChatComponentTranslation;
 import noppes.mpm.ModelData;
 import noppes.mpm.Server;
 import noppes.mpm.constants.EnumPacketClient;
-import noppes.mpm.controllers.ModelDataController;
 
 import java.util.List;
 
@@ -52,8 +51,7 @@ public class CommandSetCloak extends MpmCommandInterface {
 
 		ModelData data = ModelData.getData(player);
 		data.cloakUrl = url;
-		data.textureLocation = null;
-		data.resourceInit = false;
+        data.resourceInit = false;
 		Server.sendAssociatedData(player, EnumPacketClient.SEND_PLAYER_DATA, player.getCommandSenderName(), data.getNBT());
 	}
 

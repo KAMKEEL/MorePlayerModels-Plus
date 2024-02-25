@@ -3,12 +3,15 @@ package noppes.mpm.client;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
+import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.entity.*;
+import net.minecraft.client.renderer.texture.ITextureObject;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySkullRenderer;
 import net.minecraft.client.resources.SkinManager;
 import net.minecraft.entity.EntityList;
@@ -35,6 +38,7 @@ import noppes.mpm.constants.EnumAnimation;
 import org.lwjgl.Sys;
 import org.lwjgl.opengl.GL11;
 
+import java.io.File;
 import java.lang.reflect.Method;
 import java.security.MessageDigest;
 import java.util.Map;
@@ -116,76 +120,74 @@ public class RenderMPM extends RenderPlayer {
 		super.doRender(player, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
 	}
 
-	public ResourceLocation getPlayerTextureLocation(AbstractClientPlayer player) {
-		if(data.url.isEmpty()){ //player skin
-			if(data.modelType == 0){
-				Minecraft mc = Minecraft.getMinecraft();
-				SkinManager skinmanager = mc.func_152342_ad();
-				Map map = skinmanager.func_152788_a(player.getGameProfile());
-				if (map.isEmpty()) {
-					map = mc.func_152347_ac().getTextures(mc.func_152347_ac().fillProfileProperties(player.getGameProfile(), false), false);
-				}
-				if (map.containsKey(Type.SKIN)){
-					data.textureLocation = mc.func_152342_ad().func_152792_a((MinecraftProfileTexture)map.get(Type.SKIN), Type.SKIN);
-					if(data.textureLocation == null)
-						return AbstractClientPlayer.locationStevePng;
 
-					player.func_152121_a(Type.SKIN, data.textureLocation);
-					return data.textureLocation;
-				}
-				return AbstractClientPlayer.locationStevePng;
-			}
-			else {
-				String futureSkin = "https://crafatar.com/skins/" + player.getUniqueID().toString().replace("-", "") + ".png";
-				try {
-					MessageDigest digest = MessageDigest.getInstance("MD5");
-					byte[] hash = digest.digest(futureSkin.getBytes("UTF-8"));
-					StringBuilder sb = new StringBuilder(2*hash.length);
-					for (byte b : hash) {
-						sb.append(String.format("%02x", b&0xff));
-					}
-					data.textureLocation = new ResourceLocation("skins64/" + sb.toString());
-					player.func_152121_a(Type.SKIN, data.textureLocation);
-					return ClientCacheController.getPlayerSkin(futureSkin, true, data.textureLocation).getLocation();
-				} catch(Exception ignored){}
-
-				if(data.modelType == 1)
-					return steve64Skin;
-				return alexSkin;
-			}
-		}
-		else { // url skin
+	public void loadPlayerResource(EntityPlayer pl, ModelData data) {
+		AbstractClientPlayer player = (AbstractClientPlayer) pl;
+		data.textureLocation = null;
+		if(data.url != null && !data.url.isEmpty()){
 			if(!data.url.startsWith("http://") && !data.url.startsWith("https://")){
-				data.textureLocation = new ResourceLocation(data.url);
-				player.func_152121_a(Type.SKIN, data.textureLocation);
-				return data.textureLocation;
-			}
-			else {
-				try {
-					MessageDigest digest = MessageDigest.getInstance("MD5");
-					byte[] hash = digest.digest(data.url.getBytes("UTF-8"));
-					StringBuilder sb = new StringBuilder(2*hash.length);
-					for (byte b : hash) {
-						sb.append(String.format("%02x", b&0xff));
-					}
-					if (data.modelType == 0) {
-						data.textureLocation = new ResourceLocation("skins/" + sb.toString());
-						player.func_152121_a(Type.SKIN, data.textureLocation);
-						return ClientCacheController.getPlayerSkin(data.url, false, data.textureLocation).getLocation();
-					} else {
-						data.textureLocation = new ResourceLocation("skins64/" + sb.toString());
-						player.func_152121_a(Type.SKIN, data.textureLocation);
-						return ClientCacheController.getPlayerSkin(data.url, true, data.textureLocation).getLocation();
-					}
-				} catch(Exception ignored){}
+				ResourceLocation location = new ResourceLocation(data.url);
+				try{
+					data.textureLocation = ClientCacheController.getTexture(location.getResourcePath()).getLocation();
+				}
+				catch(Exception e){
+					if(data.modelType == 2)
+						location = alexSkin;
+					else if (data.modelType == 1)
+						location = steve64Skin;
+					else
+						location = AbstractClientPlayer.locationStevePng;
 
-				if(data.modelType == 0)
-					return AbstractClientPlayer.locationStevePng;
-				else if(data.modelType == 1)
-					return steve64Skin;
-				return alexSkin;
+					data.resourceInit = false;
+				}
+				setPlayerTexture(player, location);
 			}
+			else{
+				boolean hasUrl = data.getEntity(pl) == null;
+				ResourceLocation location = new ResourceLocation("skins/" + (data.modelType + data.url + hasUrl).hashCode());
+				setPlayerTexture(player, location);
+				data.textureLocation = ClientCacheController.getPlayerSkin(data.url, data.modelType > 0, location).getLocation();
+			}
+			return;
 		}
+		else if(data.modelType > 0){
+			String futureSkin = "https://crafatar.com/skins/" + player.getUniqueID().toString().replace("-", "") + ".png";
+			ResourceLocation location = new ResourceLocation("skins/" + (futureSkin).hashCode());
+			setPlayerTexture(player, location);
+			data.textureLocation = ClientCacheController.getPlayerSkin(futureSkin, data.modelType > 0, location).getLocation();
+			return;
+		}
+		else if(!data.resourceLoaded){
+			Minecraft mc = Minecraft.getMinecraft();
+			SkinManager skinmanager = mc.func_152342_ad();
+			Map map = skinmanager.func_152788_a(player.getGameProfile());
+			if (map.isEmpty()) {
+				map = mc.func_152347_ac().getTextures(mc.func_152347_ac().fillProfileProperties(player.getGameProfile(), false), false);
+			}
+			if (map.containsKey(MinecraftProfileTexture.Type.SKIN)){
+				data.textureLocation = mc.func_152342_ad().func_152792_a((MinecraftProfileTexture)map.get(MinecraftProfileTexture.Type.SKIN), MinecraftProfileTexture.Type.SKIN);
+				setPlayerTexture(player, data.textureLocation);
+				data.resourceLoaded = true;
+				return;
+			}
+			data.resourceInit = false;
+		}
+		setPlayerTexture(player, null);
+	}
+
+
+	public void setPlayerTexture(AbstractClientPlayer player, ResourceLocation texture){
+		player.func_152121_a(Type.SKIN, texture);
+	}
+
+	private ITextureObject loadTexture(File file, ResourceLocation resource, ResourceLocation def, String par1Str, boolean fix64){
+		TextureManager texturemanager = Minecraft.getMinecraft().getTextureManager();
+		ITextureObject object = texturemanager.getTexture(resource);
+		if(object == null){
+			object = new ImageDownloadAlt(file, par1Str, def, new ImageBufferDownloadAlt(fix64));
+			texturemanager.loadTexture(resource, object);
+		}
+		return object;
 	}
 
 	@Override
@@ -194,9 +196,24 @@ public class RenderMPM extends RenderPlayer {
 		if(data == null)
 			return;
 
+
+		if(data.textureLocation != null){
+			ImageData imageData = ClientCacheController.getTextureUnsafe(data.textureLocation.getResourcePath());
+			if(imageData == null){
+				data.resourceInit = false;
+			}
+			else {
+				if(!imageData.imageLoaded()){
+					try {
+						imageData.bindTexture();
+					} catch (Exception e) { return;}
+				}
+			}
+		}
+
 		if(!data.resourceInit && lastSkinTick > RenderEvent.MaxSkinTick){
 			lastSkinTick = 0;
-			data.textureLocation = getPlayerTextureLocation((AbstractClientPlayer) player);
+			loadPlayerResource(player, data);
 			data.resourceInit = true;
 		}
 		setModelData(data, player);
@@ -544,17 +561,7 @@ public class RenderMPM extends RenderPlayer {
 	}
 	@Override
 	protected ResourceLocation getEntityTexture(AbstractClientPlayer player){
-		this.data = ModelData.getData(player);
-		if (this.data == null || renderEntity != null) {
-			return MPMRendererHelper.getResource(player, renderEntity, entity);
-		}
-
-		ResourceLocation resourceLocation =  getPlayerTextureLocation(player);
-		if(resourceLocation == null){
-			return AbstractClientPlayer.locationStevePng;
-		}
-
-		return resourceLocation;
+		return MPMRendererHelper.getResource(player, renderEntity, entity);
 	}
 
 	public void setModelType(ModelData data){

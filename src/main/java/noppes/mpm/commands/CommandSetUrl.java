@@ -9,7 +9,6 @@ import net.minecraft.util.ChatComponentTranslation;
 import noppes.mpm.ModelData;
 import noppes.mpm.Server;
 import noppes.mpm.constants.EnumPacketClient;
-import noppes.mpm.controllers.ModelDataController;
 
 import java.util.List;
 
@@ -52,7 +51,6 @@ public class CommandSetUrl extends MpmCommandInterface {
 
 		ModelData data = ModelData.getData(player);
 		data.url = url;
-		data.textureLocation = null;
 		data.resourceInit = false;
 		Server.sendAssociatedData(player, EnumPacketClient.SEND_PLAYER_DATA, player.getCommandSenderName(), data.getNBT());
 	}

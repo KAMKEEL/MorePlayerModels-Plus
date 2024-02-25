@@ -2,6 +2,7 @@ package noppes.mpm;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
+import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
@@ -14,20 +15,17 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
 import noppes.mpm.constants.EnumAnimation;
-import noppes.mpm.constants.EnumParts;
 import noppes.mpm.controllers.ModelDataController;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.lang.reflect.Method;
-import java.security.MessageDigest;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 
 public class ModelData extends ModelDataShared implements IExtendedEntityProperties{
 	public ResourceLocation textureLocation = null;
 	public boolean resourceInit = false;
+	public boolean resourceLoaded = false;
 
 	public boolean didSit = false;
 	public ItemStack backItem;
@@ -95,6 +93,7 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 	
 	public void setNBT(NBTTagCompound compound){
 		String prevUrl = url;
+		int prevModelType = modelType;
 		super.setNBT(compound);
 		rev = compound.getInteger("Revision");
 		size = compound.getInteger("Size");
@@ -118,8 +117,13 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 		cloakUrl = compound.getString("CloakUrl");
 
 		if(!prevUrl.equals(url)) {
-			textureLocation = null;
 			resourceInit = false;
+			resourceLoaded = false;
+		}
+
+		if(modelType != prevModelType) {
+			resourceInit = false;
+			resourceLoaded = false;
 		}
 
 		if(player != null){
@@ -206,9 +210,8 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 	public ModelData copy(){
 		ModelData data = new ModelData();
 		data.setNBT(this.getNBT());
-		data.textureLocation = null;
 		data.player = player;
-		data.resourceInit = false;
+		data.resourceLoaded = false;
 		return data;
 	}
 

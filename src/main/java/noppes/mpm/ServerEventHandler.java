@@ -33,12 +33,12 @@ public class ServerEventHandler {
 		if (data == null)
 			return;
 
-		Server.sendDelayedData(player, EnumPacketClient.SEND_PLAYER_DATA, 100, target.getCommandSenderName(), data.getNBT());
+		Server.sendData(player, EnumPacketClient.SEND_PLAYER_DATA, target.getCommandSenderName(), data.getNBT());
 		ItemStack back = player.inventory.mainInventory[0];
 		if(back != null)
-			Server.sendDelayedData(player, EnumPacketClient.BACK_ITEM_UPDATE, 100, target.getCommandSenderName(), back.writeToNBT(new NBTTagCompound()));
+			Server.sendData(player, EnumPacketClient.BACK_ITEM_UPDATE, target.getCommandSenderName(), back.writeToNBT(new NBTTagCompound()));
 		else
-			Server.sendDelayedData(player, EnumPacketClient.BACK_ITEM_REMOVE, 100, target.getCommandSenderName());
+			Server.sendData(player, EnumPacketClient.BACK_ITEM_REMOVE, target.getCommandSenderName());
 	}
 	
 	@SubscribeEvent

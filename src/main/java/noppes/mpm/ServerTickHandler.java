@@ -5,24 +5,14 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import kamkeel.MorePlayerModelsPermissions;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.server.MinecraftServer;
-import noppes.mpm.client.AnalyticsTracking;
 import noppes.mpm.constants.EnumAnimation;
 import noppes.mpm.constants.EnumPacketClient;
-import noppes.mpm.controllers.ModelDataController;
 import noppes.mpm.controllers.PermissionController;
 import noppes.mpm.controllers.data.PermissionData;
-
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.List;
 
 public class ServerTickHandler {
 
@@ -40,7 +30,6 @@ public class ServerTickHandler {
 		
 		if(data != null){
 			data.resourceInit = false;
-			data.textureLocation = null;
 			if(!event.player.worldObj.getGameRules().getGameRuleBooleanValue("mpmAllowEntityModels"))
 				data.entityClass = null;
 

@@ -11,12 +11,13 @@ import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.entity.MPMRendererHelper;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderPlayer;
+import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.*;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import noppes.mpm.ModelData;
@@ -34,6 +35,9 @@ public class RenderEvent {
 	private ModelData data;
 
 	private static final Entity hideNameSheep = new EntitySheep(null);
+
+	private static ResourceLocation skinResource = null;
+	private static ITextureObject textureObject = null;
 
 	public RenderEvent(){
 		Instance = this;
@@ -54,7 +58,6 @@ public class RenderEvent {
 
 		renderer.setModelData(data, player);
 		setModels(event.renderer);
-
 		if(data.isSleeping()){
 			if(data.animation == EnumAnimation.SLEEPING_EAST)
 				player.renderYawOffset = player.prevRenderYawOffset = -90;
@@ -66,11 +69,43 @@ public class RenderEvent {
 				player.renderYawOffset = player.prevRenderYawOffset = 0;
 		}
 
-		if(!data.resourceInit && lastSkinTick > MaxSkinTick){
+
+		if(data.textureLocation != null){
+			if(data.modelType == 0 && data.url.isEmpty()){
+//				try {
+//					ClientProxy.bindTexture(data.textureLocation);
+//				} catch (Exception e) {
+//					data.resourceInit = false;
+//				}
+			}
+			else {
+				ImageData imageData = ClientCacheController.getTextureUnsafe(data.textureLocation.getResourcePath());
+				if(imageData == null){
+					data.resourceInit = false;
+				}
+				else {
+					if(!imageData.imageLoaded()){
+						data.resourceInit = false;
+					}
+//					else {
+//						try {
+//							imageData.bindTexture();
+//						} catch (Exception e) {
+//							data.resourceInit = false;
+//						}
+//					}
+				}
+			}
+			renderer.setPlayerTexture((AbstractClientPlayer) player, data.textureLocation);
+		}
+
+		if((!data.resourceInit || data.textureLocation == null) && lastSkinTick > MaxSkinTick) {
 			lastSkinTick = 0;
-			renderer.getPlayerTextureLocation((AbstractClientPlayer) player);
+			renderer.loadPlayerResource(player, data);
 			data.resourceInit = true;
 		}
+
+
 		if(!(event.renderer instanceof RenderMPM)){
 			RenderManager.instance.entityRenderMap.put(EntityPlayer.class, renderer);
 			RenderManager.instance.entityRenderMap.put(EntityPlayerSP.class, renderer);
@@ -80,8 +115,6 @@ public class RenderEvent {
 			RenderManager.instance.entityRenderMap.put(AbstractClientPlayer.class, renderer);
 		}
 
-		EntityLivingBase entity = data.getEntity(player.worldObj, player);
-		renderer.setEntity(entity);
 		if(player == Minecraft.getMinecraft().thePlayer){
 			player.yOffset = 1.62f;
 			data.backItem = player.inventory.mainInventory[0];

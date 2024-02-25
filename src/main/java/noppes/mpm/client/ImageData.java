@@ -1,8 +1,6 @@
 package noppes.mpm.client;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ThreadDownloadImageData;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.resources.IResource;
@@ -11,7 +9,6 @@ import net.minecraft.util.ResourceLocation;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -58,6 +55,10 @@ public class ImageData {
 
     public ResourceLocation getLocation() {
         return this.isUrl && this.imageDownloadAlt.getBufferedImage() == null ? null : this.location;
+    }
+
+    public ITextureObject getITexture() {
+        return this.imageDownloadAlt;
     }
 
     public boolean imageLoaded() {

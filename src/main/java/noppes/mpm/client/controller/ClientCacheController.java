@@ -4,7 +4,6 @@ import net.minecraft.util.ResourceLocation;
 import noppes.mpm.client.ImageData;
 import noppes.mpm.client.PresetController;
 import noppes.mpm.config.ConfigClient;
-import noppes.mpm.controllers.PermissionController;
 import noppes.mpm.util.CacheHashMap;
 
 public class ClientCacheController {
@@ -20,10 +19,19 @@ public class ClientCacheController {
         }
     }
 
-    public static ImageData getCapeTexture(String directory) {
+    public static ImageData getTexture(String directory) {
         synchronized (imageDataCache) {
             if (!imageDataCache.containsKey(directory)) {
                 imageDataCache.put(directory, new CacheHashMap.CachedObject<>(new ImageData(directory)));
+            }
+            return imageDataCache.get(directory).getObject();
+        }
+    }
+
+    public static ImageData getTextureUnsafe(String directory) {
+        synchronized (imageDataCache) {
+            if (!imageDataCache.containsKey(directory)) {
+               return null;
             }
             return imageDataCache.get(directory).getObject();
         }

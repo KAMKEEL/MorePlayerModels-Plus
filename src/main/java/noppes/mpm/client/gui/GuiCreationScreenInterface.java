@@ -10,7 +10,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import noppes.mpm.ModelData;
 import noppes.mpm.client.Client;
-import noppes.mpm.client.controller.ClientCacheController;
 import noppes.mpm.client.controller.ClientDataController;
 import noppes.mpm.client.controller.ClientPermController;
 import noppes.mpm.client.gui.util.*;
@@ -144,7 +143,6 @@ public class GuiCreationScreenInterface extends GuiNPCInterface implements ISubG
 				playerdata.urlType = 0;
 			}
 			fixPlayerSkinLegs(playerdata);
-			playerdata.textureLocation = null;
 			playerdata.resourceInit = false;
 			this.initGui();
 		}
