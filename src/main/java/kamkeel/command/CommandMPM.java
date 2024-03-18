@@ -9,11 +9,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import noppes.mpm.ModelData;
-import noppes.mpm.PlayerDataController;
 import noppes.mpm.Server;
 import noppes.mpm.commands.MpmCommandInterface;
 import noppes.mpm.constants.EnumAnimation;
-import noppes.mpm.constants.EnumPackets;
+import noppes.mpm.constants.EnumPacketClient;
+import noppes.mpm.controllers.ModelDataController;
 
 import java.lang.reflect.Modifier;
 import java.util.*;
@@ -69,26 +69,30 @@ public class CommandMPM extends MpmCommandInterface {
 		if(player == null)
             throw new PlayerNotFoundException("commands.generic.player.notFound", icommandsender);
 
-		ModelData data = PlayerDataController.instance.getPlayerData(player);
-		
-		if(type.equals("url")){
-			url(player, args, data);
-		}
-		else if(type.equals("scale")){
-			scale(player, args, data);
-		}		
-		else if(type.equals("name")){
-			name(player, args, data);
-		}	
-		else if(type.equals("entity")){
-			entity(player, args, data);
-		}
-		else if(type.equals("animation")){
-			animation(player, args, data);
-		}
-		else if(type.equals("sendmodel")){
-			sendmodel(player, args, data);
-		}
+		ModelData data = ModelData.getData(player);
+		if(data == null)
+			return;
+
+        switch (type) {
+            case "url":
+                url(player, args, data);
+                break;
+            case "scale":
+                scale(player, args, data);
+                break;
+            case "name":
+                name(player, args, data);
+                break;
+            case "entity":
+                entity(player, args, data);
+                break;
+            case "animation":
+                animation(player, args, data);
+                break;
+            case "sendmodel":
+                sendmodel(player, args, data);
+                break;
+        }
 	}
 	
 	private void animation(EntityPlayer player, String[] args, ModelData data) throws WrongUsageException {
@@ -113,7 +117,7 @@ public class CommandMPM extends MpmCommandInterface {
 			animation = EnumAnimation.NONE;
 		}
 		
-		Server.sendAssociatedData(player, EnumPackets.ANIMATION, player.getCommandSenderName(), animation);
+		Server.sendAssociatedData(player, EnumPacketClient.PLAY_ANIMATION, player.getCommandSenderName(), animation);
 		data.setAnimation(animation.ordinal());
 	}
 	
@@ -137,7 +141,7 @@ public class CommandMPM extends MpmCommandInterface {
 			}
 		}
 		
-		Server.sendAssociatedData(player, EnumPackets.SEND_PLAYER_DATA, player.getCommandSenderName(), data.writeToNBT());
+		Server.sendAssociatedData(player, EnumPacketClient.SEND_PLAYER_DATA, player.getCommandSenderName(), data.getNBT());
 	}
 	
 	private void name(EntityPlayer player, String[] args, ModelData data) throws WrongUsageException {
@@ -160,7 +164,7 @@ public class CommandMPM extends MpmCommandInterface {
 		if(data.displayName.equalsIgnoreCase("clear"))
 			data.displayName = "";
 		player.refreshDisplayName();
-		Server.sendAssociatedData(player, EnumPackets.SEND_PLAYER_DATA, player.getCommandSenderName(), data.writeToNBT());
+		Server.sendAssociatedData(player, EnumPacketClient.SEND_PLAYER_DATA, player.getCommandSenderName(), data.getNBT());
 	}
 
 	private void url(EntityPlayer player, String[] args, ModelData data) throws WrongUsageException{
@@ -173,7 +177,7 @@ public class CommandMPM extends MpmCommandInterface {
 		if(url.equalsIgnoreCase("clear"))
 			url = "";
 		data.url = url;
-		Server.sendAssociatedData(player, EnumPackets.SEND_PLAYER_DATA, player.getCommandSenderName(), data.writeToNBT());
+		Server.sendAssociatedData(player, EnumPacketClient.SEND_PLAYER_DATA, player.getCommandSenderName(), data.getNBT());
 	}
 	
 	private void sendmodel(EntityPlayer fromPlayer, String[] args, ModelData fromData) throws WrongUsageException{
@@ -196,16 +200,16 @@ public class CommandMPM extends MpmCommandInterface {
 				throw new WrongUsageException("/mpm sendmodel [@from_player] <@to_player> (to go back to default /mpm sendmodel [@p] clear)");
 		}
 		else
-			toData = PlayerDataController.instance.getPlayerData(toPlayer);
+			toData = ModelData.getData(toPlayer);
 
 		if(toData == null){
 			return;
 		}
 
-		NBTTagCompound compound = fromData.writeToNBT();
-		toData.readFromNBT(compound);
+		NBTTagCompound compound = fromData.getNBT();
+		toData.setNBT(compound);
 		toData.save();
-		Server.sendAssociatedData(toPlayer, EnumPackets.SEND_PLAYER_DATA, toPlayer.getCommandSenderName(), compound);
+		Server.sendAssociatedData(toPlayer, EnumPacketClient.SEND_PLAYER_DATA, toPlayer.getCommandSenderName(), compound);
 	}
 	
 	private void scale(EntityPlayer player, String[] args, ModelData data) throws WrongUsageException{
@@ -216,7 +220,7 @@ public class CommandMPM extends MpmCommandInterface {
 				data.body.setScale(scale.scaleX, scale.scaleY, scale.scaleZ);
 				data.arms.setScale(scale.scaleX, scale.scaleY, scale.scaleZ);
 				data.legs.setScale(scale.scaleX, scale.scaleY, scale.scaleZ);
-				Server.sendAssociatedData(player, EnumPackets.SEND_PLAYER_DATA, player.getCommandSenderName(), data.writeToNBT());
+				Server.sendAssociatedData(player, EnumPacketClient.SEND_PLAYER_DATA, player.getCommandSenderName(), data.getNBT());
 			}
 			else if(args.length == 4){
 				Scale scale = Scale.Parse(args[0]);
@@ -229,7 +233,7 @@ public class CommandMPM extends MpmCommandInterface {
 
 				scale = Scale.Parse(args[3]);
 				data.legs.setScale(scale.scaleX, scale.scaleY, scale.scaleZ);
-				Server.sendAssociatedData(player, EnumPackets.SEND_PLAYER_DATA, player.getCommandSenderName(), data.writeToNBT());
+				Server.sendAssociatedData(player, EnumPacketClient.SEND_PLAYER_DATA, player.getCommandSenderName(), data.getNBT());
 			}
 			else{
 				throw new WrongUsageException("/mpm scale [@p] [head x,y,z] [body x,y,z] [arms x,y,z] [legs x,y,z]. Examples: /mpm scale @p 1, /mpm scale @p 1 1 1 1, /mpm scale 1,1,1 1,1,1 1,1,1 1,1,1");

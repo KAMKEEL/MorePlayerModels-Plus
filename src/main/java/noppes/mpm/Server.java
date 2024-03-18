@@ -11,9 +11,9 @@ import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTSizeTracker;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.village.MerchantRecipeList;
-import noppes.mpm.constants.EnumPackets;
+import noppes.mpm.constants.EnumPacketClient;
+import noppes.mpm.util.MPMScheduler;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ import java.io.IOException;
 
 public class Server {
 
-	public static boolean sendData(EntityPlayerMP player, EnumPackets enu, Object... obs) {
+	public static boolean sendData(EntityPlayerMP player, EnumPacketClient enu, Object... obs) {
 		ByteBuf buffer = Unpooled.buffer();
 		try {
 			if(!fillBuffer(buffer, enu, obs))
@@ -35,7 +35,18 @@ public class Server {
 		return true;
 	}
 
-	public static void sendAssociatedData(Entity entity, EnumPackets enu, Object... obs) {
+	public static void sendDelayedData(final EntityPlayerMP player, EnumPacketClient enu, int delay, Object... obs) {
+		final PacketBuffer buffer = new PacketBuffer(Unpooled.buffer());
+		try {
+			if(!fillBuffer(buffer, enu, obs))
+				return;
+			MPMScheduler.runTack(() -> MorePlayerModels.Channel.sendTo(new FMLProxyPacket(buffer, "MorePlayerModels"), player), delay);
+		} catch (IOException e) {
+			LogWriter.except(e);
+		}
+	}
+
+	public static void sendAssociatedData(Entity entity, EnumPacketClient enu, Object... obs) {
 		ByteBuf buffer = Unpooled.buffer();
 		try {
 			if(!fillBuffer(buffer, enu, obs))
@@ -46,7 +57,8 @@ public class Server {
 			e.printStackTrace();
 		}
 	}
-	public static void sendToAll(EnumPackets enu, Object... obs) {
+
+	public static void sendToAll(EnumPacketClient enu, Object... obs) {
 		ByteBuf buffer = Unpooled.buffer();
 		try {
 			if(!fillBuffer(buffer, enu, obs))

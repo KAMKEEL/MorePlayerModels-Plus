@@ -3,10 +3,10 @@ package noppes.mpm.commands;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import noppes.mpm.ModelData;
-import noppes.mpm.PlayerDataController;
 import noppes.mpm.Server;
 import noppes.mpm.constants.EnumAnimation;
-import noppes.mpm.constants.EnumPackets;
+import noppes.mpm.constants.EnumPacketClient;
+import noppes.mpm.controllers.ModelDataController;
 
 public class CommandSleep extends MpmCommandInterface {
 
@@ -20,7 +20,7 @@ public class CommandSleep extends MpmCommandInterface {
 		if(!(icommandsender instanceof EntityPlayerMP))
 			return;
 		EntityPlayerMP player = (EntityPlayerMP) icommandsender;
-		ModelData data = PlayerDataController.instance.getPlayerData(player);
+		ModelData data = ModelData.getData(player);
 
 		float rotation = player.rotationYaw;
 		while(rotation < 0)
@@ -40,7 +40,7 @@ public class CommandSleep extends MpmCommandInterface {
 		if(data.animation == EnumAnimation.SLEEPING_EAST || data.animation == EnumAnimation.SLEEPING_NORTH || data.animation == EnumAnimation.SLEEPING_WEST || data.animation == EnumAnimation.SLEEPING_SOUTH)
 			ani = EnumAnimation.NONE;
 
-		Server.sendAssociatedData(player, EnumPackets.ANIMATION, player.getCommandSenderName(), ani);
+		Server.sendAssociatedData(player, EnumPacketClient.PLAY_ANIMATION, player.getCommandSenderName(), ani);
 		data.animation = ani;
 	}
 

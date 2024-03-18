@@ -18,6 +18,10 @@ public class CommonProxy implements IGuiHandler{
 			int x, int y, int z){
 		return null;
 	}
+
+	public ModelData getClientPlayerData(EntityPlayer player) {
+		return null;
+	}
 	
 	public void load(){
 		MorePlayerModels.Channel.register(new PacketHandlerServer());

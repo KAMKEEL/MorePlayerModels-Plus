@@ -7,9 +7,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentTranslation;
 import noppes.mpm.ModelData;
-import noppes.mpm.PlayerDataController;
 import noppes.mpm.Server;
-import noppes.mpm.constants.EnumPackets;
+import noppes.mpm.constants.EnumPacketClient;
+import noppes.mpm.controllers.ModelDataController;
 
 import java.util.Arrays;
 import java.util.List;
@@ -47,7 +47,7 @@ public class CommandSetName extends MpmCommandInterface {
 		if(player == null)
 			throw new PlayerNotFoundException();
 		
-		ModelData data = PlayerDataController.instance.getPlayerData(player);
+		ModelData data = ModelData.getData(player);
 		data.displayName = var2[0];
 		for(int i = 1; i < var2.length; i++)
 			data.displayName += " " + var2[i];
@@ -55,7 +55,7 @@ public class CommandSetName extends MpmCommandInterface {
 		if(data.displayName.equalsIgnoreCase("clear"))
 			data.displayName = "";
 		player.refreshDisplayName();
-		Server.sendAssociatedData(player, EnumPackets.SEND_PLAYER_DATA, player.getCommandSenderName(), data.writeToNBT());
+		Server.sendAssociatedData(player, EnumPacketClient.SEND_PLAYER_DATA, player.getCommandSenderName(), data.getNBT());
 	}
 
 	@Override

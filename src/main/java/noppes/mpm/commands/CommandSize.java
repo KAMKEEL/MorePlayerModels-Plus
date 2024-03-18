@@ -7,9 +7,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentTranslation;
 import noppes.mpm.ModelData;
-import noppes.mpm.PlayerDataController;
 import noppes.mpm.Server;
-import noppes.mpm.constants.EnumPackets;
+import noppes.mpm.constants.EnumPacketClient;
+import noppes.mpm.controllers.ModelDataController;
 
 import java.util.List;
 
@@ -50,9 +50,9 @@ public class CommandSize extends MpmCommandInterface {
 		if(val > 10 || val <= 0)
 			val = 5;
 
-		ModelData data = PlayerDataController.instance.getPlayerData(player);
+		ModelData data = ModelData.getData(player);
 		data.size = val;
-		Server.sendAssociatedData(player, EnumPackets.SEND_PLAYER_DATA, player.getCommandSenderName(), data.writeToNBT());
+		Server.sendAssociatedData(player, EnumPacketClient.SEND_PLAYER_DATA, player.getCommandSenderName(), data.getNBT());
 	}
 
 	@Override

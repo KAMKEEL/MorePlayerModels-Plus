@@ -10,6 +10,7 @@ import cpw.mods.fml.common.event.FMLServerAboutToStartEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.FMLEventChannel;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.relauncher.Side;
 import kamkeel.MorePlayerModelsPermissions;
 import kamkeel.command.CommandMPM;
 import net.minecraft.client.Minecraft;
@@ -20,6 +21,7 @@ import noppes.mpm.commands.*;
 import noppes.mpm.config.ConfigClient;
 import noppes.mpm.config.LoadConfiguration;
 import noppes.mpm.config.legacy.LegacyConfig;
+import noppes.mpm.controllers.ModelDataController;
 import noppes.mpm.controllers.PermissionController;
 
 import java.io.File;
@@ -31,15 +33,13 @@ public class MorePlayerModels {
 
 	@SidedProxy(clientSide = "noppes.mpm.client.ClientProxy", serverSide = "noppes.mpm.CommonProxy")
 	public static CommonProxy proxy;
-	public final static String VERSION = "3.1";
+	public final static String VERSION = "4.0";
 
 	public static FMLEventChannel Channel;
-
 	public static MorePlayerModels instance;
-
 	public static int Revision = 7;
-	
 	public static File dir;
+	public static File presetDir;
 	
 	public static boolean HasServerSide = false;
 
@@ -52,22 +52,25 @@ public class MorePlayerModels {
 	public MorePlayerModels(){
 		instance = this;
 	}
+
 	@EventHandler
 	public void load(FMLPreInitializationEvent ev) {
 		Channel = NetworkRegistry.INSTANCE.newEventDrivenChannel("MorePlayerModels");
-		
+
 		MinecraftServer server = MinecraftServer.getServer();
 		String dir = "";
 		if (server != null)
 			dir = new File(".").getAbsolutePath();
 		else
 			dir = Minecraft.getMinecraft().mcDataDir.getAbsolutePath();
-		
+
 		MorePlayerModels.dir = new File(dir,"moreplayermodels");
 		if(!MorePlayerModels.dir.exists())
 			MorePlayerModels.dir.mkdir();
-		
-		new PlayerDataController(MorePlayerModels.dir);
+
+		MorePlayerModels.presetDir = new File(MorePlayerModels.dir,"presets");
+		if(!MorePlayerModels.presetDir.exists())
+			MorePlayerModels.presetDir.mkdir();
 
 		configPath = ev.getModConfigurationDirectory() + File.separator + "MorePlayerModelsPlus";
 		legacyPath = ev.getModConfigurationDirectory() + "/MorePlayerModels.cfg";
@@ -91,7 +94,7 @@ public class MorePlayerModels {
 				
 		proxy.load();
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, proxy);
-		
+
 		MinecraftForge.EVENT_BUS.register(new ServerEventHandler());
 		FMLCommonHandler.instance().bus().register(new ServerTickHandler());
 
@@ -100,8 +103,10 @@ public class MorePlayerModels {
 
 	@EventHandler
 	public void setAboutToStart(FMLServerAboutToStartEvent event) {
+		new ModelDataController();
 		new PermissionController();
 		PermissionController.Instance.reloadPermissionData();
+		ModelDataController.Instance.clearCache();
 	}
 
 	@EventHandler
@@ -129,6 +134,7 @@ public class MorePlayerModels {
 		event.registerServerCommand(new CommandSetName());
 		event.registerServerCommand(new CommandMPM());
 		event.registerServerCommand(new CommandSize());
+		event.registerServerCommand(new CommandReload());
 
 		GameRules rules = event.getServer().worldServerForDimension(0).getGameRules();
 		if(!rules.hasRule("mpmAllowEntityModels"))

@@ -11,17 +11,18 @@ import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.entity.MPMRendererHelper;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderPlayer;
+import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.*;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import noppes.mpm.ModelData;
 import noppes.mpm.MorePlayerModels;
-import noppes.mpm.PlayerDataController;
+import noppes.mpm.client.controller.ClientCacheController;
 import noppes.mpm.config.ConfigClient;
 import noppes.mpm.constants.EnumAnimation;
 import org.lwjgl.opengl.GL11;
@@ -29,12 +30,14 @@ import org.lwjgl.opengl.GL11;
 public class RenderEvent {
 	public static RenderEvent Instance;
 	public static RenderMPM renderer = new RenderMPM();
-	public static long lastSkinTick = -30;
-	public static long lastCapeTick = -30;
+	public static long lastSkinTick = -10;
 	public final static long MaxSkinTick = 6;
 	private ModelData data;
 
 	private static final Entity hideNameSheep = new EntitySheep(null);
+
+	private static ResourceLocation skinResource = null;
+	private static ITextureObject textureObject = null;
 
 	public RenderEvent(){
 		Instance = this;
@@ -47,11 +50,14 @@ public class RenderEvent {
 		}
 		if(!(event.entity instanceof AbstractClientPlayer))
 			return;
+
 		EntityPlayer player = event.entityPlayer;
-		data = PlayerDataController.instance.getPlayerData(player);
+		data = ModelData.getData(player);
+		if(data == null)
+			return;
+
 		renderer.setModelData(data, player);
 		setModels(event.renderer);
-
 		if(data.isSleeping()){
 			if(data.animation == EnumAnimation.SLEEPING_EAST)
 				player.renderYawOffset = player.prevRenderYawOffset = -90;
@@ -63,11 +69,23 @@ public class RenderEvent {
 				player.renderYawOffset = player.prevRenderYawOffset = 0;
 		}
 
-		if(!data.resourceInit && lastSkinTick > MaxSkinTick){
-			renderer.loadResource((AbstractClientPlayer) player);
+
+		if(data.textureLocation != null){
+			if(!(data.modelType == 0 && data.url.isEmpty())){
+				ImageData imageData = ClientCacheController.getTextureUnsafe(data.textureLocation.getResourcePath());
+				if(imageData == null || !imageData.imageLoaded()){
+					data.resourceInit = false;
+				}
+			}
+			renderer.setPlayerTexture((AbstractClientPlayer) player, data.textureLocation);
+		}
+
+		if((!data.resourceInit || data.textureLocation == null) && lastSkinTick > MaxSkinTick) {
 			lastSkinTick = 0;
+			renderer.loadPlayerResource(player, data);
 			data.resourceInit = true;
 		}
+
 		if(!(event.renderer instanceof RenderMPM)){
 			RenderManager.instance.entityRenderMap.put(EntityPlayer.class, renderer);
 			RenderManager.instance.entityRenderMap.put(EntityPlayerSP.class, renderer);
@@ -77,8 +95,6 @@ public class RenderEvent {
 			RenderManager.instance.entityRenderMap.put(AbstractClientPlayer.class, renderer);
 		}
 
-		EntityLivingBase entity = data.getEntity(player.worldObj, player);
-		renderer.setEntity(entity);
 		if(player == Minecraft.getMinecraft().thePlayer){
 			player.yOffset = 1.62f;
 			data.backItem = player.inventory.mainInventory[0];
@@ -95,7 +111,7 @@ public class RenderEvent {
 		}
 
 		AbstractClientPlayer player = (AbstractClientPlayer) event.entity;
-		ModelData data = PlayerDataController.instance.getPlayerData(player);
+		data = ModelData.getData(player);
 		if(data.isSleeping()){
 			player.renderYawOffset = player.prevRenderYawOffset = player.rotationYaw;
 		}
@@ -112,6 +128,9 @@ public class RenderEvent {
 
 	@SubscribeEvent(priority=EventPriority.LOWEST)
 	public void special(RenderPlayerEvent.Specials.Pre event){
+		if(data == null)
+			return;
+
 		if(data.animation == EnumAnimation.BOW){
 			float ticks = (event.entityPlayer.ticksExisted - data.animationStart) / 10f;
 			if(ticks > 1)
@@ -127,24 +146,19 @@ public class RenderEvent {
 		renderer.renderHelmet(event.entityPlayer);
 		if(ConfigClient.EnableBackItem)
 			renderer.renderBackitem(event.entityPlayer);
-		if(event.renderCape){
-			if(!data.cloakInnit && RenderEvent.lastCapeTick > RenderEvent.MaxSkinTick){
-				data.cloakObject = renderer.loadCapeResource((AbstractClientPlayer) event.entityPlayer);
-				RenderEvent.lastCapeTick = 0;
-				data.cloakInnit = true;
-			}
-		}
 		GL11.glTranslatef(0, data.getBodyY(), 0); // Cape Fix
 	}
 
 	@SubscribeEvent()
 	public void hand(RenderHandEvent event){
 		Minecraft mc = Minecraft.getMinecraft();
-		data = PlayerDataController.instance.getPlayerData(mc.thePlayer);
+		data = ModelData.getData(mc.thePlayer);
+		if(data == null)
+			return;
+
 		Entity entity = data.getEntity(mc.thePlayer);
 		if(entity != null || data.isSleeping() || data.animation == EnumAnimation.BOW && mc.thePlayer.getHeldItem() == null){
 			event.setCanceled(true);
-			return;
 		}
 	}
 
@@ -162,39 +176,41 @@ public class RenderEvent {
 
 	@SubscribeEvent
 	public void overlay(RenderGameOverlayEvent event){
-		if(event.type != ElementType.ALL)
-			return;
+		if (ClientCacheController.loaded) {
+			if(event.type != ElementType.ALL)
+				return;
 
-		Minecraft mc = Minecraft.getMinecraft();
-		if(mc.currentScreen != null || ConfigClient.Tooltips == 0)
-			return;
-		ItemStack item = mc.thePlayer.getCurrentEquippedItem();
-		if(item == null)
-			return;
+			Minecraft mc = Minecraft.getMinecraft();
+			if(mc.currentScreen != null || ConfigClient.Tooltips == 0)
+				return;
+			ItemStack item = mc.thePlayer.getCurrentEquippedItem();
+			if(item == null)
+				return;
 
-		String name = item.getDisplayName();
-		int x = event.resolution.getScaledWidth() - mc.fontRenderer.getStringWidth(name);
+			String name = item.getDisplayName();
+			int x = event.resolution.getScaledWidth() - mc.fontRenderer.getStringWidth(name);
 
-		int posX = 4;
-		int posY = 4;
-		if(ConfigClient.Tooltips % 2 == 0)
-			posX = x - 4;
-
-		if(ConfigClient.Tooltips > 2)
-			posY = event.resolution.getScaledHeight() - 24;
-
-		mc.fontRenderer.drawStringWithShadow(name, posX, posY, 0xffffff);
-		if(item.isItemStackDamageable()){
-			int max = item.getMaxDamage();
-
-			String dam = (max - item.getItemDamage()) + "/" + max;
-
-			x = event.resolution.getScaledWidth() - mc.fontRenderer.getStringWidth(dam);
-
-			if(ConfigClient.Tooltips == 2 || ConfigClient.Tooltips == 4)
+			int posX = 4;
+			int posY = 4;
+			if(ConfigClient.Tooltips % 2 == 0)
 				posX = x - 4;
 
-			mc.fontRenderer.drawStringWithShadow(dam, posX, posY + 12, 0xffffff);
+			if(ConfigClient.Tooltips > 2)
+				posY = event.resolution.getScaledHeight() - 24;
+
+			mc.fontRenderer.drawStringWithShadow(name, posX, posY, 0xffffff);
+			if(item.isItemStackDamageable()){
+				int max = item.getMaxDamage();
+
+				String dam = (max - item.getItemDamage()) + "/" + max;
+
+				x = event.resolution.getScaledWidth() - mc.fontRenderer.getStringWidth(dam);
+
+				if(ConfigClient.Tooltips == 2 || ConfigClient.Tooltips == 4)
+					posX = x - 4;
+
+				mc.fontRenderer.drawStringWithShadow(dam, posX, posY + 12, 0xffffff);
+			}
 		}
 	}
 

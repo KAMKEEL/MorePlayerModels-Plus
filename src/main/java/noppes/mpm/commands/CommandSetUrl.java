@@ -7,9 +7,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentTranslation;
 import noppes.mpm.ModelData;
-import noppes.mpm.PlayerDataController;
 import noppes.mpm.Server;
-import noppes.mpm.constants.EnumPackets;
+import noppes.mpm.constants.EnumPacketClient;
 
 import java.util.List;
 
@@ -50,13 +49,10 @@ public class CommandSetUrl extends MpmCommandInterface {
 		if(url.equalsIgnoreCase("clear"))
 			url = "";
 
-		ModelData data = PlayerDataController.instance.getPlayerData(player);
+		ModelData data = ModelData.getData(player);
 		data.url = url;
-		data.cloakLoaded = false;
-		data.cloakInnit = false;
-		data.resourceLoaded = false;
 		data.resourceInit = false;
-		Server.sendAssociatedData(player, EnumPackets.SEND_PLAYER_DATA, player.getCommandSenderName(), data.writeToNBT());
+		Server.sendAssociatedData(player, EnumPacketClient.SEND_PLAYER_DATA, player.getCommandSenderName(), data.getNBT());
 	}
 
 	@Override

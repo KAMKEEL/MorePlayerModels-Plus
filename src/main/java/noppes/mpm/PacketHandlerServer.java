@@ -3,17 +3,16 @@ package noppes.mpm;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.network.FMLNetworkEvent.ServerCustomPacketEvent;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetHandlerPlayServer;
 import noppes.mpm.constants.EnumAnimation;
-import noppes.mpm.constants.EnumPackets;
-import noppes.mpm.controllers.PermissionController;
+import noppes.mpm.constants.EnumPacketClient;
+import noppes.mpm.constants.EnumPacketServer;
+import noppes.mpm.controllers.ModelDataController;
 
 import java.io.IOException;
-import java.util.UUID;
 
 public class PacketHandlerServer{
 
@@ -22,56 +21,24 @@ public class PacketHandlerServer{
 		EntityPlayerMP player = ((NetHandlerPlayServer)event.handler).playerEntity;
 		ByteBuf buf = event.packet.payload();
 		try {
-			handlePacket(buf, (EntityPlayerMP) player, EnumPackets.values()[buf.readInt()]);
+			handlePacket(buf, (EntityPlayerMP) player, EnumPacketServer.values()[buf.readInt()]);
 		
 		} catch (Exception e) {
 			System.err.println(player + e.getMessage());
 		}
 	}
 
-	private void handlePacket(ByteBuf buffer, EntityPlayerMP player, EnumPackets type) throws IOException {
-		if(type == EnumPackets.PING){
-			int version = buffer.readInt();
-			if(version == MorePlayerModels.Revision){
-				ModelData data = PlayerDataController.instance.getPlayerData(player);
-				data.readFromNBT(Server.readNBT(buffer));
-
-				if(!player.worldObj.getGameRules().getGameRuleBooleanValue("mpmAllowEntityModels"))
-					data.entityClass = null;
-
-				data.save();
-				Server.sendAssociatedData(player, EnumPackets.SEND_PLAYER_DATA, player.getCommandSenderName(), data.writeToNBT());
-			}
-			ItemStack back = player.inventory.mainInventory[0];
-			if(back != null)
-				Server.sendAssociatedData(player, EnumPackets.BACK_ITEM_UPDATE, player.getCommandSenderName(), back.writeToNBT(new NBTTagCompound()));
-
-			Server.sendData(player, EnumPackets.PING, MorePlayerModels.Revision);
-		}
-		else if(type == EnumPackets.UPDATE_PLAYER_DATA){
-			ModelData data = PlayerDataController.instance.getPlayerData(player);
-			data.readFromNBT(Server.readNBT(buffer));
-
+	private void handlePacket(ByteBuf buffer, EntityPlayerMP player, EnumPacketServer type) throws IOException {
+		if(type == EnumPacketServer.UPDATE_PLAYER_DATA){
+			ModelData data = ModelData.getData(player);
+			data.setNBT(Server.readNBT(buffer));
 			if(!player.worldObj.getGameRules().getGameRuleBooleanValue("mpmAllowEntityModels"))
 				data.entityClass = null;
 
-			PlayerDataController.instance.savePlayerData(player, data);
-			Server.sendAssociatedData(player, EnumPackets.SEND_PLAYER_DATA, player.getCommandSenderName(), data.writeToNBT());
+			data.save();
+			Server.sendAssociatedData(player, EnumPacketClient.SEND_PLAYER_DATA, player.getCommandSenderName(), data.getNBT());
 		}
-		else if(type == EnumPackets.GET_PERMISSION){
-			long lastRequest = -1;
-			String uuid = player.getUniqueID().toString();
-			if(PermissionController.Instance.lastRequest.containsKey(uuid)){
-				lastRequest = PermissionController.Instance.lastRequest.get(uuid);
-			}
-
-			if(lastRequest == -1 || System.currentTimeMillis() - lastRequest > 60 * 1000){
-				NBTTagCompound nbtTagCompound =  PermissionController.Instance.writeNBT(player);
-				PermissionController.Instance.lastRequest.put(uuid, System.currentTimeMillis());
-				Server.sendData(player, EnumPackets.RECEIVE_PERMISSION, nbtTagCompound);
-			}
-		}
-		else if(type == EnumPackets.ANIMATION){
+		else if(type == EnumPacketServer.ANIMATION){
 
 			EnumAnimation animation = EnumAnimation.values()[buffer.readInt()];
 			if(animation == EnumAnimation.SLEEPING_SOUTH){
@@ -88,11 +55,11 @@ public class PacketHandlerServer{
 				if(rotate == 3)
 					animation = EnumAnimation.SLEEPING_EAST;
 			}
-			ModelData data = PlayerDataController.instance.getPlayerData(player);
+			ModelData data = ModelData.getData(player);
 			if(data.animationEquals(animation))
 				animation = EnumAnimation.NONE;
 
-			Server.sendAssociatedData(player, EnumPackets.ANIMATION, player.getCommandSenderName(), animation);
+			Server.sendAssociatedData(player, EnumPacketClient.PLAY_ANIMATION, player.getCommandSenderName(), animation);
 			data.setAnimation(animation);
 		}
 	}

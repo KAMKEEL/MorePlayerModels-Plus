@@ -1,5 +1,8 @@
 package noppes.mpm;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
@@ -12,31 +15,19 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
 import noppes.mpm.constants.EnumAnimation;
-import noppes.mpm.constants.EnumParts;
+import noppes.mpm.controllers.ModelDataController;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.lang.reflect.Method;
-import java.security.MessageDigest;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 
 public class ModelData extends ModelDataShared implements IExtendedEntityProperties{
-	public static ExecutorService saveExecutor = Executors.newFixedThreadPool(1);
-
+	public ResourceLocation textureLocation = null;
 	public boolean resourceInit = false;
 	public boolean resourceLoaded = false;
-	public boolean cloakInnit = false;
-	public boolean cloakLoaded = false;
 
 	public boolean didSit = false;
-
-	public boolean webapiActive = false;
-	public boolean webapiInit = false;
-
-	public ResourceLocation cloakObject = null;
-
 	public ItemStack backItem;
 
 	public int inLove = 0;
@@ -49,7 +40,11 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 
 	public short soundType = 0;
 	public double prevPosX, prevPosY, prevPosZ;
+
+
 	public EntityPlayer player = null;
+	public String playername = "";
+	public String uuid = "";
 
 	public int rev = MorePlayerModels.Revision;
 
@@ -61,10 +56,20 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 	public String cloakUrl= "";
 	public String displayName = "";
 
-	public ModelData(){
+	public ModelData(){}
+
+	public ModelData(EntityPlayer player){
+		this.player = player;
+		this.playername = player.getCommandSenderName();
+		this.uuid = player.getUniqueID().toString();
 	}
-	public NBTTagCompound writeToNBT(){
-		NBTTagCompound compound = super.writeToNBT();
+
+	public NBTTagCompound getNBT(){
+		if(player != null){
+			playername = player.getCommandSenderName();
+			uuid = player.getPersistentID().toString();
+		}
+		NBTTagCompound compound = super.getNBT();
 		compound.setInteger("Revision", rev);
 
 		compound.setInteger("Animation", animation.ordinal());
@@ -80,13 +85,16 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 
 		compound.setLong("LastEdited", lastEdited);
 
+		compound.setString("PlayerName", playername);
+		compound.setString("UUID", uuid);
+
 		return compound;
 	}
 	
-	public void readFromNBT(NBTTagCompound compound){
+	public void setNBT(NBTTagCompound compound){
 		String prevUrl = url;
-		String prevCloakUrl = cloakUrl;
-		super.readFromNBT(compound);
+		int prevModelType = modelType;
+		super.setNBT(compound);
 		rev = compound.getInteger("Revision");
 		size = compound.getInteger("Size");
 		if(size <= 0)
@@ -97,7 +105,10 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 		soundType = compound.getShort("SoundType");
 		lastEdited = compound.getLong("LastEdited");
 		displayName = compound.getString("DisplayName");
-		player.refreshDisplayName();
+
+		if(player != null)
+			player.refreshDisplayName();
+
 		setAnimation(compound.getInteger("Animation"));
 
 		url = compound.getString("CustomSkinUrl");
@@ -109,9 +120,19 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 			resourceInit = false;
 			resourceLoaded = false;
 		}
-		if(!prevCloakUrl.equals(cloakUrl)){
-			cloakLoaded = false;
-			cloakInnit = false;
+
+		if(modelType != prevModelType) {
+			resourceInit = false;
+			resourceLoaded = false;
+		}
+
+		if(player != null){
+			playername = player.getCommandSenderName();
+			uuid = player.getPersistentID().toString();
+		}
+		else{
+			playername = compound.getString("PlayerName");
+			uuid = compound.getString("UUID");
 		}
 	}
 
@@ -186,38 +207,11 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 		return entity;
 	}
 
-
-	public String getHash(){
-		try {
-			MessageDigest digest = MessageDigest.getInstance("MD5");
-			String toHash = arms.toString() + legs.toString() + body.toString() + head.toString();
-
-			if(entityClass != null)
-				toHash += entityClass.getCanonicalName();
-
-			toHash += legParts.toString() + headwear + soundType + url;
-			
-			for(EnumParts e : parts.keySet()){
-				toHash += e.name + ":" + parts.get(e).toString();
-			}
-			byte[] hash = digest.digest(toHash.getBytes("UTF-8"));
-			StringBuilder sb = new StringBuilder(2*hash.length);
-			for(byte b : hash){
-				sb.append(String.format("%02x", b&0xff));
-			}
-          
-			return sb.toString();
-		} catch (Exception e) {
-			
-		}
-		return "";
-	}
 	public ModelData copy(){
 		ModelData data = new ModelData();
-		data.readFromNBT(this.writeToNBT());
-		data.resourceLoaded = false;
-		data.cloakLoaded = false;
+		data.setNBT(this.getNBT());
 		data.player = player;
+		data.resourceLoaded = false;
 		return data;
 	}
 
@@ -234,57 +228,12 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 	}
 
 	@Override
-	public void saveNBTData(NBTTagCompound compound) {
-		
-	}
+	public void saveNBTData(NBTTagCompound compound){}
 
 	@Override
-	public void loadNBTData(NBTTagCompound compound) {
-		
-	}
-
+	public void loadNBTData(NBTTagCompound compound) {}
 	@Override
-	public void init(Entity entity, World world) {
-		
-	}
-
-	public void save(){
-		if(player == null)
-			return;
-		final EntityPlayer player = this.player;
-		saveExecutor.submit(() -> {
-			try {
-				String filename = player.getUniqueID().toString().toLowerCase();
-				if(filename.isEmpty())
-					filename = "noplayername";
-				filename += ".dat";
-				File file = new File(MorePlayerModels.dir, filename+"_new");
-				File file1 = new File(MorePlayerModels.dir, filename+"_old");
-				File file2 = new File(MorePlayerModels.dir, filename);
-				CompressedStreamTools.writeCompressed(writeToNBT(), new FileOutputStream(file));
-				if(file1.exists()){
-					file1.delete();
-				}
-				file2.renameTo(file1);
-				if(file2.exists()){
-					file2.delete();
-				}
-				file.renameTo(file2);
-				if(file.exists()){
-					file.delete();
-				}
-			} catch (Exception e) {
-				LogWriter.except(e);
-			}
-		});
-	}
-
-
-	private boolean isBlocked(EntityPlayer player) {
-		return !player.worldObj.isAirBlock((int)player.posX, (int)player.posY + 2, (int)player.posZ);
-	}
-
-
+	public void init(Entity entity, World world) {}
 
 	public void setExtra(EntityLivingBase entity, String key, String value){
 		key = key.toLowerCase();
@@ -300,6 +249,45 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 			} catch (Exception e) {
 
 			}
+		}
+	}
+
+	public synchronized void save() {
+		if(uuid.isEmpty())
+			return;
+		final NBTTagCompound compound = getNBT();
+		final String filename;
+		filename = uuid + ".dat";
+		ModelDataController.Instance.putModelDataCache(uuid, this);
+		ModelDataController.modelDataThread.execute(() -> {
+			try {
+				File saveDir = ModelDataController.getSaveDir();
+				File file = new File(saveDir, filename + "_new");
+				File file1 = new File(saveDir, filename);
+				CompressedStreamTools.writeCompressed(compound, new FileOutputStream(file));
+				if(file1.exists()){
+					file1.delete();
+				}
+				file.renameTo(file1);
+			} catch (Exception e) {
+				LogWriter.except(e);
+			}
+		});
+	}
+
+
+	public void load() {
+		NBTTagCompound data = ModelDataController.Instance.loadModelData(player.getPersistentID().toString());
+		if (data != null) {
+			this.setNBT(data);
+		}
+	}
+
+	public static ModelData getData(EntityPlayer entity) {
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+			return MorePlayerModels.proxy.getClientPlayerData(entity);
+		} else {
+			return ModelDataController.Instance.getModelData(entity);
 		}
 	}
 }

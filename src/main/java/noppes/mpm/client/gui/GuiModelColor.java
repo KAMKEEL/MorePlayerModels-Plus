@@ -18,7 +18,7 @@ import java.io.InputStream;
 
 public class GuiModelColor extends SubGuiInterface implements ITextfieldListener{
 
-	private GuiScreen parent;
+	private GuiCreationScreenInterface parent;
 	private final static ResourceLocation color = new ResourceLocation("moreplayermodels:textures/gui/color.png");
 	private final static ResourceLocation colorgui = new ResourceLocation("moreplayermodels:textures/gui/color_gui.png");
 	
@@ -27,7 +27,7 @@ public class GuiModelColor extends SubGuiInterface implements ITextfieldListener
 	private GuiNpcTextField textfield;
 
 	private ModelPartData data;
-	public GuiModelColor(GuiScreen parent, ModelPartData data){
+	public GuiModelColor(GuiCreationScreenInterface parent, ModelPartData data){
 		this.parent = parent;
 		this.data = data;
 		ySize = 230;

@@ -1,5 +1,6 @@
 package noppes.mpm;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -11,13 +12,14 @@ import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.entity.PlaySoundAtEntityEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import noppes.mpm.constants.EnumPackets;
+import noppes.mpm.constants.EnumPacketClient;
+import noppes.mpm.controllers.ModelDataController;
 
 public class ServerEventHandler {
 
 	@SubscribeEvent
 	public void chat(ServerChatEvent event){
-		Server.sendToAll(EnumPackets.CHAT_EVENT, event.player.getCommandSenderName(), event.message);
+		Server.sendToAll(EnumPacketClient.CHAT_EVENT, event.player.getCommandSenderName(), event.message);
 	}
 
 	@SubscribeEvent
@@ -27,14 +29,16 @@ public class ServerEventHandler {
 		EntityPlayer target = (EntityPlayer) event.target;
 		EntityPlayerMP player = (EntityPlayerMP) event.entityPlayer;
 
-		ModelData data = PlayerDataController.instance.getPlayerData(target);
-		Server.sendData(player, EnumPackets.SEND_PLAYER_DATA, target.getCommandSenderName(), data.writeToNBT());
+		ModelData data = ModelData.getData(target);
+		if (data == null)
+			return;
 
+		Server.sendData(player, EnumPacketClient.SEND_PLAYER_DATA, target.getCommandSenderName(), data.getNBT());
 		ItemStack back = player.inventory.mainInventory[0];
 		if(back != null)
-			Server.sendData(player, EnumPackets.BACK_ITEM_UPDATE, target.getCommandSenderName(), back.writeToNBT(new NBTTagCompound()));
+			Server.sendData(player, EnumPacketClient.BACK_ITEM_UPDATE, target.getCommandSenderName(), back.writeToNBT(new NBTTagCompound()));
 		else
-			Server.sendData(player, EnumPackets.BACK_ITEM_REMOVE, target.getCommandSenderName());
+			Server.sendData(player, EnumPacketClient.BACK_ITEM_REMOVE, target.getCommandSenderName());
 	}
 	
 	@SubscribeEvent
@@ -43,9 +47,10 @@ public class ServerEventHandler {
     	if(!(event.entity instanceof EntityPlayer) || event.name == null || !event.name.equals("game.player.hurt"))
     		return;
     	EntityPlayer player = (EntityPlayer) event.entity;
-		ModelData data = getModelData(player);
-		if(data == null)
+		ModelData data = ModelData.getData(player);
+		if (data == null)
 			return;
+
 		if(data.soundType == 0)
 			return;
     	if(player.getHealth() <= 1 || player.isDead){
@@ -75,9 +80,10 @@ public class ServerEventHandler {
 		if(!flag || event.entityLiving.getHealth() < 0 || player.hurtResistantTime > player.maxHurtResistantTime / 2.0F)
 			return;
 
-		ModelData data = getModelData(player);
-		if(data == null)
+		ModelData data = ModelData.getData(player);
+		if (data == null)
 			return;
+
 		String sound = "";
 		if(data.soundType == 1)
 			sound = "moreplayermodels:human.female.attack";
@@ -91,16 +97,9 @@ public class ServerEventHandler {
 		
 	}
 
-	private ModelData getModelData(EntityLivingBase entityLiving) {
-		if(entityLiving == null || !(entityLiving instanceof EntityPlayer))
-			return null;
-		EntityPlayer player = (EntityPlayer) entityLiving;
-		return PlayerDataController.instance.getPlayerData(player);
-	}
-
 	@SubscribeEvent
 	public void onNameSet(PlayerEvent.NameFormat event){
-		ModelData data = PlayerDataController.instance.getPlayerData(event.entityPlayer);
+		ModelData data = ModelData.getData(event.entityPlayer);
 		if(!data.displayName.isEmpty()){
 			event.displayname = data.displayName;
 		}

@@ -7,9 +7,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentTranslation;
 import noppes.mpm.ModelData;
-import noppes.mpm.PlayerDataController;
 import noppes.mpm.Server;
-import noppes.mpm.constants.EnumPackets;
+import noppes.mpm.constants.EnumPacketClient;
+import noppes.mpm.controllers.ModelDataController;
 
 import java.util.Arrays;
 import java.util.List;
@@ -43,7 +43,7 @@ public class CommandScale extends MpmCommandInterface {
 		if(player == null)
 			throw new PlayerNotFoundException();
 
-		ModelData data = PlayerDataController.instance.getPlayerData(player);
+		ModelData data = ModelData.getData(player);
 		try{
 			if(var2.length == 1){
 				Scale scale = Scale.Parse(var2[0]);
@@ -68,7 +68,7 @@ public class CommandScale extends MpmCommandInterface {
 				icommandsender.addChatMessage(new ChatComponentTranslation("Not enough arguments given"));
 				return;
 			}
-			Server.sendAssociatedData(player, EnumPackets.SEND_PLAYER_DATA, player.getCommandSenderName(), data.writeToNBT());
+			Server.sendAssociatedData(player, EnumPacketClient.SEND_PLAYER_DATA, player.getCommandSenderName(), data.getNBT());
 		}
 		catch(NumberFormatException ex){
 			icommandsender.addChatMessage(new ChatComponentTranslation("None number given"));

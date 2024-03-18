@@ -9,18 +9,17 @@ import net.minecraft.entity.MPMEntityUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import noppes.mpm.ModelData;
-import noppes.mpm.PlayerDataController;
 import noppes.mpm.client.Client;
-import noppes.mpm.client.ClientCacheHandler;
+import noppes.mpm.client.controller.ClientDataController;
+import noppes.mpm.client.controller.ClientPermController;
 import noppes.mpm.client.gui.util.*;
-import noppes.mpm.constants.EnumPackets;
+import noppes.mpm.constants.EnumPacketServer;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import static noppes.mpm.client.gui.GuiCreationParts.fixPlayerSkinLegs;
 
 public class GuiCreationScreenInterface extends GuiNPCInterface implements ISubGuiListener, ISliderListener {
-	public static String Message = "";
 	public EntityLivingBase entity;
 	
 	private boolean saving = false;
@@ -41,14 +40,12 @@ public class GuiCreationScreenInterface extends GuiNPCInterface implements ISubG
 	private static float rotation = 0.5f;
 	
 	public GuiCreationScreenInterface(){
-		Client.sendData(EnumPackets.GET_PERMISSION);
-		playerdata = PlayerDataController.instance.getPlayerData(Minecraft.getMinecraft().thePlayer);
-		original = playerdata.writeToNBT();
+		player = Minecraft.getMinecraft().thePlayer;
+		playerdata = ClientDataController.Instance().getPlayerData(player);
+		original = playerdata.getNBT();
 		xSize = 400;
 		ySize = 240;
 		xOffset = 140;
-
-		player = Minecraft.getMinecraft().thePlayer;
 		this.closeOnEsc = true;
 	}
 
@@ -58,16 +55,17 @@ public class GuiCreationScreenInterface extends GuiNPCInterface implements ISubG
     	entity = playerdata.getEntity(mc.thePlayer);
     	Keyboard.enableRepeatEvents(true);
 		guiTop += 2;
-    	addButton(new GuiNpcButton(0, guiLeft, guiTop, 60, 20, "gui.config"));
-		if(ClientCacheHandler.hasPermission(MorePlayerModelsPermissions.CONFIG_ENTITY)) {
-			addButton(new GuiNpcButton(1, guiLeft + 62, guiTop, 60, 20, "gui.entity"));
-		}
+
+		addButton(new GuiNpcButton(0, guiLeft, guiTop, 60, 20, "gui.config"));
+		addButton(new GuiNpcButton(1, guiLeft + 62, guiTop, 60, 20, "gui.entity"));
+		if(!ClientPermController.hasPermission(MorePlayerModelsPermissions.CONFIG_ENTITY))
+			getButton(1).enabled = false;
 
 		if(entity == null){
 			addButton(new GuiNpcButton(2, guiLeft, guiTop + 23, 60, 20, "gui.parts"));
-			if(!ClientCacheHandler.hasPermission(MorePlayerModelsPermissions.PARTS)){
+			if(!ClientPermController.hasPermission(MorePlayerModelsPermissions.PARTS))
 				getButton(2).enabled = false;
-			}
+
 			addButton(new GuiNpcButton(250, guiLeft + 124, guiTop, 60, 20, new String[]{"Steve","Steve64","Alex"}, playerdata.modelType));
 			addButton(new GuiNpcButton(251, guiLeft + 124, guiTop + 23, 60, 20, "gui.limbs"));
 		}
@@ -82,17 +80,17 @@ public class GuiCreationScreenInterface extends GuiNPCInterface implements ISubG
     		}
     	}
     	if(entity == null){
-			if(ClientCacheHandler.hasPermission(MorePlayerModelsPermissions.CONFIG_SCALE)) {
-				addButton(new GuiNpcButton(3, guiLeft + 62, guiTop + 23, 60, 20, "gui.scale"));
-			}
+			addButton(new GuiNpcButton(3, guiLeft + 62, guiTop + 23, 60, 20, "gui.scale"));
+			if(!ClientPermController.hasPermission(MorePlayerModelsPermissions.CONFIG_SCALE))
+				getButton(3).enabled = false;
 		}
 
     	if(hasSaving){
-			if(ClientCacheHandler.hasPermission(MorePlayerModelsPermissions.CONFIG_SAVE)) {
-				addButton(new GuiNpcButton(4, guiLeft, guiTop + ySize - 24, 60, 20, "gui.save"));
-			}
-			if(ClientCacheHandler.hasPermission(MorePlayerModelsPermissions.CONFIG_LOAD)) {
-				addButton(new GuiNpcButton(5, guiLeft + 62, guiTop + ySize - 24, 60, 20, "gui.load"));
+			addButton(new GuiNpcButton(4, guiLeft, guiTop + ySize - 24, 60, 20, "gui.save"));
+			addButton(new GuiNpcButton(5, guiLeft + 62, guiTop + ySize - 24, 60, 20, "gui.load"));
+			if(!ClientPermController.hasPermission(MorePlayerModelsPermissions.CONFIG_PRESET)){
+				getButton(4).enabled = false;
+				getButton(5).enabled = false;
 			}
     	}
 		if(active != -1){
@@ -101,9 +99,6 @@ public class GuiCreationScreenInterface extends GuiNPCInterface implements ISubG
 		addButton(unzoom = new GuiNpcButton(666, guiLeft + xSize - 79, guiTop, 20, 20, "-"));
 		addButton(zoom = new GuiNpcButton(667, guiLeft + xSize - 57 , guiTop, 20, 20, "+"));
     	addButton(new GuiNpcButton(66, guiLeft + xSize - 20, guiTop, 20, 20, "X"));
-    	    	
-    	addLabel(new GuiNpcLabel(0, Message, guiLeft + 120, guiTop + ySize - 10, 0xff0000));
-    	getLabel(0).center(xSize - 120);
 		addSlider(new GuiNpcSlider(this, 500, guiLeft + xOffset + 142, guiTop + 210, 120, 20, rotation));
     }
 
@@ -149,7 +144,6 @@ public class GuiCreationScreenInterface extends GuiNPCInterface implements ISubG
 			}
 			fixPlayerSkinLegs(playerdata);
 			playerdata.resourceInit = false;
-			playerdata.resourceLoaded = false;
 			this.initGui();
 		}
 		if(btn.id == 251){
@@ -195,13 +189,12 @@ public class GuiCreationScreenInterface extends GuiNPCInterface implements ISubG
     }
     @Override
     public void save(){
-    	NBTTagCompound newCompound = playerdata.writeToNBT();
+    	NBTTagCompound newCompound = playerdata.getNBT();
     	if(!original.equals(newCompound)){
-    		PlayerDataController.instance.savePlayerData(this.mc.thePlayer, playerdata);
-    		Client.sendData(EnumPackets.UPDATE_PLAYER_DATA, newCompound);
+			ClientDataController.Instance().getPlayerData(player).setNBT(newCompound);
+			Client.sendData(EnumPacketServer.UPDATE_PLAYER_DATA, newCompound);
     		original = newCompound;
     	}
-    	
     }
     
     public void openGui(GuiScreen gui){

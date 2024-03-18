@@ -41,7 +41,7 @@ public class ModelDataShared{
 	public byte hideArms = 0;
 	public byte hideLegs = 0;
 			
-	public NBTTagCompound writeToNBT(){
+	public NBTTagCompound getNBT(){
 		NBTTagCompound compound = new NBTTagCompound();
 
 		if(entityClass != null)
@@ -82,7 +82,7 @@ public class ModelDataShared{
 		return compound;
 	}
 	
-	public void readFromNBT(NBTTagCompound compound){
+	public void setNBT(NBTTagCompound compound){
 		setEntityClass(compound.getString("EntityClass"));
 		
 		arms.readFromNBT(compound.getCompoundTag("ArmsConfig"));

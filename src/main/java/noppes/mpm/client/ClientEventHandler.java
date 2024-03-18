@@ -1,9 +1,11 @@
 package noppes.mpm.client;
 
+
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
+import cpw.mods.fml.common.network.FMLNetworkEvent;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
@@ -12,24 +14,24 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MPMEntityUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
-import net.minecraft.world.World;
 import noppes.mpm.*;
+import noppes.mpm.client.controller.ClientCacheController;
+import noppes.mpm.client.controller.ClientDataController;
 import noppes.mpm.client.fx.EntityEnderFX;
 import noppes.mpm.client.fx.EntityRainbowFX;
 import noppes.mpm.client.gui.GuiCreationScreenInterface;
 import noppes.mpm.config.ConfigClient;
 import noppes.mpm.constants.EnumAnimation;
-import noppes.mpm.constants.EnumPackets;
+import noppes.mpm.constants.EnumPacketServer;
 import noppes.mpm.constants.EnumParts;
-import noppes.mpm.sync.WebApi;
 
 import java.util.List;
 import java.util.Random;
 
 public class ClientEventHandler {
 
+	private final Minecraft mc = Minecraft.getMinecraft();
 	public static float partialTicks = 0;
-	private World prevWorld;
 	public static List<EntityPlayer> playerlist;
 	private EntityRendererAlt alt;
 	private EntityRenderer prevAlt;
@@ -40,7 +42,7 @@ public class ClientEventHandler {
 		if(mc == null || mc.thePlayer == null)
 			return;
 		if(ClientProxy.Screen.isPressed()){
-			ModelData data = PlayerDataController.instance.getPlayerData(mc.thePlayer);
+			ModelData data = ClientDataController.Instance().getPlayerData(mc.thePlayer);
 			data.animation = EnumAnimation.NONE;
 			if(mc.currentScreen == null)
 				mc.displayGuiScreen(new GuiCreationScreenInterface());
@@ -70,7 +72,7 @@ public class ClientEventHandler {
 		if(type < 0)
 			return;
 		if(MorePlayerModels.HasServerSide)
-			Client.sendData(EnumPackets.ANIMATION, type);
+			Client.sendData(EnumPacketServer.ANIMATION, type);
 		else{
 			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 			EnumAnimation animation = EnumAnimation.values()[type];
@@ -88,7 +90,8 @@ public class ClientEventHandler {
 				if(rotate == 3)
 					animation = EnumAnimation.SLEEPING_EAST;
 			}
-			ModelData data = PlayerDataController.instance.getPlayerData(player);
+
+			ModelData data = ClientDataController.Instance().getPlayerData(player);
 			if(data.animationEquals(animation))
 				animation = EnumAnimation.NONE;
 
@@ -100,6 +103,9 @@ public class ClientEventHandler {
 	public void onRenderTick(TickEvent.RenderTickEvent event){
 		partialTicks = event.renderTickTime;
 		Minecraft mc = Minecraft.getMinecraft();
+		if(mc.entityRenderer == null)
+			return;
+
 		if(ConfigClient.EnablePOV){
 			if(alt == null)
 				alt = new EntityRendererAlt(mc);
@@ -113,31 +119,27 @@ public class ClientEventHandler {
 		}
 	}
 	@SubscribeEvent
-	public void onClientTick(TickEvent.ClientTickEvent event){
-		if(event.side == Side.SERVER || event.phase == Phase.START)
+	public void onClientTick(TickEvent.ClientTickEvent event) {
+		if (event.side == Side.SERVER || event.phase == Phase.START)
 			return;
-    	Minecraft mc = Minecraft.getMinecraft();
-    	World world = mc.theWorld;
-		if ((this.prevWorld == null || world == null) && this.prevWorld != world) {
-			ClientCacheHandler.clearCache();
-			Client.sendData(EnumPackets.GET_PERMISSION);
-		}
-    	if(world != null && prevWorld != world){
-			MorePlayerModels.HasServerSide = false;
-			GuiCreationScreenInterface.Message = "message.noserver";
-			ModelData data = PlayerDataController.instance.getPlayerData(mc.thePlayer);
-			Client.sendData(EnumPackets.PING, MorePlayerModels.Revision, data.writeToNBT());
-			prevWorld = world;
-    	}
+		if (mc.thePlayer == null) return;
 
-    	RenderEvent.lastSkinTick++;
-		RenderEvent.lastCapeTick++;
+		if(mc.theWorld == null) return;
 
-		if(MorePlayerModels.HasServerSide && mc.thePlayer != null && world != null && world.getWorldTime() % 20 == 0){
-			playerlist = world.getEntitiesWithinAABB(EntityPlayer.class, mc.thePlayer.boundingBox.expand(64, 64, 64));
-			WebApi.instance.run();
+		RenderEvent.lastSkinTick++;
+	}
 
-		}
+	@SubscribeEvent
+	public void world(FMLNetworkEvent.ClientConnectedToServerEvent event){
+		// Reset Cache on Join World
+		ClientCacheController.clearDataCache();
+	}
+
+	@SubscribeEvent
+	public void world(FMLNetworkEvent.ClientDisconnectionFromServerEvent  event){
+		// Reset Cache on Leave World
+		MorePlayerModels.HasServerSide = false;
+		ClientCacheController.clearAllCache();
 	}
 
 	@SubscribeEvent
@@ -145,10 +147,9 @@ public class ClientEventHandler {
 		if(event.side == Side.SERVER || event.phase == Phase.START)
 			return;
     	EntityPlayer player = event.player;
-		ModelData data = PlayerDataController.instance.getPlayerData(player);
+		ModelData data =  ClientDataController.Instance().getPlayerData(player);
     	EntityLivingBase entity = data.getEntity(player.worldObj, player);
     	if(entity != null){
-			//entity.posY -= player.yOffset;
     		entity.onUpdate();
 			MPMEntityUtil.Copy(player, entity);
 			return;
