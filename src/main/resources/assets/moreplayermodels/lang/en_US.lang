@@ -157,10 +157,10 @@ config.names=Show Names
 url.default=Default
 url.full=Full
 
-message.noserver=Server doesn't have the mod/plugin installed
-message.lowerversion=Server is on a lower version
-message.higherversion=Server is on a higher version
-message.delete=Are you sure you want to delete this?
+message.noserver=The Server doesn't have the mod/plugin installed.
+message.lowerversion=The Server is on a lower version.
+message.higherversion=The Server is on a higher version.
+message.delete=Are you sure that you want to delete this?
 
 message.animationmessage1=This is only to change the animation/commands linked to a button.
-message.animationmessage2=To change the actual button use minecraft options -> controls
+message.animationmessage2=To change the actual button, use Minecraft options -> controls.
