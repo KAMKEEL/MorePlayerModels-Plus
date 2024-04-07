@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -94,7 +95,8 @@ public class RenderEvent {
 			RenderManager.instance.entityRenderMap.put(EntityClientPlayerMP.class, renderer);
 			RenderManager.instance.entityRenderMap.put(AbstractClientPlayer.class, renderer);
 		}
-
+		EntityLivingBase entity = data.getEntity(player.worldObj, player);
+		renderer.setEntity(entity);
 		if(player == Minecraft.getMinecraft().thePlayer){
 			player.yOffset = 1.62f;
 			data.backItem = player.inventory.mainInventory[0];
