@@ -4,10 +4,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.entity.player.EntityPlayer;
 import noppes.mpm.ModelData;
-import org.lwjgl.Sys;
 
 import java.util.HashMap;
-import java.util.UUID;
 
 public class ClientDataController {
     private static ClientDataController Instance;

@@ -13,7 +13,6 @@ import noppes.mpm.Server;
 import noppes.mpm.commands.MpmCommandInterface;
 import noppes.mpm.constants.EnumAnimation;
 import noppes.mpm.constants.EnumPacketClient;
-import noppes.mpm.controllers.ModelDataController;
 
 import java.lang.reflect.Modifier;
 import java.util.*;

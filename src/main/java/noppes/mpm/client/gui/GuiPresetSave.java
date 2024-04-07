@@ -3,7 +3,6 @@ package noppes.mpm.client.gui;
 import net.minecraft.client.gui.GuiButton;
 import noppes.mpm.ModelData;
 import noppes.mpm.client.Preset;
-import noppes.mpm.client.PresetController;
 import noppes.mpm.client.gui.util.GuiNpcButton;
 import noppes.mpm.client.gui.util.GuiNpcTextField;
 import noppes.mpm.client.gui.util.SubGuiInterface;

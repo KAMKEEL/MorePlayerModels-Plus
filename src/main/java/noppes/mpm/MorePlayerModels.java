@@ -10,7 +10,6 @@ import cpw.mods.fml.common.event.FMLServerAboutToStartEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.FMLEventChannel;
 import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.relauncher.Side;
 import kamkeel.MorePlayerModelsPermissions;
 import kamkeel.command.CommandMPM;
 import net.minecraft.client.Minecraft;

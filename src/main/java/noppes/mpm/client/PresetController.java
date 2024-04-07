@@ -2,18 +2,14 @@ package noppes.mpm.client;
 
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import noppes.mpm.LogWriter;
 import noppes.mpm.ModelData;
 import noppes.mpm.ModelPartData;
-import noppes.mpm.MorePlayerModels;
 import noppes.mpm.config.ConfigMain;
 import noppes.mpm.constants.EnumParts;
-import org.lwjgl.Sys;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.util.HashMap;
 
 public class PresetController {

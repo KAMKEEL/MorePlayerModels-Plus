@@ -3,7 +3,6 @@ package noppes.mpm.client;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
-import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
@@ -35,12 +34,10 @@ import noppes.mpm.client.controller.ClientCacheController;
 import noppes.mpm.client.model.ModelMPM;
 import noppes.mpm.client.model.ModelRenderPassHelper;
 import noppes.mpm.constants.EnumAnimation;
-import org.lwjgl.Sys;
 import org.lwjgl.opengl.GL11;
 
 import java.io.File;
 import java.lang.reflect.Method;
-import java.security.MessageDigest;
 import java.util.Map;
 import java.util.UUID;
 

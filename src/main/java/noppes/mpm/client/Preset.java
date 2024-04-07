@@ -1,22 +1,15 @@
 package noppes.mpm.client;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import noppes.mpm.LogWriter;
 import noppes.mpm.ModelData;
-import noppes.mpm.ModelPartData;
 import noppes.mpm.MorePlayerModels;
-import noppes.mpm.constants.EnumParts;
-import noppes.mpm.controllers.ModelDataController;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.util.HashMap;
 
 public class Preset {
 
