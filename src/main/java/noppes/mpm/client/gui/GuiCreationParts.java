@@ -5,7 +5,6 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.util.StatCollector;
 import noppes.mpm.ModelData;
 import noppes.mpm.ModelPartData;
-import noppes.mpm.client.controller.ClientCacheController;
 import noppes.mpm.client.controller.ClientPermController;
 import noppes.mpm.client.gui.util.*;
 import noppes.mpm.constants.EnumParts;

@@ -1,10 +1,7 @@
 package noppes.mpm.controllers;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.command.PlayerSelector;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
@@ -12,8 +9,10 @@ import noppes.mpm.LogWriter;
 import noppes.mpm.ModelData;
 import noppes.mpm.util.CacheHashMap;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.HashMap;
+import java.util.UUID;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 

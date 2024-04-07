@@ -15,11 +15,9 @@ import net.minecraft.village.MerchantRecipeList;
 import noppes.mpm.constants.EnumPacketClient;
 import noppes.mpm.util.MPMScheduler;
 
-import java.io.*;
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.io.IOException;
 
 public class Server {
 

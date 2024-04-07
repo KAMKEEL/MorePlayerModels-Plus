@@ -13,7 +13,6 @@ import net.minecraft.world.World;
 import noppes.mpm.ModelData;
 import noppes.mpm.Server;
 import noppes.mpm.constants.EnumPacketClient;
-import noppes.mpm.controllers.ModelDataController;
 
 import java.lang.reflect.Modifier;
 import java.util.HashMap;

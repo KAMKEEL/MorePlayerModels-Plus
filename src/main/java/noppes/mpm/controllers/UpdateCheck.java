@@ -1,17 +1,14 @@
 package noppes.mpm.controllers;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import net.minecraftforge.common.MinecraftForge;
+import noppes.mpm.MorePlayerModels;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
-import noppes.mpm.MorePlayerModels;
-import org.apache.logging.log4j.Level;
-
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
-import net.minecraftforge.common.MinecraftForge;
 
 public class UpdateCheck implements Runnable {
 

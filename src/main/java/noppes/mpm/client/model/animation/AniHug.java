@@ -3,7 +3,6 @@ package noppes.mpm.client.model.animation;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
-import noppes.mpm.client.model.ModelMPM;
 
 public class AniHug {
 

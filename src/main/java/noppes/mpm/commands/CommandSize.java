@@ -9,7 +9,6 @@ import net.minecraft.util.ChatComponentTranslation;
 import noppes.mpm.ModelData;
 import noppes.mpm.Server;
 import noppes.mpm.constants.EnumPacketClient;
-import noppes.mpm.controllers.ModelDataController;
 
 import java.util.List;
 

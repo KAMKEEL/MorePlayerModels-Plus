@@ -4,13 +4,10 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.network.FMLNetworkEvent.ServerCustomPacketEvent;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetHandlerPlayServer;
 import noppes.mpm.constants.EnumAnimation;
 import noppes.mpm.constants.EnumPacketClient;
 import noppes.mpm.constants.EnumPacketServer;
-import noppes.mpm.controllers.ModelDataController;
 
 import java.io.IOException;
 
