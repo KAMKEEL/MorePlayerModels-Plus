@@ -37,9 +37,6 @@ public class RenderEvent {
 
 	private static final Entity hideNameSheep = new EntitySheep(null);
 
-	private static ResourceLocation skinResource = null;
-	private static ITextureObject textureObject = null;
-
 	public RenderEvent(){
 		Instance = this;
 	}
