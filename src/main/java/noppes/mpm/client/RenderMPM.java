@@ -53,15 +53,15 @@ public class RenderMPM extends RenderPlayer {
 
 	// ModelMPM Presets
 	// Steve
-	public ModelMPM steve32 = new ModelMPM(0, 0);
-	public ModelMPM steve64 = new ModelMPM(0, false);
-	public ModelMPM alex = new ModelMPM(0, true);
+	public static final ModelMPM steve32 = new ModelMPM(0, 0);
+	public static final ModelMPM steve64 = new ModelMPM(0, false);
+	public static final ModelMPM alex = new ModelMPM(0, true);
 
-	public ModelMPM steveArmorChest = new ModelMPM(1,0);
-	public ModelMPM steveArmor = new ModelMPM(0.5F,0);
+	public static final ModelMPM steveArmorChest = new ModelMPM(1,0);
+	public static final ModelMPM steveArmor = new ModelMPM(0.5F,0);
 
-	public ModelMPM alex32armorChest = new ModelMPM(1,1);
-	public ModelMPM alex32armor = new ModelMPM(0.5F,1);
+	public static final ModelMPM alex32armorChest = new ModelMPM(1,1);
+	public static final ModelMPM alex32armor = new ModelMPM(0.5F,1);
 
 	public RendererLivingEntity renderEntity;
 	public EntityLivingBase entity;
@@ -177,16 +177,6 @@ public class RenderMPM extends RenderPlayer {
 		player.func_152121_a(Type.SKIN, texture);
 	}
 
-	private ITextureObject loadTexture(File file, ResourceLocation resource, ResourceLocation def, String par1Str, boolean fix64){
-		TextureManager texturemanager = Minecraft.getMinecraft().getTextureManager();
-		ITextureObject object = texturemanager.getTexture(resource);
-		if(object == null){
-			object = new ImageDownloadAlt(file, par1Str, def, new ImageBufferDownloadAlt(fix64));
-			texturemanager.loadTexture(resource, object);
-		}
-		return object;
-	}
-
 	@Override
 	public void renderFirstPersonArm(EntityPlayer player){
 		data = ModelData.getData(player);
@@ -194,14 +184,14 @@ public class RenderMPM extends RenderPlayer {
 			return;
 
 
-		if(data.textureLocation != null){
+		if(data.resourceInit && data.textureLocation != null){
 			if(!(data.modelType == 0 && data.url.isEmpty())){
 				ImageData imageData = ClientCacheController.getTextureUnsafe(data.textureLocation.getResourcePath());
 				if(imageData == null || !imageData.imageLoaded()){
 					data.resourceInit = false;
 				}
 			}
-			setPlayerTexture((AbstractClientPlayer) player, data.textureLocation);
+			 setPlayerTexture((AbstractClientPlayer) player, data.textureLocation);
 		}
 
 		if((!data.resourceInit || data.textureLocation == null) && lastSkinTick > RenderEvent.MaxSkinTick){
@@ -536,7 +526,7 @@ public class RenderMPM extends RenderPlayer {
 
 	@Override
 	public void preRenderCallback(EntityLivingBase entityliving, float f){
-		float ff = 0.9375f;
+		float ff = 1;
 		GL11.glScalef((ff / 5) * data.size, (ff / 5) * data.size, (ff / 5) * data.size);
 		if(renderEntity != null){
 			MPMRendererHelper.preRenderCallback(entity, f, renderEntity);
