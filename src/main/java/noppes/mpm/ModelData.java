@@ -283,7 +283,7 @@ public class ModelData extends ModelDataShared implements IExtendedEntityPropert
 	}
 
 	public static ModelData getData(EntityPlayer entity) {
-		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+		if (entity.worldObj.isRemote) {
 			return MorePlayerModels.proxy.getClientPlayerData(entity);
 		} else {
 			return ModelDataController.Instance.getModelData(entity);

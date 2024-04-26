@@ -96,9 +96,14 @@ public class ServerEventHandler {
 
 	@SubscribeEvent
 	public void onNameSet(PlayerEvent.NameFormat event){
+		if(event.entityPlayer == null)
+			return;
+
 		ModelData data = ModelData.getData(event.entityPlayer);
-		if(!data.displayName.isEmpty()){
-			event.displayname = data.displayName;
+		if(data != null){
+			if(!data.displayName.isEmpty()){
+				event.displayname = data.displayName;
+			}
 		}
 	}
 }
