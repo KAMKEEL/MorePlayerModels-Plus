@@ -1,0 +1,166 @@
+menu.mpm=More Player Models
+
+gui.normal=Normal
+gui.none=Kein
+gui.save=Speichern
+gui.cancel=Abbrechen
+gui.load=Laden
+gui.back=Zurück
+gui.defaults=Standardwerte
+gui.config=Konfiguration
+gui.entity=Entity
+gui.parts=Körperteile
+gui.limbs=Gliedmaßen
+gui.model=Modell
+gui.scale=Skalierung
+gui.extra=Extra
+gui.options=Optionen
+gui.type=Typ
+gui.playerskin=Spieler Skin
+gui.pattern=Muster
+gui.headwear=Kopfbedeckung
+gui.bodywear=Körperbekleidung
+gui.armwear=Armbekleidung
+gui.legwear=Beinbekleidung
+gui.solid=Fest
+gui.show=Anzeigen
+gui.left=Links
+gui.right=Rechts
+gui.both=Beides
+gui.default=Standard
+gui.color=Farbe
+gui.remove=Entfernen
+gui.draw=Zeichnen
+gui.position=Position
+gui.select=Auswählen
+gui.resettoplayer=Zum Spieler zurücksetzen
+gui.player=Spieler
+gui.new=Neu
+gui.hide=Verstecken
+
+animation.sleep=Schlafen
+animation.crawl=Kriechen
+animation.hug=Umarmen
+animation.sit=Sitzen
+animation.dance=Tanzen
+animation.wave=Winken
+animation.wag=Wedeln
+animation.bow=Verbeugen
+animation.cry=Weinen
+
+scale.width=Breite
+scale.height=Höhe
+scale.depth=Tiefe
+scale.shared=Geteilt
+
+part.ears=Ohren
+part.horns=Hörner
+part.hair=Haar
+part.mohawk=Iro
+part.snout=Schnauze
+part.beard=Bart
+part.wings=Flügel
+part.claws=Krallen
+part.skirt=Rock
+part.legs=Beine
+part.tail=Schweif
+part.head=Kopf
+part.arms=Arme
+part.breasts=Brüste
+part.fin=Flosse
+part.body=Körper
+part.cape=Umhang
+part.left=Links
+part.right=Rechts
+part.both=Beides
+part.particles=Partikel
+part.solid=Fest
+
+particle.rainbow=Regenbogen
+
+hair.long=Lang
+hair.thin=Dünn
+hair.stylish=Stylisch
+hair.ponytail=Pferdeschwanz
+
+beard.standard=Standard
+beard.viking=Wikinger
+beard.long=Lang
+beard.short=Kurz
+
+horns.bull=Stier
+horns.antlers=Geweih
+horns.antenna=Antenne
+
+horns.player_bull=Stier (P)
+horns.player_antlers=Geweih (P)
+horns.player_antennaf=AntenneF (P)
+horns.player_antennab=AntenneB (P)
+
+tail.player_dragon=Drache (P)
+tail.dragon=Drache
+tail.horse=Pferd
+tail.squirrel=Eichhörnchen
+tail.fin=Flosse
+tail.rodent=Nagetier
+tail.bird=Vogel
+tail.fox=Fuchs
+tail.cat=Katze
+tail.wolf=Wolf
+tail.feather=Federn
+tail.monkey=Affe
+tail.normal=Normal
+tail.wrapped=Eingewickelt
+tail.large=Groß
+
+snout.bunny=Hase
+snout.beak=Schnabel
+snout.small=Klein
+snout.medium=Mittel
+snout.large=Groß
+snout.player_bunny=Hase (P)
+snout.player_small=Klein (P)
+snout.player_medium=Mittel (P)
+snout.player_large=Groß (P)
+
+ears.bunny=Hase
+ears.bear=Bär
+
+fin.shark=Hai
+fin.reptile=Reptil
+
+legs.naga=Naga
+legs.player_naga=Spieler Naga
+legs.spider=Spinne
+legs.horse=Pferd
+legs.mermaid=Meerjungfrau
+legs.digitigrade=Zehengänger
+
+config.sounds=Sounds
+config.humanfemale=Menschliche Frau
+config.humanmale=Menschlicher Mann
+config.goblinmale=Goblin Mann
+config.skinurl=Skin URL
+config.capeurl=Umhang URL
+config.urltype=URL-Typ
+config.reloadskins=Skins neu laden
+config.editbuttons=Buttons anpassen
+config.pov=Perspektive
+config.chatbubbles=Chat Bubbles
+config.backitem=Rücken-Gegenstand anzeigen
+config.particles=Partikel anzeigen
+config.tooltip=Tooltip
+config.compatibility=Kompatibilitätsmodus
+config.blockhighlight=Block Highlight
+config.names=Namen anzeigen
+
+url.default=Standard
+url.full=Voll
+
+message.noserver=Der Server hat die Mod/das Plugin nicht installiert.
+message.lowerversion=Der Server nutzt eine ältere Version.
+message.higherversion=Der Server nutzt eine neuere Version.
+message.delete=Bist du sicher, dass du das löschen möchtest?
+
+message.animationmessage1=Dies ändert nur die Animation/Befehle, die mit einem Button verknüpft sind.
+message.animationmessage2=Um den Button selbst zu ändern, nutze Minecraft Optionen -> Steuerung.
