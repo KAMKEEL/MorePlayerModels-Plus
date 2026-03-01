@@ -42,6 +42,7 @@ public class ModelMPM extends ModelBiped{
 	private ModelPartInterface fin;
 	private ModelPartInterface skirt;
 	private ModelPartInterface horns;
+	private ModelPartInterface halo;
 	private ModelPartInterface clawsR;
 	private ModelPartInterface clawsL;
 	private ModelCape cape;
@@ -189,6 +190,7 @@ public class ModelMPM extends ModelBiped{
 			// Completed
 			this.bipedHead.addChild(snout = new ModelSnout(this));
 			this.bipedHead.addChild(horns = new ModelHorns(this));
+			this.bipedHead.addChild(halo = new ModelHalo(this));
 
 			// Completed
 			tail = new ModelTail(this);
@@ -306,6 +308,7 @@ public class ModelMPM extends ModelBiped{
 			// Completed
 			this.bipedHead.addChild(snout = new ModelSnout(this));
 			this.bipedHead.addChild(horns = new ModelHorns(this));
+			this.bipedHead.addChild(halo = new ModelHalo(this));
 
 			// Completed
 			tail = new ModelTail(this);
@@ -333,6 +336,7 @@ public class ModelMPM extends ModelBiped{
 			clawsR.setData(data, player);
 			skirt.setData(data, player);
 			horns.setData(data, player);
+			halo.setData(data, player);
 		}
 		breasts.setData(data, player);
 		legs.setData(data, player);

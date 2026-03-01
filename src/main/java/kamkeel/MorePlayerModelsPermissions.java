@@ -32,6 +32,7 @@ public class MorePlayerModelsPermissions {
 	public static final Permission PARTS_FIN = new Permission("mpm.parts.fin", ConfigPerm.PARTS_FIN);
 	public static final Permission PARTS_HAIR = new Permission("mpm.parts.hair", ConfigPerm.PARTS_HAIR);
 	public static final Permission PARTS_HORNS = new Permission("mpm.parts.horns", ConfigPerm.PARTS_HORNS);
+	public static final Permission PARTS_HALO = new Permission("mpm.parts.halo", ConfigPerm.PARTS_HALO);
 	public static final Permission PARTS_LEGS = new Permission("mpm.parts.legs", ConfigPerm.PARTS_LEGS);
 	public static final Permission PARTS_MOHAWK = new Permission("mpm.parts.mohawk", ConfigPerm.PARTS_MOHAWK);
 	public static final Permission PARTS_PARTICLES = new Permission("mpm.parts.particles", ConfigPerm.PARTS_PARTICLES);

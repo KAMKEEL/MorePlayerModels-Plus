@@ -3,7 +3,6 @@ package noppes.mpm.client.gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.util.ResourceLocation;
-import noppes.mpm.ModelPartData;
 import noppes.mpm.client.gui.util.GuiNpcButton;
 import noppes.mpm.client.gui.util.GuiNpcTextField;
 import noppes.mpm.client.gui.util.ITextfieldListener;
@@ -14,10 +13,10 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class GuiModelColor extends SubGuiInterface implements ITextfieldListener{
-
-	private GuiCreationScreenInterface parent;
 	private final static ResourceLocation color = new ResourceLocation("moreplayermodels:textures/gui/color.png");
 	private final static ResourceLocation colorgui = new ResourceLocation("moreplayermodels:textures/gui/color_gui.png");
 	
@@ -25,10 +24,12 @@ public class GuiModelColor extends SubGuiInterface implements ITextfieldListener
 	
 	private GuiNpcTextField textfield;
 
-	private ModelPartData data;
-	public GuiModelColor(GuiCreationScreenInterface parent, ModelPartData data){
+	private final Supplier<Integer> getter;
+	private final Consumer<Integer> setter;
+	public GuiModelColor(GuiCreationScreenInterface parent, Supplier<Integer> getter, Consumer<Integer> setter){
 		this.parent = parent;
-		this.data = data;
+		this.getter = getter;
+		this.setter = setter;
 		ySize = 230;
 		closeOnEsc = false;
 		background = colorgui;
@@ -39,9 +40,9 @@ public class GuiModelColor extends SubGuiInterface implements ITextfieldListener
     	super.initGui();
     	colorX = guiLeft + 4;
     	colorY = guiTop + 50;
-		this.addTextField(textfield = new GuiNpcTextField(0, this, guiLeft + 35, guiTop + 25, 60, 20, data.getColor()));
+		this.addTextField(textfield = new GuiNpcTextField(0, this, guiLeft + 35, guiTop + 25, 60, 20, formatColor(getter.get())));
 		addButton(new GuiNpcButton(66, guiLeft + 107, guiTop + 8, 20, 20, "X"));
-		textfield.setTextColor(data.color);
+		textfield.setTextColor(getter.get());
     }
 
     @Override
@@ -60,7 +61,7 @@ public class GuiModelColor extends SubGuiInterface implements ITextfieldListener
     		return;
 		try{
 			int color = Integer.parseInt(textfield.getText(),16);
-			data.color = color;
+			setter.accept(color);
 			textfield.setTextColor(color);
 		}
 		catch(NumberFormatException e){
@@ -88,9 +89,9 @@ public class GuiModelColor extends SubGuiInterface implements ITextfieldListener
             BufferedImage bufferedimage = ImageIO.read(stream = resource.getInputStream());
             int color = bufferedimage.getRGB((i - guiLeft - 4) * 4, (j - guiTop - 50) * 4)  & 16777215;
             if(color != 0){
-            	data.color = color;
+            	setter.accept(color);
             	textfield.setTextColor(color);
-            	textfield.setText(data.getColor());
+            	textfield.setText(formatColor(getter.get()));
             }
 			
 		} catch (IOException e) {
@@ -115,7 +116,17 @@ public class GuiModelColor extends SubGuiInterface implements ITextfieldListener
 		catch(NumberFormatException e){
 			color = 0;
 		}
-		data.color = color;
+		setter.accept(color);
 		textfield.setTextColor(color);
 	}
+
+	public static String formatColor(int color) {
+		StringBuilder str = new StringBuilder(Integer.toHexString(color));
+
+		while(str.length() < 6)
+			str.insert(0, "0");
+
+		return str.toString();
+	}
+
 }

@@ -31,6 +31,7 @@ public class ConfigPerm {
     public static boolean PARTS_FIN;
     public static boolean PARTS_HAIR;
     public static boolean PARTS_HORNS;
+    public static boolean PARTS_HALO;
     public static boolean PARTS_LEGS;
     public static boolean PARTS_MOHAWK;
     public static boolean PARTS_PARTICLES;
@@ -89,6 +90,7 @@ public class ConfigPerm {
             PARTS_FIN = permConfig.get(PART, "PARTS_FIN", true).getBoolean();
             PARTS_HAIR = permConfig.get(PART, "PARTS_HAIR", true).getBoolean();
             PARTS_HORNS = permConfig.get(PART, "PARTS_HORNS", true).getBoolean();
+            PARTS_HALO = permConfig.get(PART, "PARTS_HALO", true).getBoolean();
             PARTS_LEGS = permConfig.get(PART, "PARTS_LEGS", true).getBoolean();
             PARTS_MOHAWK = permConfig.get(PART, "PARTS_MOHAWK", true).getBoolean();
             PARTS_PARTICLES = permConfig.get(PART, "PARTS_PARTICLES", true).getBoolean();
